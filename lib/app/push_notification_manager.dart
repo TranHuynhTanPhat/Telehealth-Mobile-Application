@@ -1,0 +1,3 @@
+class PushNotificationManager{
+  void init(){}
+}
