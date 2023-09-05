@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:telehealth/res/colors.dart';
-import 'package:telehealth/utils/config_loading.dart';
+import 'package:healthline/app/app_routes.dart';
+import 'package:healthline/app/healthline_app.dart';
+import 'package:healthline/res/colors.dart';
+import 'package:healthline/utils/config_loading.dart';
 
-import '../app/telehealth_app.dart';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,6 @@ void main(){
     statusBarColor: transparent
   ));
 
-  runApp(const MyApp());
+  runApp( MyApp(appRoute: AppRoute(),));
   configLoading();
 }
