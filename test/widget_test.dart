@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-// import 'package:telehealth/app/telehealth_app.dart';
+// import 'package:healthline/app/healthline_app.dart';
 
 
 void main() {
