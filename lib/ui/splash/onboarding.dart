@@ -108,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       iconSize: dimensIcon(),
                       onPressed: () {
                         if (currentIndex == slides.length - 1) {
-                          Navigator.pushReplacementNamed(context, mainScreenId);
+                          Navigator.pushReplacementNamed(context, signUpName);
                         } else {
                           _controller.nextPage(
                               duration: const Duration(milliseconds: 100),

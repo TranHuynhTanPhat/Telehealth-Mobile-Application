@@ -1,5 +1,5 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
+import 'package:healthline/utils/log_data.dart';
 
 class SizeConfig {
   double _screenWidth = 0;
@@ -18,10 +18,10 @@ class SizeConfig {
   void init(BoxConstraints constraints) {
     _screenWidth = constraints.maxWidth;
     _screenHeight = constraints.maxHeight;
-    developer.log("$_screenWidth $_screenHeight");
+    logPrint("$_screenWidth $_screenHeight");
     _blockWidth = _screenWidth / 50.5854791898;
     _blockHeight = _screenHeight / 112.4121759774;
-    developer.log('$_blockWidth $_blockHeight');
+    logPrint('$_blockWidth $_blockHeight');
     textMultiplier = _blockHeight;
     imageSizeMultiplier = _blockWidth;
     heightMultiplier = _blockHeight;

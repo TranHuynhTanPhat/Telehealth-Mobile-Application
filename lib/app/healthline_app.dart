@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(
               textScaleFactor: 1.0,
             ),
-            child: const SplashScreen(),
+            child:  const SplashScreen(),
           ),
           theme: AppThemes.appThemeData[AppTheme.lightTheme],
           onGenerateRoute: appRoute.onGeneralRoute,
-          initialRoute: splashId,
+          initialRoute: splashName,
           supportedLocales: AppLocalizationsSetup.supportedLocales,
           localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
           locale: const Locale('vi'),

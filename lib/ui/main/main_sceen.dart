@@ -12,20 +12,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> _pageDetail = [
-      // {
-      //   "page": const LandingPageScreen(),
-      //   "title": "",
-      // },
-      // {
-      //   "pageName": const FavoriteTasksScreen(),
-      //   "title": AppLocalizations.of(context).translate('favoritetasks')
-      // },
-      // {
-      //   "pageName": const CompletedTasksScreen(),
-      //   "title": AppLocalizations.of(context).translate('completedtasks')
-      // },
-    ];
+    // final List<Map<String, dynamic>> _pageDetail = [
+    //   // {
+    //   //   "page": const LandingPageScreen(),
+    //   //   "title": "",
+    //   // },
+    //   // {
+    //   //   "pageName": const FavoriteTasksScreen(),
+    //   //   "title": AppLocalizations.of(context).translate('favoritetasks')
+    //   // },
+    //   // {
+    //   //   "pageName": const CompletedTasksScreen(),
+    //   //   "title": AppLocalizations.of(context).translate('completedtasks')
+    //   // },
+    // ];
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedPage,

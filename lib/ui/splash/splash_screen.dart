@@ -27,10 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
       bool? firstTime = prefs.getBool('first_time');
 
       if (firstTime != null && !firstTime) {
-        Navigator.pushReplacementNamed(context, signupId);
+        Navigator.pushReplacementNamed(context, signUpName);
       } else {
         prefs.setBool('first_time', false);
-        Navigator.pushReplacementNamed(context, onboardingId);
+        Navigator.pushReplacementNamed(context, onboardingName);
       }
 
       // Navigator.pushReplacementNamed(context, onboardingId);

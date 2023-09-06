@@ -1,4 +1,5 @@
-const splashId="/splash";
-const mainScreenId="/main_screen";
-const onboardingId = "/onboarding";
-const signupId = "/signup";
+const splashName="/splash";
+const mainScreenName="/main_screen";
+const onboardingName = "/onboarding";
+const signUpName = "/sign_up";
+const logInName ="/log_in";

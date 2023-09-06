@@ -16,5 +16,7 @@
   "i_agree_with": "I agree with the",
   "terms_and_conditions": "Terms&Conditions",
   "create_account": "Create Account",
-  "already_have_an_account": "Already have an account?"
+  "already_have_an_account": "Already have an account?",
+  "forgot_your_password": "Forgot your password?",
+  "don't_have_an_account_yet": "Don't have an account yet?"
 }

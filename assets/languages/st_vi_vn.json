@@ -4,7 +4,7 @@
   "skip": "BỎ QUA",
   "next": "Kế tiếp",
   "log_in": "Đăng nhập",
-  "sign_up": "Đăng kys",
+  "sign_up": "Đăng ký",
   "title_signup": "Đăng ký tài khoảng ngay",
   "content_signup": "Chào mừng đến với HealthLine! Đăng ký và bắt đầu sử dụng ứng dụng ngay thôi.",
   "full_name": "Họ & Tên",
@@ -16,5 +16,7 @@
   "i_agree_with": "Tôi đồng ý với",
   "terms_and_conditions": "Điều khoản & điều kiện",
   "create_account": "Tạo Tài Khoản",
-  "already_have_an_account": "Bạn đã có tài khoản?"
+  "already_have_an_account": "Bạn đã có tài khoản?",
+  "forgot_your_password":"Quên mật khẩu?",
+  "don't_have_an_account_yet":"Bạn chưa đăng ký tài khoản?"
 }

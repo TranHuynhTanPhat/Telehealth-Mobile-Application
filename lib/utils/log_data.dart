@@ -1,10 +1,14 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+
 void logPrint(Object? object) async {
   int defaultPrintLength = 1020;
   if (object == null || object.toString().length <= defaultPrintLength) {
     log("===================================================================================================");
+
     print(object);
+
     log("===================================================================================================");
   } else {
     log("===================================================================================================");
