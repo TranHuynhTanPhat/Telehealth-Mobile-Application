@@ -1,8 +1,4 @@
 // import 'package:flutter/material.dart';
-// import 'package:flutter_chat_sdk/res/style.dart';
-// import 'package:flutter_chat_sdk/res/theme/theme_service.dart';
-
-// import '../../res/dimens.dart';
 
 // class AppTextField extends StatefulWidget {
 //   final TextEditingController? controller;
@@ -23,7 +19,7 @@
 //     this.hintText,
 //     this.hintStyle,
 //     this.strokeColor,
-//     this.autoFocus = true,
+//     this.autoFocus = false,
 //     this.inputType,
 //     this.prefixIcon,
 //     this.maxLength,
@@ -95,3 +91,70 @@
 //         borderSide: BorderSide(color: strokeColor ?? getColor().borderNeutral));
 //   }
 // }
+
+import 'package:flutter/material.dart';
+import 'package:healthline/res/style.dart';
+
+import '../../utils/keyboard.dart';
+
+class TextFieldWidget extends StatelessWidget {
+  const TextFieldWidget({
+    super.key,
+    this.label,
+    this.hint,
+    this.textInputType = TextInputType.text,
+    this.obscureText = false,
+    this.enableSuggestions = false,
+    this.autocorrect = false, required this.controller,
+  });
+  final TextEditingController controller;
+  final String? label;
+  final String? hint;
+  final TextInputType? textInputType;
+  final bool? obscureText;
+  final bool? enableSuggestions;
+  final bool? autocorrect;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      
+      controller: controller,
+      onTap: () => KeyboardUtil.hideKeyboard(context),
+      style: Theme.of(context).textTheme.bodyLarge,
+      keyboardType: textInputType,
+      obscureText: obscureText!,
+      enableSuggestions: enableSuggestions!,
+      autocorrect: autocorrect!,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(dimensHeight()*2),
+          labelText: label,
+          // labelStyle: Theme.of(context).textTheme.bodyLarge,
+          floatingLabelStyle: Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(color: color1F1F1F),
+          hintText: hint,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: colorA8B1CE),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(width: 1, color: colorA8B1CE),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(width: 1, color: colorA8B1CE)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(width: 1, color: color1F1F1F)),
+          focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(width: 1, color: Colors.redAccent))),
+    );
+  }
+}

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/colors.dart';
-import 'package:healthline/res/dimens.dart';
-import 'package:healthline/res/language/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -30,19 +27,17 @@ class _MainScreenState extends State<MainScreen> {
       // },
     ];
     return Scaffold(
-      bottomNavigationBar: Container(
-        child: NavigationBar(
-          selectedIndex: _selectedPage,
-          onDestinationSelected: (value) => setState(() {
-            _selectedPage = value;
-          }),
-          destinations: const [
-            NavigationDestination(
-                icon: Icon(Icons.home,), label: "Lable"),
-            NavigationDestination(
-                icon: Icon(Icons.message,), label: "Lable"),
-          ],
-        ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedPage,
+        onDestinationSelected: (value) => setState(() {
+          _selectedPage = value;
+        }),
+        destinations: const [
+          NavigationDestination(
+              icon: Icon(Icons.home,), label: "Lable"),
+          NavigationDestination(
+              icon: Icon(Icons.message,), label: "Lable"),
+        ],
       ),
     );
   }

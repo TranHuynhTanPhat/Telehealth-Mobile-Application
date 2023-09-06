@@ -1,4 +1,20 @@
 {
   "vi": "Tiếng Việt",
-  "en": "Tiếng Anh"
+  "en": "Tiếng Anh",
+  "skip": "BỎ QUA",
+  "next": "Kế tiếp",
+  "log_in": "Đăng nhập",
+  "sign_up": "Đăng kys",
+  "title_signup": "Đăng ký tài khoảng ngay",
+  "content_signup": "Chào mừng đến với HealthLine! Đăng ký và bắt đầu sử dụng ứng dụng ngay thôi.",
+  "full_name": "Họ & Tên",
+  "ex_full_name": "vd: Nguyễn Văn A",
+  "email": "Email",
+  "ex_email": "example@gmail.com",
+  "password": "Mật khẩu",
+  "confirm_password": "Xác Thực Mật Khẩu",
+  "i_agree_with": "Tôi đồng ý với",
+  "terms_and_conditions": "Điều khoản & điều kiện",
+  "create_account": "Tạo Tài Khoản",
+  "already_have_an_account": "Bạn đã có tài khoản?"
 }

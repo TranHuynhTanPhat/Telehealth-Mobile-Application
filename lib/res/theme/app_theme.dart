@@ -44,7 +44,7 @@ class AppThemes {
       brightness: Brightness.light,
       useMaterial3: true,
       textTheme: textTheme,
-      // dividerColor: const Color(0xffb5c9cd),
+      dividerTheme: const DividerThemeData(color: colorF2F5FF, thickness: 1),
       // bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       //   backgroundColor: Colors.white,
       //   elevation: 10,

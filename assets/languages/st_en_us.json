@@ -1,4 +1,20 @@
 {
   "vi": "Vietnamese",
-  "en": "English"
+  "en": "English",
+  "skip": "SKIP",
+  "next": "Next",
+  "log_in": "Log in",
+  "sign_up": "Sign up",
+  "title_signup": "Register an account now",
+  "content_signup": "Welcome to HealthLine! Sign up and start using application now.",
+  "full_name": "Full Name",
+  "ex_full_name": "ex. David Beckham",
+  "email": "Email",
+  "ex_email": "example@gmail.com",
+  "password": "Password",
+  "confirm_password": "Confirm Password",
+  "i_agree_with": "I agree with the",
+  "terms_and_conditions": "Terms&Conditions",
+  "create_account": "Create Account",
+  "already_have_an_account": "Already have an account?"
 }

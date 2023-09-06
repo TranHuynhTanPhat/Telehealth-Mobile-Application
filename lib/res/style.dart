@@ -1,4 +1,8 @@
 export './theme/text_theme.dart';
+export './theme/app_theme.dart';
+export './language/app_localizations.dart';
+export './language/app_localizations_delegate.dart';
+export './language/app_localizations_setup.dart';
 export 'colors.dart';
 export 'dimens.dart';
 export 'icons.dart';
