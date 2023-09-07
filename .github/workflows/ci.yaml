@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          EOF
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
@@ -26,6 +32,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          EOF
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
@@ -42,6 +54,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          EOF
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"

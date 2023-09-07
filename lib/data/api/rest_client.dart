@@ -6,6 +6,7 @@ import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RestClient {
@@ -118,6 +119,7 @@ class RestClient {
           return handler.next(options);
         } on DioException catch (error) {
           logout();
+          SentryLogError().additionalMessage(error, SentryLevel.error);
           return handler.reject(error, true);
         }
       } else {
@@ -133,7 +135,7 @@ class RestClient {
       try {
         throw error;
       } catch (error, stackTrace) {
-        SentryLogError().additionalData(error, stackTrace);
+        SentryLogError().additionalException(error, stackTrace);
       }
       if (error.response?.statusCode == 401) {
         // Đăng xuất khi hết session
