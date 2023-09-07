@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/data/storage/models/slider_model.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/ui/splash/components/exports.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -74,7 +75,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   itemCount: slides.length,
                   itemBuilder: (context, index) {
-                    return Slider(
+                    return SliderWidget(
                       image: slides[index].getImage(),
                       title: slides[index].getTitle(),
                       description: slides[index].getDescription(),
@@ -137,53 +138,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
-    );
-  }
-}
-
-class Slider extends StatelessWidget {
-  const Slider(
-      {super.key,
-      required this.image,
-      required this.title,
-      required this.description});
-  final String image;
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // image given in slider
-          Image(image: AssetImage(image), height: dimensImage()*50,),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                    child: Text.rich(TextSpan(
-                        text: title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.w900),
-                        children: [
-                      TextSpan(
-                          text: "\n$description",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: color6A6E83))
-                    ])))
-              ],
-            ),
-          )
-        ],
-      ),
     );
   }
 }

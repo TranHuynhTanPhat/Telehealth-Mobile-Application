@@ -1,8 +1,8 @@
-part of 'log_in_bloc.dart';
+part of 'log_in_cubit.dart';
 
 sealed class LogInState extends Equatable {
   const LogInState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -10,7 +10,6 @@ sealed class LogInState extends Equatable {
 final class LogInInitial extends LogInState {}
 
 final class LogInActionState extends LogInState {}
-
 
 final class LogInLoading extends LogInState {}
 
@@ -22,4 +21,4 @@ final class LogInError extends LogInState {
   const LogInError({required this.message});
 }
 
-final class NavigateToSignUpActionState extends LogInActionState{}
+final class NavigateToSignUpActionState extends LogInActionState {}

@@ -18,5 +18,7 @@
   "create_account": "Create Account",
   "already_have_an_account": "Already have an account?",
   "forgot_your_password": "Forgot your password?",
-  "don't_have_an_account_yet": "Don't have an account yet?"
+  "don't_have_an_account_yet": "Don't have an account yet?",
+  "title_login": "Hello",
+  "content_login": "HealthLine is happy to see you again. You can continue where you left off by logging in."
 }
