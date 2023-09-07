@@ -132,11 +132,9 @@ class RestClient {
       return handler.next(response);
     }, onError: (DioException error, handler) async {
       // Ghi log những lỗi gửi về Sentry hoặc Firebase crashlytics
-      try {
-        throw error;
-      } catch (error, stackTrace) {
-        SentryLogError().additionalException(error, stackTrace);
-      }
+
+      SentryLogError().additionalException("${error}REST_CLIENT");
+
       if (error.response?.statusCode == 401) {
         // Đăng xuất khi hết session
         logout();
@@ -151,7 +149,6 @@ class RestClient {
   static Future<void> logout() async {
     final _prefs = await SharedPreferences.getInstance();
     _prefs.remove('accessToken');
-    _prefs.remove('expiredTime');
     _prefs.remove('refreshToken');
   }
 }
