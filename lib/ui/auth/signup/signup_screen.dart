@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/app/blocs/blocs_export.dart';
+// import 'package:healthline/app/blocs/blocs_export.dart';
+import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/ui/auth/signup/components/exports.dart';
 import 'package:healthline/ui/widgets/elevated_button_widget.dart';
@@ -43,8 +44,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignUpBloc(),
-      child: BlocListener<SignUpBloc, SignUpState>(
+      create: (context) => SignUpCubit(),
+      child: BlocListener<SignUpCubit, SignUpState>(
         listener: (context, state) {
           if (state is NavigateToLogInActionState) {
             Navigator.pushReplacementNamed(context, logInName);

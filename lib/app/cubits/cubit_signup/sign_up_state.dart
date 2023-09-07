@@ -1,4 +1,4 @@
-part of 'sign_up_bloc.dart';
+part of 'sign_up_cubit.dart';
 
 sealed class SignUpState extends Equatable {
   const SignUpState();
@@ -7,9 +7,11 @@ sealed class SignUpState extends Equatable {
   List<Object> get props => [];
 }
 
+final class SignUpInitial extends SignUpState {}
+
+
 final class SignUpActionState extends SignUpState {}
 
-final class SignUpInitial extends SignUpState {}
 
 final class SignUpLoading extends SignUpState {}
 

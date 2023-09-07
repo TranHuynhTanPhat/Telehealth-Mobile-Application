@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/app_routes.dart';
 import 'package:healthline/res/style.dart';
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
           ),
           theme: AppThemes.appThemeData[AppTheme.lightTheme],
           onGenerateRoute: appRoute.onGeneralRoute,
-          initialRoute: splashName,
           supportedLocales: AppLocalizationsSetup.supportedLocales,
           localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
           locale: const Locale('vi'),

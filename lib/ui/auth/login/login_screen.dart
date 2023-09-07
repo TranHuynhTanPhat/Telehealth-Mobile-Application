@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/app/blocs/blocs_export.dart';
+import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/ui/auth/login/components/exports.dart';
-
 import 'package:healthline/ui/widgets/elevated_button_widget.dart';
 import 'package:healthline/ui/widgets/text_field_widget.dart';
 
@@ -36,8 +35,8 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LogInBloc(),
-      child: BlocListener<LogInBloc, LogInState>(
+      create: (context) => LogInCubit(),
+      child: BlocListener<LogInCubit, LogInState>(
         listener: (context, state) {
           if (state is NavigateToSignUpActionState) {
             Navigator.pushReplacementNamed(context, signUpName);
@@ -75,7 +74,8 @@ class _LogInScreenState extends State<LogInScreen> {
                     TextButton(
                       onPressed: null,
                       child: Text(
-                        "Forgot your password!",
+                        AppLocalizations.of(context)
+                            .translate("forgot_your_password"),
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall

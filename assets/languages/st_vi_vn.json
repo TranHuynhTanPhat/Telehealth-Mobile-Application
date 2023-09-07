@@ -11,12 +11,14 @@
   "ex_full_name": "vd: Nguyễn Văn A",
   "email": "Email",
   "ex_email": "example@gmail.com",
-  "password": "Mật khẩu",
+  "password": "Mật Khẩu",
   "confirm_password": "Xác Thực Mật Khẩu",
   "i_agree_with": "Tôi đồng ý với",
   "terms_and_conditions": "Điều khoản & điều kiện",
   "create_account": "Tạo Tài Khoản",
   "already_have_an_account": "Bạn đã có tài khoản?",
   "forgot_your_password":"Quên mật khẩu?",
-  "don't_have_an_account_yet":"Bạn chưa đăng ký tài khoản?"
+  "don't_have_an_account_yet":"Bạn chưa đăng ký tài khoản?",
+  "title_login":"Xin chào",
+  "content_login":"HealthLine rất vui khi gặp lại bạn. Bạn có thể tiếp tục sau khi đăng nhập."
 }
