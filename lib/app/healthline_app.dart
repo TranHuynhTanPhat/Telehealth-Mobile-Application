@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/app_routes.dart';
 import 'package:healthline/res/style.dart';
 
-import 'package:healthline/ui/splash/splash_screen.dart';
+import 'package:healthline/views/splash/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.appRoute});
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
           ),
           theme: AppThemes.appThemeData[AppTheme.lightTheme],
           onGenerateRoute: appRoute.onGeneralRoute,
-          initialRoute: splashName,
           supportedLocales: AppLocalizationsSetup.supportedLocales,
           localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
           locale: const Locale('vi'),

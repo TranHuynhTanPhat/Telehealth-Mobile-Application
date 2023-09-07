@@ -105,20 +105,23 @@ class TextFieldWidget extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.obscureText = false,
     this.enableSuggestions = false,
-    this.autocorrect = false, required this.controller,
+    this.autocorrect = false,
+    required this.controller,
+    this.error, this.suffixIcon,
   });
   final TextEditingController controller;
   final String? label;
   final String? hint;
+  final String? error;
   final TextInputType? textInputType;
   final bool? obscureText;
   final bool? enableSuggestions;
   final bool? autocorrect;
+  final IconButton? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      
       controller: controller,
       onTap: () => KeyboardUtil.hideKeyboard(context),
       style: Theme.of(context).textTheme.bodyLarge,
@@ -127,7 +130,7 @@ class TextFieldWidget extends StatelessWidget {
       enableSuggestions: enableSuggestions!,
       autocorrect: autocorrect!,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(dimensHeight()*2),
+          contentPadding: EdgeInsets.all(dimensHeight() * 2),
           labelText: label,
           // labelStyle: Theme.of(context).textTheme.bodyLarge,
           floatingLabelStyle: Theme.of(context)
@@ -139,6 +142,8 @@ class TextFieldWidget extends StatelessWidget {
               .textTheme
               .bodyLarge
               ?.copyWith(color: colorA8B1CE),
+          errorText: error,
+          suffixIcon: suffixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(width: 1, color: colorA8B1CE),

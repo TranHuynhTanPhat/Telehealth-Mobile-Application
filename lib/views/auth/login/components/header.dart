@@ -12,7 +12,7 @@ class HeaderLogIn extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "Hello",
+                AppLocalizations.of(context).translate('title_login'),
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color: secondary,
                       fontWeight: FontWeight.w900,
@@ -28,7 +28,7 @@ class HeaderLogIn extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "HealthLine is happy to see you again. You can continue where you left off by logging in.",
+                AppLocalizations.of(context).translate("content_login"),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: colorA8B1CE.withOpacity(.5),
                     fontWeight: FontWeight.w600),

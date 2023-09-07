@@ -18,5 +18,17 @@
   "create_account": "Create Account",
   "already_have_an_account": "Already have an account?",
   "forgot_your_password": "Forgot your password?",
-  "don't_have_an_account_yet": "Don't have an account yet?"
+  "don't_have_an_account_yet": "Don't have an account yet?",
+  "title_login": "Hello",
+  "content_login": "HealthLine is happy to see you again. You can continue where you left off by logging in.",
+  "please_enter_email":"Please enter email",
+  "enter_a_valid_email_address":"Enter a valid email address",
+  "please_enter_password":"Please enter password",
+  "least_8_characters_long":"Least 8 characters long",
+  "least_1_uppercase":"Least 1 uppercase",
+  "least_1_lowercase":"Least 1 lowercase",
+  "least_1_number":"Least 1 number",
+  "least_1_special_character":"Least 1 special character",
+  "please_enter_fulname":"Please enter full name",
+  "password_must_be_same_as_above":"Password must be same as above"
 }
