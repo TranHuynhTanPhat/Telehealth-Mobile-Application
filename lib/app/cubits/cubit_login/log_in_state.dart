@@ -21,4 +21,12 @@ final class LogInError extends LogInState {
   const LogInError({required this.message});
 }
 
+final class LogInErrorActionState extends LogInActionState {
+  final String message;
+
+  LogInErrorActionState({required this.message});
+}
+
 final class NavigateToSignUpActionState extends LogInActionState {}
+
+final class SignInActionState extends LogInActionState {}

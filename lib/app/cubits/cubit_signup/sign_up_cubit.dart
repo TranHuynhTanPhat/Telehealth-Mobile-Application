@@ -8,7 +8,12 @@ part 'sign_up_state.dart';
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(SignUpInitial());
 
-  void navigateToLogIn(){
+  void navigateToLogIn() {
     emit(NavigateToLogInActionState());
+  }
+
+  Future<void> registerAccount(
+      String fullName, String email, String password) async {
+    emit(RegisterAccountActionState());
   }
 }

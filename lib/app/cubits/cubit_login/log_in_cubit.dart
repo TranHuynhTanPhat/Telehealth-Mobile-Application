@@ -11,4 +11,8 @@ class LogInCubit extends Cubit<LogInState> {
   void navigateToSignIn(){
     emit(NavigateToSignUpActionState());
   }
+
+  Future<void> signIn(String email, String password)async {
+    emit(SignInActionState());
+  }
 }
