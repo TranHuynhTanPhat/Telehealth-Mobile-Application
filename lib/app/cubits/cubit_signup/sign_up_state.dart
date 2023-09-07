@@ -9,9 +9,7 @@ sealed class SignUpState extends Equatable {
 
 final class SignUpInitial extends SignUpState {}
 
-
 final class SignUpActionState extends SignUpState {}
-
 
 final class SignUpLoading extends SignUpState {}
 
@@ -23,4 +21,12 @@ final class SignUpError extends SignUpState {
   const SignUpError({required this.message});
 }
 
-final class NavigateToLogInActionState extends SignUpActionState{}
+final class SignUpErrorActionState extends SignUpActionState {
+  final String message;
+
+  SignUpErrorActionState({required this.message});
+}
+
+final class NavigateToLogInActionState extends SignUpActionState {}
+
+final class RegisterAccountActionState extends SignUpActionState {}
