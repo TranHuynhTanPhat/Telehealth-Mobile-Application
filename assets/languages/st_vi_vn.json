@@ -30,5 +30,7 @@
   "least_1_number":"Ít nhất 1 chữ số",
   "least_1_special_character":"Ít nhất 1 kí tự đặc biệt",
   "please_enter_fulname":"Vui lòng nhập họ tên",
-  "password_must_be_same_as_above":"Mật khẩu phải giống ở trên"
+  "password_must_be_same_as_above":"Mật khẩu phải giống ở trên",
+  "email_or_password_is_invalid":"Email hoặc mật khẩu không hợp lệ",
+  "email_already_existed":"Email đã tồn tại"
 }

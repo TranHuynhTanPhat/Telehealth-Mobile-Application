@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
+import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/views/auth/signup/components/exports.dart';
 import 'package:healthline/views/widgets/elevated_button_widget.dart';
@@ -52,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignUpCubit(),
+      create: (context) => SignUpCubit(UserRepository()),
       child: Builder(builder: (context) {
         return BlocListener<SignUpCubit, SignUpState>(
           listenWhen: (previous, current) => current is SignUpActionState,
@@ -60,8 +61,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             if (state is NavigateToLogInActionState) {
               Navigator.pushReplacementNamed(context, logInName);
             } else if (state is RegisterAccountActionState) {
-              logPrint("CHECKK");
-            } else if (state is SignUpErrorActionState) {}
+              logPrint(state.response);
+            } else if (state is SignUpErrorActionState) {
+              if (state.message.contains('409')) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)
+                          .translate("email_already_existed"),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: white),
+                    ),
+                  ),
+                );
+              }
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: true,

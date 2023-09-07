@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
+import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/utils/config_loading.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/views/auth/login/components/exports.dart';
 import 'package:healthline/views/widgets/elevated_button_widget.dart';
 import 'package:healthline/views/widgets/text_field_widget.dart';
@@ -42,14 +43,26 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LogInCubit(),
+      create: (context) => LogInCubit(UserRepository()),
       child: BlocListener<LogInCubit, LogInState>(
         listener: (context, state) {
           if (state is NavigateToSignUpActionState) {
             Navigator.pushReplacementNamed(context, signUpName);
           } else if (state is SignInActionState) {
-            configLoading();
-          } else if (state is LogInErrorActionState) {}
+            logPrint(state.response);
+          } else if (state is LogInErrorActionState) {
+            if (state.message.contains("401")) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context)
+                        .translate("email_or_password_is_invalid"),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(color: white),
+                  ),
+                ),
+              );
+            }
+          }
         },
         child: Builder(builder: (context) {
           return Scaffold(
