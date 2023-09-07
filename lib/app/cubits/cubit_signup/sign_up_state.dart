@@ -29,4 +29,8 @@ final class SignUpErrorActionState extends SignUpActionState {
 
 final class NavigateToLogInActionState extends SignUpActionState {}
 
-final class RegisterAccountActionState extends SignUpActionState {}
+final class RegisterAccountActionState extends SignUpActionState {
+  final SignUpResponse response;
+
+  RegisterAccountActionState({required this.response});
+}
