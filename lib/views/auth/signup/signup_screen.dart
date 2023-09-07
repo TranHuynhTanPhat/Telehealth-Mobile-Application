@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/ui/auth/signup/components/exports.dart';
-import 'package:healthline/ui/widgets/elevated_button_widget.dart';
-import 'package:healthline/ui/widgets/text_field_widget.dart';
+import 'package:healthline/views/auth/signup/components/exports.dart';
+import 'package:healthline/views/widgets/elevated_button_widget.dart';
+import 'package:healthline/views/widgets/text_field_widget.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/validate.dart';
 

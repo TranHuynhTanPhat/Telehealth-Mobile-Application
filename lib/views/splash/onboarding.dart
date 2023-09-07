@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/data/storage/models/slider_model.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/ui/splash/components/exports.dart';
+import 'package:healthline/views/splash/components/exports.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

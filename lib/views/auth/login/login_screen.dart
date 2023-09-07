@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/ui/auth/login/components/exports.dart';
-import 'package:healthline/ui/widgets/elevated_button_widget.dart';
-import 'package:healthline/ui/widgets/text_field_widget.dart';
+import 'package:healthline/utils/config_loading.dart';
+import 'package:healthline/views/auth/login/components/exports.dart';
+import 'package:healthline/views/widgets/elevated_button_widget.dart';
+import 'package:healthline/views/widgets/text_field_widget.dart';
 import 'package:healthline/utils/validate.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _LogInScreenState extends State<LogInScreen> {
           if (state is NavigateToSignUpActionState) {
             Navigator.pushReplacementNamed(context, signUpName);
           } else if (state is SignInActionState) {
-            print("CHEKKKK");
+            configLoading();
           } else if (state is LogInErrorActionState) {}
         },
         child: Builder(builder: (context) {
