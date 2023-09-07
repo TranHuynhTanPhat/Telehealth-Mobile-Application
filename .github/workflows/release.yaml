@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - v0.*
+      - v*
 
 name: Test, Build and Release apk
 jobs:
@@ -29,4 +29,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/debug/*.apk"
+          replacesArtifacts: false
           token: ${{ secrets.TOKEN }}
+          allowUpdates: true
