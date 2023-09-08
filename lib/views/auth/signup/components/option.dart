@@ -30,7 +30,7 @@ class OptionSignUp extends StatelessWidget {
                 height: dimensImage() * 5,
               ),
               label: Text(
-                'Google',
+                AppLocalizations.of(context).translate("sign_in_with_google"),
                 style: Theme.of(context).textTheme.labelLarge,
               )),
         ),
@@ -49,7 +49,7 @@ class OptionSignUp extends StatelessWidget {
                   EdgeInsets.all(0),
                 ),
               ),
-              onPressed: ()=> context.read<SignUpCubit>().navigateToLogIn(),
+              onPressed: () => context.read<SignUpCubit>().navigateToLogIn(),
               child: Text(
                 AppLocalizations.of(context).translate("log_in"),
                 style: Theme.of(context)

@@ -35,7 +35,6 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacementNamed(context, onboardingName);
       }
 
-      // Navigator.pushReplacementNamed(context, onboardingId);
     });
   }
 

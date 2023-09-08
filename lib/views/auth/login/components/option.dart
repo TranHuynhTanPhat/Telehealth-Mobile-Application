@@ -27,10 +27,10 @@ class OptionLogIn extends StatelessWidget {
               onPressed: null,
               icon: Image.asset(
                 DImages.logoGoogle,
-                height: dimensImage() * 5,
+                height: dimensImage() * 3,
               ),
               label: Text(
-                'Google',
+                AppLocalizations.of(context).translate("sign_in_with_google"),
                 style: Theme.of(context).textTheme.labelLarge,
               )),
         ),

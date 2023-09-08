@@ -9,7 +9,6 @@ sealed class LogInState extends Equatable {
 
 final class LogInInitial extends LogInState {}
 
-final class LogInActionState extends LogInState {}
 
 final class LogInLoading extends LogInState {}
 
@@ -20,6 +19,10 @@ final class LogInError extends LogInState {
 
   const LogInError({required this.message});
 }
+
+final class LogInActionState extends LogInState {}
+
+final class LogInLoadingActionState extends LogInActionState{}
 
 final class LogInErrorActionState extends LogInActionState {
   final String message;

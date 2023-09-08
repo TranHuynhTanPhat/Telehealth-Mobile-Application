@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
@@ -58,23 +59,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return BlocListener<SignUpCubit, SignUpState>(
           listenWhen: (previous, current) => current is SignUpActionState,
           listener: (context, state) {
-            if (state is NavigateToLogInActionState) {
+            if (state is SignUpLoadingActionState) {
+              EasyLoading.show();
+            } else if (state is NavigateToLogInActionState) {
+              EasyLoading.dismiss();
               Navigator.pushReplacementNamed(context, logInName);
             } else if (state is RegisterAccountActionState) {
+              EasyLoading.dismiss();
               logPrint(state.response);
             } else if (state is SignUpErrorActionState) {
               if (state.message.contains('409')) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(context)
-                          .translate("email_already_existed"),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(color: white),
-                    ),
-                  ),
+                EasyLoading.showToast(
+                  AppLocalizations.of(context)
+                      .translate("email_already_existed"),
                 );
               }
             }

@@ -32,5 +32,6 @@
   "please_enter_fulname":"Vui lòng nhập họ tên",
   "password_must_be_same_as_above":"Mật khẩu phải giống ở trên",
   "email_or_password_is_invalid":"Email hoặc mật khẩu không hợp lệ",
-  "email_already_existed":"Email đã tồn tại"
+  "email_already_existed":"Email đã tồn tại",
+  "sign_in_with_google":"Đăng nhập với Google"
 }
