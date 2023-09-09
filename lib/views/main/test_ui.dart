@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/app/app_routes.dart';
-import 'package:healthline/app/healthline_app.dart';
-import 'package:healthline/res/colors.dart';
+import 'package:healthline/res/style.dart';
+import 'package:healthline/views/main/error_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +34,6 @@ Future<void> main() async {
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 1.0;
     },
-    appRunner: () => runApp(MyApp(
-      appRoute: AppRoute(),
-    )),
+    appRunner: () => runApp(const MaterialApp(home: ErrorScreen())),
   );
-
-  // runApp(MyApp(
-  //   appRoute: AppRoute(),
-  // ));
 }

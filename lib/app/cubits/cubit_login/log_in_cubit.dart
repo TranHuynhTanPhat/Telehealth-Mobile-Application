@@ -16,6 +16,7 @@ class LogInCubit extends Cubit<LogInState> {
   }
 
   Future<void> signIn(String email, String password) async {
+    emit(LogInLoadingActionState());
     try {
       LoginResponse response = await _userRepository.login(email, password);
       emit(SignInActionState(response: response));

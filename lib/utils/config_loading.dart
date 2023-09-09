@@ -2,22 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/res/colors.dart';
 
-void configLoading() {
+void configLoading(context) {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..indicatorType = EasyLoadingIndicatorType.ring
     ..loadingStyle = EasyLoadingStyle.custom
-    ..indicatorSize = 45.0
-    ..radius = 10.0
-    ..progressColor = primary
-    ..backgroundColor = white
+    ..maskType = EasyLoadingMaskType.custom
+    ..indicatorSize = 40
+    ..radius = 20.0
+    ..progressColor = white
+    ..backgroundColor = colorF2F5FF
     ..indicatorColor = primary
-    ..textColor = primary
-    ..maskColor = primary.withOpacity(0.5)
+    ..textColor = white
+    ..maskColor = transparent
     ..userInteractions = true
     ..dismissOnTap = false
+    ..toastPosition = EasyLoadingToastPosition.top
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..textAlign = TextAlign.center
+    ..textStyle = Theme.of(context).textTheme.bodyLarge
+    ..contentPadding = const EdgeInsets.all(10)
+    ..textPadding = EdgeInsets.zero
+    ..animationDuration = const Duration(milliseconds: 200)
     ..customAnimation = CustomAnimation();
 }
+
 class CustomAnimation extends EasyLoadingAnimation {
   CustomAnimation();
 
