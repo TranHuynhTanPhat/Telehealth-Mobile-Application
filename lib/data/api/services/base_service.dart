@@ -41,7 +41,7 @@ abstract class BaseService {
     switch (response.statusCode) {
       case 200:
       case 201:
-        return DataResponse(response.data);
+        return DataResponse(response.data['data']);
       default:
         var apiResponse = ApiResponse.fromJson(response.data);
         throw ApiException(

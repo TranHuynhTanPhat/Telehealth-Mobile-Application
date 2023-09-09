@@ -91,11 +91,11 @@ class RestClient {
 
       // Lấy các token được lưu tạm từ local storage
       String? accessToken = _prefs.getString('accessToken');
-      String? refreshToken = _prefs.getString('refreshToken');
+      // String? role = _prefs.getString('role');
 
       // Kiểm tra xem user có đăng nhập hay chưa. Nếu chưa thì call handler.next(options)
       // để trả data về tiếp client
-      if (accessToken == null || refreshToken == null) {
+      if (accessToken == null) {
         return handler.next(options);
       }
 
@@ -149,6 +149,6 @@ class RestClient {
   static Future<void> logout() async {
     final _prefs = await SharedPreferences.getInstance();
     _prefs.remove('accessToken');
-    _prefs.remove('refreshToken');
+    _prefs.remove('role');
   }
 }

@@ -3,6 +3,7 @@ import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/data/storage/models/slider_model.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/views/splash/components/exports.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,12 +15,12 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   List<SliderModel> slides = [];
   int currentIndex = 0;
-  late PageController _controller;
+  late PreloadPageController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController(initialPage: 0);
+    _controller = PreloadPageController(initialPage: 0);
     slides = getSlides();
   }
 
@@ -42,31 +43,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: dimensWidth()*2),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
                     alignment: Alignment.bottomRight,
                     child: TextButton(
-                              child: Text(
-                                AppLocalizations.of(context).translate("skip"),
-                                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                    color: color1F1F1F, fontWeight: FontWeight.normal),
-                              ),
-                              onPressed: () {
-                                // if (currentIndex == slides.length - 1) {
-                                //   Navigator.pushReplacementNamed(context, mainScreenId);
-                                // } else {
-                                //   _controller.nextPage(
-                                //       duration: const Duration(milliseconds: 100),
-                                //       curve: Curves.linear);
-                                // }
-                              },
-                            ),
+                      child: Text(
+                        AppLocalizations.of(context).translate("skip"),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: color1F1F1F, fontWeight: FontWeight.normal),
+                      ),
+                      onPressed: () {
+                        // if (currentIndex == slides.length - 1) {
+                        //   Navigator.pushReplacementNamed(context, mainScreenId);
+                        // } else {
+                        //   _controller.nextPage(
+                        //       duration: const Duration(milliseconds: 100),
+                        //       curve: Curves.linear);
+                        // }
+                      },
+                    ),
                   ),
                 ),
               ],
             ),
             Expanded(
-              child: PageView.builder(
+              child: PreloadPageView.builder(
                   controller: _controller,
+                  preloadPagesCount: 6,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   onPageChanged: (value) {
                     setState(() {
@@ -75,8 +79,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   itemCount: slides.length,
                   itemBuilder: (context, index) {
+                    
                     return SliderWidget(
-                      image: slides[index].getImage(),
+                      fileName: slides[index].getFileName(),
                       title: slides[index].getTitle(),
                       description: slides[index].getDescription(),
                     );

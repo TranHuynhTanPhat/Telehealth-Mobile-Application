@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'log_in_state.dart';
 
@@ -19,8 +20,15 @@ class LogInCubit extends Cubit<LogInState> {
     emit(LogInLoadingActionState());
     try {
       LoginResponse response = await _userRepository.login(email, password);
+      // AppController().authState = AuthState.authorized;
+      print(response.jwtToken);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('accessToken', response.jwtToken!);
+      prefs.setString('role', response.role!);
+      print(response);
       emit(SignInActionState(response: response));
     } catch (error) {
+      print(error);
       emit(LogInErrorActionState(message: error.toString()));
     }
   }

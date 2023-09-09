@@ -12,6 +12,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     // final List<Map<String, dynamic>> _pageDetail = [
     //   // {
     //   //   "page": const LandingPageScreen(),
@@ -34,9 +35,15 @@ class _MainScreenState extends State<MainScreen> {
         }),
         destinations: const [
           NavigationDestination(
-              icon: Icon(Icons.home,), label: "Lable"),
+              icon: Icon(
+                Icons.home,
+              ),
+              label: "Lable"),
           NavigationDestination(
-              icon: Icon(Icons.message,), label: "Lable"),
+              icon: Icon(
+                Icons.message,
+              ),
+              label: "Lable"),
         ],
       ),
     );

@@ -1,19 +1,17 @@
 import 'dart:convert';
 
-import 'package:healthline/res/style.dart';
-
 class SliderModel {
-  String image;
+  String fileName;
   String title;
   String description;
   SliderModel({
-    required this.image,
+    required this.fileName,
     required this.title,
     required this.description,
   });
 
-  void setImage(String getImage) {
-    image = getImage;
+  void setFileName(String getImage) {
+    fileName = getImage;
   }
 
   void setTitle(String getTitle) {
@@ -24,8 +22,8 @@ class SliderModel {
     description = getDescription;
   }
 
-  String getImage() {
-    return image;
+  String getFileName() {
+    return fileName;
   }
 
   String getTitle() {
@@ -37,12 +35,12 @@ class SliderModel {
   }
 
   SliderModel copyWith({
-    String? image,
+    String? fileName,
     String? title,
     String? description,
   }) {
     return SliderModel(
-      image: image ?? this.image,
+      fileName: fileName ?? this.fileName,
       title: title ?? this.title,
       description: description ?? this.description,
     );
@@ -51,7 +49,7 @@ class SliderModel {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'image': image});
+    result.addAll({'fileName': fileName});
     result.addAll({'title': title});
     result.addAll({'description': description});
 
@@ -60,7 +58,7 @@ class SliderModel {
 
   factory SliderModel.fromMap(Map<String, dynamic> map) {
     return SliderModel(
-      image: map['image'] ?? '',
+      fileName: map['fileName'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
     );
@@ -73,20 +71,20 @@ class SliderModel {
 
   @override
   String toString() =>
-      'SliderModel(image: $image, title: $title, description: $description)';
+      'SliderModel(fileName: $fileName, title: $title, description: $description)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is SliderModel &&
-        other.image == image &&
+        other.fileName == fileName &&
         other.title == title &&
         other.description == description;
   }
 
   @override
-  int get hashCode => image.hashCode ^ title.hashCode ^ description.hashCode;
+  int get hashCode => fileName.hashCode ^ title.hashCode ^ description.hashCode;
 }
 
 // List created
@@ -94,32 +92,32 @@ List<SliderModel> getSlides() {
   List<SliderModel> slides = [];
 
   slides.add(SliderModel(
-      image: DImages.onboarding1,
+      fileName: "img_onboarding_1.jpg",
       title: "Find your best specialists and clinics",
       description:
           "Doctors from all over Vietnam are always ready to provide medical advice for you."));
   slides.add(SliderModel(
-      image: DImages.onboarding2,
+      fileName: "img_onboarding_2.jpg",
       title: "Answer all health questions",
       description:
           "You can get answers to all your health-related questions through forums or by directly consulting with a doctor."));
   slides.add(SliderModel(
-      image: DImages.onboarding3,
+      fileName: "img_onboarding_3.jpg",
       title: "Schedule online appointment easily",
       description:
           "Select the specialist and make appointment throught our app."));
   slides.add(SliderModel(
-      image: DImages.onboarding4,
+      fileName: "img_onboarding_4.jpg",
       title: "Health service",
       description:
           "We provide a wide range of health-related services with the collaboration of doctors."));
   slides.add(SliderModel(
-      image: DImages.onboarding5,
+      fileName: "img_onboarding_5.jpg",
       title: "Limit direct contact",
       description:
           "This helps reduce the risk of disease transmission in crowded places like hospitals."));
   slides.add(SliderModel(
-      image: DImages.onboarding6,
+      fileName: "img_onboarding_6.jpg",
       title: "Security",
       description:
           "Your personal and health information will be kept highly confidential."));
