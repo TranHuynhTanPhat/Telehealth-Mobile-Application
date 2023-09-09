@@ -21,7 +21,7 @@ class LogInCubit extends Cubit<LogInState> {
       LoginResponse response = await _userRepository.login(email, password);
       emit(SignInActionState(response: response));
     } catch (error) {
-      emit(LogInError(message: error.toString()));
+      emit(LogInErrorActionState(message: error.toString()));
     }
   }
 }

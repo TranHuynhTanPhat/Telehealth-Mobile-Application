@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/views/widgets/google_button_widget.dart';
 
 class OptionSignUp extends StatelessWidget {
   const OptionSignUp({super.key});
@@ -19,20 +20,7 @@ class OptionSignUp extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-          child: ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(colorF8F9FD),
-                  padding: MaterialStatePropertyAll(EdgeInsets.symmetric(
-                      vertical: dimensHeight(), horizontal: dimensWidth()))),
-              onPressed: null,
-              icon: Image.asset(
-                DImages.logoGoogle,
-                height: dimensImage() * 5,
-              ),
-              label: Text(
-                AppLocalizations.of(context).translate("sign_in_with_google"),
-                style: Theme.of(context).textTheme.labelLarge,
-              )),
+          child: const GoogleButtonWidget()
         ),
         const Divider(),
         Row(

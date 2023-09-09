@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/cubits/cubit_login/log_in_cubit.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/views/widgets/google_button_widget.dart';
 
 class OptionLogIn extends StatelessWidget {
   const OptionLogIn({super.key});
@@ -19,20 +20,7 @@ class OptionLogIn extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-          child: ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(colorF8F9FD),
-                  padding: MaterialStatePropertyAll(EdgeInsets.symmetric(
-                      vertical: dimensHeight(), horizontal: dimensWidth()))),
-              onPressed: null,
-              icon: Image.asset(
-                DImages.logoGoogle,
-                height: dimensImage() * 3,
-              ),
-              label: Text(
-                AppLocalizations.of(context).translate("sign_in_with_google"),
-                style: Theme.of(context).textTheme.labelLarge,
-              )),
+          child: const GoogleButtonWidget(),
         ),
         const Divider(),
         Row(
@@ -64,3 +52,5 @@ class OptionLogIn extends StatelessWidget {
     );
   }
 }
+
+

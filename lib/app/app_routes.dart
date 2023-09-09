@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/views/auth/login/login_screen.dart';
 import 'package:healthline/views/auth/signup/signup_screen.dart';
+import 'package:healthline/views/main/error_screen.dart';
 import 'package:healthline/views/main/main_sceen.dart';
 import 'package:healthline/views/splash/onboarding.dart';
 
@@ -20,6 +21,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case logInName:
         return MaterialPageRoute(builder: (_) => const LogInScreen());
+      case errorName:
+        return MaterialPageRoute(builder: (_) => const ErrorScreen());
       default:
         return null;
     }
