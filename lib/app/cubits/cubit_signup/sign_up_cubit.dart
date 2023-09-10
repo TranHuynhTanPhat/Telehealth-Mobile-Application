@@ -17,6 +17,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> registerAccount(
       String fullName, String email, String password) async {
+    emit(SignUpLoadingActionState());
     try {
       SignUpResponse response =
           await _userRepository.registerAccount(fullName, email, password);

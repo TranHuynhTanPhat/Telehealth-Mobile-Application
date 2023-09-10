@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:healthline/res/style.dart';
 
-import '../../res/style.dart';
+
 
 class ElevatedButtonWidget extends StatefulWidget {
   const ElevatedButtonWidget({

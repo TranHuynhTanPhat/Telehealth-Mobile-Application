@@ -1,0 +1,1 @@
+const TABLE_USER = "users";

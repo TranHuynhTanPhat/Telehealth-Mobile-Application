@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/colors.dart';
 import 'package:healthline/res/dimens.dart';
@@ -26,16 +27,20 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? firstTime = prefs.getBool('first_time');
 
-        // prefs.setBool('first_time', false);
+      // prefs.setBool('first_time', false);
 
       if (firstTime != null && !firstTime) {
-        Navigator.pushReplacementNamed(context, signUpName);
+        if (AppController().authState == AuthState.authorized_user ||
+            AppController().authState == AuthState.authorized_admin) {
+          Navigator.pushReplacementNamed(context, mainScreenName);
+        } else if (AppController().authState == AuthState.unauthorized) {
+          Navigator.pushReplacementNamed(context, logInName);
+        }
       } else {
         prefs.setBool('first_time', false);
         Navigator.pushReplacementNamed(context, onboardingName);
       }
-
-      // Navigator.pushReplacementNamed(context, onboardingId);
+      // Navigator.pushReplacementNamed(context, onboardingName);
     });
   }
 
