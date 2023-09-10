@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -78,7 +79,7 @@ class RestClient {
 
     dio.interceptors
         .add(QueuedInterceptorsWrapper(onRequest: (options, handler) async {
-      final _prefs = await SharedPreferences.getInstance();
+      // final _prefs = await SharedPreferences.getInstance();
 
       if (!options.path.contains('http')) {
         // Cấu hình đường path để call api, thành phần gồm
@@ -90,8 +91,8 @@ class RestClient {
       }
 
       // Lấy các token được lưu tạm từ local storage
-      String? accessToken = _prefs.getString('accessToken');
-      // String? role = _prefs.getString('role');
+      String? accessToken = await AppStorage().getUserAccessToken();
+      // String? role = await AppStorage().getRoleUser();
 
       // Kiểm tra xem user có đăng nhập hay chưa. Nếu chưa thì call handler.next(options)
       // để trả data về tiếp client
@@ -147,8 +148,7 @@ class RestClient {
   }
 
   static Future<void> logout() async {
-    final _prefs = await SharedPreferences.getInstance();
-    _prefs.remove('accessToken');
-    _prefs.remove('role');
+    await AppStorage().clearAccessToken();
+    await AppStorage().clearRole();
   }
 }

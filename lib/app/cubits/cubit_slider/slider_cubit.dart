@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'slider_state.dart';
 
@@ -14,7 +15,7 @@ class SliderCubit extends Cubit<SliderState> {
           .getDownloadURL();
       emit(SliderLoaded(state.ref, url: url));
     } catch (error) {
-      print(error);
+      logPrint(error);
       emit(SliderError(state.ref, message: error.toString()));
     }
   }

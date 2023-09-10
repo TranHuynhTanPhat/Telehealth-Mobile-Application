@@ -8,7 +8,6 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/views/auth/signup/components/exports.dart';
 import 'package:healthline/views/widgets/elevated_button_widget.dart';
 import 'package:healthline/views/widgets/text_field_widget.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/validate.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -66,7 +65,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Navigator.pushReplacementNamed(context, logInName);
             } else if (state is RegisterAccountActionState) {
               EasyLoading.dismiss();
-              logPrint(state.response);
             } else if (state is SignUpErrorActionState) {
               if (state.message.contains('409')) {
                 EasyLoading.showToast(

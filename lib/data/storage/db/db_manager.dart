@@ -1,48 +1,55 @@
-// import 'dart:io';
+import 'dart:io';
 
 
-// import 'package:hive/hive.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:healthline/data/storage/db/db_constants.dart';
+import 'package:healthline/data/storage/models/user_model.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
-// class DbManager {
-//   late Directory document;
-//   init() async {
-//     document = await getApplicationDocumentsDirectory();
-//     Hive.init(document.path);
-//     initAdapter();
-//   }
+class DbManager {
+  late Directory document;
+  init() async {
+    document = await getApplicationDocumentsDirectory();
+    Hive.init(document.path);
+    initAdapter();
+  }
 
-//   initAdapter() {
-//   //   Hive.registerAdapter(HospitalItemAdapter());
-//   //   Hive.registerAdapter(DepartmentItemAdapter());
-//   }
+  initAdapter() {
+    Hive.registerAdapter(UserAdapter());
+  //   Hive.registerAdapter(DepartmentItemAdapter());
+  }
 
-//   clearAll() {
-//   //   Hive.deleteBoxFromDisk(document.path);
-//   }
+  clearAll() {
+    Hive.deleteBoxFromDisk(document.path);
+  }
 
-//   // saveListHospital(List<HospitalItem> items) async {
-//   //   var box = await Hive.openBox<HospitalItem>(TABLE_HOSPITAL);
-//   //   box.clear();
-//   //   box.addAll(items);
-//   // }
+  // saveUser(User item) async {
+  //   var box = await Hive.openBox<User>(TABLE_USER);
+  //   box.clear();
+  //   box.add(item);
+  // }
 
-//   // Future<List<HospitalItem>> getListHospital() async {
-//   //   var box = await Hive.openBox<HospitalItem>(TABLE_HOSPITAL);
-//   //   var items = box.values.toList();
-//   //   return items;
-//   // }
+  // Future<User?> getUser() async {
+  //   var box = await Hive.openBox<User>(TABLE_USER);
+  //   User? items = box.get(0);
+  //   return items;
+  // }
 
-//   // saveListDepartment(
-//   //     {required String hospitalId, required List<DepartmentItem> items}) async {
-//   //   var box = await Hive.openBox<List<DepartmentItem>>(TABLEL_DEPARTMENT);
-//   //   box.put(hospitalId, items);
-//   // }
+  clearUser() async{
+    var box = await Hive.openBox<User>(TABLE_USER);
+    box.clear();
+  }
 
-//   // Future<List<DepartmentItem>> getListDepartment(
-//   //     {required String hospitalId}) async {
-//   //   var box = await Hive.openBox<List<DepartmentItem>>(TABLEL_DEPARTMENT);
-//   //   final items = box.get(hospitalId);
-//   //   return items ?? [];
-//   // }
-// }
+  // saveListDepartment(
+  //     {required String hospitalId, required List<DepartmentItem> items}) async {
+  //   var box = await Hive.openBox<List<DepartmentItem>>(TABLEL_DEPARTMENT);
+  //   box.put(hospitalId, items);
+  // }
+
+  // Future<List<DepartmentItem>> getListDepartment(
+  //     {required String hospitalId}) async {
+  //   var box = await Hive.openBox<List<DepartmentItem>>(TABLEL_DEPARTMENT);
+  //   final items = box.get(hospitalId);
+  //   return items ?? [];
+  // }
+}

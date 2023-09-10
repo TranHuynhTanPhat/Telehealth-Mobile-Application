@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/firebase_options.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,7 +18,7 @@ class AppController {
   late String deviceId;
   AuthState authState = AuthState.unauthorized;
 
-   // singleton
+  // singleton
   static final AppController instance = AppController._internal();
 
   factory AppController() {
@@ -26,7 +28,7 @@ class AppController {
   AppController._internal();
 
   init() async {
-    await Future.wait([initFirebase()]);
+    await Future.wait([initFirebase(), setupLocator()]);
     await initAuth();
   }
 
@@ -47,6 +49,11 @@ class AppController {
       await initApi();
       authState = AuthState.unauthorized;
     }
+  }
+
+  Future<void> setupLocator() async {
+    AppStorage.instance.init();
+    DbManager().init();
   }
 
   Future<void> initFirebase() async {
