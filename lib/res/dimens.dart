@@ -33,7 +33,7 @@ double dimensWidth() => SizeConfig.widthMultiplier;
 double dimensHeight() => SizeConfig.heightMultiplier;
 double dimensText() => SizeConfig.textMultiplier;
 double dimensImage() => SizeConfig.imageSizeMultiplier;
-double dimensIcon() => 32;
+double dimensIcon() => SizeConfig.widthMultiplier*3.8;
 
 class Converts {
   static double c8 = 1 * SizeConfig.textMultiplier;

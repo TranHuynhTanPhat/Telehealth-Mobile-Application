@@ -22,7 +22,7 @@ Future<void> main() async {
   HydratedBloc.storage = storage;
 
   await dotenv.load();
-  await AppController().init();
+  await AppController.instance.init();
 
   // Sentry
   await SentryFlutter.init(

@@ -1,97 +1,96 @@
-// // ignore_for_file: constant_identifier_names
 
-// import 'dart:convert';
+// ignore_for_file: constant_identifier_names
 
-// import 'package:flutter_chat_sdk/data/api/models/responses/user.dart';
-// import 'package:flutter_chat_sdk/res/language/localization_service.dart';
-// import 'package:flutter_chat_sdk/res/theme/theme_service.dart';
-// import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class AppStorage {
-//   late GetStorage box;
-//   static const STORAGE_NAME = "cnq_coffee_storage";
-//   static const USER_ACCESS_TOKEN = "user_access_token";
-//   static const USER_INFO = "cnq_user_info";
-//   static const SYSTEM_CONFIG_DATA = "cnq_system_config";
-//   static const APP_NEW_INSTALL = "app_new_install";
-//   static const APP_THEME = "app_theme";
-//   static const APP_LANGUAGE = "app_language";
-//   static const DEVICE_TOKEN = "device_token";
+import 'package:healthline/data/storage/models/user_model.dart';
+import 'package:healthline/utils/log_data.dart';
 
-//   init() async {
-//     await GetStorage.init(STORAGE_NAME);
-//     box = GetStorage(STORAGE_NAME);
-//   }
+class AppStorage {
+  late SharedPreferences _pref;
+  static const USER = "user";
 
-//   Future<void> saveDeviceToken(String deviceToken) async {
-//     box.write(DEVICE_TOKEN, deviceToken);
-//   }
+  static final AppStorage instance = AppStorage._internal();
 
-//   Future<String?> getDeviceToken() async {
-//     final token = await box.read(DEVICE_TOKEN);
-//     return token;
-//   }
+  factory AppStorage() {
+    return instance;
+  }
 
-//   Future<void> saveUserAccessToken(String accessToken) async {
-//     box.write(USER_ACCESS_TOKEN, accessToken);
-//   }
+  AppStorage._internal();
 
-//   Future<String?> getUserAccessToken() async {
-//     final token = await box.read(USER_ACCESS_TOKEN);
-//     return token;
-//   }
+  init() async {
+    _pref = await SharedPreferences.getInstance();
+  }
+
+  Future<void> saveUser({required User user}) async {
+    _pref.setString(USER, user.toJson());
+  }
+
+  Future<User?> getUser() async {
+    try {
+      User user = User.fromJson(_pref.getString(USER)!);
+      return user;
+    } catch (e) {
+      logPrint(e);
+      return null;
+    }
+  }
+
+  clearUser() async {
+    _pref.remove(USER);
+  }
 
 //   Future<void> saveUserInfo(User user) async {
 //     String json = jsonEncode(user.toJson());
-//     box.write(USER_INFO, json);
+//     _pref.write(USER_INFO, json);
 //   }
 
 //   Future<User?> getUserInfo() async {
-//     final userJson = await box.read(USER_INFO);
+//     final userJson = await _pref.read(USER_INFO);
 //     return userJson != null ? User.fromJson(json.decode(userJson)) : null;
 //   }
 
 //   // Future<void> saveSystemConfig(SystemConfig config) async {
 //   //   String json = jsonEncode(config.toJson());
-//   //   box.write(SYSTEM_CONFIG_DATA, json);
+//   //   _pref.write(SYSTEM_CONFIG_DATA, json);
 //   // }
 
 //   // Future<SystemConfig?> getSystemConfig() async {
-//   //   final config = await box.read(SYSTEM_CONFIG_DATA);
+//   //   final config = await _pref.read(SYSTEM_CONFIG_DATA);
 //   //   return config != null ? SystemConfig.fromJson(json.decode(config)) : null;
 //   // }
 
 //   Future<void> saveInstall(bool isInstall) async {
-//     box.write(APP_NEW_INSTALL, isInstall);
+//     _pref.write(APP_NEW_INSTALL, isInstall);
 //   }
 
 //   Future<bool> isInstall() async {
-//     final isInstall = await box.read(APP_NEW_INSTALL) ?? false;
+//     final isInstall = await _pref.read(APP_NEW_INSTALL) ?? false;
 //     return isInstall;
 //   }
 
 //   Future<void> setTheme(int theme) async {
-//     box.write(APP_THEME, theme);
+//     _pref.write(APP_THEME, theme);
 //   }
 
 //   Future<int> getTheme() async {
-//     final theme = await box.read(APP_THEME) ?? ThemeService.LIGHT_THEME;
+//     final theme = await _pref.read(APP_THEME) ?? ThemeService.LIGHT_THEME;
 //     return theme;
 //   }
 
 //   Future<void> setLanguage(String language) async {
-//     box.write(APP_LANGUAGE, language);
+//     _pref.write(APP_LANGUAGE, language);
 //   }
 
 //   Future<String> getLanguage() async {
-//     final theme = await box.read(APP_LANGUAGE) ?? LANGUAGES[0].key;
+//     final theme = await _pref.read(APP_LANGUAGE) ?? LANGUAGES[0].key;
 //     return theme;
 //   }
 
 //   Future<void> logout() async {
-//     if (box.hasData(APP_LANGUAGE)) await box.remove(APP_LANGUAGE);
-//     if (box.hasData(APP_THEME)) await box.remove(APP_THEME);
-//     if (box.hasData(USER_INFO)) await box.remove(USER_INFO);
-//     if (box.hasData(USER_ACCESS_TOKEN)) await box.remove(USER_ACCESS_TOKEN);
+//     if (_pref.hasData(APP_LANGUAGE)) await _pref.remove(APP_LANGUAGE);
+//     if (_pref.hasData(APP_THEME)) await _pref.remove(APP_THEME);
+//     if (_pref.hasData(USER_INFO)) await _pref.remove(USER_INFO);
+//     if (_pref.hasData(USER_ACCESS_TOKEN)) await _pref.remove(USER_ACCESS_TOKEN);
 //   }
-// }
+}

@@ -4,7 +4,7 @@ import 'package:healthline/app/app_routes.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/config_loading.dart';
 
-import 'package:healthline/views/splash/splash_screen.dart';
+import 'package:healthline/screens/splash/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.appRoute});

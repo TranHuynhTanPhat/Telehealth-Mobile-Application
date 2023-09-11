@@ -11,6 +11,7 @@
   "ex_full_name": "ex. David Beckham",
   "email": "Email",
   "ex_email": "example@gmail.com",
+  "phone_number":"Số điện thoại",
   "password": "Password",
   "confirm_password": "Confirm Password",
   "i_agree_with": "I agree with the",

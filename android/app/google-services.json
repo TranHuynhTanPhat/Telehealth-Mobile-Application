@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "12920586932",
+    "project_id": "healthline-50e84",
+    "storage_bucket": "healthline-50e84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12920586932:android:3f4401335052a619048de1",
+        "android_client_info": {
+          "package_name": "com.example.healthline"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvzHI9S1_fGOv_sO-6PwQ2I8DBUD03vyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

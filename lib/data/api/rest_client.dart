@@ -3,11 +3,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RestClient {
   static const CONNECT_TIME_OUT = 30000;
@@ -78,7 +79,7 @@ class RestClient {
 
     dio.interceptors
         .add(QueuedInterceptorsWrapper(onRequest: (options, handler) async {
-      final _prefs = await SharedPreferences.getInstance();
+      // final _prefs = await SharedPreferences.getInstance();
 
       if (!options.path.contains('http')) {
         // Cấu hình đường path để call api, thành phần gồm
@@ -90,17 +91,18 @@ class RestClient {
       }
 
       // Lấy các token được lưu tạm từ local storage
-      String? accessToken = _prefs.getString('accessToken');
-      String? refreshToken = _prefs.getString('refreshToken');
+      User? user = await AppStorage().getUser();
+      // String? accessToken = await AppStorage().getUserAccessToken();
+      // String? role = await AppStorage().getRoleUser();
 
       // Kiểm tra xem user có đăng nhập hay chưa. Nếu chưa thì call handler.next(options)
       // để trả data về tiếp client
-      if (accessToken == null || refreshToken == null) {
+      if (user == null || user.accessToken==null) {
         return handler.next(options);
       }
 
       // Tính toán thời gian token expired
-      bool isExpired = JwtDecoder.isExpired(accessToken);
+      bool isExpired = JwtDecoder.isExpired(user.accessToken!);
 
       if (isExpired) {
         try {
@@ -110,6 +112,7 @@ class RestClient {
             if (response.data != false) {
               options.headers['Authorization'] =
                   "Bearer ${response.data["jwtToken"]}";
+              AppStorage().saveUser(user: user.copyWith(accessToken: response.data));
             } else {
               logout();
             }
@@ -124,7 +127,7 @@ class RestClient {
         }
       } else {
         // Gắn access_token vào header, gửi kèm access_token trong header mỗi khi call API
-        options.headers['Authorization'] = "Bearer $accessToken";
+        options.headers['Authorization'] = "Bearer ${user.accessToken}";
         return handler.next(options);
       }
     }, onResponse: (Response response, handler) {
@@ -147,8 +150,6 @@ class RestClient {
   }
 
   static Future<void> logout() async {
-    final _prefs = await SharedPreferences.getInstance();
-    _prefs.remove('accessToken');
-    _prefs.remove('refreshToken');
+    await AppStorage().clearUser();
   }
 }
