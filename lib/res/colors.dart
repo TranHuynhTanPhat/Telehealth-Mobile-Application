@@ -12,3 +12,7 @@ const Color colorA8B1CE = Color(0xffa8b1ce);
 const Color colorF8F9FD = Color(0xfff8f9fd);
 const Color colorEBEBF4 = Color(0xffebebf4);
 const Color colorF4F4F4 = Color(0xfff4f4f4);
+const Color color1C6AA3 = Color(0xff1c6aa3);
+const Color colorDF9F1E = Color(0xffdf9f1e);
+const Color color009DC7 = Color(0xff009dc7);
+const Color color9D4B6C = Color(0xff9d4b6c);

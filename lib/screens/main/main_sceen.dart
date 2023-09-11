@@ -11,6 +11,7 @@ import 'package:healthline/screens/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screens/main/home/home_screen.dart';
 import 'package:healthline/screens/main/message/message_screen.dart';
 import 'package:healthline/screens/main/schedule/schedule_screen.dart';
+import 'package:healthline/utils/keyboard.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -62,7 +63,20 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> _pageDetail = [
       {
-        "page": const HomeScreen(),
+        "page": HomeScreen(
+          press: () {
+            if (isSideMenuClosed) {
+              _animationController.forward();
+            } else {
+              _animationController.reverse();
+            }
+            KeyboardUtil.hideKeyboard(context);
+
+            setState(() {
+              isSideMenuClosed = !isSideMenuClosed;
+            });
+          },
+        ),
         "title": "Home",
         "icon": FontAwesomeIcons.heartPulse
       },
@@ -86,79 +100,6 @@ class _MainScreenState extends State<MainScreen>
       resizeToAvoidBottomInset: false,
       extendBody: true,
       backgroundColor: secondary,
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(dimensHeight() * 7 * hideAnimation.value),
-        child: AppBar(
-          backgroundColor: isSideMenuClosed ? white : secondary,
-          leadingWidth: dimensWidth() * 10,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'Hello!',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: color6A6E83),
-              ),
-              Text(
-                'Tran Huynh Tan Phat',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: color1F1F1F),
-              )
-            ],
-          ),
-          centerTitle: false,
-          leading: Padding(
-            padding: EdgeInsets.only(
-              left: dimensWidth() * 2.5,
-            ),
-            child: InkWell(
-              splashColor: transparent,
-              highlightColor: transparent,
-              onTap: () {
-                setState(() {
-                  if (isSideMenuClosed) {
-                    _animationController.forward();
-                  } else {
-                    _animationController.reverse();
-                  }
-                  setState(() {
-                    isSideMenuClosed = !isSideMenuClosed;
-                  });
-                });
-              },
-              child: CircleAvatar(
-                backgroundColor: secondary,
-                backgroundImage: AssetImage(DImages.placeholder),
-              ),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                right: dimensWidth() * 2.5,
-                left: dimensWidth(),
-              ),
-              child: InkWell(
-                  splashColor: transparent,
-                  highlightColor: transparent,
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                  },
-                  child: FaIcon(
-                    FontAwesomeIcons.bell,
-                    color: color1F1F1F,
-                    size: dimensIcon(),
-                  )),
-            )
-          ],
-        ),
-      ),
       bottomNavigationBar: Transform.translate(
         offset: Offset(0, dimensWidth() * 12 * animation.value),
         child: Container(
@@ -289,16 +230,18 @@ class _MainScreenState extends State<MainScreen>
                     ),
                     child: InkWell(
                       onTap: () {
+                        if (!isSideMenuClosed) {
+                          _animationController.reverse();
+                        }
+                        KeyboardUtil.hideKeyboard(context);
                         setState(() {
-                          if (!isSideMenuClosed) {
-                            _animationController.reverse();
-                          }
-                          setState(() {
-                            isSideMenuClosed = true;
-                          });
+                          isSideMenuClosed = true;
                         });
                       },
-                      child: _pageDetail[_currentIndex]['page'],
+                      child: AbsorbPointer(
+                        child: _pageDetail[_currentIndex]['page'],
+                        absorbing: !isSideMenuClosed,
+                      ),
                     ),
                   ),
                 )),

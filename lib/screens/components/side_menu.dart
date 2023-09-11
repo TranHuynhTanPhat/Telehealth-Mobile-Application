@@ -31,24 +31,26 @@ class _SideMenuState extends State<SideMenu> {
         width: dimensWidth() * 50,
         height: double.infinity,
         color: secondary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const InfoCard(
-              name: "Tran Huynh Tan Phat",
-              profession: "Patient",
-            ),
-            ...sideMenus.map((menu) => SideMenuTile(
-                  press: () {
-                    setState(() {
-                      selectedMenu = menu;
-                    });
-                  },
-                  isActive: selectedMenu == menu,
-                  name: menu['name'],
-                  icon: menu['icon'],
-                )),
-          ],
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const InfoCard(
+                name: "Tran Huynh Tan Phat",
+                profession: "Patient",
+              ),
+              ...sideMenus.map((menu) => SideMenuTile(
+                    press: () {
+                      setState(() {
+                        selectedMenu = menu;
+                      });
+                    },
+                    isActive: selectedMenu == menu,
+                    name: menu['name'],
+                    icon: menu['icon'],
+                  )),
+            ],
+          ),
         ),
       ),
     );

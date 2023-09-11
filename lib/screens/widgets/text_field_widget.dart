@@ -94,9 +94,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/utils/keyboard.dart';
-
-
 
 class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({
@@ -108,7 +105,12 @@ class TextFieldWidget extends StatelessWidget {
     this.enableSuggestions = false,
     this.autocorrect = false,
     required this.controller,
-    this.error, this.suffixIcon,
+    this.error,
+    this.suffixIcon,
+    this.filled = false,
+    this.fillColor = white,
+    this.enabledBorderColor = colorA8B1CE,
+    this.focusedBorderColor = color1F1F1F,
   });
   final TextEditingController controller;
   final String? label;
@@ -119,18 +121,23 @@ class TextFieldWidget extends StatelessWidget {
   final bool? enableSuggestions;
   final bool? autocorrect;
   final IconButton? suffixIcon;
+  final bool? filled;
+  final Color? fillColor;
+  final Color? enabledBorderColor;
+  final Color? focusedBorderColor;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      onTap: () => KeyboardUtil.hideKeyboard(context),
       style: Theme.of(context).textTheme.bodyLarge,
       keyboardType: textInputType,
       obscureText: obscureText!,
       enableSuggestions: enableSuggestions!,
       autocorrect: autocorrect!,
       decoration: InputDecoration(
+          fillColor: fillColor,
+          filled: filled,
           contentPadding: EdgeInsets.all(dimensHeight() * 2),
           labelText: label,
           // labelStyle: Theme.of(context).textTheme.bodyLarge,
@@ -141,20 +148,20 @@ class TextFieldWidget extends StatelessWidget {
           hintText: hint,
           hintStyle: Theme.of(context)
               .textTheme
-              .bodyLarge
+              .labelLarge
               ?.copyWith(color: colorA8B1CE),
           errorText: error,
           suffixIcon: suffixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(width: 1, color: colorA8B1CE),
+            borderSide: BorderSide(width: 1, color: enabledBorderColor!),
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(width: 1, color: colorA8B1CE)),
+              borderSide: BorderSide(width: 1, color: enabledBorderColor!)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(width: 1, color: color1F1F1F)),
+              borderSide: BorderSide(width: 1, color: focusedBorderColor!)),
           focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
