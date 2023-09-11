@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
+import 'package:healthline/app/cubits/cubit_login/log_in_cubit.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/views/widgets/google_button_widget.dart';
+import 'package:healthline/screens/widgets/google_button_widget.dart';
 
-class OptionSignUp extends StatelessWidget {
-  const OptionSignUp({super.key});
+class OptionLogIn extends StatelessWidget {
+  const OptionLogIn({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +13,14 @@ class OptionSignUp extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              top: dimensHeight() * 4,
+              top: dimensHeight() * 10,
               right: dimensWidth() * 3,
               left: dimensWidth() * 3),
           child: const Divider(),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-          child: const GoogleButtonWidget()
+          child: const GoogleButtonWidget(),
         ),
         const Divider(),
         Row(
@@ -28,7 +28,7 @@ class OptionSignUp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              " ${AppLocalizations.of(context).translate("already_have_an_account")} ",
+              " ${AppLocalizations.of(context).translate("don't_have_an_account_yet")} ",
               style: Theme.of(context).textTheme.bodySmall,
             ),
             TextButton(
@@ -37,9 +37,9 @@ class OptionSignUp extends StatelessWidget {
                   EdgeInsets.all(0),
                 ),
               ),
-              onPressed: () => context.read<SignUpCubit>().navigateToLogIn(),
+              onPressed: () => context.read<LogInCubit>().navigateToSignIn(),
               child: Text(
-                AppLocalizations.of(context).translate("log_in"),
+                AppLocalizations.of(context).translate("sign_up"),
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -52,3 +52,5 @@ class OptionSignUp extends StatelessWidget {
     );
   }
 }
+
+

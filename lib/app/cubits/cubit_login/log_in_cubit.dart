@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/data/storage/app_storage.dart';
-import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/data/storage/models/user_model.dart';
 
 part 'log_in_state.dart';
@@ -22,7 +21,8 @@ class LogInCubit extends Cubit<LogInState> {
     emit(LogInLoadingActionState());
     try {
       LoginResponse response = await _userRepository.login(email, password);
-      AppStorage().saveRoleUser(role: response.role!);
+      AppStorage().saveUser(
+          user: User(role: response.role, accessToken: response.jwtToken));
       emit(SignInActionState(response: response));
     } catch (error) {
       emit(LogInErrorActionState(message: error.toString()));

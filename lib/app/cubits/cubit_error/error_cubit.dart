@@ -3,7 +3,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:healthline/utils/log_data.dart';
 
 part 'error_state.dart';
 
@@ -17,7 +16,6 @@ class ErrorCubit extends Cubit<ErrorState> {
           .getDownloadURL();
       emit(ErrorLoaded(state.ref, url: url));
     } catch (error) {
-      logPrint(error);
       emit(ErrorInvalid(state.ref, message: error.toString()));
     }
   }

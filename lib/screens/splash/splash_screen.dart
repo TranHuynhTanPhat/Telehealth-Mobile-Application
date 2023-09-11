@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/colors.dart';
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? firstTime = prefs.getBool('first_time');
 
-      // prefs.setBool('first_time', false);
+      // prefs.setBool('first_time', true);
 
       if (firstTime != null && !firstTime) {
         if (AppController().authState == AuthState.authorized_user ||
@@ -52,7 +53,13 @@ class _SplashScreenState extends State<SplashScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          FaIcon(
+            FontAwesomeIcons.hospital,
+            color: secondary,
+            size: dimensWidth()*20,
+          ),
           Container(
+            padding: EdgeInsets.only(top: dimensHeight()*2),
             width: dimensWidth() * 100,
             alignment: Alignment.center,
             child: Text(

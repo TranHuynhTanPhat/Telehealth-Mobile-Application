@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/data/storage/models/slider_model.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/views/splash/components/exports.dart';
+import 'package:healthline/screens/splash/components/exports.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -21,6 +21,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     _controller = PreloadPageController(initialPage: 0);
+    // _controller.animateToPage(currentIndex,
+    //     duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
     slides = getSlides();
   }
 
@@ -79,7 +81,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                   itemCount: slides.length,
                   itemBuilder: (context, index) {
-                    
                     return SliderWidget(
                       fileName: slides[index].getFileName(),
                       title: slides[index].getTitle(),
@@ -134,11 +135,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   AnimatedContainer buildDot(int index, BuildContext context) {
     return AnimatedContainer(
-      height: 10,
-      width: currentIndex == index ? 25 : 10,
+      height: dimensWidth(),
+      width: currentIndex == index ? dimensWidth()*2 : dimensWidth(),
       margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(dimensWidth()*2),
         color: currentIndex == index ? primary : colorCDDEFF,
       ),
       duration: const Duration(milliseconds: 500),

@@ -1,5 +1,4 @@
-// ignore_for_file: constant_identifier_names
-
+// ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +7,7 @@ import 'package:healthline/data/api/rest_client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/db/db_manager.dart';
+import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/firebase_options.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -33,19 +33,25 @@ class AppController {
   }
 
   Future<void> initAuth() async {
-    final _prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Lấy các token được lưu tạm từ local storage
-    String? accessToken = _prefs.getString('accessToken');
-    String? role = _prefs.getString('role');
-    if (accessToken != null) {
-      await initApi(token: accessToken);
-      if (role == 'user') {
-        authState = AuthState.authorized_user;
-      } else if (role == 'admin') {
-        authState = AuthState.authorized_admin;
+    try {
+      User user = User.fromJson(prefs.getString("user")!);
+      String? accessToken = user.accessToken;
+      String? role = user.role;
+      if (accessToken != null) {
+        await initApi(token: accessToken);
+        if (role == 'user') {
+          authState = AuthState.authorized_user;
+        } else if (role == 'admin') {
+          authState = AuthState.authorized_admin;
+        }
+      } else {
+        await initApi();
+        authState = AuthState.unauthorized;
       }
-    } else {
+    } catch (e) {
       await initApi();
       authState = AuthState.unauthorized;
     }

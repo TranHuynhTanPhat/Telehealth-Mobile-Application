@@ -25,7 +25,6 @@ class _ErrorScreenState extends State<ErrorScreen> {
     return BlocConsumer<ErrorCubit, ErrorState>(
       bloc: errorCubit,
       listener: (context, state) {
-        // TODO: implement listener
       },
       builder: (context, state) {
         return Scaffold(

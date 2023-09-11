@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/views/main/error_screen.dart';
+import 'package:healthline/screens/error/error_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

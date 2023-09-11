@@ -30,7 +30,6 @@ class _SliderWidgetState extends State<SliderWidget> {
     return BlocConsumer<SliderCubit, SliderState>(
       bloc: sliderCubit,
       listener: (context, state) {
-        // TODO: implement listener
       },
       builder: (context, state) {
         return SizedBox(
@@ -41,7 +40,7 @@ class _SliderWidgetState extends State<SliderWidget> {
               state.runtimeType == SliderLoaded
                   ? Image(
                       image: NetworkImage((state as SliderLoaded).url),
-                      height: dimensImage() * 50,
+                      height: dimensHeight() * 50,
                       // width: dimensImage() * 50,
                       fit: BoxFit.contain,
                       // placeholder: AssetImage(DImages.placeholder),
@@ -55,8 +54,8 @@ class _SliderWidgetState extends State<SliderWidget> {
                     )
                   : Container(
                       decoration: const BoxDecoration(color: white),
-                      height: dimensImage() * 50,
-                      width: dimensImage() * 50),
+                      height: dimensHeight() * 50,
+                      width: dimensHeight() * 50),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
                 child: Row(

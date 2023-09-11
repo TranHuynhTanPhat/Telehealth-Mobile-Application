@@ -5,9 +5,9 @@ import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/views/auth/login/components/exports.dart';
-import 'package:healthline/views/widgets/elevated_button_widget.dart';
-import 'package:healthline/views/widgets/text_field_widget.dart';
+import 'package:healthline/screens/auth/login/components/exports.dart';
+import 'package:healthline/screens/widgets/elevated_button_widget.dart';
+import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/validate.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -77,7 +77,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     ),
                     TextFieldWidget(
                       controller: _controllerEmail,
-                      label: AppLocalizations.of(context).translate("email"),
+                      label: AppLocalizations.of(context).translate("phone_"),
                       hint: AppLocalizations.of(context).translate("ex_email"),
                       textInputType: TextInputType.emailAddress,
                       error: errorEmail,
