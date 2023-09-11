@@ -10,6 +10,6 @@ class HealthInfoScreen extends StatefulWidget {
 class _HealthInfoScreenState extends State<HealthInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }
