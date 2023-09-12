@@ -8,7 +8,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/auth/login/components/exports.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:healthline/utils/validate.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -55,11 +55,13 @@ class _LogInScreenState extends State<LogInScreen> {
             EasyLoading.dismiss();
             Navigator.pushReplacementNamed(context, mainScreenName);
           } else if (state is LogInErrorActionState) {
-            if (state.message.contains("401")) {
-              EasyLoading.dismiss();
-              EasyLoading.showToast(AppLocalizations.of(context)
-                  .translate("phone_or_password_is_invalid"));
-            }
+            // if (state.message.contains("401")) {
+            //   EasyLoading.dismiss();
+            //   EasyLoading.showToast(AppLocalizations.of(context)
+            //       .translate("phone_or_password_is_invalid"));
+            // }
+            EasyLoading.dismiss();
+            EasyLoading.showToast(state.message);
           }
         },
         child: BlocBuilder<LogInCubit, LogInState>(
@@ -67,16 +69,13 @@ class _LogInScreenState extends State<LogInScreen> {
             return Scaffold(
               body: Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 2,
+                    vertical: dimensHeight() * 7,
                     horizontal: dimensWidth() * 2),
                 child: ListView(
                   children: [
                     const HeaderLogIn(),
                     SizedBox(
-                      height: dimensHeight() * 10,
-                    ),
-                    IntlPhoneField(controller: _controllerPhone,
-                    languageCode: AppLocalizations.of(context).locale.languageCode,
+                      height: dimensHeight() * 3,
                     ),
                     TextFieldWidget(
                       controller: _controllerPhone,
@@ -137,8 +136,8 @@ class _LogInScreenState extends State<LogInScreen> {
                         text: AppLocalizations.of(context).translate('log_in'),
                         onPressed: () {
                           setState(() {
-                            // errorPhone = Validate()
-                            //     .validatePhone(context, _controllerPhone.text);
+                            errorPhone = Validate()
+                                .validatePhone(context, _controllerPhone.text);
                             errorPassword = _controllerPassword.text.isEmpty
                                 ? AppLocalizations.of(context)
                                     .translate('please_enter_password')

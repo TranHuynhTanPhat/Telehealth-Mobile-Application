@@ -48,14 +48,14 @@ class SideMenuTile extends StatelessWidget {
               leading: FaIcon(
                 icon,
                 size: dimensIcon()*.8,
-                color: isActive ? color1F1F1F : white,
+                color: isActive ? secondary : white,
               ),
               title: Text(
                 name,
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
-                    ?.copyWith(color: isActive ? color1F1F1F : white),
+                    ?.copyWith(color: isActive ? secondary : white),
               ),
             ),
           ],

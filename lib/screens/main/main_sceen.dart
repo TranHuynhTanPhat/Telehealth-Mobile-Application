@@ -99,7 +99,7 @@ class _MainScreenState extends State<MainScreen>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      backgroundColor: color1F1F1F,
+      backgroundColor: secondary,
       bottomNavigationBar: Transform.translate(
         offset: Offset(0, dimensWidth() * 12 * animation.value),
         child: Container(

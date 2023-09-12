@@ -26,7 +26,7 @@ Future<void> main() async {
   await dotenv.load();
   await AppController.instance.init();
 
-  // HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   // Sentry
   await SentryFlutter.init(
     (options) {

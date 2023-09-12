@@ -9,7 +9,7 @@ import 'package:healthline/utils/log_data.dart';
 class AppStorage {
   late SharedPreferences _pref;
   static const USER = "user";
-  static const REFRESHTOKEN = "refresh_token";
+  static const REFRESH_TOKEN = "refresh_token";
 
   static final AppStorage instance = AppStorage._internal();
 
@@ -28,7 +28,7 @@ class AppStorage {
   }
 
   Future<void> saveRefreshToken({required String refresh}) async {
-    _pref.setString(REFRESHTOKEN, refresh);
+    _pref.setString(REFRESH_TOKEN, refresh);
   }
 
   Future<User?> getUser() async {
@@ -43,7 +43,7 @@ class AppStorage {
 
   Future<String?> getRefreshToken() async{
     try{
-      return _pref.getString(REFRESHTOKEN);
+      return _pref.getString(REFRESH_TOKEN);
     }catch(e){
       logPrint(e);
       return null;
@@ -52,6 +52,10 @@ class AppStorage {
 
   clearUser() async {
     _pref.remove(USER);
+  }
+
+  clearRefreshToken() async{
+    _pref.remove(REFRESH_TOKEN);
   }
 
 //   Future<void> saveUserInfo(User user) async {

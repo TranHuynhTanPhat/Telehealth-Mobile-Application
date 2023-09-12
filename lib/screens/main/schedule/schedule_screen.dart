@@ -35,7 +35,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ),
           )
         ],
-        bottom: TabBar(tabs: [
+        bottom: const TabBar(tabs: [
           Tab(
             icon: Icon(Icons.chat_bubble),
             text: "Chats",
@@ -50,7 +50,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           )
         ]),
       ),
-      body: TabBarView(children: [],),
+      body: const TabBarView(children: [],),
     );
   }
 }

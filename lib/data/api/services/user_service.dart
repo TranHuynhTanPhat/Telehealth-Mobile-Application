@@ -6,6 +6,7 @@ import 'package:healthline/data/api/models/responses/signup_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class UserService extends BaseService {
+  /// 
   Future<LoginResponse> login(LoginRequest request) async {
     final response = await post(LOG_IN, data: request.toJson());
     return LoginResponse.fromJson(response.data);
@@ -17,8 +18,6 @@ class UserService extends BaseService {
   }
 
   Future<void> refreshToken() async {
-    final response = await post(REFRESH_TOKEN);
-    print(response);
-    // return SignUpResponse.fromJson(response.data);
+    await post(baseUrl + REFRESH_TOKEN);
   }
 }

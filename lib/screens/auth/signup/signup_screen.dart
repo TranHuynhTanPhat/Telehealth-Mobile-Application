@@ -66,12 +66,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             } else if (state is RegisterAccountActionState) {
               EasyLoading.dismiss();
             } else if (state is SignUpErrorActionState) {
-              if (state.message.contains('409')) {
-                EasyLoading.showToast(
-                  AppLocalizations.of(context)
-                      .translate("phone_already_existed"),
-                );
-              }
+              // if (state.message.contains('409')) {
+              //   EasyLoading.showToast(
+              //     AppLocalizations.of(context)
+              //         .translate("phone_already_existed"),
+              //   );
+              // }
+              EasyLoading.dismiss();
+              EasyLoading.showToast(state.message);
             }
           },
           child: Scaffold(
@@ -98,8 +100,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   TextFieldWidget(
                     controller: _controllerPhone,
-                    label: AppLocalizations.of(context).translate('phone'),
-                    hint: AppLocalizations.of(context).translate('ex_phone'),
+                    label: AppLocalizations.of(context).translate("phone"),
+                    hint: AppLocalizations.of(context).translate("ex_phone"),
                     textInputType: TextInputType.phone,
                     error: errorPhone,
                   ),
@@ -207,8 +209,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ? errorFullName = AppLocalizations.of(context)
                                 .translate("please_enter_fulname")
                             : null;
-                        // errorPhone = Validate()
-                        //     .validatePhone(context, _controllerPhone.text);
+                        errorPhone = Validate()
+                            .validatePhone(context, _controllerPhone.text);
                         errorPassword = Validate().validatePassword(
                             context, _controllerPassword.text);
                         errorConfirmPassword = _controllerConfirmPassword

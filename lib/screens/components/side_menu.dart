@@ -16,6 +16,7 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   final List<Map<String, dynamic>> sideMenus = [
+    // ignore: deprecated_member_use
     {"name": "home", "icon": FontAwesomeIcons.home},
 
     {"name": "setting", "icon": FontAwesomeIcons.gear},
@@ -35,7 +36,7 @@ class _SideMenuState extends State<SideMenu> {
       body: Container(
         width: dimensWidth() * 50,
         height: double.infinity,
-        color: color1F1F1F,
+        color: secondary,
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,7 @@ class _SideMenuState extends State<SideMenu> {
               SideSubMenu(
                 icon: FontAwesomeIcons.arrowRightFromBracket,
                 name: "Log out",
-                color: Colors.red,
+                color: Colors.yellow,
                 press: () {},
               )
             ],

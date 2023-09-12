@@ -12,7 +12,6 @@ class Validate {
         r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
     final regex = RegExp(pattern);
 
-
     return value!.isEmpty
         ? AppLocalizations.of(context).translate("please_enter_email")
         : !regex.hasMatch(value)
@@ -75,5 +74,18 @@ class Validate {
 //   (?=.*?[!@#\$&*~]) // should contain at least one Special character
 //   .{8,}             // Must be at least 8 characters in length
 // $
+  }
+
+  String? validatePhone(BuildContext context, String phone) {
+    RegExp uppercase = RegExp(r'^(?=.*[A-Z])');
+    RegExp lowercase = RegExp(r'^(?=.*[a-z])');
+    RegExp special = RegExp(r'^(?=.*?[!@#\$&*~])');
+    if (uppercase.hasMatch(phone) ||
+        lowercase.hasMatch(phone) ||
+        special.hasMatch(phone) ||
+        phone.length != 10) {
+      return AppLocalizations.of(context).translate("invalid_phone");
+    }
+    return null;
   }
 }

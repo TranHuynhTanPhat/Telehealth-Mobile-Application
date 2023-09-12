@@ -63,5 +63,6 @@
   "home":"Nhà",
   "schedule":"Lịch trình",
   "message":"Tin nhắn",
-  "health_info":"Thông tin"
+  "health_info":"Thông tin",
+  "invalid_phone":"Số điện thoại không hợp lệ"
 }

@@ -218,8 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _searchController,
               suffixIcon: IconButton(
                 onPressed: () {
-                  // UserRepository _userRepository = UserRepository();
-                  // _userRepository.refreshToken();
+                  UserRepository _userRepository = UserRepository();
+                  _userRepository.refreshToken();
                 },
                 icon: FaIcon(
                   FontAwesomeIcons.magnifyingGlass,
