@@ -77,29 +77,29 @@ class _MainScreenState extends State<MainScreen>
             });
           },
         ),
-        "title": "Home",
+        "title": "home",
         "icon": FontAwesomeIcons.heartPulse
       },
       {
         "page": const ScheduleScreen(),
-        "title": "Schedule",
+        "title": "schedule",
         "icon": FontAwesomeIcons.calendar
       },
       {
         "page": const MessageScreen(),
-        "title": "Message",
+        "title": "message",
         "icon": FontAwesomeIcons.comment
       },
       {
         "page": const HealthInfoScreen(),
-        "title": "Health info",
+        "title": "health_info",
         "icon": FontAwesomeIcons.bookMedical
       },
     ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      backgroundColor: secondary,
+      backgroundColor: color1F1F1F,
       bottomNavigationBar: Transform.translate(
         offset: Offset(0, dimensWidth() * 12 * animation.value),
         child: Container(
@@ -169,7 +169,8 @@ class _MainScreenState extends State<MainScreen>
                             curve: Curves.fastLinearToSlowEaseIn,
                             child: Text(
                               index == _currentIndex
-                                  ? _pageDetail[index]['title']
+                                  ? AppLocalizations.of(context)
+                                      .translate(_pageDetail[index]['title'])
                                   : '',
                               style: Theme.of(context)
                                   .textTheme

@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.setBool('first_time', false);
         Navigator.pushReplacementNamed(context, onboardingName);
       }
-      // Navigator.pushReplacementNamed(context, onboardingName);
+      // Navigator.pushReplacementNamed(context, logInName);
     });
   }
 

@@ -62,10 +62,13 @@ class DoctorTitle extends StatelessWidget {
             flex: 6,
             child: Container(
               decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(dimensWidth() * 2),
+                      topRight: Radius.circular(dimensWidth() * 2)),
                   image: DecorationImage(
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.center,
-                      image: AssetImage(DImages.placeholder))),
+                      image: AssetImage(DImages.anhthe))),
             )
             //  Image(image: AssetImage(DImages.placeholder),fit: BoxFit.cover,alignment: Alignment.center,)
             ),

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
@@ -208,14 +209,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
             child: TextFieldWidget(
-              hint: AppLocalizations.of(context).translate("search_drugs_categories"),
+              hint: AppLocalizations.of(context)
+                  .translate("search_drugs_categories"),
               fillColor: colorF2F5FF,
               filled: true,
               focusedBorderColor: colorF2F5FF,
               enabledBorderColor: colorF2F5FF,
               controller: _searchController,
               suffixIcon: IconButton(
-                onPressed: null,
+                onPressed: () {
+                  // UserRepository _userRepository = UserRepository();
+                  // _userRepository.refreshToken();
+                },
                 icon: FaIcon(
                   FontAwesomeIcons.magnifyingGlass,
                   color: color6A6E83,
@@ -255,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocalizations.of(context).translate("upcoming_appointments"),
+                  AppLocalizations.of(context)
+                      .translate("upcoming_appointments"),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -289,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                AppLocalizations.of(context).translate("top_doctors"),
+                  AppLocalizations.of(context).translate("top_doctors"),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge

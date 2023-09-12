@@ -16,11 +16,11 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> registerAccount(
-      String fullName, String email, String password) async {
+      String fullName, String phone, String password) async {
     emit(SignUpLoadingActionState());
     try {
       SignUpResponse response =
-          await _userRepository.registerAccount(fullName, email, password);
+          await _userRepository.registerAccount(fullName, phone, password);
       emit(RegisterAccountActionState(response: response));
     } catch (error) {
       emit(SignUpErrorActionState(message: error.toString()));

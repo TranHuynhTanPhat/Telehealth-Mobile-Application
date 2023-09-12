@@ -8,7 +8,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/auth/login/components/exports.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
-import 'package:healthline/utils/validate.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -18,24 +18,24 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  late TextEditingController _controllerEmail;
+  late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
 
-  String? errorEmail;
+  String? errorPhone;
   String? errorPassword;
 
   bool showPassword = false;
 
   @override
   void initState() {
-    _controllerEmail = TextEditingController();
+    _controllerPhone = TextEditingController();
     _controllerPassword = TextEditingController();
     super.initState();
   }
 
   @override
   void deactivate() {
-    _controllerEmail.dispose();
+    _controllerPhone.dispose();
     _controllerPassword.dispose();
     super.deactivate();
   }
@@ -58,7 +58,7 @@ class _LogInScreenState extends State<LogInScreen> {
             if (state.message.contains("401")) {
               EasyLoading.dismiss();
               EasyLoading.showToast(AppLocalizations.of(context)
-                  .translate("email_or_password_is_invalid"));
+                  .translate("phone_or_password_is_invalid"));
             }
           }
         },
@@ -75,12 +75,15 @@ class _LogInScreenState extends State<LogInScreen> {
                     SizedBox(
                       height: dimensHeight() * 10,
                     ),
+                    IntlPhoneField(controller: _controllerPhone,
+                    languageCode: AppLocalizations.of(context).locale.languageCode,
+                    ),
                     TextFieldWidget(
-                      controller: _controllerEmail,
-                      label: AppLocalizations.of(context).translate("phone_number"),
-                      hint: AppLocalizations.of(context).translate("ex_email"),
-                      textInputType: TextInputType.emailAddress,
-                      error: errorEmail,
+                      controller: _controllerPhone,
+                      label: AppLocalizations.of(context).translate("phone"),
+                      hint: AppLocalizations.of(context).translate("ex_phone"),
+                      textInputType: TextInputType.phone,
+                      error: errorPhone,
                     ),
                     SizedBox(
                       height: dimensHeight() * 3,
@@ -134,16 +137,16 @@ class _LogInScreenState extends State<LogInScreen> {
                         text: AppLocalizations.of(context).translate('log_in'),
                         onPressed: () {
                           setState(() {
-                            errorEmail = Validate()
-                                .validateEmail(context, _controllerEmail.text);
+                            // errorPhone = Validate()
+                            //     .validatePhone(context, _controllerPhone.text);
                             errorPassword = _controllerPassword.text.isEmpty
                                 ? AppLocalizations.of(context)
                                     .translate('please_enter_password')
                                 : null;
 
-                            if (errorEmail == null && errorPassword == null) {
+                            if (errorPhone == null && errorPassword == null) {
                               context.read<LogInCubit>().signIn(
-                                  _controllerEmail.text,
+                                  _controllerPhone.text,
                                   _controllerPassword.text);
                             }
                           });

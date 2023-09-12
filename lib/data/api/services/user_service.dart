@@ -15,4 +15,10 @@ class UserService extends BaseService {
     final response = await post(SIGN_UP, data: request.toJson());
     return SignUpResponse.fromJson(response.data);
   }
+
+  Future<void> refreshToken() async {
+    final response = await post(REFRESH_TOKEN);
+    print(response);
+    // return SignUpResponse.fromJson(response.data);
+  }
 }

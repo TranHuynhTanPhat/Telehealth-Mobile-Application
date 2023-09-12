@@ -97,10 +97,11 @@ class RestClient {
 
       // Kiểm tra xem user có đăng nhập hay chưa. Nếu chưa thì call handler.next(options)
       // để trả data về tiếp client
-      if (user == null || user.accessToken==null) {
+      if (user == null || user.accessToken == null) {
         return handler.next(options);
       }
 
+      options.headers['cookie'] = 'M_GCHkw--xVkr5bFzjSJn';
       // Tính toán thời gian token expired
       bool isExpired = JwtDecoder.isExpired(user.accessToken!);
 
@@ -112,7 +113,8 @@ class RestClient {
             if (response.data != false) {
               options.headers['Authorization'] =
                   "Bearer ${response.data["jwtToken"]}";
-              AppStorage().saveUser(user: user.copyWith(accessToken: response.data));
+              AppStorage()
+                  .saveUser(user: user.copyWith(accessToken: response.data));
             } else {
               logout();
             }

@@ -17,10 +17,10 @@ class LogInCubit extends Cubit<LogInState> {
     emit(NavigateToSignUpActionState());
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> signIn(String phone, String password) async {
     emit(LogInLoadingActionState());
     try {
-      LoginResponse response = await _userRepository.login(email, password);
+      LoginResponse response = await _userRepository.login(phone, password);
       AppStorage().saveUser(
           user: User(role: response.role, accessToken: response.jwtToken));
       emit(SignInActionState(response: response));
