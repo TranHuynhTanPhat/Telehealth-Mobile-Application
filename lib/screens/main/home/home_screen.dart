@@ -1,10 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screens/main/home/components/event_title.dart';
-import 'package:healthline/screens/main/home/components/list_services.dart';
+import 'package:healthline/screens/main/home/components/export.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _searchController;
+  int _selected = 0;
+
   @override
   void initState() {
     _searchController = TextEditingController();
@@ -84,6 +86,55 @@ class _HomeScreenState extends State<HomeScreen> {
         'date': DateTime.now(),
         'time': TimeOfDay.now()
       },
+    ];
+    final List<Map<String, dynamic>> doctors = [
+      {
+        'dr': 'Dr. Phat',
+        'description': 'Depression in Cho Ray Hopital',
+        'rate': 4.5,
+        'review': 250
+      },
+      {
+        'dr': 'Dr. Nghia',
+        'description': 'Cardiologist in AB Hopital',
+        'rate': 4.5,
+        'review': 250
+      },
+      {
+        'dr': 'Dr. Truong',
+        'description': 'General in BBC Hopital',
+        'rate': 4.5,
+        'review': 250
+      },
+      {
+        'dr': 'Dr. Chien',
+        'description': 'General in AFC Clinic',
+        'rate': 4.5,
+        'review': 250
+      },
+      {
+        'dr': 'Dr. An',
+        'description': 'Depression in Dr Hopital',
+        'rate': 4.5,
+        'review': 250
+      },
+      {
+        'dr': 'Dr. Phong',
+        'description': 'Cardiologist in XC Clinic',
+        'rate': 4.5,
+        'review': 250
+      },
+    ];
+    final List<String> categories = [
+      'All',
+      'General',
+      'Dentist',
+      'Cardiologist',
+      'Depression',
+      'Optician',
+      'Audiologist',
+      'Paediatric',
+      'Therapist'
     ];
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -183,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
-                  ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.w100),
+                  ?.copyWith(color: color1F1F1F),
             ),
           ),
           ListServices(services: services),
@@ -199,139 +250,75 @@ class _HomeScreenState extends State<HomeScreen> {
                 top: dimensHeight() * 4,
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
-            child: Text(
-              "Upcoming Appointments",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.w100),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Upcoming Appointments",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: color1F1F1F),
+                ),
+                InkWell(
+                  child: Text(
+                    "See all",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: primary, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: dimensWidth()),
-            child: CarouselSlider(
-                items: appointments
-                    .map(
-                      (e) => Container(
-                        // width: dimensWidth() * 40,
-                        // height: dimensWidth() * 10,
-                        padding: EdgeInsets.all(dimensWidth() * 2),
-                        decoration: BoxDecoration(
-                            color: colorCDDEFF,
-                            borderRadius:
-                                BorderRadius.circular(dimensWidth() * 2.5)),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: white.withOpacity(.5),
-                                      borderRadius: BorderRadius.circular(
-                                        dimensWidth() * 1.5,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            e['date'].month.toString(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displayLarge
-                                                ?.copyWith(
-                                                    color: secondary,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            e['date'].day.toString(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall
-                                                ?.copyWith(
-                                                    color: secondary,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                              Expanded(
-                                  flex: 7,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: dimensWidth() * 2,
-                                        top: dimensWidth(),
-                                        bottom: dimensWidth() * 2),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            e['time']
-                                                .format(context)
-                                                .toString(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(color: secondary),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            e['dr'],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge
-                                                ?.copyWith(
-                                                    color: secondary,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            e['description'],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(color: secondary),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ))
-                            ]),
-                      ),
-                    )
-                    .toList(),
-                options: CarouselOptions(
-                    autoPlay: false,
-                    aspectRatio: 3,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.8,
-                    enlargeStrategy: CenterPageEnlargeStrategy.scale)),
-          )
+            child: UpcomingApointment(
+              appointments: appointments,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: dimensHeight() * 4,
+                left: dimensWidth() * 3,
+                right: dimensWidth() * 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Top doctors",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: color1F1F1F),
+                ),
+                InkWell(
+                  child: Text(
+                    "See all",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListCategories(
+            categories: categories,
+            selected: _selected,
+            chooseCategory: (value) {
+              setState(() {
+                _selected = value;
+              });
+            },
+          ),
+          ListDoctors(doctors: doctors),
         ],
       ),
     );
   }
 }
-
-
-
-
-// Padding(
-//         padding: EdgeInsets.symmetric(
-//             vertical: dimensHeight() * 2, horizontal: dimensWidth() * 3),
-//         child: 
