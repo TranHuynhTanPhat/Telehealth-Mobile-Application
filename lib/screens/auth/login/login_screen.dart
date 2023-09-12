@@ -77,7 +77,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     ),
                     TextFieldWidget(
                       controller: _controllerEmail,
-                      label: AppLocalizations.of(context).translate("phone_"),
+                      label: AppLocalizations.of(context).translate("phone_number"),
                       hint: AppLocalizations.of(context).translate("ex_email"),
                       textInputType: TextInputType.emailAddress,
                       error: errorEmail,

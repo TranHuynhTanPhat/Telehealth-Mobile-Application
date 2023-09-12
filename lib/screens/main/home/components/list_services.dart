@@ -44,7 +44,7 @@ class ListServices extends StatelessWidget {
               ),
               Expanded(
                   child: Text(
-                services[index]['name'],
+                AppLocalizations.of(context).translate(services[index]['name']),
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelSmall,
               ))

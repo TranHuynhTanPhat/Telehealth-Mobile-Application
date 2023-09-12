@@ -49,7 +49,7 @@ class _ListCategoriesState extends State<ListCategories> {
               ),
             ),
             child: Text(
-              widget.categories[index],
+              AppLocalizations.of(context).translate(widget.categories[index]),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall

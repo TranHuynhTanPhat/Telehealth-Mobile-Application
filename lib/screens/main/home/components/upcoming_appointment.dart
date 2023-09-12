@@ -89,7 +89,8 @@ class UpcomingApointment extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    e['description'],
+                                    AppLocalizations.of(context)
+                                        .translate(e['description']),
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme

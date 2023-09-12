@@ -25,15 +25,15 @@ class EventTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Consult Doctors",
+                AppLocalizations.of(context).translate('consult_doctors'),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall
-                    ?.copyWith(
-                        color: secondary, fontWeight: FontWeight.bold),
+                    ?.copyWith(color: secondary, fontWeight: FontWeight.bold),
               ),
               Text(
-                "Get Expert Advice Form Specialist Doctors",
+                AppLocalizations.of(context).translate('get_expert_advice_form_specialist_doctors'),
+
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall

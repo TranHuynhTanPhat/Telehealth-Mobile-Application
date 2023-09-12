@@ -28,27 +28,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> services = [
       {
-        'name': 'General medical',
+        'name': 'general_medical',
         'color': color009DC7,
         'icon': FontAwesomeIcons.briefcaseMedical,
       },
       {
-        'name': 'Doctor',
+        'name': 'doctor',
         'color': color1C6AA3,
         'icon': FontAwesomeIcons.userDoctor,
       },
       {
-        'name': 'Nurse',
+        'name': 'nurse',
         'color': colorDF9F1E,
         'icon': FontAwesomeIcons.userNurse,
       },
       {
-        'name': 'Vaccination',
+        'name': 'vaccination',
         'color': color9D4B6C,
         'icon': FontAwesomeIcons.syringe,
       },
       {
-        'name': 'Corona',
+        'name': 'corona',
         'color': secondary,
         'icon': FontAwesomeIcons.virusCovid,
       },
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Map<String, dynamic>> appointments = [
       {
         'dr': 'Dr. Phat',
-        'description': 'Depression',
+        'description': 'depression',
         'color': colorCDDEFF,
         'icon': FontAwesomeIcons.briefcaseMedical,
         'date': DateTime.now(),
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       {
         'dr': 'Dr. Truong',
-        'description': 'Cardiologist',
+        'description': 'cardiologist',
         'color': colorCDDEFF,
         'icon': FontAwesomeIcons.briefcaseMedical,
         'date': DateTime.now(),
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       {
         'dr': 'Dr. Chien',
-        'description': 'General examination',
+        'description': 'general_examination',
         'color': colorCDDEFF,
         'icon': FontAwesomeIcons.briefcaseMedical,
         'date': DateTime.now(),
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       {
         'dr': 'Dr. Dang',
-        'description': 'Depression',
+        'description': 'depression',
         'color': colorCDDEFF,
         'icon': FontAwesomeIcons.briefcaseMedical,
         'date': DateTime.now(),
@@ -126,15 +126,15 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     ];
     final List<String> categories = [
-      'All',
-      'General',
-      'Dentist',
-      'Cardiologist',
-      'Depression',
-      'Optician',
-      'Audiologist',
-      'Paediatric',
-      'Therapist'
+      'all',
+      'general',
+      'dentist',
+      'cardiologist',
+      'depression',
+      'optician',
+      'audiologist',
+      'paediatric',
+      'therapist'
     ];
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Hello!',
+                AppLocalizations.of(context).translate("greeting"),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
             child: TextFieldWidget(
-              hint: 'Search drugs, category',
+              hint: AppLocalizations.of(context).translate("search_drugs_categories"),
               fillColor: colorF2F5FF,
               filled: true,
               focusedBorderColor: colorF2F5FF,
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
             child: Text(
-              "Services",
+              AppLocalizations.of(context).translate("services"),
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Upcoming Appointments",
+                  AppLocalizations.of(context).translate("upcoming_appointments"),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -263,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   child: Text(
-                    "See all",
+                    AppLocalizations.of(context).translate("see_all"),
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -289,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Top doctors",
+                AppLocalizations.of(context).translate("top_doctors"),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   child: Text(
-                    "See all",
+                    AppLocalizations.of(context).translate("see_all"),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: primary,
                           fontWeight: FontWeight.bold,
