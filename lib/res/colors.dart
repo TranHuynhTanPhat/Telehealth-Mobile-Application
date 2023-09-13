@@ -16,3 +16,4 @@ const Color color1C6AA3 = Color(0xff1c6aa3);
 const Color colorDF9F1E = Color(0xffdf9f1e);
 const Color color009DC7 = Color(0xff009dc7);
 const Color color9D4B6C = Color(0xff9d4b6c);
+const Color black26 = Colors.black26;

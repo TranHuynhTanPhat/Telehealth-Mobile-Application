@@ -3,10 +3,11 @@ import 'package:healthline/data/api/models/requests/login_request.dart';
 import 'package:healthline/data/api/models/requests/signup_request.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/models/responses/signup_response.dart';
+import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class UserService extends BaseService {
-  /// 
+  ///
   Future<LoginResponse> login(LoginRequest request) async {
     final response = await post(LOG_IN, data: request.toJson());
     return LoginResponse.fromJson(response.data);
@@ -19,5 +20,10 @@ class UserService extends BaseService {
 
   Future<void> refreshToken() async {
     await post(baseUrl + REFRESH_TOKEN);
+  }
+
+  Future<void> logout() async {
+    RestClient().logout();
+    await delete(baseUrl + LOGOUT);
   }
 }

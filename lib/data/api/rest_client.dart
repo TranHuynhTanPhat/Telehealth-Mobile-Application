@@ -44,7 +44,7 @@ class RestClient {
     final String appDocPath = appDocDir.path;
     cookieJar = PersistCookieJar(
       ignoreExpires: true,
-      storage: FileStorage(appDocPath + "/.cookies/"),
+      storage: FileStorage("$appDocPath/.cookies/"),
     );
 
     // cookieJar = CookieJar();
@@ -103,7 +103,9 @@ class RestClient {
       // options.headers['cookie'] = 'M_GCHkw--xVkr5bFzjSJn';
       bool isExpired = JwtDecoder.isExpired(user.accessToken!);
 
-      if (isExpired && !options.path.contains(REFRESH_TOKEN)) {
+      if (isExpired &&
+          !options.path.contains(REFRESH_TOKEN) &&
+          !options.path.contains(LOGOUT)) {
         try {
           final response = await dio
               .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
@@ -115,14 +117,19 @@ class RestClient {
               AppStorage()
                   .saveUser(user: user.copyWith(accessToken: response.data));
             } else {
+              await getDio()
+                  .post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
               logout();
             }
           } else {
             logout();
+            await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
           }
           return handler.next(options);
         } on DioException catch (error) {
           logout();
+          await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
+
           SentryLogError().additionalMessage(error, SentryLevel.error);
           return handler.reject(error, true);
         }
@@ -131,7 +138,7 @@ class RestClient {
         return handler.next(options);
       }
     }, onResponse: (Response response, handler) async {
-      logPrint("RESPONSE HEADERS");
+      logPrint("RESPONSE");
       logPrint(response.headers);
       try {
         String refreshToken = getRefreshToken(response.headers.toString());
@@ -149,8 +156,10 @@ class RestClient {
       logPrint("ERROR");
       logPrint(error.message);
       SentryLogError().additionalException("${error}REST_CLIENT");
-      if (error.response?.statusCode == 401 || error.type == DioExceptionType.connectionTimeout) {
+      if (error.response?.statusCode == 401 ||
+          error.type == DioExceptionType.connectionTimeout) {
         logout();
+        await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
       }
       return handler.next(error);
     }));

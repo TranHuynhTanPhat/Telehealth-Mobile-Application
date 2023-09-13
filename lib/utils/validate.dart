@@ -83,6 +83,6 @@ class Validate {
     if (phone.length == 10 && phone.characters.first == '0') {
       phone = phone.replaceFirst('0', '');
     }
-    return '+84' + phone;
+    return '+84$phone';
   }
 }

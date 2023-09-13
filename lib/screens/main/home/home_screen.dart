@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/bases/base_gridview.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 
@@ -248,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 top: dimensHeight() * 3,
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
-            child: const EventTitle(),
+            child: const EventCard(),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -322,7 +323,19 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
           ),
-          ListDoctors(doctors: doctors),
+          Padding(
+            padding: EdgeInsets.symmetric(
+          vertical: dimensWidth() * 2, horizontal: dimensWidth() * 3),
+            child: BaseGridview(
+              children: doctors
+                  .map(
+                    (e) => DoctorCard(
+                      doctor: e,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );

@@ -25,4 +25,8 @@ class UserRepository extends BaseRepository {
   Future<void> refreshToken() async {
     await _userService.refreshToken();
   }
+
+  Future<void> logout() async{
+    await _userService.logout();
+  }
 }

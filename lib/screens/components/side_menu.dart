@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
@@ -35,9 +36,15 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SideMenuCubit, SideMenuState>(
-      listenWhen: (previous, current) => current is SideMenuActionState,
+      // listenWhen: (previous, current) => current is SideMenuActionState,
       listener: (context, state) {
-        if (state is LogoutActionState) {
+        if (state is SideMenuLoading) {
+          EasyLoading.show();
+        } else if (state is LogoutActionState) {
+          EasyLoading.dismiss();
+          Navigator.pushReplacementNamed(context, logInName);
+        } else if (state is ErrorActionState) {
+          EasyLoading.dismiss();
           Navigator.pushReplacementNamed(context, logInName);
         }
       },

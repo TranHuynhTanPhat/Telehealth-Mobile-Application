@@ -64,5 +64,9 @@
   "schedule": "Schedule",
   "message": "Message",
   "health_info": "Health info",
-  "invalid_phone": "Invalid phone"
+  "invalid_phone": "Invalid phone",
+  "my_appointments":"My appointments",
+  "upcoming":"Upcomming",
+  "completed":"Completed",
+  "canceled":"Canceled"
 }

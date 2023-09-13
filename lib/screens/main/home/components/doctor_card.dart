@@ -3,41 +3,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 
-class ListDoctors extends StatelessWidget {
-  const ListDoctors({
-    super.key,
-    required this.doctors,
-  });
-
-  final List<Map<String, dynamic>> doctors;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView(
-      padding: EdgeInsets.symmetric(
-          vertical: dimensWidth() * 2, horizontal: dimensWidth() * 3),
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        childAspectRatio: 0.8,
-        mainAxisSpacing: dimensWidth() * 2,
-        crossAxisSpacing: dimensHeight() * 2,
-      ),
-      children: doctors
-          .map(
-            (e) => DoctorTitle(
-              doctor: e,
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class DoctorTitle extends StatelessWidget {
-  const DoctorTitle({
+class DoctorCard extends StatelessWidget {
+  const DoctorCard({
     super.key,
     required this.doctor,
   });

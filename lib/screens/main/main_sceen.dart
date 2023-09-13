@@ -199,7 +199,7 @@ class _MainScreenState extends State<MainScreen>
                               size: dimensWidth() * 3.8,
                               color: index == _currentIndex
                                   ? primary
-                                  : Colors.black26,
+                                  : black26,
                             )
                           ],
                         ),

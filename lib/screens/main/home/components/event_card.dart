@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:lottie/lottie.dart';
 
-class EventTitle extends StatelessWidget {
-  const EventTitle({
+class EventCard extends StatelessWidget {
+  const EventCard({
     super.key,
   });
 

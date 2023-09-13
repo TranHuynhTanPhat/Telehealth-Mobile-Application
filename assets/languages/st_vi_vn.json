@@ -63,5 +63,9 @@
   "schedule":"Lịch trình",
   "message":"Tin nhắn",
   "health_info":"Thông tin",
-  "invalid_phone":"Số điện thoại không hợp lệ"
+  "invalid_phone":"Số điện thoại không hợp lệ",
+  "my_appointments":"Cuộc hẹn của tôi",
+  "upcoming":"Sắp tới",
+  "completed":"Hoàn thành",
+  "canceled":"Đã huỷ"
 }
