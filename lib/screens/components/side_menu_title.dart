@@ -33,7 +33,7 @@ class SideMenuTile extends StatelessWidget {
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               curve: Curves.fastOutSlowIn,
-              height: dimensHeight() * 6.8,
+              height: dimensWidth() * 6.6,
               width: isActive ? dimensWidth() * 35 : 0,
               left: 0,
               child: Container(
@@ -47,7 +47,7 @@ class SideMenuTile extends StatelessWidget {
               onTap: press,
               leading: FaIcon(
                 icon,
-                size: dimensIcon(),
+                size: dimensIcon()*.8,
                 color: isActive ? secondary : white,
               ),
               title: Text(

@@ -70,7 +70,7 @@ class AppController {
 
   initApi({String? token}) async {
     packageInfo = await PackageInfo.fromPlatform();
-    RestClient.instance.init(
+    await RestClient.instance.init(
         accessToken: token ?? "",
         platform: Platform.isAndroid ? "android" : "ios",
         appVersion: packageInfo.version,

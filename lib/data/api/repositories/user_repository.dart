@@ -10,15 +10,23 @@ import 'package:healthline/data/api/services/user_service.dart';
 class UserRepository extends BaseRepository {
   final UserService _userService = UserService();
 
-  Future<LoginResponse> login(String email, String password) async {
-    LoginRequest request = LoginRequest(email: email, password: password);
+  Future<LoginResponse> login(String phone, String password) async {
+    LoginRequest request = LoginRequest(phone: phone, password: password);
     return await _userService.login(request);
   }
 
   Future<SignUpResponse> registerAccount(
-      String fullName, String email, String password) async {
+      String fullName, String phone, String password) async {
     SignUpRequest request =
-        SignUpRequest(email: email, password: password, fullName: fullName);
+        SignUpRequest(phone: phone, password: password, fullName: fullName);
     return await _userService.registerAccount(request);
+  }
+
+  Future<void> refreshToken() async {
+    await _userService.refreshToken();
+  }
+
+  Future<void> logout() async{
+    await _userService.logout();
   }
 }

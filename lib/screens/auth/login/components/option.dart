@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/cubits/cubit_login/log_in_cubit.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screens/widgets/google_button_widget.dart';
 
 class OptionLogIn extends StatelessWidget {
   const OptionLogIn({super.key});
@@ -13,16 +12,16 @@ class OptionLogIn extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              top: dimensHeight() * 10,
+              top: dimensHeight() * 4,
               right: dimensWidth() * 3,
               left: dimensWidth() * 3),
           child: const Divider(),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-          child: const GoogleButtonWidget(),
-        ),
-        const Divider(),
+        // Container(
+        //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
+        //   child: const GoogleButtonWidget(),
+        // ),
+        // const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

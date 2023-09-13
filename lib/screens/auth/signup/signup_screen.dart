@@ -19,14 +19,14 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController _controllerFullName;
-  late TextEditingController _controllerEmail;
+  late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
   late TextEditingController _controllerConfirmPassword;
 
   bool agreeTermsAndConditions = false;
 
   String? errorFullName;
-  String? errorEmail;
+  String? errorPhone;
   String? errorPassword;
   String? errorConfirmPassword;
   bool? errorCheckTermsAndConditons;
@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     _controllerFullName = TextEditingController();
-    _controllerEmail = TextEditingController();
+    _controllerPhone = TextEditingController();
     _controllerPassword = TextEditingController();
     _controllerConfirmPassword = TextEditingController();
     super.initState();
@@ -44,11 +44,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void deactivate() {
     _controllerFullName.dispose();
-    _controllerEmail.dispose();
+    _controllerPhone.dispose();
     _controllerPassword.dispose();
     _controllerConfirmPassword.dispose();
     super.deactivate();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +67,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             } else if (state is RegisterAccountActionState) {
               EasyLoading.dismiss();
             } else if (state is SignUpErrorActionState) {
-              if (state.message.contains('409')) {
-                EasyLoading.showToast(
-                  AppLocalizations.of(context)
-                      .translate("email_already_existed"),
-                );
-              }
+              // if (state.message.contains('409')) {
+              //   EasyLoading.showToast(
+              //     AppLocalizations.of(context)
+              //         .translate("phone_already_existed"),
+              //   );
+              // }
+              EasyLoading.dismiss();
+              EasyLoading.showToast(state.message);
             }
           },
           child: Scaffold(
@@ -97,11 +100,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: dimensHeight() * 3,
                   ),
                   TextFieldWidget(
-                    controller: _controllerEmail,
-                    label: AppLocalizations.of(context).translate('email'),
-                    hint: AppLocalizations.of(context).translate('ex_email'),
-                    textInputType: TextInputType.emailAddress,
-                    error: errorEmail,
+                    prefix: Padding(
+                      padding: EdgeInsets.only(right:dimensWidth()*.5),
+                      child: Text(
+                        '+84',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    controller: _controllerPhone,
+                    label: AppLocalizations.of(context).translate("phone"),
+                    textInputType: TextInputType.phone,
+                    error: errorPhone,
                   ),
                   SizedBox(
                     height: dimensHeight() * 3,
@@ -207,8 +219,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ? errorFullName = AppLocalizations.of(context)
                                 .translate("please_enter_fulname")
                             : null;
-                        errorEmail = Validate()
-                            .validateEmail(context, _controllerEmail.text);
+                        errorPhone = Validate()
+                            .validatePhone(context, _controllerPhone.text);
                         errorPassword = Validate().validatePassword(
                             context, _controllerPassword.text);
                         errorConfirmPassword = _controllerConfirmPassword
@@ -221,12 +233,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       });
                       if (errorConfirmPassword == null &&
                           errorFullName == null &&
-                          errorEmail == null &&
+                          errorPhone == null &&
                           errorPassword == null &&
                           agreeTermsAndConditions == true) {
                         context.read<SignUpCubit>().registerAccount(
                             _controllerFullName.text,
-                            _controllerEmail.text,
+                            Validate().changePhoneFormat(_controllerPhone.text),
                             _controllerPassword.text);
                       }
                     },

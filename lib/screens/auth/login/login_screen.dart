@@ -18,24 +18,24 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  late TextEditingController _controllerEmail;
+  late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
 
-  String? errorEmail;
+  String? errorPhone;
   String? errorPassword;
 
   bool showPassword = false;
 
   @override
   void initState() {
-    _controllerEmail = TextEditingController();
+    _controllerPhone = TextEditingController();
     _controllerPassword = TextEditingController();
     super.initState();
   }
 
   @override
   void deactivate() {
-    _controllerEmail.dispose();
+    _controllerPhone.dispose();
     _controllerPassword.dispose();
     super.deactivate();
   }
@@ -55,11 +55,13 @@ class _LogInScreenState extends State<LogInScreen> {
             EasyLoading.dismiss();
             Navigator.pushReplacementNamed(context, mainScreenName);
           } else if (state is LogInErrorActionState) {
-            if (state.message.contains("401")) {
-              EasyLoading.dismiss();
-              EasyLoading.showToast(AppLocalizations.of(context)
-                  .translate("email_or_password_is_invalid"));
-            }
+            // if (state.message.contains("401")) {
+            //   EasyLoading.dismiss();
+            //   EasyLoading.showToast(AppLocalizations.of(context)
+            //       .translate("phone_or_password_is_invalid"));
+            // }
+            EasyLoading.dismiss();
+            EasyLoading.showToast(state.message);
           }
         },
         child: BlocBuilder<LogInCubit, LogInState>(
@@ -67,20 +69,29 @@ class _LogInScreenState extends State<LogInScreen> {
             return Scaffold(
               body: Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 2,
+                    vertical: dimensHeight() * 7,
                     horizontal: dimensWidth() * 2),
                 child: ListView(
                   children: [
                     const HeaderLogIn(),
                     SizedBox(
-                      height: dimensHeight() * 10,
+                      height: dimensHeight() * 3,
                     ),
                     TextFieldWidget(
-                      controller: _controllerEmail,
-                      label: AppLocalizations.of(context).translate("phone_"),
-                      hint: AppLocalizations.of(context).translate("ex_email"),
-                      textInputType: TextInputType.emailAddress,
-                      error: errorEmail,
+                      controller: _controllerPhone,
+                      prefix: Padding(
+                        padding: EdgeInsets.only(right: dimensWidth() * .5),
+                        child: Text(
+                          '+84',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      label: AppLocalizations.of(context).translate("phone"),
+                      textInputType: TextInputType.phone,
+                      error: errorPhone,
                     ),
                     SizedBox(
                       height: dimensHeight() * 3,
@@ -134,16 +145,17 @@ class _LogInScreenState extends State<LogInScreen> {
                         text: AppLocalizations.of(context).translate('log_in'),
                         onPressed: () {
                           setState(() {
-                            errorEmail = Validate()
-                                .validateEmail(context, _controllerEmail.text);
+                            errorPhone = Validate()
+                                .validatePhone(context, _controllerPhone.text);
                             errorPassword = _controllerPassword.text.isEmpty
                                 ? AppLocalizations.of(context)
                                     .translate('please_enter_password')
                                 : null;
 
-                            if (errorEmail == null && errorPassword == null) {
+                            if (errorPhone == null && errorPassword == null) {
                               context.read<LogInCubit>().signIn(
-                                  _controllerEmail.text,
+                                  Validate()
+                                      .changePhoneFormat(_controllerPhone.text),
                                   _controllerPassword.text);
                             }
                           });

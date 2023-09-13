@@ -12,7 +12,6 @@ class Validate {
         r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
     final regex = RegExp(pattern);
 
-
     return value!.isEmpty
         ? AppLocalizations.of(context).translate("please_enter_email")
         : !regex.hasMatch(value)
@@ -62,18 +61,28 @@ class Validate {
       return error;
     }
     return null;
+  }
 
-    // return value!.isEmpty
-    //     ? 'Please enter password'
-    //     : !regex.hasMatch(value)
-    //         ? 'Enter a valid password'
-    //         : null;
-//     r'^
-//   (?=.*[A-Z])       // should contain at least one upper case
-//   (?=.*[a-z])       // should contain at least one lower case
-//   (?=.*?[0-9])      // should contain at least one digit
-//   (?=.*?[!@#\$&*~]) // should contain at least one Special character
-//   .{8,}             // Must be at least 8 characters in length
-// $
+  String? validatePhone(BuildContext context, String phone) {
+    RegExp uppercase = RegExp(r'^(?=.*[A-Z])');
+    RegExp lowercase = RegExp(r'^(?=.*[a-z])');
+    RegExp special = RegExp(r'^(?=.*?[!@#\$&*~])');
+    if (phone.length == 10 && phone.characters.first == '0') {
+      phone = phone.replaceFirst('0', '');
+    }
+    if (uppercase.hasMatch(phone) ||
+        lowercase.hasMatch(phone) ||
+        special.hasMatch(phone) ||
+        phone.length != 9) {
+      return AppLocalizations.of(context).translate("invalid_phone");
+    }
+    return null;
+  }
+
+  String changePhoneFormat(String phone) {
+    if (phone.length == 10 && phone.characters.first == '0') {
+      phone = phone.replaceFirst('0', '');
+    }
+    return '+84$phone';
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unused_field
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:healthline/data/api/models/responses/signup_response.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
@@ -16,14 +17,16 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> registerAccount(
-      String fullName, String email, String password) async {
+      String fullName, String phone, String password) async {
     emit(SignUpLoadingActionState());
     try {
       SignUpResponse response =
-          await _userRepository.registerAccount(fullName, email, password);
+          await _userRepository.registerAccount(fullName, phone, password);
       emit(RegisterAccountActionState(response: response));
     } catch (error) {
-      emit(SignUpErrorActionState(message: error.toString()));
+      DioException er = error as DioException;
+      emit(SignUpErrorActionState(message: er.response?.data['message']));
+
     }
   }
 }

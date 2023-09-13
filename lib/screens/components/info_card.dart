@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 
 class InfoCard extends StatelessWidget {
@@ -17,11 +15,7 @@ class InfoCard extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: colorA8B1CE,
         radius: dimensWidth() * 4,
-        child: FaIcon(
-          FontAwesomeIcons.user,
-          color: white,
-          size: dimensIcon(),
-        ),
+        backgroundImage: AssetImage(DImages.anhthe),
       ),
       title: Text(
         name,
