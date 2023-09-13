@@ -50,6 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.deactivate();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -99,9 +100,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: dimensHeight() * 3,
                   ),
                   TextFieldWidget(
+                    prefix: Padding(
+                      padding: EdgeInsets.only(right:dimensWidth()*.5),
+                      child: Text(
+                        '+84',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     controller: _controllerPhone,
                     label: AppLocalizations.of(context).translate("phone"),
-                    hint: AppLocalizations.of(context).translate("ex_phone"),
                     textInputType: TextInputType.phone,
                     error: errorPhone,
                   ),
@@ -228,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           agreeTermsAndConditions == true) {
                         context.read<SignUpCubit>().registerAccount(
                             _controllerFullName.text,
-                            _controllerPhone.text,
+                            Validate().changePhoneFormat(_controllerPhone.text),
                             _controllerPassword.text);
                       }
                     },

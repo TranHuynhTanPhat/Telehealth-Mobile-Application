@@ -4,7 +4,7 @@ import 'package:healthline/res/colors.dart';
 
 void configLoading(context) {
   EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 2000)
+    ..displayDuration = const Duration(milliseconds: 5000)
     ..indicatorType = EasyLoadingIndicatorType.ring
     ..loadingStyle = EasyLoadingStyle.custom
     ..maskType = EasyLoadingMaskType.custom

@@ -111,6 +111,8 @@ class TextFieldWidget extends StatelessWidget {
     this.fillColor = white,
     this.enabledBorderColor = colorA8B1CE,
     this.focusedBorderColor = color1F1F1F,
+    this.suffix,
+    this.prefix,
   });
   final TextEditingController controller;
   final String? label;
@@ -121,10 +123,12 @@ class TextFieldWidget extends StatelessWidget {
   final bool? enableSuggestions;
   final bool? autocorrect;
   final IconButton? suffixIcon;
+  final Widget? suffix;
   final bool? filled;
   final Color? fillColor;
   final Color? enabledBorderColor;
   final Color? focusedBorderColor;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +156,8 @@ class TextFieldWidget extends StatelessWidget {
               ?.copyWith(color: colorA8B1CE),
           errorText: error,
           suffixIcon: suffixIcon,
+          suffix: suffix,
+          prefix: prefix,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(width: 1, color: enabledBorderColor!),

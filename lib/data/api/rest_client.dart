@@ -1,5 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, constant_identifier_names
 
+import 'dart:io';
+
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -10,6 +12,7 @@ import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RestClient {
@@ -31,13 +34,20 @@ class RestClient {
   late Map<String, dynamic> headers;
   late CookieJar cookieJar;
 
-  void init(
+  Future<void> init(
       {String? platform,
       String? deviceId,
       String? language,
       String? appVersion,
-      String? accessToken}) {
-    cookieJar = CookieJar();
+      String? accessToken}) async {
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String appDocPath = appDocDir.path;
+    cookieJar = PersistCookieJar(
+      ignoreExpires: true,
+      storage: FileStorage(appDocPath + "/.cookies/"),
+    );
+
+    // cookieJar = CookieJar();
     headers = {
       'Content-Type': 'application/json',
       'X-Version': appVersion,
@@ -121,8 +131,8 @@ class RestClient {
         return handler.next(options);
       }
     }, onResponse: (Response response, handler) async {
-      logPrint("RESPONSE");
-      logPrint(response);
+      logPrint("RESPONSE HEADERS");
+      logPrint(response.headers);
       try {
         String refreshToken = getRefreshToken(response.headers.toString());
         if (refreshToken.isNotEmpty) {
@@ -137,9 +147,9 @@ class RestClient {
       return handler.next(response);
     }, onError: (DioException error, handler) async {
       logPrint("ERROR");
-      logPrint(error);
+      logPrint(error.message);
       SentryLogError().additionalException("${error}REST_CLIENT");
-      if (error.response?.statusCode == 401) {
+      if (error.response?.statusCode == 401 || error.type == DioExceptionType.connectionTimeout) {
         logout();
       }
       return handler.next(error);
@@ -154,7 +164,7 @@ class RestClient {
     String refreshToken = headers
         .substring(refreshTokenStart, refreshTokenEnd)
         .replaceAll('refresh_token=', '');
-    return refreshToken;
+    return refreshToken.trim();
   }
 
   Future<void> logout() async {

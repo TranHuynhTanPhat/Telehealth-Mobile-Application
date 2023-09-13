@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unused_field
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
@@ -20,12 +21,14 @@ class LogInCubit extends Cubit<LogInState> {
   Future<void> signIn(String phone, String password) async {
     emit(LogInLoadingActionState());
     try {
-      LoginResponse response = await _userRepository.login(phone, password);
+      LoginResponse response =
+          await _userRepository.login(phone.trim(), password.trim());
       AppStorage().saveUser(
           user: User(role: response.role, accessToken: response.jwtToken));
       emit(SignInActionState(response: response));
     } catch (error) {
-      emit(LogInErrorActionState(message: error.toString()));
+      DioException er = error as DioException;
+      emit(LogInErrorActionState(message: er.response?.data['message']));
     }
   }
 }

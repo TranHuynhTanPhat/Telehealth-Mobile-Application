@@ -79,8 +79,17 @@ class _LogInScreenState extends State<LogInScreen> {
                     ),
                     TextFieldWidget(
                       controller: _controllerPhone,
+                      prefix: Padding(
+                        padding: EdgeInsets.only(right: dimensWidth() * .5),
+                        child: Text(
+                          '+84',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
                       label: AppLocalizations.of(context).translate("phone"),
-                      hint: AppLocalizations.of(context).translate("ex_phone"),
                       textInputType: TextInputType.phone,
                       error: errorPhone,
                     ),
@@ -145,7 +154,8 @@ class _LogInScreenState extends State<LogInScreen> {
 
                             if (errorPhone == null && errorPassword == null) {
                               context.read<LogInCubit>().signIn(
-                                  _controllerPhone.text,
+                                  Validate()
+                                      .changePhoneFormat(_controllerPhone.text),
                                   _controllerPassword.text);
                             }
                           });

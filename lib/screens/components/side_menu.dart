@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_pages.dart';
+import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/info_card.dart';
@@ -32,47 +34,59 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: dimensWidth() * 50,
-        height: double.infinity,
-        color: secondary,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InfoCard(
-                name: "Tran Huynh Tan Phat",
-                profession: AppLocalizations.of(context).translate("patient"),
-              ),
-              ...sideMenus.map((menu) => SideMenuTile(
+    return BlocListener<SideMenuCubit, SideMenuState>(
+      listenWhen: (previous, current) => current is SideMenuActionState,
+      listener: (context, state) {
+        if (state is LogoutActionState) {
+          Navigator.pushReplacementNamed(context, logInName);
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          width: dimensWidth() * 50,
+          height: double.infinity,
+          color: secondary,
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InfoCard(
+                  name: "Tran Huynh Tan Phat",
+                  profession: AppLocalizations.of(context).translate("patient"),
+                ),
+                ...sideMenus.map((menu) => SideMenuTile(
+                      press: () {
+                        setState(() {
+                          selectedMenu = menu;
+                        });
+                      },
+                      isActive: selectedMenu == menu,
+                      name:
+                          AppLocalizations.of(context).translate(menu['name']),
+                      icon: menu['icon'],
+                    )),
+                const Spacer(),
+                SideSubMenu(
                     press: () {
-                      setState(() {
-                        selectedMenu = menu;
-                      });
+                      AppLocalizations.of(context).isVnLocale
+                          ? context.read<ResCubit>().toEnglish()
+                          : context.read<ResCubit>().toVietnamese();
                     },
-                    isActive: selectedMenu == menu,
-                    name: AppLocalizations.of(context).translate(menu['name']),
-                    icon: menu['icon'],
-                  )),
-              const Spacer(),
-              SideSubMenu(
+                    name: AppLocalizations.of(context).isVnLocale
+                        ? AppLocalizations.of(context).translate('en')
+                        : AppLocalizations.of(context).translate('vi'),
+                    icon: FontAwesomeIcons.language),
+                SideSubMenu(
+                  icon: FontAwesomeIcons.arrowRightFromBracket,
+                  name: "Log out",
+                  color: Colors.yellow,
                   press: () {
-                    AppLocalizations.of(context).isVnLocale
-                        ? context.read<ResCubit>().toEnglish()
-                        : context.read<ResCubit>().toVietnamese();
+                    // RestClient().logout();
+                    context.read<SideMenuCubit>().logoutActionState();
                   },
-                  name: AppLocalizations.of(context).isVnLocale
-                      ? AppLocalizations.of(context).translate('en')
-                      : AppLocalizations.of(context).translate('vi'),
-                  icon: FontAwesomeIcons.language),
-              SideSubMenu(
-                icon: FontAwesomeIcons.arrowRightFromBracket,
-                name: "Log out",
-                color: Colors.yellow,
-                press: () {},
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
