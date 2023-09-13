@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/views/auth/login/login_screen.dart';
-import 'package:healthline/views/auth/signup/signup_screen.dart';
-import 'package:healthline/views/main/error_screen.dart';
-import 'package:healthline/views/main/main_sceen.dart';
-import 'package:healthline/views/splash/onboarding.dart';
+import 'package:healthline/screens/auth/login/login_screen.dart';
+import 'package:healthline/screens/auth/signup/signup_screen.dart';
+import 'package:healthline/screens/error/error_screen.dart';
+import 'package:healthline/screens/main/main_sceen.dart';
+import 'package:healthline/screens/splash/onboarding.dart';
 
-import 'package:healthline/views/splash/splash_screen.dart';
+import 'package:healthline/screens/splash/splash_screen.dart';
 
 class AppRoute {
   Route? onGeneralRoute(RouteSettings routeSettings) {

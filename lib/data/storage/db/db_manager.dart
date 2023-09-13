@@ -1,8 +1,6 @@
 import 'dart:io';
 
 
-import 'package:healthline/data/storage/db/db_constants.dart';
-import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,7 +13,7 @@ class DbManager {
   }
 
   initAdapter() {
-    Hive.registerAdapter(UserAdapter());
+    // Hive.registerAdapter(UserAdapter());
   //   Hive.registerAdapter(DepartmentItemAdapter());
   }
 
@@ -35,10 +33,10 @@ class DbManager {
   //   return items;
   // }
 
-  clearUser() async{
-    var box = await Hive.openBox<User>(TABLE_USER);
-    box.clear();
-  }
+  // clearUser() async{
+  //   var box = await Hive.openBox<User>(TABLE_USER);
+  //   box.clear();
+  // }
 
   // saveListDepartment(
   //     {required String hospitalId, required List<DepartmentItem> items}) async {

@@ -8,7 +8,7 @@ sealed class SliderState extends Equatable {
 }
 
 final class SliderInitial extends SliderState {
-  SliderInitial(super.ref);
+  const SliderInitial(super.ref);
 }
 
 final class SliderLoaded extends SliderState {
@@ -18,6 +18,6 @@ final class SliderLoaded extends SliderState {
 }
 
 final class SliderError extends SliderState {
-  SliderError(super.ref, {required this.message});
+  const SliderError(super.ref, {required this.message});
   final String message;
 }

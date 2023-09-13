@@ -1,20 +1,15 @@
-// // ignore_for_file: constant_identifier_names
-
-// import 'dart:convert';
-
-// import 'package:flutter_chat_sdk/data/api/models/responses/user.dart';
-// import 'package:flutter_chat_sdk/res/language/localization_service.dart';
-// import 'package:flutter_chat_sdk/res/theme/theme_service.dart';
-// import 'package:get_storage/get_storage.dart';
 
 // ignore_for_file: constant_identifier_names
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:healthline/data/storage/models/user_model.dart';
+import 'package:healthline/utils/log_data.dart';
+
 class AppStorage {
   late SharedPreferences _pref;
-  static const ROLE = "role";
-  static const ACCESS_TOKEN = "access_token";
+  static const USER = "user";
+  static const REFRESH_TOKEN = "refresh_token";
 
   static final AppStorage instance = AppStorage._internal();
 
@@ -28,30 +23,39 @@ class AppStorage {
     _pref = await SharedPreferences.getInstance();
   }
 
-  Future<void> saveRoleUser({required String role}) async {
-    _pref.setString(ROLE, role);
+  Future<void> saveUser({required User user}) async {
+    _pref.setString(USER, user.toJson());
   }
 
-  Future<String?> getRoleUser() async {
-    final token = _pref.getString(ROLE);
-    return token;
+  Future<void> saveRefreshToken({required String refresh}) async {
+    _pref.setString(REFRESH_TOKEN, refresh);
   }
 
-  Future<void> saveUserAccessToken(String accessToken) async {
-    _pref.setString(ACCESS_TOKEN, accessToken);
+  Future<User?> getUser() async {
+    try {
+      User user = User.fromJson(_pref.getString(USER)!);
+      return user;
+    } catch (e) {
+      logPrint(e);
+      return null;
+    }
   }
 
-  Future<String?> getUserAccessToken() async {
-    final token = _pref.getString(ACCESS_TOKEN);
-    return token;
+  Future<String?> getRefreshToken() async{
+    try{
+      return _pref.getString(REFRESH_TOKEN);
+    }catch(e){
+      logPrint(e);
+      return null;
+    }
   }
 
-  clearRole() async{
-    _pref.remove(ROLE);
+  clearUser() async {
+    _pref.remove(USER);
   }
 
-  clearAccessToken() async{
-    _pref.remove(ACCESS_TOKEN);
+  clearRefreshToken() async{
+    _pref.remove(REFRESH_TOKEN);
   }
 
 //   Future<void> saveUserInfo(User user) async {

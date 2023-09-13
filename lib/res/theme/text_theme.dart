@@ -53,17 +53,17 @@ final textTheme = TextTheme(
   ),
   labelLarge: GoogleFonts.roboto(
     fontWeight: FontWeight.w700,
-    fontSize: Converts.c14,
+    fontSize: Converts.c16,
     height: 20 / 14,
   ),
   labelMedium: GoogleFonts.roboto(
     fontWeight: FontWeight.w700,
-    fontSize: Converts.c12,
+    fontSize: Converts.c14,
     height: 16 / 12,
   ),
   labelSmall: GoogleFonts.roboto(
     fontWeight: FontWeight.w700,
-    fontSize: Converts.c11,
+    fontSize: Converts.c12,
     height: 16 / 11,
   ),
   bodyLarge: GoogleFonts.roboto(

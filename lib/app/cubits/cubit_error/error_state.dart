@@ -9,16 +9,16 @@ sealed class ErrorState extends Equatable {
 }
 
 final class ErrorInitial extends ErrorState {
-  ErrorInitial(super.ref);
+  const ErrorInitial(super.ref);
 }
 
 final class ErrorLoaded extends ErrorState {
-  ErrorLoaded(super.ref, {required this.url});
+  const ErrorLoaded(super.ref, {required this.url});
   final String url;
 }
 
 final class ErrorInvalid extends ErrorState {
   final String message;
 
-  ErrorInvalid(super.ref, {required this.message});
+  const ErrorInvalid(super.ref, {required this.message});
 }

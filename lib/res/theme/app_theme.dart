@@ -45,12 +45,9 @@ class AppThemes {
       useMaterial3: true,
       textTheme: textTheme,
       dividerTheme: const DividerThemeData(color: colorF2F5FF, thickness: 1),
-      // bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      //   backgroundColor: Colors.white,
-      //   elevation: 10,
-      //   unselectedItemColor: Color(0xffb5c9cd),
-      //   selectedItemColor: Color(0xfffdc17a),
-      // ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: transparent
+      ),
       // drawerTheme: const DrawerThemeData(
       //     backgroundColor: Colors.white, surfaceTintColor: Colors.black),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
