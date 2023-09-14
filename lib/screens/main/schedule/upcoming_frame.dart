@@ -244,7 +244,7 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
           thickness: 3,
         ),
         SizedBox(
-          height: dimensHeight() * 5,
+          height: dimensHeight(),
         ),
         ...List.generate(24, (index) {
           if (appointments.any((element) => element['time'].hour == index)) {

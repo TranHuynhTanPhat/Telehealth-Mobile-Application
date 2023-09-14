@@ -20,47 +20,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: white,
-        // appBar: AppBar(
-        //   title: Padding(
-        //     padding: EdgeInsets.only(left: dimensWidth()),
-        //     child: Text(
-        //       AppLocalizations.of(context).translate('my_appointments'),
-        //       style: Theme.of(context)
-        //           .textTheme
-        //           .headlineLarge
-        //           ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.w900),
-        //     ),
-        //   ),
-        //   centerTitle: false,
-        // actions: [
-        //   Container(
-        //     padding: EdgeInsets.only(right: dimensWidth() * 3),
-        //     alignment: Alignment.center,
-        //     child: FaIcon(
-        //       FontAwesomeIcons.calendarPlus,
-        //       size: dimensIcon(),
-        //       color: color1F1F1F,
-        //     ),
-        //   )
-        // ],
-        //   bottom: TabBar(
-        // splashBorderRadius: BorderRadius.circular(dimensWidth() * 3),
-        // splashFactory: InkRipple.splashFactory,
-        // indicatorPadding: EdgeInsets.only(bottom: dimensWidth() * .5),
-        // labelStyle: Theme.of(context).textTheme.titleMedium,
-        // tabs: [
-        //   Tab(
-        //     text: AppLocalizations.of(context).translate('upcoming'),
-        //   ),
-        //   Tab(
-        //     text: AppLocalizations.of(context).translate('completed'),
-        //   ),
-        //   Tab(
-        //     text: AppLocalizations.of(context).translate('canceled'),
-        //   ),
-        // ],
-        //   ),
-        // ),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
@@ -118,13 +77,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               CanceledFrame(),
             ],
           ),
-          // child: TabBarView(
-          //   children: [
-          //     Icon(Icons.flight, size: 350),
-          //     Icon(Icons.directions_transit, size: 350),
-          //     Icon(Icons.directions_car, size: 350),
-          //   ],
-          // ),
         ),
       ),
     );

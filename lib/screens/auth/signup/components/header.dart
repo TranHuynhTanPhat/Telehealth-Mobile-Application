@@ -15,23 +15,24 @@ class HeaderSignUp extends StatelessWidget {
                 AppLocalizations.of(context).translate("title_signup"),
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color: secondary,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
             ),
           ],
         ),
         SizedBox(
-          height: dimensHeight() * 3,
+          height: dimensHeight(),
         ),
         Row(
           children: [
             Expanded(
               child: Text(
                 AppLocalizations.of(context).translate('content_signup'),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: colorA8B1CE.withOpacity(.5),
-                    fontWeight: FontWeight.w600),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: colorA8B1CE.withOpacity(.5)),
               ),
             ),
           ],
