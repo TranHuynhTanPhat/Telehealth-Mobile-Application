@@ -40,9 +40,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   splashBorderRadius: BorderRadius.circular(dimensWidth() * 3),
                   splashFactory: InkRipple.splashFactory,
                   indicatorPadding: EdgeInsets.only(bottom: dimensWidth() * .5),
-                  indicatorColor: color1F1F1F,
+                  indicatorColor: primary,
                   labelStyle: Theme.of(context).textTheme.titleMedium,
-                  labelColor: color1F1F1F,
+                  labelColor: primary,
                   unselectedLabelColor: black26,
                   tabs: [
                     Tab(

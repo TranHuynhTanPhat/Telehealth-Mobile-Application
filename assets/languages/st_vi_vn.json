@@ -67,5 +67,10 @@
   "my_appointments":"Cuộc hẹn của tôi",
   "upcoming":"Sắp tới",
   "completed":"Hoàn thành",
-  "canceled":"Đã huỷ"
+  "canceled":"Đã huỷ",
+  "pending":"Đang xử lý",
+  "confirmed":"Đã xác nhận",
+  "finished":"Đã kết thúc",
+  "detail":"Chi tiết",
+  "dr":"Bs"
 }

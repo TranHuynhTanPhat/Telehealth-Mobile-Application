@@ -10,7 +10,6 @@
   "full_name": "Full Name",
   "ex_full_name": "ex. David Beckham",
   "phone": "Phone",
-
   "password": "Password",
   "confirm_password": "Confirm Password",
   "i_agree_with": "I agree with the",
@@ -65,8 +64,14 @@
   "message": "Message",
   "health_info": "Health info",
   "invalid_phone": "Invalid phone",
-  "my_appointments":"My appointments",
-  "upcoming":"Upcomming",
-  "completed":"Completed",
-  "canceled":"Canceled"
+  "my_appointments": "My appointments",
+  "upcoming": "Upcomming",
+  "completed": "Completed",
+  "canceled": "Canceled",
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "finished": "Finished",
+  "detail": "Detail",
+  "dr":"Dr"
+
 }

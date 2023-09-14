@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/images.dart';
+import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/bases/base_listview_horizontal.dart';
+import 'package:healthline/screens/main/schedule/components/export.dart';
 
 class CompletedFrame extends StatefulWidget {
   const CompletedFrame({super.key});
@@ -9,8 +11,79 @@ class CompletedFrame extends StatefulWidget {
 }
 
 class _CompletedFrameState extends State<CompletedFrame> {
+  final List<Map<String, dynamic>> appointments = [
+    {
+      'dr': 'Phat',
+      'description': 'depression',
+      'patient': 'Tran Huynh Tan Phat',
+      'image': DImages.anhthe,
+      'date': DateTime.now(),
+      'begin': const TimeOfDay(hour: 10, minute: 0),
+      'end': const TimeOfDay(hour: 10, minute: 30),
+      'status': 'finished'
+    },
+    {
+      'dr': 'Truong',
+      'description': 'cardiologist',
+      'patient': 'Tran Huynh Tan Phat',
+      'image': DImages.logoGoogle,
+      'date': DateTime.now(),
+      'begin': const TimeOfDay(hour: 11, minute: 0),
+      'end': const TimeOfDay(hour: 11, minute: 30),
+      'status': 'finished'
+    },
+    {
+      'dr': 'Chien',
+      'description': 'general_examination',
+      'patient': 'Tran Huynh Tan Phat',
+      'image': DImages.anhthe,
+      'date': DateTime.now(),
+      'begin': const TimeOfDay(hour: 8, minute: 0),
+      'end': const TimeOfDay(hour: 8, minute: 30),
+      'status': 'finished'
+    },
+    {
+      'dr': 'Dang',
+      'description': 'depression',
+      'patient': 'Tran Huynh Tan Phat',
+      'image': DImages.placeholder,
+      'date': DateTime.now(),
+      'begin': const TimeOfDay(hour: 8, minute: 30),
+      'end': const TimeOfDay(hour: 9, minute: 30),
+      'status': 'finished'
+    },
+    {
+      'dr': 'Chien',
+      'description': 'general_examination',
+      'patient': 'Tran Huynh Tan Phat',
+      'image': DImages.anhthe,
+      'date': DateTime.now(),
+      'begin': const TimeOfDay(hour: 14, minute: 0),
+      'end': const TimeOfDay(hour: 14, minute: 30),
+      'status': 'finished'
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Image(image: AssetImage(DImages.anhthe));
+    return ListView(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      padding: EdgeInsets.symmetric(vertical: dimensWidth()),
+      children: [
+        const SlideMonthsInYear(),
+        Padding(
+          padding: EdgeInsets.only(
+              top: 0,
+              right: dimensWidth() * 3,
+              left: dimensWidth() * 3,
+              bottom: dimensHeight() * 10),
+          child: BaseListviewHorizontal(
+            children:
+                appointments.map((e) => CompletedCard(object: e)).toList(),
+          ),
+        ),
+      ],
+    );
   }
 }
