@@ -122,11 +122,6 @@ class CanceledCard extends StatelessWidget {
                   SizedBox(
                     width: dimensWidth(),
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.circleCheck,
-                    color: color6A6E83,
-                    size: dimensWidth() * 2,
-                  ),
                 ],
               )
             ],

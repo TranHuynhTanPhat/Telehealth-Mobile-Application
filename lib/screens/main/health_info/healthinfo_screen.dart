@@ -80,7 +80,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                                       fontWeight: FontWeight.w900),
                             ),
                             CircleAvatar(
-                              radius: dimensImage()*3,
+                              // radius: dimensImage()*3,
                               backgroundImage: AssetImage(DImages.placeholder),
                               onBackgroundImageError: (exception, stackTrace) =>
                                   AssetImage(DImages.placeholder),

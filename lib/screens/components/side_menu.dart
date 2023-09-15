@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,7 +10,6 @@ import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/info_card.dart';
 import 'package:healthline/screens/components/side_menu_title.dart';
-import 'package:healthline/screens/components/side_submenu.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -18,20 +19,11 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  final List<Map<String, dynamic>> sideMenus = [
-    // ignore: deprecated_member_use
-    {"name": "home", "icon": FontAwesomeIcons.home},
-    {"name": "edit_profile", "icon": FontAwesomeIcons.userGear},
-    {"name": "notification", "icon": FontAwesomeIcons.solidBell},
-    {"name": "setting", "icon": FontAwesomeIcons.gear},
-    {"name": "help_center", "icon": FontAwesomeIcons.circleQuestion},
-    
-  ];
-  late Map<String, dynamic> selectedMenu;
+  late SideMenus selectedMenu;
 
   @override
   void initState() {
-    selectedMenu = sideMenus.first;
+    selectedMenu = SideMenus.home;
     super.initState();
   }
 
@@ -48,14 +40,18 @@ class _SideMenuState extends State<SideMenu> {
         } else if (state is ErrorActionState) {
           EasyLoading.dismiss();
           Navigator.pushReplacementNamed(context, logInName);
+        } else if (state is WalletActionState) {
+          EasyLoading.dismiss();
+          Navigator.pushNamed(context, walletName);
         }
       },
       child: Scaffold(
         body: Container(
-          width: dimensWidth() * 50,
+          width: double.maxFinite,
           height: double.infinity,
           color: secondary,
           child: SafeArea(
+            bottom: false,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -63,37 +59,128 @@ class _SideMenuState extends State<SideMenu> {
                   name: "Tran Huynh Tan Phat",
                   profession: AppLocalizations.of(context).translate("patient"),
                 ),
-                ...sideMenus.map((menu) => SideMenuTile(
-                      press: () {
-                        setState(() {
-                          selectedMenu = menu;
-                        });
-                      },
-                      isActive: selectedMenu == menu,
-                      name:
-                          AppLocalizations.of(context).translate(menu['name']),
-                      icon: menu['icon'],
-                    )),
-                const Spacer(),
-                SideSubMenu(
-                    press: () {
-                      AppLocalizations.of(context).isVnLocale
-                          ? context.read<ResCubit>().toEnglish()
-                          : context.read<ResCubit>().toVietnamese();
-                    },
-                    name: AppLocalizations.of(context).isVnLocale
-                        ? AppLocalizations.of(context).translate('en')
-                        : AppLocalizations.of(context).translate('vi'),
-                    icon: FontAwesomeIcons.language),
-                SideSubMenu(
-                  icon: FontAwesomeIcons.arrowRightFromBracket,
-                  name: "Log out",
-                  color: Colors.yellow,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 2,
+                      left: dimensWidth() * 2,
+                      bottom: dimensHeight()),
+                  child: Text(
+                    AppLocalizations.of(context).translate('general'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: white),
+                  ),
+                ),
+                SideMenuTile(
                   press: () {
-                    // RestClient().logout();
-                    context.read<SideMenuCubit>().logoutActionState();
+                    setState(() {
+                      selectedMenu = SideMenus.home;
+                    });
                   },
-                )
+                  isActive: selectedMenu == SideMenus.home,
+                  name: AppLocalizations.of(context).translate('home'),
+                  icon: FontAwesomeIcons.home,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.edit_profile;
+                    });
+                  },
+                  isActive: selectedMenu == SideMenus.edit_profile,
+                  name: AppLocalizations.of(context).translate('edit_profile'),
+                  icon: FontAwesomeIcons.userGear,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.wallet;
+                      context.read<SideMenuCubit>().navigateToWallet();
+                    });
+                  },
+                  isActive: selectedMenu == SideMenus.wallet,
+                  name: AppLocalizations.of(context).translate('wallet'),
+                  icon: FontAwesomeIcons.wallet,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 3,
+                      left: dimensWidth() * 2,
+                      bottom: dimensHeight()),
+                  child: Text(
+                    AppLocalizations.of(context).translate('supports'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: white),
+                  ),
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.faq;
+                    });
+                  },
+                  isActive: selectedMenu == SideMenus.faq,
+                  name: AppLocalizations.of(context).translate('faq'),
+                  icon: FontAwesomeIcons.circleQuestion,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.terms_and_conditions;
+                    });
+                  },
+                  isActive: selectedMenu == SideMenus.terms_and_conditions,
+                  name: AppLocalizations.of(context)
+                      .translate('terms_and_conditions'),
+                  icon: FontAwesomeIcons.fileContract,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.privacy_policy;
+                    });
+                  },
+                  isActive: selectedMenu == SideMenus.privacy_policy,
+                  name:
+                      AppLocalizations.of(context).translate('privacy_policy'),
+                  icon: FontAwesomeIcons.shieldHalved,
+                ),
+                const Spacer(),
+                SideMenuTile(
+                  press: () {
+                    AppLocalizations.of(context).isVnLocale
+                        ? context.read<ResCubit>().toEnglish()
+                        : context.read<ResCubit>().toVietnamese();
+                  },
+                  name: AppLocalizations.of(context).isVnLocale
+                      ? AppLocalizations.of(context).translate('en')
+                      : AppLocalizations.of(context).translate('vi'),
+                  icon: FontAwesomeIcons.language,
+                  isActive: false,
+                ),
+                Container(
+                    margin: EdgeInsets.only(bottom: dimensHeight() * 5),
+                    child: ListTile(
+                      onTap: () {
+                        // RestClient().logout();
+                        context.read<SideMenuCubit>().logoutClick();
+                      },
+                      leading: FaIcon(
+                        FontAwesomeIcons.arrowRightFromBracket,
+                        size: dimensIcon() * .7,
+                        color: Colors.yellow,
+                      ),
+                      title: Text(
+                        "Log out",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium
+                            ?.copyWith(color: Colors.yellow),
+                      ),
+                    ))
               ],
             ),
           ),
@@ -101,4 +188,14 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
+}
+
+enum SideMenus {
+  home,
+  edit_profile,
+  wallet,
+  setting,
+  faq,
+  terms_and_conditions,
+  privacy_policy
 }

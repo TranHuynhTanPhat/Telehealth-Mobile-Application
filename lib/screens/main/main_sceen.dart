@@ -217,7 +217,7 @@ class _MainScreenState extends State<MainScreen>
               duration: const Duration(milliseconds: 500),
               curve: Curves.fastOutSlowIn,
               left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
-              width: dimensWidth() * 45,
+              width: double.maxFinite,
               height: MediaQuery.of(context).size.height,
               child: const SideMenu(),
             ),

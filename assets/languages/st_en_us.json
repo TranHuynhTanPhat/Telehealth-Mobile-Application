@@ -110,5 +110,17 @@
   "records": "Records",
   "head_circumference": "Head circumference",
   "children": "children",
-  "child": "child"
+  "child": "child",
+  "privacy_policy": "Privacy policy",
+  "supports": "Supports",
+  "wallet": "Wallet",
+  "recharge_with":"Recharge with",
+  "transfer":"Transfer",
+  "bank_card":"Bank card",
+  "service_card":"Service card",
+  "transfer_money_through_banks":"Transfer money through banks",
+  "transfer_money_via_visa_master_or_bank_card":"Transfer money via visa, master or bank card",
+  "recharge_via_momo_application":"Recharge via Momo application"
+
+
 }
