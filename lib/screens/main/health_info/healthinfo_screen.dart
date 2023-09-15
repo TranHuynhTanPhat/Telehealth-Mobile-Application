@@ -16,7 +16,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
       'name': 'head_circumference',
       'color': colorDF9F1E,
       'icon': FontAwesomeIcons.ruler,
-      'unit': 'children'
+      'unit': 'cm'
     },
     {
       'name': 'vaccination',
@@ -65,15 +65,27 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(bottom: dimensWidth() * 2),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .translate("health_information"),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
-                              ?.copyWith(
-                                  color: color1F1F1F,
-                                  fontWeight: FontWeight.w900),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate("health_information"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge
+                                  ?.copyWith(
+                                      color: color1F1F1F,
+                                      fontWeight: FontWeight.w900),
+                            ),
+                            CircleAvatar(
+                              radius: dimensImage()*3,
+                              backgroundImage: AssetImage(DImages.placeholder),
+                              onBackgroundImageError: (exception, stackTrace) =>
+                                  AssetImage(DImages.placeholder),
+                            )
+                          ],
                         ),
                       ),
                       const HeartRateCard(),
