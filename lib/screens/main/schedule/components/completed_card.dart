@@ -26,31 +26,34 @@ class CompletedCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${AppLocalizations.of(context).translate('dr')}. ${AppLocalizations.of(context).translate(object['dr'])} - ${AppLocalizations.of(context).translate(object['description'])}",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                                color: color1F1F1F,
-                                fontWeight: FontWeight.w900),
-                      ),
-                      Text(
-                        "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: color1F1F1F),
-                      ),
-                    ],
+                  SizedBox(
+                    width: dimensWidth() * 32,
+                    child: Text(
+                      "${AppLocalizations.of(context).translate('dr')}. ${AppLocalizations.of(context).translate(object['dr'])}",
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: color6A6E83, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  SizedBox(
+                    width: dimensWidth() * 32,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate(object['specialist']),
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: color6A6E83, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  Text(
+                    "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: color6A6E83),
                   ),
                 ],
               ),
@@ -65,17 +68,6 @@ class CompletedCard extends StatelessWidget {
                   )),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: dimensHeight() * 2, bottom: dimensHeight() * .5),
-            child: Text(
-              formatFullDate(context, object['date']),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.bold),
-            ),
-          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +76,7 @@ class CompletedCard extends StatelessWidget {
                 children: [
                   FaIcon(
                     FontAwesomeIcons.clock,
-                    color: color1F1F1F,
+                    color: color6A6E83,
                     size: dimensWidth() * 2,
                   ),
                   SizedBox(
@@ -93,7 +85,7 @@ class CompletedCard extends StatelessWidget {
                   Text(
                     object['begin'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color1F1F1F, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -101,7 +93,7 @@ class CompletedCard extends StatelessWidget {
                   Text(
                     "-",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color1F1F1F, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -109,16 +101,31 @@ class CompletedCard extends StatelessWidget {
                   Text(
                     object['end'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color1F1F1F, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    formatDayMonthYear(context, object['date']),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              Text(
-                AppLocalizations.of(context).translate(object['status']),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context).translate(object['status']),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: color6A6E83, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: dimensWidth(),
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.circleCheck,
+                    color: color6A6E83,
+                    size: dimensWidth() * 2,
+                  ),
+                ],
               )
             ],
           )

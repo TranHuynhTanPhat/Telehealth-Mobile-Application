@@ -14,10 +14,12 @@ class CanceledCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(
           horizontal: dimensWidth() * 2, vertical: dimensWidth() * 2),
       decoration: BoxDecoration(
-        color: color9D4B6C.withOpacity(.1),
-        borderRadius: BorderRadius.all(
-          Radius.circular(dimensWidth() * 3),
-        ),
+        border: Border(
+            bottom: BorderSide(
+                color: color6A6E83.withOpacity(.2),
+                style: BorderStyle.solid,
+                width: 2,
+                strokeAlign: BorderSide.strokeAlignInside)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,32 +28,34 @@ class CanceledCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${AppLocalizations.of(context).translate('dr')}. ${AppLocalizations.of(context).translate(object['dr'])} - ${AppLocalizations.of(context).translate(object['description'])}",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                                color: color9D4B6C,
-                                fontWeight: FontWeight.w900),
-                      ),
-                      Text(
-                        "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: color9D4B6C),
-                      ),
-                      
-                    ],
+                  SizedBox(
+                    width: dimensWidth() * 32,
+                    child: Text(
+                      "${AppLocalizations.of(context).translate('dr')}. ${AppLocalizations.of(context).translate(object['dr'])}",
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: color6A6E83, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  SizedBox(
+                    width: dimensWidth() * 32,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate(object['specialist']),
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: color6A6E83, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  Text(
+                    "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: color6A6E83),
                   ),
                 ],
               ),
@@ -66,17 +70,6 @@ class CanceledCard extends StatelessWidget {
                   )),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: dimensHeight() * 2, bottom: dimensHeight() * .5),
-            child: Text(
-              formatFullDate(context, object['date']),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: color9D4B6C, fontWeight: FontWeight.bold),
-            ),
-          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +78,7 @@ class CanceledCard extends StatelessWidget {
                 children: [
                   FaIcon(
                     FontAwesomeIcons.clock,
-                    color: color9D4B6C,
+                    color: color6A6E83,
                     size: dimensWidth() * 2,
                   ),
                   SizedBox(
@@ -94,7 +87,7 @@ class CanceledCard extends StatelessWidget {
                   Text(
                     object['begin'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color9D4B6C, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -102,7 +95,7 @@ class CanceledCard extends StatelessWidget {
                   Text(
                     "-",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color9D4B6C, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -110,16 +103,31 @@ class CanceledCard extends StatelessWidget {
                   Text(
                     object['end'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color9D4B6C, fontWeight: FontWeight.bold),
+                        color: color6A6E83, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    formatDayMonthYear(context, object['date']),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              Text(
-                AppLocalizations.of(context).translate(object['status']),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: color9D4B6C, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context).translate(object['status']),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: color6A6E83, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: dimensWidth(),
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.circleCheck,
+                    color: color6A6E83,
+                    size: dimensWidth() * 2,
+                  ),
+                ],
               )
             ],
           )

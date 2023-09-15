@@ -41,7 +41,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   splashFactory: InkRipple.splashFactory,
                   indicatorPadding: EdgeInsets.only(bottom: dimensWidth() * .5),
                   indicatorColor: primary,
-                  labelStyle: Theme.of(context).textTheme.titleMedium,
+                  labelStyle: Theme.of(context).textTheme.titleSmall,
                   labelColor: primary,
                   unselectedLabelColor: black26,
                   tabs: [

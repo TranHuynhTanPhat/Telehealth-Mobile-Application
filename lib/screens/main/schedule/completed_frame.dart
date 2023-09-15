@@ -13,8 +13,8 @@ class CompletedFrame extends StatefulWidget {
 class _CompletedFrameState extends State<CompletedFrame> {
   final List<Map<String, dynamic>> appointments = [
     {
-      'dr': 'Phat',
-      'description': 'depression',
+      'dr': 'Dr. Phat',
+      'specialist': 'traumatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
@@ -23,8 +23,8 @@ class _CompletedFrameState extends State<CompletedFrame> {
       'status': 'finished'
     },
     {
-      'dr': 'Truong',
-      'description': 'cardiologist',
+      'dr': 'Dr. Truong',
+      'specialist': 'obstetrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.logoGoogle,
       'date': DateTime.now(),
@@ -33,8 +33,8 @@ class _CompletedFrameState extends State<CompletedFrame> {
       'status': 'finished'
     },
     {
-      'dr': 'Chien',
-      'description': 'general_examination',
+      'dr': 'Dr. Chien',
+      'specialist': 'general_examination',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
@@ -43,8 +43,8 @@ class _CompletedFrameState extends State<CompletedFrame> {
       'status': 'finished'
     },
     {
-      'dr': 'Dang',
-      'description': 'depression',
+      'dr': 'Dr. Dang',
+      'specialist': 'paeditrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.placeholder,
       'date': DateTime.now(),
@@ -53,8 +53,8 @@ class _CompletedFrameState extends State<CompletedFrame> {
       'status': 'finished'
     },
     {
-      'dr': 'Chien',
-      'description': 'general_examination',
+      'dr': 'Dr. Chien',
+      'specialist': 'dermatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),

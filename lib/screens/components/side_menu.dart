@@ -21,9 +21,11 @@ class _SideMenuState extends State<SideMenu> {
   final List<Map<String, dynamic>> sideMenus = [
     // ignore: deprecated_member_use
     {"name": "home", "icon": FontAwesomeIcons.home},
-
+    {"name": "edit_profile", "icon": FontAwesomeIcons.userGear},
+    {"name": "notification", "icon": FontAwesomeIcons.solidBell},
     {"name": "setting", "icon": FontAwesomeIcons.gear},
-    {"name": "account_setting", "icon": FontAwesomeIcons.userGear}
+    {"name": "help_center", "icon": FontAwesomeIcons.circleQuestion},
+    
   ];
   late Map<String, dynamic> selectedMenu;
 

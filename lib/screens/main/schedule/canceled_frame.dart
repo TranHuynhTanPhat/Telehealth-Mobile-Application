@@ -3,7 +3,6 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/bases/base_listview_horizontal.dart';
 import 'package:healthline/screens/main/schedule/components/export.dart';
 
-
 class CanceledFrame extends StatefulWidget {
   const CanceledFrame({super.key});
 
@@ -12,10 +11,10 @@ class CanceledFrame extends StatefulWidget {
 }
 
 class _CanceledFrameState extends State<CanceledFrame> {
- final List<Map<String, dynamic>> appointments = [
+  final List<Map<String, dynamic>> appointments = [
     {
-      'dr': 'Phat',
-      'description': 'depression',
+      'dr': 'Dr. Phat',
+      'specialist': 'traumatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
@@ -24,28 +23,28 @@ class _CanceledFrameState extends State<CanceledFrame> {
       'status': 'canceled'
     },
     {
-      'dr': 'Truong',
-      'description': 'cardiologist',
+      'dr': 'Dr. Truong',
+      'specialist': 'obstetrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.logoGoogle,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 11, minute: 0),
       'end': const TimeOfDay(hour: 11, minute: 30),
-      'status': 'canceled'
+      'status': 'denied'
     },
     {
-      'dr': 'Chien',
-      'description': 'general_examination',
+      'dr': 'Dr. Chien',
+      'specialist': 'general_examination',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 8, minute: 0),
       'end': const TimeOfDay(hour: 8, minute: 30),
-      'status': 'canceled'
+      'status': 'denied'
     },
     {
-      'dr': 'Dang',
-      'description': 'depression',
+      'dr': 'Dr. Dang',
+      'specialist': 'paeditrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.placeholder,
       'date': DateTime.now(),
@@ -54,8 +53,8 @@ class _CanceledFrameState extends State<CanceledFrame> {
       'status': 'canceled'
     },
     {
-      'dr': 'Chien',
-      'description': 'general_examination',
+      'dr': 'Dr. Chien',
+      'specialist': 'dermatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
@@ -80,8 +79,7 @@ class _CanceledFrameState extends State<CanceledFrame> {
               left: dimensWidth() * 3,
               bottom: dimensHeight() * 10),
           child: BaseListviewHorizontal(
-            children:
-                appointments.map((e) => CanceledCard(object: e)).toList(),
+            children: appointments.map((e) => CanceledCard(object: e)).toList(),
           ),
         ),
       ],

@@ -16,53 +16,53 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
   final List<Map<String, dynamic>> appointments = [
     {
       'dr': 'Dr. Phat',
-      'description': 'depression',
+      'specialist': 'traumatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 10, minute: 0),
       'end': const TimeOfDay(hour: 10, minute: 30),
-      'status': 'Pending'
+      'status': 'pending'
     },
     {
       'dr': 'Dr. Truong',
-      'description': 'cardiologist',
+      'specialist': 'obstetrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.logoGoogle,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 11, minute: 0),
       'end': const TimeOfDay(hour: 11, minute: 30),
-      'status': 'Confirmed'
+      'status': 'confirmed'
     },
     {
       'dr': 'Dr. Chien',
-      'description': 'general_examination',
+      'specialist': 'obstetrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 8, minute: 0),
       'end': const TimeOfDay(hour: 8, minute: 30),
-      'status': 'Confirmed'
+      'status': 'confirmed'
     },
     {
       'dr': 'Dr. Dang',
-      'description': 'depression',
+      'specialist': 'paeditrician',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.placeholder,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 8, minute: 30),
       'end': const TimeOfDay(hour: 9, minute: 30),
-      'status': 'Confirmed'
+      'status': 'confirmed'
     },
     {
       'dr': 'Dr. Chien',
-      'description': 'general_examination',
+      'specialist': 'dermatologist',
       'patient': 'Tran Huynh Tan Phat',
       'image': DImages.anhthe,
       'date': DateTime.now(),
       'begin': const TimeOfDay(hour: 14, minute: 0),
       'end': const TimeOfDay(hour: 14, minute: 30),
-      'status': 'Pending'
+      'status': 'pending'
     },
   ];
 
