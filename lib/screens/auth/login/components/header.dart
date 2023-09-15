@@ -13,25 +13,22 @@ class HeaderLogIn extends StatelessWidget {
             Expanded(
               child: Text(
                 AppLocalizations.of(context).translate('title_login'),
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: secondary,
-                      fontWeight: FontWeight.w900,
-                    ),
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium
+                    ?.copyWith(color: secondary, fontWeight: FontWeight.bold),
               ),
             ),
           ],
-        ),
-        SizedBox(
-          height: dimensHeight()*3,
         ),
         Row(
           children: [
             Expanded(
               child: Text(
                 AppLocalizations.of(context).translate("content_login"),
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colorA8B1CE.withOpacity(.5),
-                    fontWeight: FontWeight.w600),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: colorA8B1CE.withOpacity(.5),
+                    ),
               ),
             ),
           ],

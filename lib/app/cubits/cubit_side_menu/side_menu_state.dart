@@ -17,6 +17,8 @@ final class SideMenuError extends SideMenuState {}
 
 final class SideMenuActionState extends SideMenuState{}
 
+final class WalletActionState extends SideMenuActionState{}
+
 final class LogoutActionState extends SideMenuActionState{}
 
 final class ErrorActionState extends SideMenuActionState{}

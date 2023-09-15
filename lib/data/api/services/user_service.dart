@@ -24,6 +24,6 @@ class UserService extends BaseService {
 
   Future<void> logout() async {
     RestClient().logout();
-    await delete(baseUrl + LOGOUT);
+    await delete(baseUrl + LOG_OUT);
   }
 }

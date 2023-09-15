@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200))
+        vsync: this, duration: const Duration(milliseconds: 500))
       ..addListener(() {
         setState(() {});
       });
@@ -214,10 +214,10 @@ class _MainScreenState extends State<MainScreen>
         body: Stack(
           children: [
             AnimatedPositioned(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 500),
               curve: Curves.fastOutSlowIn,
               left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
-              width: dimensWidth() * 45,
+              width: double.maxFinite,
               height: MediaQuery.of(context).size.height,
               child: const SideMenu(),
             ),

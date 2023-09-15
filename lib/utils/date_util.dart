@@ -1,41 +1,41 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-const DATE_FORMAT = "dd/MM/yyyy";
-const DATE_FORMAT_MONGODB = "yyyy-MM-ddTHH:mm:ss.mmm";
+const DATE_FORMAT = "EEEE, dd MMMM yyyy";
+const DAY_MONTH_YEAR = " dd/MM/yyyy";
 const MONTH_YEAR_FORMAT = "MMMM yyyy";
 const EEE_FORMAT ="EEE";
 const DAY_FORMAT ="d";
+const MONTH_FORMAT = "MMMM";
 
-String formatDateBirthday(DateTime birthday) {
-  var formatter = DateFormat(DATE_FORMAT);
-  return formatter.format(birthday);
+String formatFullDate(BuildContext context,DateTime date) {
+  var formatter = DateFormat(DATE_FORMAT, Localizations.localeOf(context).toString());
+  return formatter.format(date);
 }
 
-String formatDateToMonthYear(DateTime date) {
-  return DateFormat(MONTH_YEAR_FORMAT).format(date);
+String formatDayMonthYear(BuildContext context, DateTime date){
+  var formatter = DateFormat(DAY_MONTH_YEAR, Localizations.localeOf(context).toString());
+  return formatter.format(date);
 }
 
-String formatDate(DateTime date){
-  return DateFormat(EEE_FORMAT).format(date);
+String formatDateToMonthYear(BuildContext context, DateTime date) {
+  return DateFormat(MONTH_YEAR_FORMAT , Localizations.localeOf(context).toString()).format(date);
 }
 
-String formatDay(DateTime date){
-  return DateFormat(DAY_FORMAT).format(date);
+String formatToDate(BuildContext context,DateTime date){
+  return DateFormat(EEE_FORMAT, Localizations.localeOf(context).toString()).format(date);
 }
 
-String dateToJsonFormatMongoDB(DateTime? date) {
-  if (date == null) {
-    return "";
-  }
-  var duration = date.timeZoneOffset;
-  if (duration.isNegative) {
-    return ("${DateFormat(DATE_FORMAT_MONGODB).format(date)}-${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
-  } else {
-    return ("${DateFormat(DATE_FORMAT_MONGODB).format(date)}+${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
-  }
+String formatDay(BuildContext context,DateTime date){
+  return DateFormat(DAY_FORMAT, Localizations.localeOf(context).toString()).format(date);
 }
+
+String formatMonth(BuildContext context,DateTime date){
+  return DateFormat(MONTH_FORMAT, Localizations.localeOf(context).toString()).format(date);
+}
+
 
 DateTime? convertStringToDateTime(String? dateString) {
   if (dateString == null) {

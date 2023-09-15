@@ -6,14 +6,15 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RestClient {
   static const CONNECT_TIME_OUT = 3000;
@@ -88,81 +89,96 @@ class RestClient {
           requestBody: true, responseBody: true, logPrint: logPrint));
     }
 
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (options, handler) async {
-      if (!options.path.contains('http')) {
-        options.path = dotenv.get('BASE_URL', fallback: '') + options.path;
-      }
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          /// check path
+          if (!options.path.contains('http')) {
+            options.path = dotenv.get('BASE_URL', fallback: '') + options.path;
+          }
 
-      User? user = await AppStorage().getUser();
+          /// check access token
+          User? user = await AppStorage().getUser();
+          if (user == null || user.accessToken == null) {
+            return handler.next(options);
+          }
 
-      if (user == null || user.accessToken == null) {
-        return handler.next(options);
-      }
+          bool isExpired = JwtDecoder.isExpired(user.accessToken!);
 
-      // options.headers['cookie'] = 'M_GCHkw--xVkr5bFzjSJn';
-      bool isExpired = JwtDecoder.isExpired(user.accessToken!);
+          /// if access token expired ---> refresh token
+          /// else continue
+          /// dont rt when path contain LOG_IN or SIGN_UP or REFRESH_TOKEN or LOG_OUT
 
-      if (isExpired &&
-          !options.path.contains(REFRESH_TOKEN) &&
-          !options.path.contains(LOGOUT)) {
-        try {
-          final response = await dio
-              .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
-          if (response.statusCode == 200) {
-            // ! EXPIRED SESSION
-            if (response.data != false) {
-              options.headers['Authorization'] =
-                  "Bearer ${response.data["jwtToken"]}";
-              AppStorage()
-                  .saveUser(user: user.copyWith(accessToken: response.data));
-            } else {
-              await getDio()
-                  .post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
+          if (isExpired &&
+              !options.path.contains(REFRESH_TOKEN) &&
+              !options.path.contains(LOG_OUT) &&
+              !options.path.contains(LOG_OUT) &&
+              !options.path.contains(SIGN_UP)) {
+            try {
+              /// refresh token if success continue
+              /// else logout
+              final response = await dio
+                  .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
+              if (response.statusCode == 200) {
+                if (response.data != false) {
+                  options.headers['Authorization'] =
+                      "Bearer ${response.data["jwtToken"]}";
+                  AppStorage().saveUser(
+                      user: user.copyWith(accessToken: response.data));
+                } else {
+                  logout();
+                  await getDio()
+                      .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
+                }
+              } else {
+                logout();
+                await getDio()
+                    .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
+              }
+              return handler.next(options);
+            } on DioException catch (error) {
               logout();
+              await getDio()
+                  .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
+
+              SentryLogError().additionalMessage(error, SentryLevel.error);
+              return handler.reject(error, true);
             }
           } else {
-            logout();
-            await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
+            options.headers['Authorization'] = "Bearer ${user.accessToken}";
+            return handler.next(options);
           }
-          return handler.next(options);
-        } on DioException catch (error) {
-          logout();
-          await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
+        },
+        onResponse: (Response response, handler) async {
+          logPrint("RESPONSE");
+          logPrint(response.headers);
+          try {
+            String refreshToken = getRefreshToken(response.headers.toString());
+            if (refreshToken.isNotEmpty) {
+              AppStorage().saveRefreshToken(refresh: refreshToken);
+              await instance.cookieJar.saveFromResponse(
+                  Uri.parse('${dotenv.get('BASE_URL', fallback: '')}/'), []);
+            }
+          } catch (e) {
+            logPrint(e);
+          }
 
-          SentryLogError().additionalMessage(error, SentryLevel.error);
-          return handler.reject(error, true);
-        }
-      } else {
-        options.headers['Authorization'] = "Bearer ${user.accessToken}";
-        return handler.next(options);
-      }
-    }, onResponse: (Response response, handler) async {
-      logPrint("RESPONSE");
-      logPrint(response.headers);
-      try {
-        String refreshToken = getRefreshToken(response.headers.toString());
-        if (refreshToken.isNotEmpty) {
-          AppStorage().saveRefreshToken(refresh: refreshToken);
-          await instance.cookieJar.saveFromResponse(
-              Uri.parse('${dotenv.get('BASE_URL', fallback: '')}/'), []);
-        }
-      } catch (e) {
-        logPrint(e);
-      }
-
-      return handler.next(response);
-    }, onError: (DioException error, handler) async {
-      logPrint("ERROR");
-      logPrint(error.message);
-      SentryLogError().additionalException("${error}REST_CLIENT");
-      if (error.response?.statusCode == 401 ||
-          error.type == DioExceptionType.connectionTimeout) {
-        logout();
-        await getDio().post(dotenv.get('BASE_URL', fallback: '') + LOGOUT);
-      }
-      return handler.next(error);
-    }));
+          return handler.next(response);
+        },
+        onError: (DioException error, handler) async {
+          logPrint("ERROR");
+          logPrint(error.message);
+          SentryLogError().additionalException("${error}REST_CLIENT");
+          // if (error.response?.statusCode == 401 ||
+          //     error.type == DioExceptionType.connectionTimeout) {
+          //   logout();
+          //   await getDio()
+          //       .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
+          // }
+          return handler.next(error);
+        },
+      ),
+    );
 
     return dio;
   }

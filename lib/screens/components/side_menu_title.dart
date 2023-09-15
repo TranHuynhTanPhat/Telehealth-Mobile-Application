@@ -21,19 +21,19 @@ class SideMenuTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: dimensWidth()*35,
-          padding: EdgeInsets.only(left: dimensWidth() * 3),
-          child: const Divider(
-            color: Colors.white24,
-          ),
-        ),
+        // Container(
+        //   width: dimensWidth()*35,
+        //   padding: EdgeInsets.only(left: dimensWidth() * 3),
+        //   child: const Divider(
+        //     color: Colors.white24,
+        //   ),
+        // ),
         Stack(
           children: [
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               curve: Curves.fastOutSlowIn,
-              height: dimensWidth() * 6.6,
+              height: dimensHeight() * 6.6,
               width: isActive ? dimensWidth() * 35 : 0,
               left: 0,
               child: Container(
@@ -47,14 +47,14 @@ class SideMenuTile extends StatelessWidget {
               onTap: press,
               leading: FaIcon(
                 icon,
-                size: dimensIcon()*.8,
+                size: dimensIcon()*.5,
                 color: isActive ? secondary : white,
               ),
               title: Text(
                 name,
                 style: Theme.of(context)
                     .textTheme
-                    .labelLarge
+                    .titleMedium
                     ?.copyWith(color: isActive ? secondary : white),
               ),
             ),
