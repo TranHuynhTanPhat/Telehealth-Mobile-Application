@@ -50,7 +50,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.deactivate();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -79,173 +78,165 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
           child: Scaffold(
             resizeToAvoidBottomInset: true,
-            body: Padding(
+            body: ListView(
+              // crossAxisAlignment: CrossAxisAlignment.start,
               padding: EdgeInsets.symmetric(
-                  vertical: dimensHeight() * 2, horizontal: dimensWidth() * 2),
-              child: ListView(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const HeaderSignUp(),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  TextFieldWidget(
-                    controller: _controllerFullName,
-                    label: AppLocalizations.of(context).translate('full_name'),
-                    hint:
-                        AppLocalizations.of(context).translate('ex_full_name'),
-                    error: errorFullName,
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  TextFieldWidget(
-                    prefix: Padding(
-                      padding: EdgeInsets.only(right:dimensWidth()*.5),
-                      child: Text(
-                        '+84',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    controller: _controllerPhone,
-                    label: AppLocalizations.of(context).translate("phone"),
-                    textInputType: TextInputType.phone,
-                    error: errorPhone,
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  TextFieldWidget(
-                    controller: _controllerPassword,
-                    label: AppLocalizations.of(context).translate('password'),
-                    obscureText: !showPassword,
-                    error: errorPassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(showPassword
-                          ? Icons.visibility_rounded
-                          : Icons.visibility_off_rounded),
-                      onPressed: () {
-                        setState(
-                          () {
-                            showPassword = !showPassword;
-                          },
-                        );
-                      },
+                  vertical: dimensHeight() * 10, horizontal: dimensWidth() * 3),
+              children: [
+                const HeaderSignUp(),
+                SizedBox(
+                  height: dimensHeight() * 5,
+                ),
+                TextFieldWidget(
+                  controller: _controllerFullName,
+                  label: AppLocalizations.of(context).translate('full_name'),
+                  hint: AppLocalizations.of(context).translate('ex_full_name'),
+                  error: errorFullName,
+                ),
+                SizedBox(
+                  height: dimensHeight() * 3,
+                ),
+                TextFieldWidget(
+                  prefix: Padding(
+                    padding: EdgeInsets.only(right: dimensWidth() * .5),
+                    child: Text(
+                      '+84',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  TextFieldWidget(
-                    controller: _controllerConfirmPassword,
-                    label: AppLocalizations.of(context)
-                        .translate('confirm_password'),
-                    obscureText: !showPassword,
-                    error: errorConfirmPassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(showPassword
-                          ? Icons.visibility_rounded
-                          : Icons.visibility_off_rounded),
-                      onPressed: () {
-                        setState(
-                          () {
-                            showPassword = !showPassword;
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 2,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Checkbox(
-                          side: errorCheckTermsAndConditons == true ||
-                                  errorCheckTermsAndConditons == null
-                              ? const BorderSide(width: .5)
-                              : BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.error),
-                          value: agreeTermsAndConditions,
-                          onChanged: (value) => setState(
-                            () {
-                              agreeTermsAndConditions = value!;
-                            },
-                          ),
-                        ),
-                      ),
-                      Text(
-                        " ${AppLocalizations.of(context).translate("i_agree_with")} ",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      TextButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(
-                            EdgeInsets.all(0),
-                          ),
-                        ),
-                        onPressed: null,
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .translate("terms_and_conditions"),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                  color: secondary,
-                                  fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  ElevatedButtonWidget(
-                    text: AppLocalizations.of(context)
-                        .translate("create_account"),
+                  controller: _controllerPhone,
+                  label: AppLocalizations.of(context).translate("phone"),
+                  textInputType: TextInputType.phone,
+                  error: errorPhone,
+                ),
+                SizedBox(
+                  height: dimensHeight() * 3,
+                ),
+                TextFieldWidget(
+                  controller: _controllerPassword,
+                  label: AppLocalizations.of(context).translate('password'),
+                  obscureText: !showPassword,
+                  error: errorPassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(showPassword
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded),
                     onPressed: () {
-                      setState(() {
-                        _controllerFullName.text == ''
-                            ? errorFullName = AppLocalizations.of(context)
-                                .translate("please_enter_fulname")
-                            : null;
-                        errorPhone = Validate()
-                            .validatePhone(context, _controllerPhone.text);
-                        errorPassword = Validate().validatePassword(
-                            context, _controllerPassword.text);
-                        errorConfirmPassword = _controllerConfirmPassword
-                                    .text ==
-                                _controllerPassword.text
-                            ? null
-                            : AppLocalizations.of(context)
-                                .translate("password_must_be_same_as_above");
-                        errorCheckTermsAndConditons = agreeTermsAndConditions;
-                      });
-                      if (errorConfirmPassword == null &&
-                          errorFullName == null &&
-                          errorPhone == null &&
-                          errorPassword == null &&
-                          agreeTermsAndConditions == true) {
-                        context.read<SignUpCubit>().registerAccount(
-                            _controllerFullName.text,
-                            Validate().changePhoneFormat(_controllerPhone.text),
-                            _controllerPassword.text);
-                      }
+                      setState(
+                        () {
+                          showPassword = !showPassword;
+                        },
+                      );
                     },
                   ),
-                  const OptionSignUp(),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: dimensHeight() * 3,
+                ),
+                TextFieldWidget(
+                  controller: _controllerConfirmPassword,
+                  label: AppLocalizations.of(context)
+                      .translate('confirm_password'),
+                  obscureText: !showPassword,
+                  error: errorConfirmPassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(showPassword
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded),
+                    onPressed: () {
+                      setState(
+                        () {
+                          showPassword = !showPassword;
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: dimensHeight() * 2,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: Checkbox(
+                        side: errorCheckTermsAndConditons == true ||
+                                errorCheckTermsAndConditons == null
+                            ? const BorderSide(width: .5)
+                            : BorderSide(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.error),
+                        value: agreeTermsAndConditions,
+                        onChanged: (value) => setState(
+                          () {
+                            agreeTermsAndConditions = value!;
+                          },
+                        ),
+                      ),
+                    ),
+                    Text(
+                      " ${AppLocalizations.of(context).translate("i_agree_with")} ",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    TextButton(
+                      style: const ButtonStyle(
+                        padding: MaterialStatePropertyAll(
+                          EdgeInsets.all(0),
+                        ),
+                      ),
+                      onPressed: null,
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate("terms_and_conditions"),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: secondary, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: dimensHeight() * 3,
+                ),
+                ElevatedButtonWidget(
+                  text:
+                      AppLocalizations.of(context).translate("create_account"),
+                  onPressed: () {
+                    setState(() {
+                      _controllerFullName.text == ''
+                          ? errorFullName = AppLocalizations.of(context)
+                              .translate("please_enter_fulname")
+                          : null;
+                      errorPhone = Validate()
+                          .validatePhone(context, _controllerPhone.text);
+                      errorPassword = Validate()
+                          .validatePassword(context, _controllerPassword.text);
+                      errorConfirmPassword = _controllerConfirmPassword.text ==
+                              _controllerPassword.text
+                          ? null
+                          : AppLocalizations.of(context)
+                              .translate("password_must_be_same_as_above");
+                      errorCheckTermsAndConditons = agreeTermsAndConditions;
+                    });
+                    if (errorConfirmPassword == null &&
+                        errorFullName == null &&
+                        errorPhone == null &&
+                        errorPassword == null &&
+                        agreeTermsAndConditions == true) {
+                      context.read<SignUpCubit>().registerAccount(
+                          _controllerFullName.text,
+                          Validate().changePhoneFormat(_controllerPhone.text),
+                          _controllerPassword.text);
+                    }
+                  },
+                ),
+                const OptionSignUp(),
+              ],
             ),
           ),
         );

@@ -5,4 +5,4 @@ const SIGN_UP = '/common/user';
 
 /// Cần cookie
 const REFRESH_TOKEN = '/common/refresh';
-const LOGOUT = '/common/auth/logout';
+const LOG_OUT = '/common/auth/logout';

@@ -9,11 +9,20 @@ part 'side_menu_state.dart';
 class SideMenuCubit extends Cubit<SideMenuState> {
   SideMenuCubit() : super(SideMenuInitial());
 
-  Future<void> logoutActionState() async {
+  Future<void> logoutClick() async {
     emit(SideMenuLoading());
     try {
       await UserRepository().logout();
       emit(LogoutActionState());
+    } catch (e) {
+      emit(ErrorActionState());
+    }
+  }
+
+  Future<void> navigateToWallet() async {
+    emit(SideMenuLoading());
+    try {
+      emit(WalletActionState());
     } catch (e) {
       emit(ErrorActionState());
     }

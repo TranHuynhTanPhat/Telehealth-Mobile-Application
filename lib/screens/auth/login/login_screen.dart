@@ -67,102 +67,96 @@ class _LogInScreenState extends State<LogInScreen> {
         child: BlocBuilder<LogInCubit, LogInState>(
           builder: (context, state) {
             return Scaffold(
-              body: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 7,
-                    horizontal: dimensWidth() * 2),
-                child: ListView(
-                  children: [
-                    const HeaderLogIn(),
-                    SizedBox(
-                      height: dimensHeight() * 3,
+              body: ListView(
+                padding: EdgeInsets.symmetric(vertical: dimensHeight()*10, horizontal: dimensWidth()*3),
+                children: [
+                  const HeaderLogIn(),
+                  SizedBox(
+                    height: dimensHeight() * 5,
+                  ),
+                  TextFieldWidget(
+                    controller: _controllerPhone,
+                    prefix: Padding(
+                      padding: EdgeInsets.only(right: dimensWidth() * .5),
+                      child: Text(
+                        '+84',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    TextFieldWidget(
-                      controller: _controllerPhone,
-                      prefix: Padding(
-                        padding: EdgeInsets.only(right: dimensWidth() * .5),
+                    label: AppLocalizations.of(context).translate("phone"),
+                    textInputType: TextInputType.phone,
+                    error: errorPhone,
+                  ),
+                  SizedBox(
+                    height: dimensHeight() * 3,
+                  ),
+                  TextFieldWidget(
+                    controller: _controllerPassword,
+                    label: AppLocalizations.of(context).translate("password"),
+                    obscureText: !showPassword,
+                    error: errorPassword,
+                    suffixIcon: IconButton(
+                      icon: Icon(showPassword
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded),
+                      onPressed: () {
+                        setState(
+                          () {
+                            showPassword = !showPassword;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: dimensHeight() * 3,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: null,
+                        style: const ButtonStyle(
+                            padding:
+                                MaterialStatePropertyAll(EdgeInsets.all(0))),
                         child: Text(
-                          '+84',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          AppLocalizations.of(context)
+                              .translate("forgot_your_password"),
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: color6A6E83,
+                                  ),
                         ),
                       ),
-                      label: AppLocalizations.of(context).translate("phone"),
-                      textInputType: TextInputType.phone,
-                      error: errorPhone,
-                    ),
-                    SizedBox(
-                      height: dimensHeight() * 3,
-                    ),
-                    TextFieldWidget(
-                      controller: _controllerPassword,
-                      label: AppLocalizations.of(context).translate("password"),
-                      obscureText: !showPassword,
-                      error: errorPassword,
-                      suffixIcon: IconButton(
-                        icon: Icon(showPassword
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded),
-                        onPressed: () {
-                          setState(
-                            () {
-                              showPassword = !showPassword;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: dimensHeight() * 3,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: null,
-                          style: const ButtonStyle(
-                              padding:
-                                  MaterialStatePropertyAll(EdgeInsets.all(0))),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate("forgot_your_password"),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                  color: color6A6E83,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: dimensHeight(),
-                    ),
-                    ElevatedButtonWidget(
-                        text: AppLocalizations.of(context).translate('log_in'),
-                        onPressed: () {
-                          setState(() {
-                            errorPhone = Validate()
-                                .validatePhone(context, _controllerPhone.text);
-                            errorPassword = _controllerPassword.text.isEmpty
-                                ? AppLocalizations.of(context)
-                                    .translate('please_enter_password')
-                                : null;
+                    ],
+                  ),
+                  SizedBox(
+                    height: dimensHeight(),
+                  ),
+                  ElevatedButtonWidget(
+                      text: AppLocalizations.of(context).translate('log_in'),
+                      onPressed: () {
+                        setState(() {
+                          errorPhone = Validate()
+                              .validatePhone(context, _controllerPhone.text);
+                          errorPassword = _controllerPassword.text.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('please_enter_password')
+                              : null;
 
-                            if (errorPhone == null && errorPassword == null) {
-                              context.read<LogInCubit>().signIn(
-                                  Validate()
-                                      .changePhoneFormat(_controllerPhone.text),
-                                  _controllerPassword.text);
-                            }
-                          });
-                        }),
-                    const OptionLogIn()
-                  ],
-                ),
+                          if (errorPhone == null && errorPassword == null) {
+                            context.read<LogInCubit>().signIn(
+                                Validate()
+                                    .changePhoneFormat(_controllerPhone.text),
+                                _controllerPassword.text);
+                          }
+                        });
+                      }),
+                  const OptionLogIn()
+                ],
               ),
             );
           },

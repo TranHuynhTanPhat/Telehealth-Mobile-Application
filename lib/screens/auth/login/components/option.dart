@@ -28,7 +28,7 @@ class OptionLogIn extends StatelessWidget {
           children: [
             Text(
               " ${AppLocalizations.of(context).translate("don't_have_an_account_yet")} ",
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             TextButton(
               style: const ButtonStyle(
@@ -41,7 +41,7 @@ class OptionLogIn extends StatelessWidget {
                 AppLocalizations.of(context).translate("sign_up"),
                 style: Theme.of(context)
                     .textTheme
-                    .bodySmall
+                    .bodyMedium
                     ?.copyWith(color: secondary, fontWeight: FontWeight.w600),
               ),
             ),
