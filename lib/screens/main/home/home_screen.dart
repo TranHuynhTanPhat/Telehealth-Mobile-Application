@@ -8,6 +8,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/bases/base_gridview.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
+import 'package:healthline/utils/translate.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.press});
@@ -150,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                AppLocalizations.of(context).translate("greeting"),
+                translate(context,'greeting'),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     FontAwesomeIcons.bell,
                     color: color1F1F1F,
                     size: dimensIcon(),
-                  )),
+                  ),),
             )
           ],
         ),
@@ -210,8 +211,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
             child: TextFieldWidget(
-              hint: AppLocalizations.of(context)
-                  .translate("search_drugs_categories"),
+              validate: (p0) => null,
+              hint: translate(context,'search_drugs_categories'),
               fillColor: colorF2F5FF,
               filled: true,
               focusedBorderColor: colorF2F5FF,
@@ -236,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: dimensWidth() * 3,
                 right: dimensWidth() * 3),
             child: Text(
-              AppLocalizations.of(context).translate("services"),
+              translate(context,'services'),
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -261,8 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocalizations.of(context)
-                      .translate("upcoming_appointments"),
+                  translate(context,'upcoming_appointments'),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   child: Text(
-                    AppLocalizations.of(context).translate("see_all"),
+                    translate(context,'see_all'),
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -296,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocalizations.of(context).translate("top_doctors"),
+                  translate(context,'top_doctors'),
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   child: Text(
-                    AppLocalizations.of(context).translate("see_all"),
+                    translate(context,'see_all'),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: primary,
                           fontWeight: FontWeight.bold,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/main/health_info/components/export.dart';
+import 'package:healthline/utils/translate.dart';
 
 class HealthInfoScreen extends StatefulWidget {
   const HealthInfoScreen({super.key});
@@ -11,6 +12,7 @@ class HealthInfoScreen extends StatefulWidget {
 }
 
 class _HealthInfoScreenState extends State<HealthInfoScreen> {
+  final _formKey = GlobalKey<FormState>();
   final List<Map<String, dynamic>> reports = [
     {
       'name': 'head_circumference',
@@ -37,6 +39,15 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
       'unit': 'prescriptions'
     },
   ];
+
+  Future<void> showDialogInput(BuildContext context) async {
+    await showDialog(
+        barrierDismissible: true,
+        useSafeArea: true,
+        context: context,
+        builder: (context) => CustomDialog(formKey: _formKey));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +64,11 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                 floating: true,
                 expandedHeight: dimensWidth() * 60,
                 flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.pin,
+                  collapseMode: CollapseMode.parallax,
                   expandedTitleScale: 1,
                   background: ListView(
                     padding: EdgeInsets.symmetric(
-                        vertical: dimensHeight() * 10,
+                        vertical: dimensHeight() * 8,
                         horizontal: dimensWidth() * 3),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -70,8 +81,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              AppLocalizations.of(context)
-                                  .translate("health_information"),
+                              translate(context, 'health_information'),
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineLarge
@@ -88,17 +98,26 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                           ],
                         ),
                       ),
-                      const HeartRateCard(),
+                      InkWell(
+                        onTap: () => showDialogInput(context),
+                        child: const HeartRateCard(),
+                      ),
                       Row(
                         children: [
-                          const Expanded(
-                            child: BloodGroupCard(),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async => await showDialogInput(context),
+                              child: const BloodGroupCard(),
+                            ),
                           ),
                           SizedBox(
                             width: dimensWidth() * 2,
                           ),
-                          const Expanded(
-                            child: BMICard(),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async => await showDialogInput(context),
+                              child: const BMICard(),
+                            ),
                           ),
                         ],
                       ),

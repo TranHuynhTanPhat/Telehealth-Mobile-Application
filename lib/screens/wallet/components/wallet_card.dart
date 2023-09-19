@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class WalletCard extends StatelessWidget {
   const WalletCard({
@@ -31,7 +32,7 @@ class WalletCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                AppLocalizations.of(context).translate('service_card'),
+                translate(context, 'service_card'),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall

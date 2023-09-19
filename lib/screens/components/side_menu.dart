@@ -10,6 +10,7 @@ import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/info_card.dart';
 import 'package:healthline/screens/components/side_menu_title.dart';
+import 'package:healthline/utils/translate.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -57,7 +58,7 @@ class _SideMenuState extends State<SideMenu> {
               children: [
                 InfoCard(
                   name: "Tran Huynh Tan Phat",
-                  profession: AppLocalizations.of(context).translate("patient"),
+                  profession: translate(context,'patient'),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -65,7 +66,7 @@ class _SideMenuState extends State<SideMenu> {
                       left: dimensWidth() * 2,
                       bottom: dimensHeight()),
                   child: Text(
-                    AppLocalizations.of(context).translate('general'),
+                    translate(context,'general'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -79,7 +80,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.home,
-                  name: AppLocalizations.of(context).translate('home'),
+                  name: translate(context,'home'),
                   icon: FontAwesomeIcons.home,
                 ),
                 SideMenuTile(
@@ -89,7 +90,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.edit_profile,
-                  name: AppLocalizations.of(context).translate('edit_profile'),
+                  name: translate(context,'edit_profile'),
                   icon: FontAwesomeIcons.userGear,
                 ),
                 SideMenuTile(
@@ -100,7 +101,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.wallet,
-                  name: AppLocalizations.of(context).translate('wallet'),
+                  name: translate(context,'wallet'),
                   icon: FontAwesomeIcons.wallet,
                 ),
                 Padding(
@@ -109,7 +110,7 @@ class _SideMenuState extends State<SideMenu> {
                       left: dimensWidth() * 2,
                       bottom: dimensHeight()),
                   child: Text(
-                    AppLocalizations.of(context).translate('supports'),
+                    translate(context,'supports'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -123,7 +124,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.faq,
-                  name: AppLocalizations.of(context).translate('faq'),
+                  name: translate(context,'FAQ'),
                   icon: FontAwesomeIcons.circleQuestion,
                 ),
                 SideMenuTile(
@@ -133,8 +134,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.terms_and_conditions,
-                  name: AppLocalizations.of(context)
-                      .translate('terms_and_conditions'),
+                  name: translate(context,'terms_and_conditions'),
                   icon: FontAwesomeIcons.fileContract,
                 ),
                 SideMenuTile(
@@ -145,7 +145,7 @@ class _SideMenuState extends State<SideMenu> {
                   },
                   isActive: selectedMenu == SideMenus.privacy_policy,
                   name:
-                      AppLocalizations.of(context).translate('privacy_policy'),
+                      translate(context,'privacy_policy'),
                   icon: FontAwesomeIcons.shieldHalved,
                 ),
                 const Spacer(),
@@ -156,8 +156,8 @@ class _SideMenuState extends State<SideMenu> {
                         : context.read<ResCubit>().toVietnamese();
                   },
                   name: AppLocalizations.of(context).isVnLocale
-                      ? AppLocalizations.of(context).translate('en')
-                      : AppLocalizations.of(context).translate('vi'),
+                      ? translate(context,'en')
+                      : translate(context,'vi'),
                   icon: FontAwesomeIcons.language,
                   isActive: false,
                 ),
@@ -174,7 +174,7 @@ class _SideMenuState extends State<SideMenu> {
                         color: Colors.yellow,
                       ),
                       title: Text(
-                        "Log out",
+                        translate(context, 'log_out'),
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium

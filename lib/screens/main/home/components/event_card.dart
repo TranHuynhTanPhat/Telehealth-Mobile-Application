@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 import 'package:lottie/lottie.dart';
 
 class EventCard extends StatelessWidget {
@@ -25,14 +26,14 @@ class EventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context).translate('consult_doctors'),
+                translate(context,'consult_doctors'),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall
                     ?.copyWith(color: secondary, fontWeight: FontWeight.bold),
               ),
               Text(
-                AppLocalizations.of(context).translate('get_expert_advice_form_specialist_doctors'),
+                translate(context,'get_expert_advice_form_specialist_doctors'),
 
                 style: Theme.of(context)
                     .textTheme

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/language/app_localizations.dart';
+import 'package:healthline/utils/translate.dart';
 
 class Validate {
   String? validateEmail(BuildContext context, String? value) {
@@ -13,10 +13,9 @@ class Validate {
     final regex = RegExp(pattern);
 
     return value!.isEmpty
-        ? AppLocalizations.of(context).translate("please_enter_email")
+        ? translate(context, 'please_enter_email')
         : !regex.hasMatch(value)
-            ? AppLocalizations.of(context)
-                .translate("enter_a_valid_email_address")
+            ? translate(context, 'enter_a_valid_email_address')
             : null;
   }
 
@@ -31,32 +30,27 @@ class Validate {
     String error = "";
 
     if (value!.isEmpty) {
-      return AppLocalizations.of(context).translate("please_enter_password");
+      return translate(context, 'please_enter_password');
     } else if (!regex.hasMatch(value)) {
       if (value.length < 8) {
         error += error.isNotEmpty ? "\n" : "";
-        error +=
-            '- ${AppLocalizations.of(context).translate("least_8_characters_long")}';
+        error += '- ${translate(context, 'least_8_characters_long')}';
       }
       if (!uppercase.hasMatch(value)) {
         error += error.isNotEmpty ? "\n" : "";
-        error +=
-            '- ${AppLocalizations.of(context).translate("least_1_uppercase")}';
+        error += '- ${translate(context, 'least_1_uppercase')}';
       }
       if (!lowercase.hasMatch(value)) {
         error += error.isNotEmpty ? "\n" : "";
-        error +=
-            '- ${AppLocalizations.of(context).translate("least_1_lowercase")}';
+        error += '- ${translate(context, 'least_1_lowercase')}';
       }
       if (!number.hasMatch(value)) {
         error += error.isNotEmpty ? "\n" : "";
-        error +=
-            '- ${AppLocalizations.of(context).translate("least_1_number")}';
+        error += '- ${translate(context, 'least_1_number')}';
       }
       if (!special.hasMatch(value)) {
         error += error.isNotEmpty ? "\n" : "";
-        error +=
-            '- ${AppLocalizations.of(context).translate("least_1_special_character")}';
+        error += '- ${translate(context, 'least_1_special_character')}';
       }
       return error;
     }
@@ -74,7 +68,7 @@ class Validate {
         lowercase.hasMatch(phone) ||
         special.hasMatch(phone) ||
         phone.length != 9) {
-      return AppLocalizations.of(context).translate("invalid_phone");
+      return translate(context, 'invalid_phone');
     }
     return null;
   }

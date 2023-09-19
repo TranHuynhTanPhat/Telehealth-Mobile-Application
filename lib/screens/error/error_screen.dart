@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/cubits/cubit_error/error_cubit.dart';
 import 'package:healthline/res/dimens.dart';
 import 'package:healthline/res/images.dart';
-import 'package:healthline/res/language/app_localizations.dart';
+import 'package:healthline/utils/translate.dart';
 import 'package:lottie/lottie.dart';
 
 class ErrorScreen extends StatefulWidget {
@@ -24,8 +24,7 @@ class _ErrorScreenState extends State<ErrorScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<ErrorCubit, ErrorState>(
       bloc: errorCubit,
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(
@@ -40,7 +39,7 @@ class _ErrorScreenState extends State<ErrorScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 5),
                   child: Text(
-                    AppLocalizations.of(context).translate(""),
+                    translate(context, ''),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge

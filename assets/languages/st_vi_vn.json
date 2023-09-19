@@ -60,7 +60,7 @@
   "get_expert_advice_form_specialist_doctors": "Nhận lời khuyên của chuyên gia Bác sĩ chuyên khoa",
   "home": "Nhà",
   "schedule": "Lịch trình",
-  "message": "Tin nhắn",
+  "messages": "Tin nhắn",
   "health_info": "Thông tin",
   "invalid_phone": "Số điện thoại không hợp lệ",
   "my_appointments": "Cuộc hẹn của tôi",
@@ -118,8 +118,18 @@
   "transfer": "Chuyển khoản",
   "bank_card": "Thẻ ngân hàng",
   "service_card": "Thẻ dịch vụ",
-  "transfer_money_through_banks":"Chuyển tiền qua ngân hàng",
-  "transfer_money_via_visa_master_or_bank_card":"Chuyển tiền qua thẻ Visa, Master hoặc thẻ ngân hàng",
-  "recharge_via_momo_application":"Nạp tiền qua ứng dụng MoMo"
+  "transfer_money_through_banks": "Chuyển tiền qua ngân hàng",
+  "transfer_money_via_visa_master_or_bank_card": "Chuyển tiền qua thẻ Visa, Master hoặc thẻ ngân hàng",
+  "recharge_via_momo_application": "Nạp tiền qua ứng dụng MoMo",
+  "age": "Tuổi",
+  "height": "Chiều cao",
+  "weight": "Cân nặng",
+  "invalid_age": "Tuổi không hợp lệ",
+  "invalid_blood_group": "Nhóm máu không hợp lệ",
+  "invalid_height": "Chiều cao không hợp lệ",
+  "invalid_weight": "Cân nặng không hợp lệ",
+  "invalid_heart_rate": "Nhịp tim không hợp lệ",
+  "update_information":"Cập nhật thông tin",
+  "log_out":"Đăng xuất"
 
 }

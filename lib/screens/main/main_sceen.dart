@@ -11,9 +11,10 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/side_menu.dart';
 import 'package:healthline/screens/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screens/main/home/home_screen.dart';
-import 'package:healthline/screens/main/message/message_screen.dart';
+import 'package:healthline/screens/main/message/messages_screen.dart';
 import 'package:healthline/screens/main/schedule/schedule_screen.dart';
 import 'package:healthline/utils/keyboard.dart';
+import 'package:healthline/utils/translate.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -88,8 +89,8 @@ class _MainScreenState extends State<MainScreen>
         "icon": FontAwesomeIcons.calendar
       },
       {
-        "page": const MessageScreen(),
-        "title": "message",
+        "page": const MessagesScreen(),
+        "title": "messages",
         "icon": FontAwesomeIcons.comment
       },
       {
@@ -174,8 +175,7 @@ class _MainScreenState extends State<MainScreen>
                               curve: Curves.fastLinearToSlowEaseIn,
                               child: Text(
                                 index == _currentIndex
-                                    ? AppLocalizations.of(context)
-                                        .translate(_pageDetail[index]['title'])
+                                    ? translate(context,_pageDetail[index]['title'])
                                     : '',
                                 style: Theme.of(context)
                                     .textTheme

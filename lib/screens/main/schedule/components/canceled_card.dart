@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/translate.dart';
 
 class CanceledCard extends StatelessWidget {
   const CanceledCard({super.key, required this.object});
@@ -34,7 +35,7 @@ class CanceledCard extends StatelessWidget {
                   SizedBox(
                     width: dimensWidth() * 32,
                     child: Text(
-                      "${AppLocalizations.of(context).translate('dr')}. ${AppLocalizations.of(context).translate(object['dr'])}",
+                      "${translate(context, 'dr')}. ${translate(context, object['dr'])}",
                       overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: color6A6E83, fontWeight: FontWeight.w900),
@@ -43,15 +44,14 @@ class CanceledCard extends StatelessWidget {
                   SizedBox(
                     width: dimensWidth() * 32,
                     child: Text(
-                      AppLocalizations.of(context)
-                          .translate(object['specialist']),
+                      translate(context, object['specialist']),
                       overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: color6A6E83, fontWeight: FontWeight.w900),
                     ),
                   ),
                   Text(
-                    "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
+                    "${translate(context, 'patient')}: ${object['patient']}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -62,7 +62,7 @@ class CanceledCard extends StatelessWidget {
               InkWell(
                   onTap: () {},
                   child: Text(
-                    AppLocalizations.of(context).translate("detail"),
+                    translate(context, 'detail'),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: primary,
                         fontWeight: FontWeight.normal,
@@ -115,7 +115,7 @@ class CanceledCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate(object['status']),
+                    translate(context, object['status']),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: color6A6E83, fontWeight: FontWeight.bold),
                   ),

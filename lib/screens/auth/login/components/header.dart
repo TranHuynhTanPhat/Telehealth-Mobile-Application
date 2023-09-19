@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class HeaderLogIn extends StatelessWidget {
   const HeaderLogIn({super.key});
@@ -12,7 +13,7 @@ class HeaderLogIn extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                AppLocalizations.of(context).translate('title_login'),
+               translate(context, 'title_login'),
                 style: Theme.of(context)
                     .textTheme
                     .displayMedium
@@ -25,7 +26,7 @@ class HeaderLogIn extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                AppLocalizations.of(context).translate("content_login"),
+                translate(context, 'content_login'),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: colorA8B1CE.withOpacity(.5),
                     ),

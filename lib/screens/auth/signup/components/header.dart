@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class HeaderSignUp extends StatelessWidget {
   const HeaderSignUp({super.key});
@@ -12,7 +13,7 @@ class HeaderSignUp extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                AppLocalizations.of(context).translate("title_signup"),
+                translate(context, 'title_signup'),
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color: secondary,
                       fontWeight: FontWeight.bold,
@@ -28,7 +29,7 @@ class HeaderSignUp extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                AppLocalizations.of(context).translate('content_signup'),
+                translate(context, 'content_signup'),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
