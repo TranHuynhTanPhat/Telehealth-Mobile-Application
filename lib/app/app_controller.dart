@@ -1,17 +1,22 @@
 // ignore_for_file: constant_identifier_names, no_leading_underscores_for_local_identifiers
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
-import 'package:healthline/data/api/rest_client.dart';
+import 'package:cloudinary_flutter/cloudinary_context.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/data/storage/models/user_model.dart';
-import 'package:healthline/firebase_options.dart';
+import 'package:healthline/res/colors.dart';
 import 'package:healthline/utils/log_data.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AppController {
   late PackageInfo packageInfo;
@@ -28,8 +33,28 @@ class AppController {
   AppController._internal();
 
   init() async {
-    await Future.wait([initFirebase(), setupLocator()]);
+    await Future.wait([setupSystem(), setupLocator()]);
     await initAuth();
+    setupCloudinary();
+  }
+
+  Future<void> setupSystem() async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: transparent));
+
+    final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory(),
+    );
+    HydratedBloc.storage = storage;
+  }
+
+  void setupCloudinary() {
+    CloudinaryContext.cloudinary =
+        Cloudinary.fromStringUrl(dotenv.get('CLOUDINARY_URL'));
+    CloudinaryContext.cloudinary.config.urlConfig.secure = true;
   }
 
   Future<void> initAuth() async {
@@ -60,12 +85,6 @@ class AppController {
   Future<void> setupLocator() async {
     AppStorage.instance.init();
     DbManager().init();
-  }
-
-  Future<void> initFirebase() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
   }
 
   initApi({String? token}) async {

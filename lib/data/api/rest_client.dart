@@ -92,61 +92,73 @@ class RestClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          /// check path
-          if (!options.path.contains('http')) {
-            options.path = dotenv.get('BASE_URL', fallback: '') + options.path;
-          }
+          if (!isUpload) {
+            logPrint('NORMAL API');
+            /// check path
+            if (!options.path.contains('http')) {
+              options.path =
+                  dotenv.get('BASE_URL', fallback: '') + options.path;
+            }
 
-          /// check access token
-          User? user = await AppStorage().getUser();
-          if (user == null || user.accessToken == null) {
-            return handler.next(options);
-          }
+            /// check access token
+            User? user = await AppStorage().getUser();
+            if (user == null || user.accessToken == null) {
+              return handler.next(options);
+            }
 
-          bool isExpired = JwtDecoder.isExpired(user.accessToken!);
+            bool isExpired = JwtDecoder.isExpired(user.accessToken!);
 
-          /// if access token expired ---> refresh token
-          /// else continue
-          /// dont rt when path contain LOG_IN or SIGN_UP or REFRESH_TOKEN or LOG_OUT
+            /// if access token expired ---> refresh token
+            /// else continue
+            /// dont rt when path contain LOG_IN or SIGN_UP or REFRESH_TOKEN or LOG_OUT
 
-          if (isExpired &&
-              !options.path.contains(REFRESH_TOKEN) &&
-              !options.path.contains(LOG_OUT) &&
-              !options.path.contains(LOG_OUT) &&
-              !options.path.contains(SIGN_UP)) {
-            try {
-              /// refresh token if success continue
-              /// else logout
-              final response = await dio
-                  .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
-              if (response.statusCode == 200) {
-                if (response.data != false) {
-                  options.headers['Authorization'] =
-                      "Bearer ${response.data["jwtToken"]}";
-                  AppStorage().saveUser(
-                      user: user.copyWith(accessToken: response.data));
+            if (isExpired &&
+                !options.path.contains(REFRESH_TOKEN) &&
+                !options.path.contains(LOG_OUT) &&
+                !options.path.contains(LOG_OUT) &&
+                !options.path.contains(SIGN_UP)) {
+              try {
+                /// refresh token if success continue
+                /// else logout
+                final response = await dio
+                    .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
+                if (response.statusCode == 200) {
+                  if (response.data != false) {
+                    options.headers['Authorization'] =
+                        "Bearer ${response.data["jwtToken"]}";
+                    AppStorage().saveUser(
+                        user: user.copyWith(accessToken: response.data));
+                  } else {
+                    logout();
+                    await getDio()
+                        .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
+                  }
                 } else {
                   logout();
                   await getDio()
                       .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
                 }
-              } else {
+                return handler.next(options);
+              } on DioException catch (error) {
                 logout();
                 await getDio()
                     .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
-              }
-              return handler.next(options);
-            } on DioException catch (error) {
-              logout();
-              await getDio()
-                  .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
 
-              SentryLogError().additionalMessage(error, SentryLevel.error);
-              return handler.reject(error, true);
+                SentryLogError().additionalMessage(error, SentryLevel.error);
+                return handler.reject(error, true);
+              }
+            } else {
+              options.headers['Authorization'] = "Bearer ${user.accessToken}";
+              return handler.next(options);
             }
-          } else {
-            options.headers['Authorization'] = "Bearer ${user.accessToken}";
-            return handler.next(options);
+          }
+          else{
+            logPrint('CLOUDINARY_API');
+            /// check path
+            if (!options.path.contains('http')) {
+              options.path =
+                  dotenv.get('CLOUDINARY_API', fallback: '') + options.path;
+            }
           }
         },
         onResponse: (Response response, handler) async {

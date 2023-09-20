@@ -1,5 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+
+// CLOUDINARY
+const UPLOAD = '/upload';
+
 const LOG_IN = '/common/auth';
 const SIGN_UP = '/common/user';
 

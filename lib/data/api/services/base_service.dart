@@ -34,9 +34,9 @@ abstract class BaseService {
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> postUpload(String path, {data}) async {
+  Future<DataResponse> postUpload(String path, {formData}) async {
     final response =
-        await RestClient().getDio(isUpload: true).post(path, data: data);
+        await RestClient().getDio(isUpload: true).post(path, data: formData);
     return await _handleResponse(response);
   }
 

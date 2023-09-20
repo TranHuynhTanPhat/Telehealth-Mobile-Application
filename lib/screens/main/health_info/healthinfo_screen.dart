@@ -43,7 +43,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
   Future<void> showDialogInput(BuildContext context) async {
     await showDialog(
         barrierDismissible: true,
-        useSafeArea: true,
         context: context,
         builder: (context) => CustomDialog(formKey: _formKey));
   }

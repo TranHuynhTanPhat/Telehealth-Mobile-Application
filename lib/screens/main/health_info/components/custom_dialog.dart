@@ -51,8 +51,9 @@ class _CustomDialogState extends State<CustomDialog> {
         child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: dimensHeight() * 4, horizontal: dimensWidth() * 3),
-          child: Stack(
-            alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Form(
                 key: widget._formKey,

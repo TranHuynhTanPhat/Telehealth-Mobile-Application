@@ -37,6 +37,8 @@ jobs:
           cat > .env <<EOF
           BASE_URL=${{ secrets.BASE_URL }}
           SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+          CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
           EOF
       - uses: actions/setup-java@v1
         with:

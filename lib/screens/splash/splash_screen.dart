@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? firstTime = prefs.getBool('first_time');
 
-      // prefs.setBool('first_time', true);
+      // // prefs.setBool('first_time', true);
 
       if (firstTime != null && !firstTime) {
         if (AppController().authState == AuthState.authorized_user ||
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.setBool('first_time', false);
         Navigator.pushReplacementNamed(context, onboardingName);
       }
-      // Navigator.pushReplacementNamed(context, logInName);
+      // Navigator.pushReplacementNamed(context, onboardingName);
     });
   }
 
