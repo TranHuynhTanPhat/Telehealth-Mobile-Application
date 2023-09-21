@@ -17,8 +17,8 @@ import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 
 class RestClient {
-  static const CONNECT_TIME_OUT = 3000;
-  static const RECEIVE_TIME_OUT = 3000;
+  static const CONNECT_TIME_OUT = 60*1000;
+  static const RECEIVE_TIME_OUT = 60*1000;
   static const ENABLE_LOG = true;
   static const ACCESS_TOKEN_HEADER = 'Authorization';
   static const LANGUAGE = 'Accept-Language';

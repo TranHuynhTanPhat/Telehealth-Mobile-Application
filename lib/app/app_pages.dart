@@ -5,3 +5,4 @@ const signUpName = "/sign_up";
 const logInName ="/log_in";
 const errorName ="/error";
 const walletName ="/wallet";
+const profileName = "/profile";

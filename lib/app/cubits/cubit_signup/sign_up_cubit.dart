@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:healthline/data/api/models/responses/signup_response.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'sign_up_state.dart';
 
@@ -25,6 +26,9 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(RegisterAccountActionState(response: response));
     } catch (error) {
       DioException er = error as DioException;
+      logPrint("=>> ERROR REGISTER");
+      // ignore: avoid_print
+      print(er);
       emit(SignUpErrorActionState(message: er.response?.data['message']));
 
     }

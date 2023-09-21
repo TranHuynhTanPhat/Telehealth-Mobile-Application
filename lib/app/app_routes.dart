@@ -4,6 +4,7 @@ import 'package:healthline/screens/auth/login/login_screen.dart';
 import 'package:healthline/screens/auth/signup/signup_screen.dart';
 import 'package:healthline/screens/error/error_screen.dart';
 import 'package:healthline/screens/main/main_sceen.dart';
+import 'package:healthline/screens/profile/profile_screen.dart';
 import 'package:healthline/screens/splash/onboarding.dart';
 
 import 'package:healthline/screens/splash/splash_screen.dart';
@@ -24,6 +25,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const LogInScreen());
       case walletName:
         return MaterialPageRoute(builder: (_) => const WalletScreen());
+      case profileName:
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case errorName:
         return MaterialPageRoute(builder: (_) => const ErrorScreen());
       default:

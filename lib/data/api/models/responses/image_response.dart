@@ -69,7 +69,7 @@ class ImageResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['asset_id'] = assetId;
     data['public_id'] = publicId;
     data['version'] = version;

@@ -44,6 +44,15 @@ class _SideMenuState extends State<SideMenu> {
         } else if (state is WalletActionState) {
           EasyLoading.dismiss();
           Navigator.pushNamed(context, walletName);
+        } else if (state is ProfileActionState) {
+          EasyLoading.dismiss();
+          Navigator.pushNamed(context, profileName).then(
+            (value) => setState(
+              () {
+                selectedMenu = SideMenus.home;
+              },
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -58,7 +67,7 @@ class _SideMenuState extends State<SideMenu> {
               children: [
                 InfoCard(
                   name: "Tran Huynh Tan Phat",
-                  profession: translate(context,'patient'),
+                  profession: translate(context, 'patient'),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -66,7 +75,7 @@ class _SideMenuState extends State<SideMenu> {
                       left: dimensWidth() * 2,
                       bottom: dimensHeight()),
                   child: Text(
-                    translate(context,'general'),
+                    translate(context, 'general'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -80,17 +89,18 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.home,
-                  name: translate(context,'home'),
+                  name: translate(context, 'home'),
                   icon: FontAwesomeIcons.home,
                 ),
                 SideMenuTile(
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.edit_profile;
+                      context.read<SideMenuCubit>().navigateToProfile();
                     });
                   },
                   isActive: selectedMenu == SideMenus.edit_profile,
-                  name: translate(context,'edit_profile'),
+                  name: translate(context, 'edit_profile'),
                   icon: FontAwesomeIcons.userGear,
                 ),
                 SideMenuTile(
@@ -101,7 +111,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.wallet,
-                  name: translate(context,'wallet'),
+                  name: translate(context, 'wallet'),
                   icon: FontAwesomeIcons.wallet,
                 ),
                 Padding(
@@ -110,7 +120,7 @@ class _SideMenuState extends State<SideMenu> {
                       left: dimensWidth() * 2,
                       bottom: dimensHeight()),
                   child: Text(
-                    translate(context,'supports'),
+                    translate(context, 'supports'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -124,7 +134,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.faq,
-                  name: translate(context,'FAQ'),
+                  name: translate(context, 'FAQ'),
                   icon: FontAwesomeIcons.circleQuestion,
                 ),
                 SideMenuTile(
@@ -134,7 +144,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.terms_and_conditions,
-                  name: translate(context,'terms_and_conditions'),
+                  name: translate(context, 'terms_and_conditions'),
                   icon: FontAwesomeIcons.fileContract,
                 ),
                 SideMenuTile(
@@ -144,8 +154,7 @@ class _SideMenuState extends State<SideMenu> {
                     });
                   },
                   isActive: selectedMenu == SideMenus.privacy_policy,
-                  name:
-                      translate(context,'privacy_policy'),
+                  name: translate(context, 'privacy_policy'),
                   icon: FontAwesomeIcons.shieldHalved,
                 ),
                 const Spacer(),
@@ -156,8 +165,8 @@ class _SideMenuState extends State<SideMenu> {
                         : context.read<ResCubit>().toVietnamese();
                   },
                   name: AppLocalizations.of(context).isVnLocale
-                      ? translate(context,'en')
-                      : translate(context,'vi'),
+                      ? translate(context, 'en')
+                      : translate(context, 'vi'),
                   icon: FontAwesomeIcons.language,
                   isActive: false,
                 ),

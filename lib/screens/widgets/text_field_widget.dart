@@ -20,6 +20,8 @@ class TextFieldWidget extends StatelessWidget {
     this.suffix,
     this.prefix,
     required this.validate,
+    this.readOnly = false,
+    this.onTap,
   });
   final TextEditingController controller;
   final String? label;
@@ -37,10 +39,14 @@ class TextFieldWidget extends StatelessWidget {
   final Color? focusedBorderColor;
   final Widget? prefix;
   final String? Function(String?) validate;
+  final bool readOnly;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
+      readOnly: readOnly,
       validator: validate,
       controller: controller,
       style: Theme.of(context).textTheme.bodyLarge,

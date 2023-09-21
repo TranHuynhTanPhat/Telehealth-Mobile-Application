@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 const DATE_FORMAT = "EEEE, dd MMMM yyyy";
-const DAY_MONTH_YEAR = " dd/MM/yyyy";
+const DAY_MONTH_YEAR = "dd/MM/yyyy";
 const MONTH_YEAR_FORMAT = "MMMM yyyy";
 const EEE_FORMAT ="EEE";
 const DAY_FORMAT ="d";

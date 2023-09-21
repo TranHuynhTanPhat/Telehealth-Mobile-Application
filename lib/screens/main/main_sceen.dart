@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
 import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/side_menu.dart';
@@ -25,6 +26,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
+  final _homeCubit = HomeCubit();
   var _currentIndex = 0;
 
   bool isSideMenuClosed = true;
@@ -53,6 +55,7 @@ class _MainScreenState extends State<MainScreen>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
+    _homeCubit.fetchData();
     super.initState();
   }
 
@@ -99,8 +102,15 @@ class _MainScreenState extends State<MainScreen>
         "icon": FontAwesomeIcons.bookMedical
       },
     ];
-    return BlocProvider(
-      create: (context) => SideMenuCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SideMenuCubit(),
+        ),
+        BlocProvider(
+          create: (context) => _homeCubit,
+        ),
+      ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
@@ -175,7 +185,8 @@ class _MainScreenState extends State<MainScreen>
                               curve: Curves.fastLinearToSlowEaseIn,
                               child: Text(
                                 index == _currentIndex
-                                    ? translate(context,_pageDetail[index]['title'])
+                                    ? translate(
+                                        context, _pageDetail[index]['title'])
                                     : '',
                                 style: Theme.of(context)
                                     .textTheme
@@ -197,9 +208,7 @@ class _MainScreenState extends State<MainScreen>
                             FaIcon(
                               _pageDetail[index]['icon'],
                               size: dimensWidth() * 3.8,
-                              color: index == _currentIndex
-                                  ? primary
-                                  : black26,
+                              color: index == _currentIndex ? primary : black26,
                             )
                           ],
                         ),
