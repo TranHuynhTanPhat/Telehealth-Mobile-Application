@@ -27,4 +27,13 @@ class SideMenuCubit extends Cubit<SideMenuState> {
       emit(ErrorActionState());
     }
   }
+
+  Future<void> navigateToProfile() async {
+    emit(SideMenuLoading());
+    try {
+      emit(ProfileActionState());
+    } catch (e) {
+      emit(ErrorActionState());
+    }
+  }
 }

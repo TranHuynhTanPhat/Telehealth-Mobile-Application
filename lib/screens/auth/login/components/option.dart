@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/cubits/cubit_login/log_in_cubit.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class OptionLogIn extends StatelessWidget {
   const OptionLogIn({super.key});
@@ -27,7 +28,7 @@ class OptionLogIn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              " ${AppLocalizations.of(context).translate("don't_have_an_account_yet")} ",
+              " ${translate(context,"don't_have_an_account_yet")} ",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             TextButton(
@@ -38,7 +39,7 @@ class OptionLogIn extends StatelessWidget {
               ),
               onPressed: () => context.read<LogInCubit>().navigateToSignIn(),
               child: Text(
-                AppLocalizations.of(context).translate("sign_up"),
+                translate(context, 'sign_up'),
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium

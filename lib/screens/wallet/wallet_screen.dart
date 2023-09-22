@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/wallet/components/exports.dart';
+import 'package:healthline/utils/translate.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
@@ -16,7 +17,7 @@ class _WalletScreenState extends State<WalletScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('wallet'),
+          translate(context, 'wallet'),
         ),
       ),
       body: ListView(
@@ -30,14 +31,13 @@ class _WalletScreenState extends State<WalletScreen> {
             padding: EdgeInsets.only(
                 top: dimensHeight() * 4, bottom: dimensHeight() * 1.5),
             child: Text(
-              AppLocalizations.of(context).translate('recharge_with'),
+              translate(context, 'recharge_with'),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           OptionCard(
-            name: AppLocalizations.of(context).translate('transfer'),
-            description: AppLocalizations.of(context)
-                .translate('transfer_money_through_banks'),
+            name: translate(context, 'transfer'),
+            description: translate(context, 'transfer_money_through_banks'),
             icon: FaIcon(
               FontAwesomeIcons.moneyBillTransfer,
               size: dimensIcon(),
@@ -45,9 +45,9 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
           OptionCard(
-            name: AppLocalizations.of(context).translate('bank_card'),
-            description: AppLocalizations.of(context)
-                .translate('transfer_money_via_visa_master_or_bank_card'),
+            name: translate(context, 'bank_card'),
+            description: translate(
+                context, 'transfer_money_via_visa_master_or_bank_card'),
             icon: FaIcon(
               FontAwesomeIcons.creditCard,
               size: dimensIcon(),
@@ -55,9 +55,8 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
           OptionCard(
-              name: '${AppLocalizations.of(context).translate('wallet')} Momo',
-              description: AppLocalizations.of(context)
-                  .translate('recharge_via_momo_application'),
+              name: '${translate(context, 'wallet')} Momo',
+              description: translate(context, 'recharge_via_momo_application'),
               icon: Image.asset(
                 DImages.mono,
                 scale: 1,

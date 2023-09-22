@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class GoogleButtonWidget extends StatelessWidget {
   const GoogleButtonWidget({
@@ -19,7 +20,7 @@ class GoogleButtonWidget extends StatelessWidget {
           height: dimensImage() * 3,
         ),
         label: Text(
-          AppLocalizations.of(context).translate("sign_in_with_google"),
+          translate(context, 'sign_in_with_google'),
           style: Theme.of(context).textTheme.labelLarge,
         ));
   }

@@ -3,17 +3,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
 import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/side_menu.dart';
 import 'package:healthline/screens/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screens/main/home/home_screen.dart';
-import 'package:healthline/screens/main/message/message_screen.dart';
+import 'package:healthline/screens/main/message/messages_screen.dart';
 import 'package:healthline/screens/main/schedule/schedule_screen.dart';
 import 'package:healthline/utils/keyboard.dart';
+import 'package:healthline/utils/translate.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,6 +25,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
+  final _homeCubit = HomeCubit();
   var _currentIndex = 0;
 
   bool isSideMenuClosed = true;
@@ -52,6 +54,7 @@ class _MainScreenState extends State<MainScreen>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
+    _homeCubit.fetchData();
     super.initState();
   }
 
@@ -88,8 +91,8 @@ class _MainScreenState extends State<MainScreen>
         "icon": FontAwesomeIcons.calendar
       },
       {
-        "page": const MessageScreen(),
-        "title": "message",
+        "page": const MessagesScreen(),
+        "title": "messages",
         "icon": FontAwesomeIcons.comment
       },
       {
@@ -98,8 +101,15 @@ class _MainScreenState extends State<MainScreen>
         "icon": FontAwesomeIcons.bookMedical
       },
     ];
-    return BlocProvider(
-      create: (context) => SideMenuCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SideMenuCubit(),
+        ),
+        BlocProvider(
+          create: (context) => _homeCubit,
+        ),
+      ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
@@ -127,7 +137,6 @@ class _MainScreenState extends State<MainScreen>
               itemBuilder: (context, index) => InkWell(
                 onTap: () => setState(() {
                   _currentIndex = index;
-                  HapticFeedback.lightImpact();
                 }),
                 splashColor: transparent,
                 highlightColor: transparent,
@@ -174,8 +183,8 @@ class _MainScreenState extends State<MainScreen>
                               curve: Curves.fastLinearToSlowEaseIn,
                               child: Text(
                                 index == _currentIndex
-                                    ? AppLocalizations.of(context)
-                                        .translate(_pageDetail[index]['title'])
+                                    ? translate(
+                                        context, _pageDetail[index]['title'])
                                     : '',
                                 style: Theme.of(context)
                                     .textTheme
@@ -197,9 +206,7 @@ class _MainScreenState extends State<MainScreen>
                             FaIcon(
                               _pageDetail[index]['icon'],
                               size: dimensWidth() * 3.8,
-                              color: index == _currentIndex
-                                  ? primary
-                                  : black26,
+                              color: index == _currentIndex ? primary : black26,
                             )
                           ],
                         ),

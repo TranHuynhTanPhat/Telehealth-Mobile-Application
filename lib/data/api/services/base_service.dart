@@ -14,7 +14,9 @@ abstract class BaseService {
     if (params != null) {
       response = await RestClient().getDio().get(path, queryParameters: params);
     } else {
+      // log("CHECKKKKK");
       response = await RestClient().getDio().get(path);
+      // print(response.toString());
     }
     return await _handleResponse(response);
   }
@@ -34,9 +36,9 @@ abstract class BaseService {
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> postUpload(String path, {data}) async {
+  Future<DataResponse> postUpload(String path, {formData}) async {
     final response =
-        await RestClient().getDio(isUpload: true).post(path, data: data);
+        await RestClient().getDio(isUpload: true).post(path, data: formData);
     return await _handleResponse(response);
   }
 

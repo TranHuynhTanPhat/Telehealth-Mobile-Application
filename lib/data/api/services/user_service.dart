@@ -10,7 +10,7 @@ class UserService extends BaseService {
   ///
   Future<LoginResponse> login(LoginRequest request) async {
     final response = await post(LOG_IN, data: request.toJson());
-    return LoginResponse.fromJson(response.data);
+    return LoginResponse.fromMap(response.data);
   }
 
   Future<SignUpResponse> registerAccount(SignUpRequest request) async {

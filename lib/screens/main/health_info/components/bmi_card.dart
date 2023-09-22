@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class BMICard extends StatelessWidget {
   const BMICard({
@@ -27,8 +28,7 @@ class BMICard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('BMI'),
+                  translate(context,'BMI'),
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

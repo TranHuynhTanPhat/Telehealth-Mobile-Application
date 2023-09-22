@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class BloodGroupCard extends StatelessWidget {
   const BloodGroupCard({
@@ -27,8 +28,7 @@ class BloodGroupCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('blood_group'),
+                  translate(context,'blood_group'),
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

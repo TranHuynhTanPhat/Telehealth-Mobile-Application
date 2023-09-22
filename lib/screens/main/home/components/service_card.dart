@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class ServiceCard extends StatelessWidget {
   const ServiceCard({
@@ -38,7 +39,7 @@ class ServiceCard extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            AppLocalizations.of(context).translate(services[index]['name']),
+            translate(context,services[index]['name']),
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelSmall,
           ))

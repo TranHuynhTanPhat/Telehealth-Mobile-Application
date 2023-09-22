@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 
 class DoctorCard extends StatelessWidget {
@@ -8,7 +9,7 @@ class DoctorCard extends StatelessWidget {
     super.key,
     required this.doctor,
   });
-  final Map<String, dynamic> doctor;
+  final DoctorResponse doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,16 @@ class DoctorCard extends StatelessWidget {
             flex: 6,
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(dimensWidth() * 2),
-                      topRight: Radius.circular(dimensWidth() * 2)),
-                  image: DecorationImage(
-                      fit: BoxFit.fitWidth,
-                      alignment: Alignment.center,
-                      image: AssetImage(DImages.anhthe))),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth() * 2),
+                    topRight: Radius.circular(dimensWidth() * 2)),
+                image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.center,
+                  image: AssetImage(DImages.placeholder),
+                ),
+
+              ),
             )
             //  Image(image: AssetImage(DImages.placeholder),fit: BoxFit.cover,alignment: Alignment.center,)
             ),
@@ -50,7 +54,7 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      doctor['dr'],
+                      doctor.fullName??"Undefine",
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -58,7 +62,7 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      doctor['description'],
+                      doctor.specialty??"Undefine",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -70,7 +74,7 @@ class DoctorCard extends StatelessWidget {
                         children: [
                           RatingBar.builder(
                             ignoreGestures: true,
-                            initialRating: doctor['rate'],
+                            initialRating: 5,
                             minRating: 1,
                             direction: Axis.horizontal,
                             allowHalfRating: true,
@@ -83,7 +87,7 @@ class DoctorCard extends StatelessWidget {
                             onRatingUpdate: (double value) {},
                           ),
                           Text(
-                            "(${doctor['review']})",
+                            "(100)",
                             style: Theme.of(context).textTheme.bodySmall,
                           )
                         ],

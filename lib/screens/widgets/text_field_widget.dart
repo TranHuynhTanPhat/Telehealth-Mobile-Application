@@ -1,97 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class AppTextField extends StatefulWidget {
-//   final TextEditingController? controller;
-//   final bool? readOnly;
-//   final TextStyle? textStyle;
-//   final TextStyle? hintStyle;
-//   final String? hintText;
-//   final Color? strokeColor;
-//   final bool autoFocus;
-//   final bool? obscureText;
-//   final TextInputType? inputType;
-//   final Widget? prefixIcon;
-//   final Widget? suffixIcon;
-//   final int? maxLength;
-//   const AppTextField({
-//     this.textStyle,
-//     required this.controller,
-//     this.hintText,
-//     this.hintStyle,
-//     this.strokeColor,
-//     this.autoFocus = false,
-//     this.inputType,
-//     this.prefixIcon,
-//     this.maxLength,
-//     this.suffixIcon,
-//     this.readOnly,
-//     this.obscureText,
-//   });
-//   @override
-//   State<StatefulWidget> createState() => _AppTextFieldState();
-// }
-
-// class _AppTextFieldState extends State<AppTextField> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     widget.controller?.addListener(() {
-//       setState(() {});
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextField(
-//       readOnly: widget.readOnly ?? false,
-//       controller: widget.controller,
-//       style: widget.textStyle ?? text20.textColorBlack,
-//       autofocus: widget.autoFocus,
-//       maxLength: widget.maxLength,
-//       obscureText: widget.obscureText ?? false,
-//       keyboardType: widget.inputType ?? TextInputType.text,
-//       decoration: InputDecoration(
-//         counterText: "",
-//         hintText: widget.hintText ?? "",
-//         hintStyle: widget.hintStyle ??
-//             widget.textStyle?.copyWith(color: getColor().hintText) ??
-//             text20.hint,
-//         suffixIconConstraints:
-//             BoxConstraints(maxWidth: 24.ws, maxHeight: 24.ws, minHeight: 24.ws),
-//         suffixIcon: widget.suffixIcon ??
-//             (widget.controller?.text != ""
-//                 ? MaterialButton(
-//                     height: 24.ws,
-//                     minWidth: 24.ws,
-//                     padding: const EdgeInsets.all(0),
-//                     onPressed: () => widget.controller?.clear(),
-//                     shape: const CircleBorder(),
-//                     child: Icon(
-//                       Icons.cancel,
-//                       size: 24.ws,
-//                       color: getColor().hintText,
-//                     ),
-//                   )
-//                 : null),
-//         prefixIcon: widget.prefixIcon,
-//         isDense: true,
-//         contentPadding: const EdgeInsets.symmetric(
-//             vertical: Dimens.verticalTextSpacing, horizontal: 0.0),
-//         enabledBorder: _underlineInputBorder(widget.strokeColor, context),
-//         focusedBorder: _underlineInputBorder(widget.strokeColor, context),
-//         border: _underlineInputBorder(widget.strokeColor, context),
-//         disabledBorder: _underlineInputBorder(widget.strokeColor, context),
-//       ),
-//     );
-//   }
-
-//   UnderlineInputBorder _underlineInputBorder(
-//       Color? strokeColor, BuildContext context) {
-//     return UnderlineInputBorder(
-//         borderSide: BorderSide(color: strokeColor ?? getColor().borderNeutral));
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 
@@ -113,6 +19,9 @@ class TextFieldWidget extends StatelessWidget {
     this.focusedBorderColor = color1F1F1F,
     this.suffix,
     this.prefix,
+    required this.validate,
+    this.readOnly = false,
+    this.onTap,
   });
   final TextEditingController controller;
   final String? label;
@@ -129,10 +38,16 @@ class TextFieldWidget extends StatelessWidget {
   final Color? enabledBorderColor;
   final Color? focusedBorderColor;
   final Widget? prefix;
+  final String? Function(String?) validate;
+  final bool readOnly;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      onTap: onTap,
+      readOnly: readOnly,
+      validator: validate,
       controller: controller,
       style: Theme.of(context).textTheme.bodyLarge,
       keyboardType: textInputType,
@@ -140,40 +55,41 @@ class TextFieldWidget extends StatelessWidget {
       enableSuggestions: enableSuggestions!,
       autocorrect: autocorrect!,
       decoration: InputDecoration(
-          fillColor: fillColor,
-          filled: filled,
-          contentPadding: EdgeInsets.all(dimensHeight() * 2),
-          labelText: label,
-          // labelStyle: Theme.of(context).textTheme.bodyLarge,
-          floatingLabelStyle: Theme.of(context)
-              .textTheme
-              .labelLarge
-              ?.copyWith(color: color1F1F1F),
-          hintText: hint,
-          hintStyle: Theme.of(context)
-              .textTheme
-              .labelLarge
-              ?.copyWith(color: colorA8B1CE),
-          errorText: error,
-          suffixIcon: suffixIcon,
-          suffix: suffix,
-          prefix: prefix,
-          border: OutlineInputBorder(
+        fillColor: fillColor,
+        filled: filled,
+        contentPadding: EdgeInsets.all(dimensHeight() * 2),
+        labelText: label,
+        // labelStyle: Theme.of(context).textTheme.bodyLarge,
+        floatingLabelStyle: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: color1F1F1F),
+        hintText: hint,
+        hintStyle: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: colorA8B1CE),
+        errorText: error,
+        suffixIcon: suffixIcon,
+        suffix: suffix,
+        prefix: prefix,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(width: 1, color: enabledBorderColor!),
+        ),
+        enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(width: 1, color: enabledBorderColor!),
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(width: 1, color: enabledBorderColor!)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(width: 1, color: focusedBorderColor!)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: const BorderSide(width: 1, color: Colors.redAccent))),
+            borderSide: BorderSide(width: 1, color: enabledBorderColor!)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(width: 1, color: focusedBorderColor!)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
+      ),
     );
   }
 }

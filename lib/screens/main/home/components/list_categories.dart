@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class ListCategories extends StatefulWidget {
   const ListCategories({
@@ -49,7 +50,7 @@ class _ListCategoriesState extends State<ListCategories> {
               ),
             ),
             child: Text(
-              AppLocalizations.of(context).translate(widget.categories[index]),
+              translate(context,widget.categories[index]),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
