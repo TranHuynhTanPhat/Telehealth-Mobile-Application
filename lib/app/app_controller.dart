@@ -11,10 +11,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/db/db_manager.dart';
-import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/res/colors.dart';
 import 'package:healthline/utils/log_data.dart';
 
@@ -62,16 +62,12 @@ class AppController {
 
     // Lấy các token được lưu tạm từ local storage
     try {
-      User user = User.fromJson(prefs.getString("user")!);
-      String? accessToken = user.accessToken;
-      String? role = user.role;
+      LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
+      String? accessToken = user.jwtToken;
       if (accessToken != null) {
         await initApi(token: accessToken);
-        if (role == 'user') {
-          authState = AuthState.authorized_user;
-        } else if (role == 'admin') {
-          authState = AuthState.authorized_admin;
-        }
+        authState = AuthState.authorized;
+        
       } else {
         await initApi();
         authState = AuthState.unauthorized;
@@ -116,4 +112,4 @@ class AppController {
   }
 }
 
-enum AuthState { unauthorized, authorized_user, authorized_admin, new_install }
+enum AuthState { unauthorized, authorized, new_install }

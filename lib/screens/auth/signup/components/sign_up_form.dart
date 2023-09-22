@@ -1,11 +1,16 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
+import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:healthline/utils/validate.dart';
+import 'package:intl/intl.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -21,6 +26,8 @@ class _SignUpFormState extends State<SignUpForm> {
   late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
   late TextEditingController _controllerConfirmPassword;
+  late TextEditingController _controllerGender;
+  late TextEditingController _controllerBirthday;
 
   bool agreeTermsAndConditions = false;
 
@@ -30,6 +37,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String? errorConfirmPassword;
   bool? errorCheckTermsAndConditons;
   bool showPassword = false;
+  List<String> genders = ['male', 'female', 'undefine'];
 
   @override
   void initState() {
@@ -37,6 +45,9 @@ class _SignUpFormState extends State<SignUpForm> {
     _controllerPhone = TextEditingController();
     _controllerPassword = TextEditingController();
     _controllerConfirmPassword = TextEditingController();
+    _controllerBirthday = TextEditingController();
+    _controllerGender = TextEditingController();
+
     super.initState();
   }
 
@@ -89,6 +100,91 @@ class _SignUpFormState extends State<SignUpForm> {
               label: translate(context, 'phone'),
               textInputType: TextInputType.phone,
               error: errorPhone,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            child: TextFieldWidget(
+              onTap: () async {
+                DateTime? date = await showDatePicker(
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    initialDatePickerMode: DatePickerMode.day,
+                    context: context,
+                    initialDate: _controllerBirthday.text.isNotEmpty
+                        ? DateFormat('dd/MM/yyyy')
+                            .parse(_controllerBirthday.text)
+                        : DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now());
+                if (date != null) {
+                  _controllerBirthday.text =
+                      // ignore: use_build_context_synchronously
+                      formatDayMonthYear(context, date);
+                }
+              },
+              readOnly: true,
+              label: translate(context, 'birthday'),
+              // hint: translate(context, 'ex_full_name'),
+              controller: _controllerBirthday,
+              validate: (value) => value!.isEmpty
+                  ? translate(context, 'please_enter_fulname')
+                  : null,
+              suffixIcon: const IconButton(
+                  onPressed: null, icon: FaIcon(FontAwesomeIcons.calendar)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            child: MenuAnchor(
+              style: MenuStyle(
+                elevation: const MaterialStatePropertyAll(10),
+                // shadowColor: MaterialStatePropertyAll(black26),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(dimensWidth() * 3),
+                  ),
+                ),
+                backgroundColor: const MaterialStatePropertyAll(white),
+                surfaceTintColor: const MaterialStatePropertyAll(white),
+                padding: MaterialStatePropertyAll(
+                    EdgeInsets.only(right: dimensWidth() * 30)),
+              ),
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
+                return TextFieldWidget(
+                  onTap: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                  readOnly: true,
+                  label: translate(context, 'gender'),
+                  // hint: translate(context, 'ex_full_name'),
+                  controller: _controllerGender,
+                  validate: (value) => value!.isEmpty
+                      ? translate(context, 'invalid_Gender')
+                      : null,
+                  suffixIcon: const IconButton(
+                      onPressed: null,
+                      icon: FaIcon(FontAwesomeIcons.caretDown)),
+                );
+              },
+              menuChildren: genders
+                  .map(
+                    (e) => MenuItemButton(
+                      style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(white)),
+                      onPressed: () => setState(() {
+                        _controllerGender.text = e;
+                      }),
+                      child: Text(
+                        translate(context, e),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
           Padding(

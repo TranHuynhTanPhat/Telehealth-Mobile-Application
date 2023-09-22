@@ -1,7 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
@@ -195,11 +194,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     splashColor: transparent,
                     highlightColor: transparent,
                     onTap: () {
-                      HapticFeedback.lightImpact();
                     },
                     child: FaIcon(
-                      FontAwesomeIcons.bell,
-                      color: color1F1F1F,
+                      FontAwesomeIcons.solidBell,
+                      color: colorDF9F1E,
                       size: dimensIcon(),
                     ),
                   ),

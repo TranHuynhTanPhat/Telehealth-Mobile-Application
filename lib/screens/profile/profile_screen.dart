@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/res/colors.dart';
-import 'package:healthline/res/dimens.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
@@ -22,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _controllerFullName;
-  late TextEditingController _controllerBirthDay;
+  late TextEditingController _controllerBirthday;
   late TextEditingController _controllerSex;
   late TextEditingController _controllerEmail;
   late TextEditingController _controllerAddress;
@@ -32,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     _controllerFullName = TextEditingController();
-    _controllerBirthDay = TextEditingController();
+    _controllerBirthday = TextEditingController();
     _controllerSex = TextEditingController();
     _controllerEmail = TextEditingController();
     _controllerAddress = TextEditingController();
@@ -60,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: CircleAvatar(
                       backgroundColor: primary,
                       backgroundImage: AssetImage(
-                        DImages.anhthe,
+                        DImages.placeholder,
                       ),
                       onBackgroundImageError: (exception, stackTrace) =>
                           AssetImage(DImages.placeholder),
@@ -127,14 +125,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         initialEntryMode: DatePickerEntryMode.calendarOnly,
                         initialDatePickerMode: DatePickerMode.day,
                         context: context,
-                        initialDate: _controllerBirthDay.text.isNotEmpty
+                        initialDate: _controllerBirthday.text.isNotEmpty
                             ? DateFormat('dd/MM/yyyy')
-                                .parse(_controllerBirthDay.text)
+                                .parse(_controllerBirthday.text)
                             : DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now());
                     if (date != null) {
-                      _controllerBirthDay.text =
+                      _controllerBirthday.text =
                           // ignore: use_build_context_synchronously
                           formatDayMonthYear(context, date);
                     }
@@ -142,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   readOnly: true,
                   label: translate(context, 'birthday'),
                   // hint: translate(context, 'ex_full_name'),
-                  controller: _controllerBirthDay,
+                  controller: _controllerBirthday,
                   validate: (value) => value!.isEmpty
                       ? translate(context, 'please_enter_fulname')
                       : null,

@@ -15,7 +15,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   final List<Map<String, dynamic>> messages = [
     {
       'dr': 'Dr. Phat',
-      'image': DImages.anhthe,
+      'image': DImages.placeholder,
       'date': DateTime.now(),
       'time': const TimeOfDay(hour: 10, minute: 0),
       "message":
@@ -32,7 +32,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
     },
     {
       'dr': 'Dr. Chien',
-      'image': DImages.anhthe,
+      'image': DImages.placeholder,
       'date': DateTime.now(),
       'time': const TimeOfDay(hour: 8, minute: 0),
       'end': const TimeOfDay(hour: 8, minute: 30),
@@ -49,7 +49,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
     },
     {
       'dr': 'Dr. Chien',
-      'image': DImages.anhthe,
+      'image': DImages.placeholder,
       'date': DateTime.now(),
       'time': const TimeOfDay(hour: 14, minute: 0),
       'message': "sdafhjsfjlsdfjalsdfj",

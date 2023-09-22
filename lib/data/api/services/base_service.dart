@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/exceptions/api_exception.dart';
@@ -16,9 +14,9 @@ abstract class BaseService {
     if (params != null) {
       response = await RestClient().getDio().get(path, queryParameters: params);
     } else {
-      log("CHECKKKKK");
+      // log("CHECKKKKK");
       response = await RestClient().getDio().get(path);
-      print(response.toString());
+      // print(response.toString());
     }
     return await _handleResponse(response);
   }

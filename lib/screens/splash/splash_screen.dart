@@ -31,8 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // // prefs.setBool('first_time', true);
 
       if (firstTime != null && !firstTime) {
-        if (AppController().authState == AuthState.authorized_user ||
-            AppController().authState == AuthState.authorized_admin) {
+        if (AppController().authState == AuthState.authorized) {
           Navigator.pushReplacementNamed(context, mainScreenName);
         } else if (AppController().authState == AuthState.unauthorized) {
           Navigator.pushReplacementNamed(context, logInName);
@@ -56,10 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
           FaIcon(
             FontAwesomeIcons.hospital,
             color: secondary,
-            size: dimensWidth()*20,
+            size: dimensWidth() * 20,
           ),
           Container(
-            padding: EdgeInsets.only(top: dimensHeight()*2),
+            padding: EdgeInsets.only(top: dimensHeight() * 2),
             width: dimensWidth() * 100,
             alignment: Alignment.center,
             child: Text(

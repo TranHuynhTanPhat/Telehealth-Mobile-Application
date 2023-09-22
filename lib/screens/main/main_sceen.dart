@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
@@ -138,7 +137,6 @@ class _MainScreenState extends State<MainScreen>
               itemBuilder: (context, index) => InkWell(
                 onTap: () => setState(() {
                   _currentIndex = index;
-                  HapticFeedback.lightImpact();
                 }),
                 splashColor: transparent,
                 highlightColor: transparent,

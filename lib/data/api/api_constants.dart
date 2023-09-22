@@ -4,9 +4,9 @@
 // CLOUDINARY
 const UPLOAD = '/upload';
 
-const LOG_IN = '/common/auth';
+const LOG_IN = '/common/user/auth';
 const SIGN_UP = '/common/user';
 
 /// Cần cookie
-const REFRESH_TOKEN = '/common/refresh';
-const LOG_OUT = '/common/auth/logout';
+const REFRESH_TOKEN = '/common/user/refresh';
+const LOG_OUT = '/common/user/logout';

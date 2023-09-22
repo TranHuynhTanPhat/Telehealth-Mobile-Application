@@ -15,7 +15,7 @@ class InfoCard extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: colorA8B1CE,
         radius: dimensWidth() * 4,
-        backgroundImage: AssetImage(DImages.anhthe),
+        backgroundImage: AssetImage(DImages.placeholder),
       ),
       title: Text(
         name,

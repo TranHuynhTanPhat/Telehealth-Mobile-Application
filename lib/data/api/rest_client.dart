@@ -6,13 +6,13 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/storage/app_storage.dart';
-import 'package:healthline/data/storage/models/user_model.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 
@@ -101,12 +101,12 @@ class RestClient {
             }
 
             /// check access token
-            User? user = await AppStorage().getUser();
-            if (user == null || user.accessToken == null) {
+            LoginResponse? user = await AppStorage().getUser();
+            if (user == null || user.jwtToken == null) {
               return handler.next(options);
             }
 
-            bool isExpired = JwtDecoder.isExpired(user.accessToken!);
+            bool isExpired = JwtDecoder.isExpired(user.jwtToken!);
 
             /// if access token expired ---> refresh token
             /// else continue
@@ -127,7 +127,7 @@ class RestClient {
                     options.headers['Authorization'] =
                         "Bearer ${response.data["jwtToken"]}";
                     AppStorage().saveUser(
-                        user: user.copyWith(accessToken: response.data));
+                        user: user.copyWith(jwtToken: response.data));
                   } else {
                     logout();
                     await getDio()
@@ -148,7 +148,7 @@ class RestClient {
                 return handler.reject(error, true);
               }
             } else {
-              options.headers['Authorization'] = "Bearer ${user.accessToken}";
+              options.headers['Authorization'] = "Bearer ${user.jwtToken}";
               return handler.next(options);
             }
           }

@@ -36,7 +36,7 @@ class DoctorCard extends StatelessWidget {
                 image: DecorationImage(
                   fit: BoxFit.fitWidth,
                   alignment: Alignment.center,
-                  image: AssetImage(DImages.anhthe),
+                  image: AssetImage(DImages.placeholder),
                 ),
 
               ),
