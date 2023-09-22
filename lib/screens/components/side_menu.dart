@@ -43,7 +43,13 @@ class _SideMenuState extends State<SideMenu> {
           Navigator.pushReplacementNamed(context, logInName);
         } else if (state is WalletActionState) {
           EasyLoading.dismiss();
-          Navigator.pushNamed(context, walletName);
+          Navigator.pushNamed(context, walletName).then(
+            (value) => setState(
+              () {
+                selectedMenu = SideMenus.home;
+              },
+            ),
+          );
         } else if (state is ProfileActionState) {
           EasyLoading.dismiss();
           Navigator.pushNamed(context, profileName).then(

@@ -13,7 +13,7 @@ class WalletCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-          vertical: dimensHeight() * 3, horizontal: dimensWidth() * 2),
+          vertical: dimensHeight() * 4, horizontal: dimensWidth() * 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(dimensWidth() * 3),
         gradient: const LinearGradient(
@@ -47,7 +47,7 @@ class WalletCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: dimensHeight() * 3, bottom: dimensHeight() * 1.5),
+                top: dimensHeight() * 3, bottom: dimensHeight() * 3),
             child: Text(
               'Tran Huynh Tan Phat',
               style: Theme.of(context)

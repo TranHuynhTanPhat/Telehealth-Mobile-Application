@@ -28,7 +28,7 @@ class OptionLogIn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              " ${translate(context,"don't_have_an_account_yet")} ",
+              " ${translate(context, "new_to_healthline")} ",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             TextButton(
@@ -52,5 +52,3 @@ class OptionLogIn extends StatelessWidget {
     );
   }
 }
-
-

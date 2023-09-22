@@ -13,7 +13,7 @@ class HeaderLogIn extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-               translate(context, 'title_login'),
+               translate(context, 'greeting'),
                 style: Theme.of(context)
                     .textTheme
                     .displayMedium

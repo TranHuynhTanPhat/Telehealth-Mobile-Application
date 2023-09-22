@@ -31,10 +31,6 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool agreeTermsAndConditions = false;
 
-  String? errorFullName;
-  String? errorPhone;
-  String? errorPassword;
-  String? errorConfirmPassword;
   bool? errorCheckTermsAndConditons;
   bool showPassword = false;
   List<String> genders = ['male', 'female', 'undefine'];
@@ -71,13 +67,12 @@ class _SignUpFormState extends State<SignUpForm> {
             child: TextFieldWidget(
               validate: (value) {
                 return _controllerFullName.text == ''
-                    ? translate(context, 'please_enter_fulname')
+                    ? translate(context, 'please_enter_full_name')
                     : null;
               },
               controller: _controllerFullName,
               label: translate(context, 'full_name'),
               hint: translate(context, 'ex_full_name'),
-              error: errorFullName,
             ),
           ),
           Padding(
@@ -99,7 +94,6 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _controllerPhone,
               label: translate(context, 'phone'),
               textInputType: TextInputType.phone,
-              error: errorPhone,
             ),
           ),
           Padding(
@@ -127,7 +121,7 @@ class _SignUpFormState extends State<SignUpForm> {
               // hint: translate(context, 'ex_full_name'),
               controller: _controllerBirthday,
               validate: (value) => value!.isEmpty
-                  ? translate(context, 'please_enter_fulname')
+                  ? translate(context, 'please_enter_full_name')
                   : null,
               suffixIcon: const IconButton(
                   onPressed: null, icon: FaIcon(FontAwesomeIcons.calendar)),
@@ -146,8 +140,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 backgroundColor: const MaterialStatePropertyAll(white),
                 surfaceTintColor: const MaterialStatePropertyAll(white),
-                padding: MaterialStatePropertyAll(
-                    EdgeInsets.only(right: dimensWidth() * 30)),
+                padding: MaterialStatePropertyAll(EdgeInsets.symmetric(
+                    horizontal: dimensWidth() * 2, vertical: dimensHeight())),
               ),
               builder: (BuildContext context, MenuController controller,
                   Widget? child) {
@@ -161,10 +155,9 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   readOnly: true,
                   label: translate(context, 'gender'),
-                  // hint: translate(context, 'ex_full_name'),
                   controller: _controllerGender,
                   validate: (value) => value!.isEmpty
-                      ? translate(context, 'invalid_Gender')
+                      ? translate(context, 'please_choose_gender')
                       : null,
                   suffixIcon: const IconButton(
                       onPressed: null,
@@ -177,7 +170,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       style: const ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(white)),
                       onPressed: () => setState(() {
-                        _controllerGender.text = e;
+                        _controllerGender.text = translate(context, e);
                       }),
                       child: Text(
                         translate(context, e),
@@ -197,7 +190,6 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _controllerPassword,
               label: translate(context, 'password'),
               obscureText: !showPassword,
-              error: errorPassword,
               suffixIcon: IconButton(
                 icon: Icon(showPassword
                     ? Icons.visibility_rounded
@@ -222,7 +214,6 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _controllerConfirmPassword,
               label: translate(context, 'confirm_password'),
               obscureText: !showPassword,
-              error: errorConfirmPassword,
               suffixIcon: IconButton(
                 icon: Icon(showPassword
                     ? Icons.visibility_rounded
