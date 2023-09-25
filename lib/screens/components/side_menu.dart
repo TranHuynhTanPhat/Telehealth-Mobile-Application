@@ -28,6 +28,14 @@ class _SideMenuState extends State<SideMenu> {
     super.initState();
   }
 
+  void comeback() {
+    setState(
+      () {
+        selectedMenu = SideMenus.home;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<SideMenuCubit, SideMenuState>(
@@ -40,25 +48,7 @@ class _SideMenuState extends State<SideMenu> {
           Navigator.pushReplacementNamed(context, logInName);
         } else if (state is ErrorActionState) {
           EasyLoading.dismiss();
-          Navigator.pushReplacementNamed(context, logInName);
-        } else if (state is WalletActionState) {
-          EasyLoading.dismiss();
-          Navigator.pushNamed(context, walletName).then(
-            (value) => setState(
-              () {
-                selectedMenu = SideMenus.home;
-              },
-            ),
-          );
-        } else if (state is ProfileActionState) {
-          EasyLoading.dismiss();
-          Navigator.pushNamed(context, profileName).then(
-            (value) => setState(
-              () {
-                selectedMenu = SideMenus.home;
-              },
-            ),
-          );
+          Navigator.pushReplacementNamed(context, errorName);
         }
       },
       child: Scaffold(
@@ -102,7 +92,9 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.edit_profile;
-                      context.read<SideMenuCubit>().navigateToProfile();
+                      Navigator.pushNamed(context, profileName).then(
+                        (value) => comeback(),
+                      );
                     });
                   },
                   isActive: selectedMenu == SideMenus.edit_profile,
@@ -113,7 +105,9 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.wallet;
-                      context.read<SideMenuCubit>().navigateToWallet();
+                      Navigator.pushNamed(context, walletName).then(
+                        (value) => comeback(),
+                      );
                     });
                   },
                   isActive: selectedMenu == SideMenus.wallet,
@@ -147,6 +141,9 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.terms_and_conditions;
+                      Navigator.pushNamed(context, termsAndConditionsName).then(
+                        (value) => comeback(),
+                      );
                     });
                   },
                   isActive: selectedMenu == SideMenus.terms_and_conditions,
@@ -181,7 +178,7 @@ class _SideMenuState extends State<SideMenu> {
                     child: ListTile(
                       onTap: () {
                         // RestClient().logout();
-                        context.read<SideMenuCubit>().logoutClick();
+                        context.read<SideMenuCubit>().logout();
                       },
                       leading: FaIcon(
                         FontAwesomeIcons.arrowRightFromBracket,

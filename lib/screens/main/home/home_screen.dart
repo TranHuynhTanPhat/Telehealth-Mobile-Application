@@ -193,12 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     splashColor: transparent,
                     highlightColor: transparent,
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: FaIcon(
                       FontAwesomeIcons.solidBell,
                       color: colorDF9F1E,
-                      size: dimensIcon(),
+                      size: dimensIcon()*.9,
                     ),
                   ),
                 )
@@ -324,6 +323,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
               ),
+              state is HomeLoading
+                  ? Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top:dimensWidth() * 3),
+                      child: const LinearProgressIndicator(),
+                    )
+                  : const SizedBox(),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: dimensWidth() * 2, horizontal: dimensWidth() * 3),
@@ -336,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                       .toList(),
                 ),
-              ),
+              )
             ],
           ),
         );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 
 class LinearProgressIndicatorLoading extends StatefulWidget {
-  const LinearProgressIndicatorLoading({super.key, required this.seconds});
-  final int seconds;
+  const LinearProgressIndicatorLoading({super.key, this.seconds});
+  final int? seconds;
 
   @override
   State<LinearProgressIndicatorLoading> createState() =>
@@ -21,7 +21,8 @@ class _LinearProgressIndicatorLoadingState
       /// [AnimationController]s can be created with `vsync: this` because of
       /// [TickerProviderStateMixin].
       vsync: this,
-      duration: Duration(seconds: widget.seconds),
+      duration:
+          widget.seconds != null ? Duration(seconds: widget.seconds!) : null,
     )..addListener(() {
         setState(() {});
       });
@@ -41,11 +42,11 @@ class _LinearProgressIndicatorLoadingState
       padding: EdgeInsets.symmetric(
           vertical: dimensHeight() * 10, horizontal: dimensWidth() * 5),
       child: const LinearProgressIndicator(
-        // color: secondary,
-        // value: controller.value,
-        // valueColor: controller
-        //     .drive(ColorTween(begin: colorCDDEFF, end: secondary)),
-      ),
+          // color: secondary,
+          // value: controller.value,
+          // valueColor: controller
+          //     .drive(ColorTween(begin: colorCDDEFF, end: secondary)),
+          ),
     );
   }
 }

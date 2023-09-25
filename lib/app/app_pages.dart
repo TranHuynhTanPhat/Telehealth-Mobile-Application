@@ -6,3 +6,4 @@ const logInName ="/log_in";
 const errorName ="/error";
 const walletName ="/wallet";
 const profileName = "/profile";
+const termsAndConditionsName = '/terms_and_conditions';

@@ -4,14 +4,14 @@ import 'package:healthline/res/colors.dart';
 
 void configLoading(context) {
   EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 5000)
+    ..displayDuration = const Duration(milliseconds: 4000)
     ..indicatorType = EasyLoadingIndicatorType.ring
     ..loadingStyle = EasyLoadingStyle.custom
     ..maskType = EasyLoadingMaskType.custom
     ..indicatorSize = 40
-    ..radius = 20.0
+    ..radius = 21.0
     ..progressColor = white
-    ..backgroundColor = colorF2F5FF
+    ..backgroundColor = secondary
     ..indicatorColor = primary
     ..textColor = white
     ..maskColor = transparent
@@ -20,8 +20,8 @@ void configLoading(context) {
     ..toastPosition = EasyLoadingToastPosition.top
     ..animationStyle = EasyLoadingAnimationStyle.scale
     ..textAlign = TextAlign.center
-    ..textStyle = Theme.of(context).textTheme.bodyLarge
-    ..contentPadding = const EdgeInsets.all(10)
+    // ..textStyle = Theme.of(context).textTheme.bodyLarge
+    ..contentPadding = const EdgeInsets.all(12)
     ..textPadding = EdgeInsets.zero
     ..animationDuration = const Duration(milliseconds: 200)
     ..customAnimation = CustomAnimation();

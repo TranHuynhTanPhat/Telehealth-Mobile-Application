@@ -2,11 +2,19 @@ import 'dart:convert';
 
 class DoctorResponse {
   String? id;
-  String? specialty;
-  String? fullName;
   String? avatar;
-
-  DoctorResponse({this.id, this.specialty, this.fullName, this.avatar});
+  String? name;
+  String? specialty;
+  double? averageRating;
+  int? reviewed;
+  DoctorResponse({
+    this.id,
+    this.avatar,
+    this.name,
+    this.specialty,
+    this.averageRating,
+    this.reviewed,
+  });
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -14,14 +22,20 @@ class DoctorResponse {
     if (id != null) {
       result.addAll({'id': id});
     }
+    if (avatar != null) {
+      result.addAll({'avatar': avatar});
+    }
+    if (name != null) {
+      result.addAll({'name': name});
+    }
     if (specialty != null) {
       result.addAll({'specialty': specialty});
     }
-    if (fullName != null) {
-      result.addAll({'fullName': fullName});
+    if (averageRating != null) {
+      result.addAll({'averageRating': averageRating});
     }
-    if (avatar != null) {
-      result.addAll({'avatar': avatar});
+    if (reviewed != null) {
+      result.addAll({'reviewed': reviewed});
     }
 
     return result;
@@ -30,9 +44,11 @@ class DoctorResponse {
   factory DoctorResponse.fromMap(Map<String, dynamic> map) {
     return DoctorResponse(
       id: map['id'],
-      specialty: map['specialty'],
-      fullName: map['fullName'],
       avatar: map['avatar'],
+      name: map['name'],
+      specialty: map['specialty'],
+      averageRating: map['averageRating']?.toDouble(),
+      reviewed: map['reviewed']?.toInt(),
     );
   }
 

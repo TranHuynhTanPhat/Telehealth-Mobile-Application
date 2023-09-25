@@ -1,14 +1,10 @@
 part of 'sign_up_cubit.dart';
 
-sealed class SignUpState extends Equatable {
+sealed class SignUpState {
   const SignUpState();
-
-  @override
-  List<Object> get props => [];
 }
 
 final class SignUpInitial extends SignUpState {}
-
 
 final class SignUpLoading extends SignUpState {}
 
@@ -22,7 +18,7 @@ final class SignUpError extends SignUpState {
 
 final class SignUpActionState extends SignUpState {}
 
-final class SignUpLoadingActionState extends SignUpActionState{}
+final class SignUpLoadingActionState extends SignUpActionState {}
 
 final class SignUpErrorActionState extends SignUpActionState {
   final String message;
@@ -33,7 +29,7 @@ final class SignUpErrorActionState extends SignUpActionState {
 final class NavigateToLogInActionState extends SignUpActionState {}
 
 final class RegisterAccountActionState extends SignUpActionState {
-  final SignUpResponse response;
+  final String message;
 
-  RegisterAccountActionState({required this.response});
+  RegisterAccountActionState({required this.message});
 }

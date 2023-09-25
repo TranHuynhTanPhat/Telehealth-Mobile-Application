@@ -12,7 +12,7 @@ class FileService extends BaseService{
       ),
       "upload_preset": request.uploadPreset,
     });
-    final response = await postUpload(UPLOAD, formData: formData);
+    final response = await postUpload(ApiConstants.UPLOAD, formData: formData);
     return ImageResponse.fromJson(response.data);
   }
 }

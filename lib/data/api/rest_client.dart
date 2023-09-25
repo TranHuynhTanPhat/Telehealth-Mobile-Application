@@ -1,5 +1,4 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, constant_identifier_names
-
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -17,8 +16,8 @@ import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 
 class RestClient {
-  static const CONNECT_TIME_OUT = 60*1000;
-  static const RECEIVE_TIME_OUT = 60*1000;
+  static const CONNECT_TIME_OUT = 60 * 1000;
+  static const RECEIVE_TIME_OUT = 60 * 1000;
   static const ENABLE_LOG = true;
   static const ACCESS_TOKEN_HEADER = 'Authorization';
   static const LANGUAGE = 'Accept-Language';
@@ -93,7 +92,6 @@ class RestClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           if (!isUpload) {
-            logPrint('NORMAL API');
             /// check path
             if (!options.path.contains('http')) {
               options.path =
@@ -113,37 +111,31 @@ class RestClient {
             /// dont rt when path contain LOG_IN or SIGN_UP or REFRESH_TOKEN or LOG_OUT
 
             if (isExpired &&
-                !options.path.contains(REFRESH_TOKEN) &&
-                !options.path.contains(LOG_OUT) &&
-                !options.path.contains(LOG_OUT) &&
-                !options.path.contains(SIGN_UP)) {
+                !options.path.contains(ApiConstants.USER_REFRESH_TOKEN) &&
+                !options.path.contains(ApiConstants.USER_LOG_IN) &&
+                !options.path.contains(ApiConstants.USER_LOG_OUT) &&
+                !options.path.contains(ApiConstants.USER)) {
               try {
                 /// refresh token if success continue
                 /// else logout
-                final response = await dio
-                    .post(dotenv.get('BASE_URL', fallback: '') + REFRESH_TOKEN);
+                final response = await dio.post(
+                    dotenv.get('BASE_URL', fallback: '') +
+                        ApiConstants.USER_REFRESH_TOKEN);
                 if (response.statusCode == 200) {
                   if (response.data != false) {
                     options.headers['Authorization'] =
                         "Bearer ${response.data["jwtToken"]}";
-                    AppStorage().saveUser(
-                        user: user.copyWith(jwtToken: response.data));
+                    AppStorage()
+                        .saveUser(user: user.copyWith(jwtToken: response.data));
                   } else {
                     logout();
-                    await getDio()
-                        .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
                   }
                 } else {
                   logout();
-                  await getDio()
-                      .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
                 }
                 return handler.next(options);
               } on DioException catch (error) {
                 logout();
-                await getDio()
-                    .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
-
                 SentryLogError().additionalMessage(error, SentryLevel.error);
                 return handler.reject(error, true);
               }
@@ -151,9 +143,9 @@ class RestClient {
               options.headers['Authorization'] = "Bearer ${user.jwtToken}";
               return handler.next(options);
             }
-          }
-          else{
-            logPrint('CLOUDINARY_API');
+          } else {
+            logPrint('CALL_CLOUDINARY_API');
+
             /// check path
             if (!options.path.contains('http')) {
               options.path =
@@ -181,12 +173,6 @@ class RestClient {
           logPrint("ERROR");
           logPrint(error.message);
           SentryLogError().additionalException("${error}REST_CLIENT");
-          // if (error.response?.statusCode == 401 ||
-          //     error.type == DioExceptionType.connectionTimeout) {
-          //   logout();
-          //   await getDio()
-          //       .delete(dotenv.get('BASE_URL', fallback: '') + LOG_OUT);
-          // }
           return handler.next(error);
         },
       ),
@@ -208,6 +194,8 @@ class RestClient {
     clearToken();
     await AppStorage().clearUser();
     await AppStorage().clearRefreshToken();
+    await getDio().delete(
+        dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
     instance.cookieJar.deleteAll();
   }
 }

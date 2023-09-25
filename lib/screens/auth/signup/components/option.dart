@@ -18,11 +18,6 @@ class OptionSignUp extends StatelessWidget {
               left: dimensWidth() * 3),
           child: const Divider(),
         ),
-        // Container(
-        //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-        //   child: const GoogleButtonWidget()
-        // ),
-        // const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

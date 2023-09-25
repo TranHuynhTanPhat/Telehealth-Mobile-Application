@@ -28,11 +28,13 @@ class _SignUpFormState extends State<SignUpForm> {
   late TextEditingController _controllerConfirmPassword;
   late TextEditingController _controllerGender;
   late TextEditingController _controllerBirthday;
+  late TextEditingController _controllerAddress;
 
   bool agreeTermsAndConditions = false;
 
   bool? errorCheckTermsAndConditons;
   bool showPassword = false;
+  String? gender;
   List<String> genders = ['male', 'female', 'undefine'];
 
   @override
@@ -43,6 +45,7 @@ class _SignUpFormState extends State<SignUpForm> {
     _controllerConfirmPassword = TextEditingController();
     _controllerBirthday = TextEditingController();
     _controllerGender = TextEditingController();
+    _controllerAddress = TextEditingController();
 
     super.initState();
   }
@@ -53,6 +56,9 @@ class _SignUpFormState extends State<SignUpForm> {
     _controllerPhone.dispose();
     _controllerPassword.dispose();
     _controllerConfirmPassword.dispose();
+    _controllerBirthday.dispose();
+    _controllerGender.dispose();
+    _controllerAddress.dispose();
     super.deactivate();
   }
 
@@ -171,6 +177,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           backgroundColor: MaterialStatePropertyAll(white)),
                       onPressed: () => setState(() {
                         _controllerGender.text = translate(context, e);
+                        gender = e;
                       }),
                       child: Text(
                         translate(context, e),
@@ -230,6 +237,14 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            child: TextFieldWidget(
+              controller: _controllerAddress,
+              label: translate(context, 'address'),
+              validate: (value) => null,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -285,9 +300,14 @@ class _SignUpFormState extends State<SignUpForm> {
                     errorCheckTermsAndConditons == true) {
                   _formKey.currentState!.save();
                   context.read<SignUpCubit>().registerAccount(
-                      _controllerFullName.text,
-                      Validate().changePhoneFormat(_controllerPhone.text),
-                      _controllerPassword.text);
+                        _controllerFullName.text,
+                        Validate().changePhoneFormat(_controllerPhone.text),
+                        _controllerPassword.text,
+                        _controllerConfirmPassword.text,
+                        gender!,
+                        _controllerBirthday.text,
+                        _controllerAddress.text,
+                      );
                 }
               },
             ),

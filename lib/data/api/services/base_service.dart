@@ -14,7 +14,6 @@ abstract class BaseService {
     if (params != null) {
       response = await RestClient().getDio().get(path, queryParameters: params);
     } else {
-      // log("CHECKKKKK");
       response = await RestClient().getDio().get(path);
       // print(response.toString());
     }
@@ -46,7 +45,10 @@ abstract class BaseService {
     switch (response.statusCode) {
       case 200:
       case 201:
-        return DataResponse(response.data['data']);
+        return DataResponse(
+            data: response.data['data'],
+            message: response.statusMessage,
+            code: response.statusCode);
       default:
         var apiResponse = ApiResponse.fromJson(response.data);
         throw ApiException(

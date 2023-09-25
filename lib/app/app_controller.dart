@@ -9,7 +9,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
@@ -58,12 +57,13 @@ class AppController {
   }
 
   Future<void> initAuth() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Lấy các token được lưu tạm từ local storage
     try {
-      LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
-      String? accessToken = user.jwtToken;
+      // LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
+      LoginResponse? user =await AppStorage().getUser();
+      String? accessToken = user?.jwtToken;
       if (accessToken != null) {
         await initApi(token: accessToken);
         authState = AuthState.authorized;
@@ -79,7 +79,7 @@ class AppController {
   }
 
   Future<void> setupLocator() async {
-    AppStorage.instance.init();
+    AppStorage().init();
     DbManager().init();
   }
 
