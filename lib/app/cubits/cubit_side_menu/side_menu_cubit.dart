@@ -2,29 +2,21 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:healthline/data/api/repositories/user_repository.dart';
+import 'package:healthline/data/api/rest_client.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'side_menu_state.dart';
 
 class SideMenuCubit extends Cubit<SideMenuState> {
   SideMenuCubit() : super(SideMenuInitial());
 
-  Future<void> logoutClick() async {
+  Future<void> logout() async {
     emit(SideMenuLoading());
     try {
-      await UserRepository().logout();
+      await RestClient().logout();
       emit(LogoutActionState());
     } catch (e) {
-      emit(ErrorActionState());
-    }
-  }
-
-  Future<void> navigateToWallet() async {
-    emit(SideMenuLoading());
-    try {
-      emit(WalletActionState());
-    } catch (e) {
-      emit(ErrorActionState());
+      logPrint(e);
     }
   }
 }

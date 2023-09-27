@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class ReportCard extends StatelessWidget {
   const ReportCard({
@@ -45,11 +46,11 @@ class ReportCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate(object['name']),
+                    translate(context,object['name']),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
-                    "10 ${AppLocalizations.of(context).translate(object['unit'])}",
+                    "10 ${translate(context,object['unit'])}",
                     style: Theme.of(context).textTheme.bodyMedium,
                   )
                 ],

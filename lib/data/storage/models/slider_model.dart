@@ -92,32 +92,32 @@ List<SliderModel> getSlides() {
   List<SliderModel> slides = [];
 
   slides.add(SliderModel(
-      fileName: "img_onboarding_1.jpg",
+      fileName: "img_onboarding_1",
       title: "Find your best specialists and clinics",
       description:
           "Doctors from all over Vietnam are always ready to provide medical advice for you."));
   slides.add(SliderModel(
-      fileName: "img_onboarding_2.jpg",
+      fileName: "img_onboarding_2",
       title: "Answer all health questions",
       description:
           "You can get answers to all your health-related questions through forums or by directly consulting with a doctor."));
   slides.add(SliderModel(
-      fileName: "img_onboarding_3.jpg",
+      fileName: "img_onboarding_3",
       title: "Schedule online appointment easily",
       description:
           "Select the specialist and make appointment throught our app."));
   slides.add(SliderModel(
-      fileName: "img_onboarding_4.jpg",
+      fileName: "img_onboarding_4",
       title: "Health service",
       description:
           "We provide a wide range of health-related services with the collaboration of doctors."));
   slides.add(SliderModel(
-      fileName: "img_onboarding_5.jpg",
+      fileName: "img_onboarding_5",
       title: "Limit direct contact",
       description:
           "This helps reduce the risk of disease transmission in crowded places like hospitals."));
   slides.add(SliderModel(
-      fileName: "img_onboarding_6.jpg",
+      fileName: "img_onboarding_6",
       title: "Security",
       description:
           "Your personal and health information will be kept highly confidential."));

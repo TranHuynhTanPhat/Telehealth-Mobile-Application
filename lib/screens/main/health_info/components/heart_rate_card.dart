@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 import 'package:lottie/lottie.dart';
 
 class HeartRateCard extends StatelessWidget {
@@ -21,7 +22,7 @@ class HeartRateCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context).translate('heart_rate'),
+                translate(context, 'heart_rate'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
@@ -31,14 +32,14 @@ class HeartRateCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate('96'),
+                    translate(context, '96'),
                     style: Theme.of(context)
                         .textTheme
                         .displayLarge
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    AppLocalizations.of(context).translate('bpm'),
+                    translate(context, 'bpm'),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],

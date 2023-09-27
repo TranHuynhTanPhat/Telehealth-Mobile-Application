@@ -3,6 +3,7 @@ import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/data/storage/models/slider_model.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/splash/components/exports.dart';
+import 'package:healthline/utils/translate.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -50,18 +51,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     alignment: Alignment.bottomRight,
                     child: TextButton(
                       child: Text(
-                        AppLocalizations.of(context).translate("skip"),
+                        translate(context, 'skip'),
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: color1F1F1F, fontWeight: FontWeight.normal),
                       ),
                       onPressed: () {
-                        // if (currentIndex == slides.length - 1) {
-                        //   Navigator.pushReplacementNamed(context, mainScreenId);
-                        // } else {
-                        //   _controller.nextPage(
-                        //       duration: const Duration(milliseconds: 100),
-                        //       curve: Curves.linear);
-                        // }
+                        Navigator.pushReplacementNamed(context, signUpName);
                       },
                     ),
                   ),
@@ -136,10 +131,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   AnimatedContainer buildDot(int index, BuildContext context) {
     return AnimatedContainer(
       height: dimensWidth(),
-      width: currentIndex == index ? dimensWidth()*2 : dimensWidth(),
+      width: currentIndex == index ? dimensWidth() * 2 : dimensWidth(),
       margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(dimensWidth()*2),
+        borderRadius: BorderRadius.circular(dimensWidth() * 2),
         color: currentIndex == index ? primary : colorCDDEFF,
       ),
       duration: const Duration(milliseconds: 500),

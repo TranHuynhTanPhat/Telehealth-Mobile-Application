@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class WalletCard extends StatelessWidget {
   const WalletCard({
@@ -12,7 +13,7 @@ class WalletCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-          vertical: dimensHeight() * 3, horizontal: dimensWidth() * 2),
+          vertical: dimensHeight() * 4, horizontal: dimensWidth() * 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(dimensWidth() * 3),
         gradient: const LinearGradient(
@@ -27,32 +28,35 @@ class WalletCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                AppLocalizations.of(context).translate('service_card'),
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: white),
-              ),
               FaIcon(
                 FontAwesomeIcons.hospital,
-                size: dimensIcon() * 1,
+                size: dimensIcon() * .5,
                 color: white,
+              ),
+              SizedBox(
+                width: dimensWidth()*.5,
+              ),
+              Text(
+                translate(context, 'Healthline'),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: white, fontWeight: FontWeight.w400, height: 0),
               ),
             ],
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: dimensHeight() * 3, bottom: dimensHeight() * 1.5),
+                top: dimensHeight() * 2, bottom: dimensHeight() * 3),
             child: Text(
               'Tran Huynh Tan Phat',
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge
-                  ?.copyWith(color: white),
+                  .headlineSmall
+                  ?.copyWith(color: white, fontWeight: FontWeight.w900),
             ),
           ),
           Row(

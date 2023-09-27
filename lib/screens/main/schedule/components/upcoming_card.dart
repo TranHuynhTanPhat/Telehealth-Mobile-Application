@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/translate.dart';
 
 class UpcomingCard extends StatelessWidget {
   const UpcomingCard({super.key, required this.object});
@@ -53,7 +54,7 @@ class UpcomingCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          AppLocalizations.of(context).translate(object['dr']),
+                          translate(context, object['dr']),
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
@@ -67,8 +68,7 @@ class UpcomingCard extends StatelessWidget {
                         SizedBox(
                           width: dimensWidth() * 30,
                           child: Text(
-                            AppLocalizations.of(context)
-                                .translate(object['specialist']),
+                            translate(context, object['specialist']),
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
@@ -100,11 +100,13 @@ class UpcomingCard extends StatelessWidget {
             child: SizedBox(
               width: dimensWidth() * 30,
               child: Text(
-                "${AppLocalizations.of(context).translate('patient')}: ${object['patient']}",
+                "${translate(context, 'patient')}: ${object['patient']}",
                 overflow: TextOverflow.visible,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color:
-                        object['status'] == 'pending' ? colorDF9F1E : secondary,),
+                      color: object['status'] == 'pending'
+                          ? colorDF9F1E
+                          : secondary,
+                    ),
               ),
             ),
           ),
@@ -166,7 +168,7 @@ class UpcomingCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate(object['status']),
+                    translate(context, object['status']),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: object['status'] == 'pending'
                             ? colorDF9F1E

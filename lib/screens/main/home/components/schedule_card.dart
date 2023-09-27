@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class ScheduleCard extends StatelessWidget {
   const ScheduleCard({super.key, required this.object});
@@ -70,8 +71,7 @@ class ScheduleCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      AppLocalizations.of(context)
-                          .translate(object['description']),
+                      translate(context,object['description']),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme

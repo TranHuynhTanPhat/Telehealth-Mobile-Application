@@ -1,17 +1,40 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/top_doctor_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
-class DoctorCard extends StatelessWidget {
+class DoctorCard extends StatefulWidget {
   const DoctorCard({
     super.key,
     required this.doctor,
   });
-  final Map<String, dynamic> doctor;
+  final TopDoctorsResponse doctor;
+
+  @override
+  State<DoctorCard> createState() => _DoctorCardState();
+}
+
+class _DoctorCardState extends State<DoctorCard> {
+  var imgVariable;
+  @override
+  void initState() {
+    imgVariable = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    imgVariable = imgVariable ??
+        NetworkImage(
+          CloudinaryContext.cloudinary
+              .image(widget.doctor.avatar ?? '')
+              .toString(),
+        );
     return Container(
       decoration: BoxDecoration(
         color: white,
@@ -24,22 +47,31 @@ class DoctorCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
             flex: 6,
             child: Container(
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(dimensWidth() * 2),
-                      topRight: Radius.circular(dimensWidth() * 2)),
-                  image: DecorationImage(
-                      fit: BoxFit.fitWidth,
-                      alignment: Alignment.center,
-                      image: AssetImage(DImages.anhthe))),
-            )
-            //  Image(image: AssetImage(DImages.placeholder),fit: BoxFit.cover,alignment: Alignment.center,)
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(dimensWidth() * 2),
+                  topRight: Radius.circular(dimensWidth() * 2),
+                ),
+                image: DecorationImage(
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    onError: (exception, stackTrace) {
+                      setState(() {
+                        imgVariable = AssetImage(DImages.placeholder);
+                      });
+                    },
+                    image: imgVariable),
+              ),
             ),
-        Expanded(
+          ),
+          Expanded(
             flex: 4,
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -50,7 +82,7 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      doctor['dr'],
+                      widget.doctor.name ?? translate(context, 'undefine'),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -58,40 +90,43 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      doctor['description'],
+                      translate(context, widget.doctor.specialty ?? 'undefine'),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                   Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          RatingBar.builder(
-                            ignoreGestures: true,
-                            initialRating: doctor['rate'],
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemSize: dimensWidth() * 1.5,
-                            itemBuilder: (context, _) => const FaIcon(
-                              FontAwesomeIcons.solidStar,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (double value) {},
+                    flex: 1,
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          ignoreGestures: true,
+                          initialRating: widget.doctor.averageRating ?? 0,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: dimensWidth() * 1.5,
+                          itemBuilder: (context, _) => const FaIcon(
+                            FontAwesomeIcons.solidStar,
+                            color: Colors.amber,
                           ),
-                          Text(
-                            "(${doctor['review']})",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          )
-                        ],
-                      )),
+                          onRatingUpdate: (double value) {},
+                        ),
+                        Text(
+                          widget.doctor.reviewed.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ))
-      ]),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

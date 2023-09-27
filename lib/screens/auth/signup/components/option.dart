@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
+import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class OptionSignUp extends StatelessWidget {
   const OptionSignUp({super.key});
@@ -17,17 +17,12 @@ class OptionSignUp extends StatelessWidget {
               left: dimensWidth() * 3),
           child: const Divider(),
         ),
-        // Container(
-        //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-        //   child: const GoogleButtonWidget()
-        // ),
-        // const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              " ${AppLocalizations.of(context).translate("already_have_an_account")} ",
+              " ${translate(context, 'already_have_an_account')} ",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             TextButton(
@@ -36,9 +31,10 @@ class OptionSignUp extends StatelessWidget {
                   EdgeInsets.all(0),
                 ),
               ),
-              onPressed: () => context.read<SignUpCubit>().navigateToLogIn(),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, logInName),
               child: Text(
-                AppLocalizations.of(context).translate("log_in"),
+                translate(context, 'log_in'),
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium

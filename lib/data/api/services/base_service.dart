@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/exceptions/api_exception.dart';
-import 'package:healthline/data/api/models/responses/base/api_respone.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 
@@ -15,6 +14,7 @@ abstract class BaseService {
       response = await RestClient().getDio().get(path, queryParameters: params);
     } else {
       response = await RestClient().getDio().get(path);
+      // print(response.toString());
     }
     return await _handleResponse(response);
   }
@@ -34,9 +34,14 @@ abstract class BaseService {
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> postUpload(String path, {data}) async {
+  Future<DataResponse> patch(String path, {data}) async {
+    final response = await RestClient().getDio().patch(path, data: data);
+    return await _handleResponse(response);
+  }
+
+  Future<DataResponse> postUpload(String path, {formData}) async {
     final response =
-        await RestClient().getDio(isUpload: true).post(path, data: data);
+        await RestClient().getDio(isUpload: true).post(path, data: formData);
     return await _handleResponse(response);
   }
 
@@ -44,9 +49,12 @@ abstract class BaseService {
     switch (response.statusCode) {
       case 200:
       case 201:
-        return DataResponse(response.data['data']);
+        return DataResponse(
+            data: response.data['data'],
+            message: response.statusMessage,
+            code: response.statusCode);
       default:
-        var apiResponse = ApiResponse.fromJson(response.data);
+        var apiResponse = ApiException.fromJson(response.data);
         throw ApiException(
           statusCode: apiResponse.statusCode,
           message: apiResponse.message,
