@@ -28,6 +28,14 @@ class _SideMenuState extends State<SideMenu> {
     super.initState();
   }
 
+  void comeback() {
+    setState(
+      () {
+        selectedMenu = SideMenus.home;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<SideMenuCubit, SideMenuState>(
@@ -40,19 +48,6 @@ class _SideMenuState extends State<SideMenu> {
           Navigator.pushReplacementNamed(context, logInName);
         } else if (state is ErrorActionState) {
           EasyLoading.dismiss();
-          Navigator.pushReplacementNamed(context, logInName);
-        } else if (state is WalletActionState) {
-          EasyLoading.dismiss();
-          Navigator.pushNamed(context, walletName);
-        } else if (state is ProfileActionState) {
-          EasyLoading.dismiss();
-          Navigator.pushNamed(context, profileName).then(
-            (value) => setState(
-              () {
-                selectedMenu = SideMenus.home;
-              },
-            ),
-          );
         }
       },
       child: Scaffold(
@@ -82,35 +77,46 @@ class _SideMenuState extends State<SideMenu> {
                         ?.copyWith(color: white),
                   ),
                 ),
+                // SideMenuTile(
+                //   press: () {
+                //     setState(() {
+                //       selectedMenu = SideMenus.home;
+                //     });
+                //   },
+                //   isActive: true,
+                //   name: translate(context, 'home'),
+                //   icon: FontAwesomeIcons.home,
+                // ),
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.home;
+                      selectedMenu = SideMenus.edit_contact_info;
+                      Navigator.pushNamed(context, contactName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.home,
-                  name: translate(context, 'home'),
-                  icon: FontAwesomeIcons.home,
-                ),
-                SideMenuTile(
-                  press: () {
-                    setState(() {
-                      selectedMenu = SideMenus.edit_profile;
-                      context.read<SideMenuCubit>().navigateToProfile();
-                    });
-                  },
-                  isActive: selectedMenu == SideMenus.edit_profile,
-                  name: translate(context, 'edit_profile'),
+                  isActive: false,
+                  name: translate(context, 'edit_contact_info'),
                   icon: FontAwesomeIcons.userGear,
                 ),
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.wallet;
-                      context.read<SideMenuCubit>().navigateToWallet();
+                      selectedMenu = SideMenus.change_password;
+                      Navigator.pushNamed(context, changePasswordName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.wallet,
+                  isActive: false,
+                  name: translate(context, 'change_password'),
+                  icon: FontAwesomeIcons.lock,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.wallet;
+                      Navigator.pushNamed(context, walletName);
+                    });
+                  },
+                  isActive: false,
                   name: translate(context, 'wallet'),
                   icon: FontAwesomeIcons.wallet,
                 ),
@@ -132,8 +138,9 @@ class _SideMenuState extends State<SideMenu> {
                     setState(() {
                       selectedMenu = SideMenus.faq;
                     });
+                    Navigator.pushNamed(context, faqsName);
                   },
-                  isActive: selectedMenu == SideMenus.faq,
+                  isActive: false,
                   name: translate(context, 'FAQ'),
                   icon: FontAwesomeIcons.circleQuestion,
                 ),
@@ -141,9 +148,10 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.terms_and_conditions;
+                      Navigator.pushNamed(context, termsAndConditionsName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.terms_and_conditions,
+                  isActive: false,
                   name: translate(context, 'terms_and_conditions'),
                   icon: FontAwesomeIcons.fileContract,
                 ),
@@ -152,8 +160,9 @@ class _SideMenuState extends State<SideMenu> {
                     setState(() {
                       selectedMenu = SideMenus.privacy_policy;
                     });
+                    Navigator.pushNamed(context, privacyPolicyName);
                   },
-                  isActive: selectedMenu == SideMenus.privacy_policy,
+                  isActive: false,
                   name: translate(context, 'privacy_policy'),
                   icon: FontAwesomeIcons.shieldHalved,
                 ),
@@ -175,7 +184,7 @@ class _SideMenuState extends State<SideMenu> {
                     child: ListTile(
                       onTap: () {
                         // RestClient().logout();
-                        context.read<SideMenuCubit>().logoutClick();
+                        context.read<SideMenuCubit>().logout();
                       },
                       leading: FaIcon(
                         FontAwesomeIcons.arrowRightFromBracket,
@@ -201,7 +210,8 @@ class _SideMenuState extends State<SideMenu> {
 
 enum SideMenus {
   home,
-  edit_profile,
+  edit_contact_info,
+  change_password,
   wallet,
   setting,
   faq,

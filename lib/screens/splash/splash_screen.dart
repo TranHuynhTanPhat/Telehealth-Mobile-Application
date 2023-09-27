@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/res/colors.dart';
-import 'package:healthline/res/dimens.dart';
+import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/linear_progress_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

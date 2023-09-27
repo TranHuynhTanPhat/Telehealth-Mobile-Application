@@ -27,9 +27,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           listener: (context, state) {
             if (state is SignUpLoadingActionState) {
               EasyLoading.show();
-            } else if (state is NavigateToLogInActionState) {
-              EasyLoading.dismiss();
-              Navigator.pushReplacementNamed(context, logInName);
             } else if (state is RegisterAccountActionState) {
               EasyLoading.dismiss();
               EasyLoading.showToast(translate(context, 'success_register'));

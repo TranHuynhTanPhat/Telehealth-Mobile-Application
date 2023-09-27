@@ -56,13 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             color: color1F1F1F, fontWeight: FontWeight.normal),
                       ),
                       onPressed: () {
-                        // if (currentIndex == slides.length - 1) {
-                        //   Navigator.pushReplacementNamed(context, mainScreenId);
-                        // } else {
-                        //   _controller.nextPage(
-                        //       duration: const Duration(milliseconds: 100),
-                        //       curve: Curves.linear);
-                        // }
+                        Navigator.pushReplacementNamed(context, signUpName);
                       },
                     ),
                   ),

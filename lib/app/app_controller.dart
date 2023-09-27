@@ -6,16 +6,16 @@ import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/res/style.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/db/db_manager.dart';
-import 'package:healthline/res/colors.dart';
+
 import 'package:healthline/utils/log_data.dart';
 
 class AppController {
@@ -58,12 +58,13 @@ class AppController {
   }
 
   Future<void> initAuth() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Lấy các token được lưu tạm từ local storage
     try {
-      LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
-      String? accessToken = user.jwtToken;
+      // LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
+      LoginResponse? user =await AppStorage().getUser();
+      String? accessToken = user?.jwtToken;
       if (accessToken != null) {
         await initApi(token: accessToken);
         authState = AuthState.authorized;
@@ -79,7 +80,7 @@ class AppController {
   }
 
   Future<void> setupLocator() async {
-    AppStorage.instance.init();
+    AppStorage().init();
     DbManager().init();
   }
 

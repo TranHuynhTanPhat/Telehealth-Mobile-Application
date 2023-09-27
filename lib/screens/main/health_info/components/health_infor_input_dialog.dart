@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
-class CustomDialog extends StatefulWidget {
-  const CustomDialog({
+class HealthInforInputDialog extends StatefulWidget {
+  const HealthInforInputDialog({
     super.key,
     required GlobalKey<FormState> formKey,
   }) : _formKey = formKey;
@@ -13,10 +14,10 @@ class CustomDialog extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
 
   @override
-  State<CustomDialog> createState() => _CustomDialogState();
+  State<HealthInforInputDialog> createState() => _HealthInforInputDialogState();
 }
 
-class _CustomDialogState extends State<CustomDialog> {
+class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
   final List<String> bloodGroup = ['a', 'b', 'ab', 'o'];
 
   late TextEditingController _controllerHeartRate;
@@ -50,7 +51,7 @@ class _CustomDialogState extends State<CustomDialog> {
         // insetPadding: EdgeInsets.all(dimensWidth() * 2),
         child: Padding(
           padding: EdgeInsets.symmetric(
-              vertical: dimensHeight() * 4, horizontal: dimensWidth() * 3),
+              vertical: dimensHeight() * 3, horizontal: dimensWidth() * 3),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -69,7 +70,11 @@ class _CustomDialogState extends State<CustomDialog> {
                             child: TextFieldWidget(
                               validate: (value) {
                                 try {
-                                  if (value!.isEmpty || int.parse(value) < 0) {
+                                  if (value!.isEmpty) {
+                                    return translate(
+                                        context, 'please_enter_age');
+                                  }
+                                  if (int.parse(value) < 0) {
                                     return translate(context, 'invalid_age');
                                   }
                                   return null;
@@ -86,18 +91,69 @@ class _CustomDialogState extends State<CustomDialog> {
                             width: dimensWidth() * 1.5,
                           ),
                           Expanded(
-                            child: TextFieldWidget(
-                              validate: (value) {
-                                if (!bloodGroup
-                                    .contains(value?.toLowerCase())) {
-                                  return translate(
-                                      context, 'invalid_blood_group');
-                                }
-                                return null;
+                            child: MenuAnchor(
+                              style: MenuStyle(
+                                elevation: const MaterialStatePropertyAll(10),
+                                // shadowColor: MaterialStatePropertyAll(black26),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        dimensWidth() * 3),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    const MaterialStatePropertyAll(white),
+                                surfaceTintColor:
+                                    const MaterialStatePropertyAll(white),
+                                padding: MaterialStatePropertyAll(
+                                    EdgeInsets.only(
+                                        right: dimensWidth() * 25,
+                                        left: dimensWidth() * 2,
+                                        top: dimensHeight(),
+                                        bottom: dimensHeight())),
+                              ),
+                              builder: (BuildContext context,
+                                  MenuController controller, Widget? child) {
+                                return TextFieldWidget(
+                                  onTap: () {
+                                    if (controller.isOpen) {
+                                      controller.close();
+                                    } else {
+                                      controller.open();
+                                    }
+                                  },
+                                  readOnly: true,
+                                  label: translate(context, 'blood_group'),
+                                  controller: _controllerBloodGroup,
+                                  validate: (value) {
+                                    if (value!.isEmpty) {
+                                      return translate(
+                                          context, 'please_choose');
+                                    }
+                                    return null;
+                                  },
+                                  suffixIcon: const IconButton(
+                                      onPressed: null,
+                                      icon: FaIcon(FontAwesomeIcons.caretDown)),
+                                );
                               },
-                              controller: _controllerBloodGroup,
-                              label: translate(context, 'blood_group'),
-                              textInputType: TextInputType.text,
+                              menuChildren: bloodGroup
+                                  .map(
+                                    (e) => MenuItemButton(
+                                      style: const ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(white)),
+                                      onPressed: () => setState(() {
+                                        _controllerBloodGroup.text =
+                                            translate(context, e).toUpperCase();
+                                      }),
+                                      child: Text(
+                                        translate(context, e).toUpperCase(),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
                         ],
@@ -108,7 +164,10 @@ class _CustomDialogState extends State<CustomDialog> {
                       child: TextFieldWidget(
                         validate: (value) {
                           try {
-                            if (value!.isEmpty || int.parse(value) <= 0) {
+                            if (value!.isEmpty) {
+                              return translate(context, 'please_enter_height');
+                            }
+                            if (int.parse(value) <= 0) {
                               return translate(context, 'invalid_height');
                             }
                             return null;
@@ -127,7 +186,10 @@ class _CustomDialogState extends State<CustomDialog> {
                       child: TextFieldWidget(
                         validate: (value) {
                           try {
-                            if (value!.isEmpty || int.parse(value) <= 0) {
+                            if (value!.isEmpty) {
+                              return translate(context, 'please_enter_weight');
+                            }
+                            if (int.parse(value) <= 0) {
                               return translate(context, 'invalid_weight');
                             }
                             return null;
@@ -146,7 +208,10 @@ class _CustomDialogState extends State<CustomDialog> {
                       child: TextFieldWidget(
                         validate: (value) {
                           try {
-                            if (value!.isEmpty || int.parse(value) <= 0) {
+                            if (value!.isEmpty) {
+                              return translate(context, 'please_enter_weight');
+                            }
+                            if (int.parse(value) <= 0) {
                               return translate(context, 'invalid_heart_rate');
                             }
                             return null;

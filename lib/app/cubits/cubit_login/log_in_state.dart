@@ -30,8 +30,6 @@ final class LogInErrorActionState extends LogInActionState {
   LogInErrorActionState({required this.message});
 }
 
-final class NavigateToSignUpActionState extends LogInActionState {}
-
 final class SignInActionState extends LogInActionState {
   final LoginResponse response;
 

@@ -34,7 +34,7 @@ class OptionCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   SizedBox(
                     width: dimensWidth() * 35,

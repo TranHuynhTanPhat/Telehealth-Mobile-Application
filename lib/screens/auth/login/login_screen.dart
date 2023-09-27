@@ -26,15 +26,12 @@ class _LogInScreenState extends State<LogInScreen> {
         listener: (context, state) {
           if (state is LogInLoadingActionState) {
             EasyLoading.show();
-          } else if (state is NavigateToSignUpActionState) {
-            EasyLoading.dismiss();
-            Navigator.pushReplacementNamed(context, signUpName);
-          } else if (state is SignInActionState) {
-            EasyLoading.dismiss();
+          }  else if (state is SignInActionState) {
+            // EasyLoading.dismiss();
             EasyLoading.showToast(translate(context, 'success_login'));
             Navigator.pushReplacementNamed(context, mainScreenName);
           } else if (state is LogInErrorActionState) {
-            EasyLoading.dismiss();
+            // EasyLoading.dismiss();
             EasyLoading.showToast(state.message);
           }
         },

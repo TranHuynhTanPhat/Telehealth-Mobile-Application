@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
-import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/bases/base_gridview.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _searchController;
-  int _selected = 0;
 
   @override
   void initState() {
@@ -30,33 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> services = [
-      {
-        'name': 'general_medical',
-        'color': color009DC7,
-        'icon': FontAwesomeIcons.briefcaseMedical,
-      },
-      {
-        'name': 'doctor',
-        'color': color1C6AA3,
-        'icon': FontAwesomeIcons.userDoctor,
-      },
-      {
-        'name': 'nurse',
-        'color': colorDF9F1E,
-        'icon': FontAwesomeIcons.userNurse,
-      },
-      {
-        'name': 'vaccination',
-        'color': color9D4B6C,
-        'icon': FontAwesomeIcons.syringe,
-      },
-      {
-        'name': 'corona',
-        'color': secondary,
-        'icon': FontAwesomeIcons.virusCovid,
-      },
-    ];
     final List<Map<String, dynamic>> appointments = [
       {
         'dr': 'Dr. Phat',
@@ -91,55 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'time': TimeOfDay.now()
       },
     ];
-    // final List<Map<String, dynamic>> doctors = [
-    //   {
-    //     'dr': 'Dr. Phat',
-    //     'description': 'Depression in Cho Ray Hopital',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    //   {
-    //     'dr': 'Dr. Nghia',
-    //     'description': 'Cardiologist in AB Hopital',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    //   {
-    //     'dr': 'Dr. Truong',
-    //     'description': 'General in BBC Hopital',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    //   {
-    //     'dr': 'Dr. Chien',
-    //     'description': 'General in AFC Clinic',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    //   {
-    //     'dr': 'Dr. An',
-    //     'description': 'Depression in Dr Hopital',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    //   {
-    //     'dr': 'Dr. Phong',
-    //     'description': 'Cardiologist in XC Clinic',
-    //     'rate': 4.5,
-    //     'review': 250
-    //   },
-    // ];
-    final List<String> categories = [
-      'all',
-      'general',
-      'dentist',
-      'cardiologist',
-      'depression',
-      'optician',
-      'audiologist',
-      'paediatric',
-      'therapist'
-    ];
+
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Scaffold(
@@ -193,12 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: InkWell(
                     splashColor: transparent,
                     highlightColor: transparent,
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: FaIcon(
                       FontAwesomeIcons.solidBell,
                       color: colorDF9F1E,
-                      size: dimensIcon(),
+                      size: dimensIcon() * .9,
                     ),
                   ),
                 )
@@ -222,10 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   enabledBorderColor: colorF2F5FF,
                   controller: _searchController,
                   suffixIcon: IconButton(
-                    onPressed: () {
-                      UserRepository _userRepository = UserRepository();
-                      _userRepository.refreshToken();
-                    },
+                    onPressed: () {},
                     icon: FaIcon(
                       FontAwesomeIcons.magnifyingGlass,
                       color: color6A6E83,
@@ -247,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ?.copyWith(color: color1F1F1F),
                 ),
               ),
-              ListServices(services: services),
+              const ListServices(),
               Padding(
                 padding: EdgeInsets.only(
                     top: dimensHeight() * 3,
@@ -304,6 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ?.copyWith(color: color1F1F1F),
                     ),
                     InkWell(
+                      onTap: () => Navigator.pushNamed(context, doctorName),
                       child: Text(
                         translate(context, 'see_all'),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -315,15 +236,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              ListCategories(
-                categories: categories,
-                selected: _selected,
-                chooseCategory: (value) {
-                  setState(() {
-                    _selected = value;
-                  });
-                },
-              ),
+              if (state is HomeLoading)
+                // LoadingItem(
+                //     widget: SizedBox(
+                //   width: double.infinity,
+                //   height: dimensHeight() * 5,
+                // )
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(top: dimensWidth() * 3),
+                    child: const LinearProgressIndicator())
+              else
+                const SizedBox(),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: dimensWidth() * 2, horizontal: dimensWidth() * 3),
@@ -336,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                       .toList(),
                 ),
-              ),
+              )
             ],
           ),
         );

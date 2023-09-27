@@ -13,10 +13,6 @@ class LogInCubit extends Cubit<LogInState> {
   LogInCubit(this._userRepository) : super(LogInInitial());
   final UserRepository _userRepository;
 
-  void navigateToSignIn() {
-    emit(NavigateToSignUpActionState());
-  }
-
   Future<void> signIn(String phone, String password) async {
     emit(LogInLoadingActionState());
     try {
@@ -26,7 +22,8 @@ class LogInCubit extends Cubit<LogInState> {
       emit(SignInActionState(response: response));
     } catch (error) {
       DioException er = error as DioException;
-      emit(LogInErrorActionState(message: er.response?.data['message']));
+      emit(LogInErrorActionState(
+          message: er.response!.data['message'].toString()));
     }
   }
 }

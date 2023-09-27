@@ -13,7 +13,13 @@ class ScheduleScreen extends StatefulWidget {
   State<ScheduleScreen> createState() => _ScheduleScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ScheduleScreenState extends State<ScheduleScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -28,8 +34,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 title: Padding(
                   padding: EdgeInsets.only(left: dimensWidth()),
                   child: Text(
-                    translate(context,'my_appointments'),
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    translate(context, 'my_appointments'),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         color: color1F1F1F, fontWeight: FontWeight.w900),
                   ),
                 ),
@@ -47,13 +53,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   unselectedLabelColor: black26,
                   tabs: [
                     Tab(
-                      text: '   ${translate(context,'upcoming')}   ',
+                      text: '   ${translate(context, 'upcoming')}   ',
                     ),
                     Tab(
-                      text: '   ${translate(context,'completed')}   ',
+                      text: '   ${translate(context, 'completed')}   ',
                     ),
                     Tab(
-                      text: '   ${translate(context,'canceled')}   ',
+                      text: '   ${translate(context, 'canceled')}   ',
                     ),
                   ],
                 ),
@@ -62,7 +68,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     padding: EdgeInsets.only(right: dimensWidth() * 3),
                     alignment: Alignment.center,
                     child: FaIcon(
-                      FontAwesomeIcons.calendarPlus,
+                      FontAwesomeIcons.plus,
                       size: dimensIcon(),
                       color: color1F1F1F,
                     ),

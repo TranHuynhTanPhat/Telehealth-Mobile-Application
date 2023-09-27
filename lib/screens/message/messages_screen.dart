@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screens/main/message/components/exports.dart';
+import 'package:healthline/screens/message/components/exports.dart';
 import 'package:healthline/utils/translate.dart';
 
 class MessagesScreen extends StatefulWidget {
@@ -69,7 +69,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 padding: EdgeInsets.only(left: dimensWidth()),
                 child: Text(
                   translate(context,'messages'),
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: color1F1F1F, fontWeight: FontWeight.w900),
                 ),
               ),
