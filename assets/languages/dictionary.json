@@ -92,8 +92,8 @@
         "en": "I agree with"
     },
     "terms_and_conditions": {
-        "vi": "Điều khoản và điều kiện",
-        "en": "Terms & conditions"
+        "vi": "Điều khoản và Điều kiện",
+        "en": "Terms & Conditions"
     },
     "create_account": {
         "vi": "Tạo tài khoản",
@@ -610,5 +610,13 @@
     "log_out": {
         "vi": "Đăng xuất",
         "en": "Log out"
+    },
+    "list_of_doctors": {
+        "vi": "Danh sách bác sĩ",
+        "en": "List of Doctors"
+    },
+    "comming_soon": {
+        "vi": "Sắp phát hành",
+        "en": "Comming soon"
     }
 }

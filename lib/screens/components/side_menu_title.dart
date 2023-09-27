@@ -30,32 +30,32 @@ class SideMenuTile extends StatelessWidget {
         // ),
         Stack(
           children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn,
-              height: dimensHeight() * 6.6,
-              width: isActive ? dimensWidth() * 35 : 0,
-              left: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.circular(dimensWidth()*2)
-                ),
-              ),
-            ),
+            // AnimatedPositioned(
+            //   duration: const Duration(milliseconds: 300),
+            //   curve: Curves.fastOutSlowIn,
+            //   height: dimensHeight() * 8,
+            //   width: isActive ? dimensWidth() * 35 : 0,
+            //   left: 0,
+            //   child: Container(
+            // decoration: BoxDecoration(
+            //   color: white,
+            //   borderRadius: BorderRadius.circular(dimensWidth()*2)
+            // ),
+            //   ),
+            // ),
             ListTile(
               onTap: press,
               leading: FaIcon(
                 icon,
-                size: dimensIcon()*.5,
-                color: isActive ? secondary : white,
+                size: dimensIcon() * .5,
+                color: white,
               ),
               title: Text(
                 name,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
-                    ?.copyWith(color: isActive ? secondary : white),
+                    ?.copyWith(color: white),
               ),
             ),
           ],

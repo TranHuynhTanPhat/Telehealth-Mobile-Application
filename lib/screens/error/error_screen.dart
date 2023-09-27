@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/dimens.dart';
+import 'package:healthline/res/style.dart';
+
 import 'package:healthline/utils/translate.dart';
 
 class ErrorScreen extends StatefulWidget {

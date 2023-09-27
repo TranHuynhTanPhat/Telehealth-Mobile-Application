@@ -48,7 +48,6 @@ class _SideMenuState extends State<SideMenu> {
           Navigator.pushReplacementNamed(context, logInName);
         } else if (state is ErrorActionState) {
           EasyLoading.dismiss();
-          Navigator.pushReplacementNamed(context, errorName);
         }
       },
       child: Scaffold(
@@ -78,26 +77,24 @@ class _SideMenuState extends State<SideMenu> {
                         ?.copyWith(color: white),
                   ),
                 ),
-                SideMenuTile(
-                  press: () {
-                    setState(() {
-                      selectedMenu = SideMenus.home;
-                    });
-                  },
-                  isActive: selectedMenu == SideMenus.home,
-                  name: translate(context, 'home'),
-                  icon: FontAwesomeIcons.home,
-                ),
+                // SideMenuTile(
+                //   press: () {
+                //     setState(() {
+                //       selectedMenu = SideMenus.home;
+                //     });
+                //   },
+                //   isActive: true,
+                //   name: translate(context, 'home'),
+                //   icon: FontAwesomeIcons.home,
+                // ),
                 SideMenuTile(
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.edit_profile;
-                      Navigator.pushNamed(context, profileName).then(
-                        (value) => comeback(),
-                      );
+                      Navigator.pushNamed(context, profileName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.edit_profile,
+                  isActive: false,
                   name: translate(context, 'edit_profile'),
                   icon: FontAwesomeIcons.userGear,
                 ),
@@ -105,12 +102,10 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.wallet;
-                      Navigator.pushNamed(context, walletName).then(
-                        (value) => comeback(),
-                      );
+                      Navigator.pushNamed(context, walletName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.wallet,
+                  isActive: false,
                   name: translate(context, 'wallet'),
                   icon: FontAwesomeIcons.wallet,
                 ),
@@ -132,8 +127,9 @@ class _SideMenuState extends State<SideMenu> {
                     setState(() {
                       selectedMenu = SideMenus.faq;
                     });
+                    Navigator.pushNamed(context, faqsName);
                   },
-                  isActive: selectedMenu == SideMenus.faq,
+                  isActive: false,
                   name: translate(context, 'FAQ'),
                   icon: FontAwesomeIcons.circleQuestion,
                 ),
@@ -141,12 +137,10 @@ class _SideMenuState extends State<SideMenu> {
                   press: () {
                     setState(() {
                       selectedMenu = SideMenus.terms_and_conditions;
-                      Navigator.pushNamed(context, termsAndConditionsName).then(
-                        (value) => comeback(),
-                      );
+                      Navigator.pushNamed(context, termsAndConditionsName);
                     });
                   },
-                  isActive: selectedMenu == SideMenus.terms_and_conditions,
+                  isActive: false,
                   name: translate(context, 'terms_and_conditions'),
                   icon: FontAwesomeIcons.fileContract,
                 ),
@@ -155,8 +149,9 @@ class _SideMenuState extends State<SideMenu> {
                     setState(() {
                       selectedMenu = SideMenus.privacy_policy;
                     });
+                    Navigator.pushNamed(context, privacyPolicyName);
                   },
-                  isActive: selectedMenu == SideMenus.privacy_policy,
+                  isActive: false,
                   name: translate(context, 'privacy_policy'),
                   icon: FontAwesomeIcons.shieldHalved,
                 ),

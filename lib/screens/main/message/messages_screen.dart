@@ -69,7 +69,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 padding: EdgeInsets.only(left: dimensWidth()),
                 child: Text(
                   translate(context,'messages'),
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: color1F1F1F, fontWeight: FontWeight.w900),
                 ),
               ),

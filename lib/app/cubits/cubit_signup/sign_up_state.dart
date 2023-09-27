@@ -26,8 +26,6 @@ final class SignUpErrorActionState extends SignUpActionState {
   SignUpErrorActionState({required this.message});
 }
 
-final class NavigateToLogInActionState extends SignUpActionState {}
-
 final class RegisterAccountActionState extends SignUpActionState {
   final String message;
 

@@ -18,6 +18,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   final _formKey = GlobalKey<FormState>();
   late AnimationController _animationController;
   late Animation<double> _animation;
+  late Animation<double> _animationIC;
 
   late bool _showUsers;
 
@@ -29,8 +30,9 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
     )..addListener(() {
         setState(() {});
       });
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.linear));
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    _animationIC =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _showUsers = false;
     super.initState();
   }
@@ -80,6 +82,12 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
       'image': DImages.placeholder,
       'role': 'con'
     },
+    {
+      'name': 'Minh',
+      'id': "dsflkadsfjldks",
+      'image': DImages.placeholder,
+      'role': 'con'
+    },
   ];
 
   Future<void> showDialogInput(BuildContext context) async {
@@ -98,12 +106,11 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              centerTitle: false,
               snap: false,
               pinned: true,
               floating: true,
               expandedHeight:
-                  dimensWidth() * 15 * _animation.value + dimensWidth() * 12,
+                  dimensHeight() * 15 * _animation.value + dimensHeight() * 12,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 expandedTitleScale: 1,
@@ -113,41 +120,46 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   scrollDirection: Axis.vertical,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: dimensWidth() * 2),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                translate(context, 'personal_health_records'),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium
-                                    ?.copyWith(
-                                        color: color1F1F1F,
-                                        fontWeight: FontWeight.w900),
-                              ),
+                      padding: EdgeInsets.only(
+                          left: dimensWidth() * 3,
+                          right: dimensWidth() * 3,
+                          top: dimensHeight() * 1.5,),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              translate(context, 'personal_health_records'),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                      color: color1F1F1F,
+                                      fontWeight: FontWeight.w900),
                             ),
-                            InkWell(
-                              child: const FaIcon(FontAwesomeIcons.rotate),
-                              onTap: () {
-                                if (_showUsers) {
-                                  _animationController.reverse();
-                                  _showUsers = false;
-                                } else {
-                                  _animationController.forward();
-                                  _showUsers = true;
-                                }
-                              },
+                          ),
+                          InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            child: AnimatedIcon(
+                              icon: AnimatedIcons.menu_close,
+                              progress: _animationIC,
+                              size: dimensIcon(),
                             ),
-                          ],
-                        ),
+                            onTap: () {
+                              if (_showUsers) {
+                                _animationController.reverse();
+                                _showUsers = false;
+                              } else {
+                                _animationController.forward();
+                                _showUsers = true;
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     AnimatedContainer(
@@ -198,7 +210,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                     ],
                   ),
                 ),
-                centerTitle: false,
               ),
             )
           ];

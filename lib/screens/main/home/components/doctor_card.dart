@@ -1,21 +1,40 @@
-import 'package:cloudinary_flutter/image/cld_image.dart';
-import 'package:cloudinary_url_gen/asset/cld_asset.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/top_doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
-class DoctorCard extends StatelessWidget {
+class DoctorCard extends StatefulWidget {
   const DoctorCard({
     super.key,
     required this.doctor,
   });
-  final DoctorResponse doctor;
+  final TopDoctorsResponse doctor;
+
+  @override
+  State<DoctorCard> createState() => _DoctorCardState();
+}
+
+class _DoctorCardState extends State<DoctorCard> {
+  var imgVariable;
+  @override
+  void initState() {
+    imgVariable = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    imgVariable = imgVariable ??
+        NetworkImage(
+          CloudinaryContext.cloudinary
+              .image(widget.doctor.avatar ?? '')
+              .toString(),
+        );
     return Container(
       decoration: BoxDecoration(
         color: white,
@@ -40,19 +59,17 @@ class DoctorCard extends StatelessWidget {
                   topLeft: Radius.circular(dimensWidth() * 2),
                   topRight: Radius.circular(dimensWidth() * 2),
                 ),
-              ),
-              child:
-                  // Image.asset(
-                  //   DImages.placeholder,
-                  //   fit: BoxFit.cover,
-                  // )
-                  CldImageWidget(
-                fit: BoxFit.fill,
-                publicId: doctor.avatar!,
-                errorBuilder: (context, url, error) => Image.asset(DImages.placeholder),
+                image: DecorationImage(
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    onError: (exception, stackTrace) {
+                      setState(() {
+                        imgVariable = AssetImage(DImages.placeholder);
+                      });
+                    },
+                    image: imgVariable),
               ),
             ),
-            //  Image(image: AssetImage(DImages.placeholder),fit: BoxFit.cover,alignment: Alignment.center,)
           ),
           Expanded(
             flex: 4,
@@ -65,7 +82,7 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      doctor.name ?? translate(context, 'undefine'),
+                      widget.doctor.name ?? translate(context, 'undefine'),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -73,7 +90,7 @@ class DoctorCard extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Text(
-                      translate(context, doctor.specialty ?? 'undefine'),
+                      translate(context, widget.doctor.specialty ?? 'undefine'),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -85,7 +102,7 @@ class DoctorCard extends StatelessWidget {
                       children: [
                         RatingBar.builder(
                           ignoreGestures: true,
-                          initialRating: doctor.averageRating ?? 0,
+                          initialRating: widget.doctor.averageRating ?? 0,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -98,7 +115,7 @@ class DoctorCard extends StatelessWidget {
                           onRatingUpdate: (double value) {},
                         ),
                         Text(
-                          doctor.reviewed.toString(),
+                          widget.doctor.reviewed.toString(),
                           style: Theme.of(context).textTheme.bodySmall,
                         )
                       ],

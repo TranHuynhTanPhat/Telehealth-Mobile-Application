@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
@@ -277,7 +278,8 @@ class _SignUpFormState extends State<SignUpForm> {
                       EdgeInsets.all(0),
                     ),
                   ),
-                  onPressed: null,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, termsAndConditionsName),
                   child: Text(
                     translate(context, 'terms_and_conditions'),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(

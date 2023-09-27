@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/app/cubits/cubit_login/log_in_cubit.dart';
+import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -37,7 +36,8 @@ class OptionLogIn extends StatelessWidget {
                   EdgeInsets.all(0),
                 ),
               ),
-              onPressed: () => context.read<LogInCubit>().navigateToSignIn(),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, signUpName),
               child: Text(
                 translate(context, 'sign_up'),
                 style: Theme.of(context)

@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-class DoctorResponse {
+class TopDoctorsResponse {
   String? id;
   String? avatar;
   String? name;
   String? specialty;
   double? averageRating;
   int? reviewed;
-  DoctorResponse({
+  TopDoctorsResponse({
     this.id,
     this.avatar,
     this.name,
@@ -41,8 +41,8 @@ class DoctorResponse {
     return result;
   }
 
-  factory DoctorResponse.fromMap(Map<String, dynamic> map) {
-    return DoctorResponse(
+  factory TopDoctorsResponse.fromMap(Map<String, dynamic> map) {
+    return TopDoctorsResponse(
       id: map['id'],
       avatar: map['avatar'],
       name: map['name'],
@@ -54,6 +54,6 @@ class DoctorResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory DoctorResponse.fromJson(String source) =>
-      DoctorResponse.fromMap(json.decode(source));
+  factory TopDoctorsResponse.fromJson(String source) =>
+      TopDoctorsResponse.fromMap(json.decode(source));
 }

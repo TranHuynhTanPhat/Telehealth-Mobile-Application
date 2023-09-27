@@ -10,10 +10,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit(this._userRepository) : super(SignUpInitial());
   final UserRepository _userRepository;
 
-  void navigateToLogIn() {
-    emit(NavigateToLogInActionState());
-  }
-
   Future<void> registerAccount(
       String fullName,
       String phone,

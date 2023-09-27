@@ -4,7 +4,7 @@ class HomeState {
   const HomeState({
     required this.doctors,
   });
-  final List<DoctorResponse> doctors;
+  final List<TopDoctorsResponse> doctors;
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -16,8 +16,8 @@ class HomeState {
 
   factory HomeState.fromMap(Map<String, dynamic> map) {
     return HomeState(
-      doctors: List<DoctorResponse>.from(
-          map['doctors']?.map((x) => DoctorResponse.fromMap(x))),
+      doctors: List<TopDoctorsResponse>.from(
+          map['doctors']?.map((x) => TopDoctorsResponse.fromMap(x))),
     );
   }
 }

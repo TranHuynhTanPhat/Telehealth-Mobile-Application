@@ -15,13 +15,13 @@ class MessageCard extends StatelessWidget {
           color: white,
           boxShadow: [
             BoxShadow(
-                color: colorA8B1CE.withOpacity(.2),
-                offset: const Offset(0, 0),
-                blurRadius: 5,
-                spreadRadius: 4)
+            color: Colors.grey.withOpacity(.1),
+            spreadRadius: dimensWidth() * .4,
+            blurRadius: dimensWidth() * .4,
+          ),
           ],
           borderRadius: BorderRadius.circular(dimensWidth() * 2),
-          border: Border.all(color: colorA8B1CE.withOpacity(.3), width: 2)),
+          border: Border.all(color: colorA8B1CE.withOpacity(.2), width: 2)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

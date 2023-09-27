@@ -2,7 +2,7 @@
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/top_doctor_response.dart';
 import 'package:healthline/data/api/repositories/doctor_repository.dart';
 import 'package:healthline/utils/log_data.dart';
 
@@ -16,7 +16,7 @@ class HomeCubit extends HydratedCubit<HomeState> {
     emit(HomeLoading(doctors: state.doctors));
 
     try {
-      List<DoctorResponse> doctors = await _doctorRepository.getDoctors();
+      List<TopDoctorsResponse> doctors = await _doctorRepository.getDoctors();
       emit(HomeInital(doctors: doctors));
     } catch (e) {
       logPrint(e.toString());
