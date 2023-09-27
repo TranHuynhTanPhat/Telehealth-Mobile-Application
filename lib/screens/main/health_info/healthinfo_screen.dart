@@ -130,7 +130,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                         children: [
                           Expanded(
                             child: Text(
-                              translate(context, 'personal_health_records'),
+                              translate(context, 'patient_records'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
@@ -180,16 +180,16 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   padding: EdgeInsets.symmetric(horizontal: dimensWidth()),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        radius: dimensWidth() * 3,
-                        backgroundColor: primary,
-                        backgroundImage: AssetImage(DImages.placeholder),
-                        onBackgroundImageError: (exception, stackTrace) =>
-                            AssetImage(DImages.placeholder),
-                      ),
-                      SizedBox(
-                        width: dimensWidth(),
-                      ),
+                      // CircleAvatar(
+                      //   radius: dimensWidth() * 2,
+                      //   backgroundColor: primary,
+                      //   backgroundImage: AssetImage(DImages.placeholder),
+                      //   onBackgroundImageError: (exception, stackTrace) =>
+                      //       AssetImage(DImages.placeholder),
+                      // ),
+                      // SizedBox(
+                      //   width: dimensWidth(),
+                      // ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -32,36 +32,49 @@ class _WalletScreenState extends State<WalletScreen> {
                 top: dimensHeight() * 4, bottom: dimensHeight() * 1.5),
             child: Text(
               translate(context, 'recharge_with'),
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           OptionCard(
             name: translate(context, 'transfer'),
             description: translate(context, 'transfer_money_through_banks'),
-            icon: FaIcon(
-              FontAwesomeIcons.moneyBillTransfer,
-              size: dimensIcon(),
-              color: colorDF9F1E,
+            icon: SizedBox(
+              width: dimensIcon(),
+              height: dimensIcon(),
+              child: FaIcon(
+                FontAwesomeIcons.moneyBillTransfer,
+                size: dimensIcon(),
+                color: colorDF9F1E,
+              ),
             ),
           ),
           OptionCard(
             name: translate(context, 'bank_card'),
             description: translate(
                 context, 'transfer_money_via_visa_master_or_bank_card'),
-            icon: FaIcon(
-              FontAwesomeIcons.creditCard,
-              size: dimensIcon(),
-              color: secondary,
+            icon: SizedBox(
+              width: dimensIcon(),
+              height: dimensIcon(),
+              child: FaIcon(
+                FontAwesomeIcons.creditCard,
+                size: dimensIcon(),
+                color: secondary,
+              ),
             ),
           ),
           OptionCard(
               name: '${translate(context, 'wallet')} Momo',
               description: translate(context, 'recharge_via_momo_application'),
-              icon: Image.asset(
-                DImages.mono,
-                scale: 1,
+              icon: SizedBox(
                 width: dimensIcon(),
                 height: dimensIcon(),
+                child: Image.asset(
+                  DImages.mono,
+                  fit: BoxFit.cover,
+                  scale: 1,
+                  width: dimensIcon(),
+                  height: dimensIcon(),
+                ),
               )),
         ],
       ),

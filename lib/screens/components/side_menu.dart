@@ -90,13 +90,24 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.edit_profile;
-                      Navigator.pushNamed(context, profileName);
+                      selectedMenu = SideMenus.edit_contact_info;
+                      Navigator.pushNamed(context, contactName);
                     });
                   },
                   isActive: false,
-                  name: translate(context, 'edit_profile'),
+                  name: translate(context, 'edit_contact_info'),
                   icon: FontAwesomeIcons.userGear,
+                ),
+                SideMenuTile(
+                  press: () {
+                    setState(() {
+                      selectedMenu = SideMenus.change_password;
+                      Navigator.pushNamed(context, changePasswordName);
+                    });
+                  },
+                  isActive: false,
+                  name: translate(context, 'change_password'),
+                  icon: FontAwesomeIcons.lock,
                 ),
                 SideMenuTile(
                   press: () {
@@ -199,7 +210,8 @@ class _SideMenuState extends State<SideMenu> {
 
 enum SideMenus {
   home,
-  edit_profile,
+  edit_contact_info,
+  change_password,
   wallet,
   setting,
   faq,

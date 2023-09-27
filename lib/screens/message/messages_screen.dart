@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screens/main/message/components/exports.dart';
+import 'package:healthline/screens/message/components/exports.dart';
 import 'package:healthline/utils/translate.dart';
 
 class MessagesScreen extends StatefulWidget {

@@ -51,7 +51,7 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 0,
               press: () {
-                EasyLoading.showToast(translate(context, 'comming_soon'));
+                EasyLoading.showToast(translate(context, 'coming_soon'));
               },
             ),
             ServiceCard(
@@ -65,14 +65,14 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 2,
               press: () {
-                EasyLoading.showToast(translate(context, 'comming_soon'));
+                EasyLoading.showToast(translate(context, 'coming_soon'));
               },
             ),
             ServiceCard(
               services: services,
               index: 3,
               press: () {
-                EasyLoading.showToast(translate(context, 'comming_soon'));
+                EasyLoading.showToast(translate(context, 'coming_soon'));
               },
             ),
           ]),

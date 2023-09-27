@@ -79,6 +79,22 @@
         "vi": "Mật khẩu",
         "en": "Password"
     },
+    "change_password": {
+        "vi": "Đổi mật khẩu",
+        "en": "Change password"
+    },
+    "old_password": {
+        "vi": "Mật khẩu cũ",
+        "en": "Old password"
+    },
+    "new_password": {
+        "vi": "Mật khẩu mới",
+        "en": "New password"
+    },
+    "confirm_new_password": {
+        "vi": "Xác thực mật khẩu mới",
+        "en": "Confirm new password"
+    },
     "relationship": {
         "vi": "Mối quan hệ",
         "en": "Relationship"
@@ -219,9 +235,9 @@
         "vi": "Cài đặt",
         "en": "Setting"
     },
-    "edit_profile": {
-        "vi": "Chỉnh sửa hồ sơ",
-        "en": "Edit profile"
+    "edit_contact_info": {
+        "vi": "Chỉnh sửa thông tin liên hệ",
+        "en": "Edit contact info"
     },
     "notification": {
         "vi": "Thông báo",
@@ -283,6 +299,10 @@
         "vi": "Cuộc hẹn sắp tới",
         "en": "Upcoming appointments"
     },
+    "coming_soon": {
+        "vi": "Sắp hoàn thành",
+        "en": "Coming soon"
+    },
     "see_all": {
         "vi": "Xem thêm",
         "en": "See all"
@@ -299,9 +319,9 @@
         "vi": "Nhận lời khuyên của các chuyên gia, bác sĩ chuyên khoa.",
         "en": "Get Expert Advice Form Specialist Doctors"
     },
-    "home": {
-        "vi": "Nhà",
-        "en": "Home"
+    "home_page": {
+        "vi": "Trang chủ",
+        "en": "Home page"
     },
     "schedule": {
         "vi": "Lịch trình",
@@ -315,9 +335,9 @@
         "vi": "Thông tin",
         "en": "Health info"
     },
-    "personal_health_records": {
-        "vi": "Hồ sơ sức khoẻ cá nhân",
-        "en": "Personal health records"
+    "patient_records": {
+        "vi": "Hồ sơ bệnh nhân",
+        "en": "Patient records"
     },
     "invalid_phone": {
         "vi": "Số điện thoại không hợp lệ",
@@ -333,7 +353,7 @@
     },
     "upcoming": {
         "vi": "Sắp tới",
-        "en": "Upcomming"
+        "en": "Upcoming"
     },
     "completed": {
         "vi": "Hoàn thành",
@@ -615,8 +635,76 @@
         "vi": "Danh sách bác sĩ",
         "en": "List of Doctors"
     },
-    "comming_soon": {
-        "vi": "Sắp phát hành",
-        "en": "Comming soon"
+    "tuberculosis": {
+        "vi": "Lao",
+        "en": "Tuberculosis"
+    },
+    "hepatitis_b": {
+        "vi": "Viêm gan B",
+        "en": "Hepatitis B"
+    },
+    "diphtheria_tetanus_pertussis": {
+        "vi": "Bạch hầu, ho gà, uốn ván",
+        "en": "Diphtheria, tetanus, pertussis"
+    },
+    "poliomyelitis": {
+        "vi": "Bại liệt",
+        "en": "Poliomyelitis"
+    },
+    "hib_diseases": {
+        "vi": "Viêm phổi, viêm màng não mủ do Hib",
+        "en": "Hib diseases"
+    },
+    "rotavirus": {
+        "vi": "Tiêu chảy do Rota Virus",
+        "en": "Rotavirus"
+    },
+    "pneumococcal_disease": {
+        "vi": "Viêm phổi, viêm màng não, viêm tai giữa do phế cầu khuẩn",
+        "en": "Pneumococcal disease"
+    },
+    "meningococcal_disease_caused_by_serogroups_b_and_c": {
+        "vi": "Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn B,C",
+        "en": "Meningococcal disease caused by serogroups B and C"
+    },
+    "influenza": {
+        "vi": "Cúm",
+        "en": "Influenza"
+    },
+    "measles": {
+        "vi": "Sởi",
+        "en": "measles"
+    },
+    "meningococcal_acwy": {
+        "vi": "Viêm màng não, nhiễm khuẩn huyết, viêm phổi do não mô cầu khuẩn A,C,W,Y",
+        "en": "Meningococcal ACWY"
+    },
+    "japanese_encephalitis": {
+        "vi": "Vắc xin phòng viêm não Nhật Bản sống giảm độc lực tái tổ hợp",
+        "en": "Japanese encephalitis"
+    },
+    "influmeasles_mumps_rubellaenza": {
+        "vi": "Sởi, Quai bị, Rubella",
+        "en": "Measles, Mumps, Rubella"
+    },
+    "varicella": {
+        "vi": "Thuỷ đậu",
+        "en": "Varicella"
+    },
+    "hepatitis_a": {
+        "vi": "Viêm gan A",
+        "en": "Hepatitis A"
+    },
+    "hepatitis_a_and_b": {
+        "vi": "Viêm gan A và B",
+        "en": "Hepatitis A and B"
+    },
+    "typhoid": {
+        "vi": "Thương hàn",
+        "en": "Typhoid"
+    },
+    "cholera": {
+        "vi": "Bệnh tả",
+        "en": "Cholera"
     }
 }

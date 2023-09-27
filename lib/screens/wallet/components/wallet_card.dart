@@ -28,32 +28,35 @@ class WalletCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                translate(context, 'service_card'),
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: white),
-              ),
               FaIcon(
                 FontAwesomeIcons.hospital,
-                size: dimensIcon() * 1,
+                size: dimensIcon() * .5,
                 color: white,
+              ),
+              SizedBox(
+                width: dimensWidth()*.5,
+              ),
+              Text(
+                translate(context, 'Healthline'),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: white, fontWeight: FontWeight.w400, height: 0),
               ),
             ],
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: dimensHeight() * 3, bottom: dimensHeight() * 3),
+                top: dimensHeight() * 2, bottom: dimensHeight() * 3),
             child: Text(
               'Tran Huynh Tan Phat',
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge
-                  ?.copyWith(color: white),
+                  .headlineSmall
+                  ?.copyWith(color: white, fontWeight: FontWeight.w900),
             ),
           ),
           Row(
