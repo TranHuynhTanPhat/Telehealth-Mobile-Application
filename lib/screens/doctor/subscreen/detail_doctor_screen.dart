@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
+import 'package:healthline/utils/translate.dart';
 
 class DetailDoctorScreen extends StatefulWidget {
   const DetailDoctorScreen({super.key});
@@ -26,9 +27,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
     imgVariable = imgVariable ??
         NetworkImage(
           CloudinaryContext.cloudinary
-              .image('healthline/avatar/oxgzmmewx1udo3un2udo')
+              .image('healthline/avatar/doctor/eoohtomji5dgvhvl2oga')
               .toString(),
         );
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: white,
@@ -44,8 +46,9 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             ),
           ),
           width: double.infinity,
-          child: const ElevatedButtonWidget(
-              text: 'Book appointment', onPressed: null)),
+          child: ElevatedButtonWidget(
+              text: translate(context, 'book_appointment_now'),
+              onPressed: null)),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -78,11 +81,11 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     dimensWidth() * 3,
                     dimensHeight(),
                   ),
-                  alignment: Alignment.center,
+                  alignment: Alignment.bottomLeft,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.white.withOpacity(0.0), white],
+                      colors: [white.withOpacity(0.0), white],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -153,7 +156,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: dimensWidth()),
                   child: Text(
-                    '3.5 (+800 feedbacks)',
+                    "3.5 (+800 ${translate(context, 'feedbacks')})",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 )
@@ -162,7 +165,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             Padding(
               padding: EdgeInsets.only(top: dimensHeight() * 3),
               child: Text(
-                'Biography',
+                translate(context, 'biography'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -173,7 +176,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             Padding(
               padding: EdgeInsets.only(top: dimensHeight() * 3),
               child: Text(
-                'Working time',
+                translate(context, 'working_time'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -184,7 +187,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             Padding(
               padding: EdgeInsets.only(top: dimensHeight() * 3),
               child: Text(
-                'Feedbacks',
+                translate(context, 'feedbacks'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),

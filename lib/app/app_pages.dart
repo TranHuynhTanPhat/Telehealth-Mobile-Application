@@ -12,3 +12,4 @@ const privacyPolicyName = '/privacy_policy';
 const doctorName = '/doctor';
 const detailDoctorName = '/detail_doctor';
 const changePasswordName = '/change_password';
+const vaccinationName = '/vaccination';

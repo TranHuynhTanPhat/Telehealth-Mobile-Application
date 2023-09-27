@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
 class DoctorCard extends StatefulWidget {
   const DoctorCard({
@@ -66,6 +67,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             CircleAvatar(
                                 radius: dimensWidth() * 4.5,
                                 backgroundImage: imgVariable,
+                                backgroundColor: white,
                                 onBackgroundImageError:
                                     (exception, stackTrace) => setState(() {
                                           imgVariable =
@@ -83,58 +85,53 @@ class _DoctorCardState extends State<DoctorCard> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
                                   Text(
                                     // ignore: prefer_interpolation_to_compose_strings
-                                    'Next Available:' +
-                                        widget.doctor['available_next'],
+                                    translate(
+                                        context, widget.doctor['specialty']),
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        child: Container(
-                                          padding: EdgeInsets.all(
-                                              dimensWidth() * .8),
-                                          decoration: const BoxDecoration(
-                                            color: primary,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                          ),
-                                          child: FaIcon(
-                                            FontAwesomeIcons.solidComment,
-                                            size: dimensIcon() * .4,
-                                            color: white,
-                                          ),
+                                  InkWell(
+                                    child: Container(
+                                      width: dimensWidth() * 17,
+                                      padding:
+                                          EdgeInsets.all(dimensWidth() * .8),
+                                      decoration: const BoxDecoration(
+                                        color: primary,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(100),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: dimensWidth(),
-                                      ),
-                                      InkWell(
-                                        child: Container(
-                                          padding: EdgeInsets.all(
-                                              dimensWidth() * .8),
-                                          decoration: const BoxDecoration(
-                                            color: primary,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(100),
-                                            ),
-                                          ),
-                                          child: FaIcon(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          FaIcon(
                                             FontAwesomeIcons.solidCalendarPlus,
                                             size: dimensIcon() * .4,
                                             color: white,
                                           ),
-                                        ),
+                                          SizedBox(
+                                            width: dimensWidth() * .3,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              translate(context,
+                                                  'book_appointment_now'),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(color: white),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),

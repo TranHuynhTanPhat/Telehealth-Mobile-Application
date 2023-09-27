@@ -69,7 +69,8 @@ class _EditContactFormState extends State<EditContactForm> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+            padding: EdgeInsets.only(
+                bottom: dimensHeight() * 3, top: dimensHeight() * 2),
             child: TextFieldWidget(
               validate: (value) {
                 return Validate().validatePhone(context, _controllerPhone.text);
@@ -207,7 +208,7 @@ class _EditContactFormState extends State<EditContactForm> {
           //   ),
           // ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: TextFieldWidget(
                 label: translate(context, 'email'),
                 hint: translate(context, 'ex_email'),
@@ -226,7 +227,7 @@ class _EditContactFormState extends State<EditContactForm> {
           //   ),
           // ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButtonWidget(

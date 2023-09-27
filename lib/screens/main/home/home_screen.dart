@@ -108,24 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: dimensWidth() * 3,
-                    left: dimensWidth(),
-                  ),
-                  child: InkWell(
-                    splashColor: transparent,
-                    highlightColor: transparent,
-                    onTap: () {},
-                    child: FaIcon(
-                      FontAwesomeIcons.solidBell,
-                      color: colorDF9F1E,
-                      size: dimensIcon() * .9,
-                    ),
-                  ),
-                )
-              ],
             ),
           ),
           body: ListView(

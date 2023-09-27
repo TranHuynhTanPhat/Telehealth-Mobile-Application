@@ -35,7 +35,7 @@ class _ListServicesState extends State<ListServices> {
         'icon': FontAwesomeIcons.syringe,
       },
       {
-        'name': 'corona',
+        'name': 'news',
         'color': color9D4B6C,
         'icon': FontAwesomeIcons.virusCovid,
       },
@@ -65,7 +65,7 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 2,
               press: () {
-                EasyLoading.showToast(translate(context, 'coming_soon'));
+                Navigator.pushNamed(context, vaccinationName);
               },
             ),
             ServiceCard(

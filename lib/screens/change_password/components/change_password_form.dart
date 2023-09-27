@@ -39,7 +39,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            padding: EdgeInsets.only(
+                bottom: dimensHeight() * 3, top: dimensHeight() * 2),
             child: TextFieldWidget(
               validate: (value) {
                 return null;
@@ -118,16 +119,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    // String avatar = _file == null
-                    //     ? 'healthline/avatar/oxgzmmewx1udo3un2udo'
-                    //     : _file!.path;
-                    // context.read<ProfileCubit>().updateUser(
-                    //     _controllerFullName.text,
-                    //     _controllerEmail.text,
-                    //     gender,
-                    //     _controllerBirthday.text,
-                    //     _controllerAddress.text,
-                    //     avatar);
                   }
                 },
               ),

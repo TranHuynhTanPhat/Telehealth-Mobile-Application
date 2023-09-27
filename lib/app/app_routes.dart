@@ -13,6 +13,7 @@ import 'package:healthline/screens/main/main_sceen.dart';
 import 'package:healthline/screens/contact/contact_screen.dart';
 import 'package:healthline/screens/splash/onboarding.dart';
 import 'package:healthline/screens/splash/splash_screen.dart';
+import 'package:healthline/screens/vaccination/vaccination_screen.dart';
 import 'package:healthline/screens/wallet/wallet_screen.dart';
 
 class AppRoute {
@@ -47,6 +48,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const DetailDoctorScreen());
       case changePasswordName:
         return MaterialPageRoute(builder: (_) => const ChangePassword());
+      case vaccinationName:
+        return MaterialPageRoute(builder: (_) => const VaccinationScreen());
       default:
         return null;
     }
