@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/widgets/shimmer_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -21,7 +22,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
       "avatar": "123",
       "name": "Drr. Phat Phut Phit",
       "specialty": "gynaecologist",
-      
       "biography":
           "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
       "averageRating": 3.6153846153846154,
@@ -31,7 +31,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
       "avatar": "123",
       "name": "Drr. Phat Phut Phit",
       "specialty": "gynaecologist",
-      
       "biography":
           "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
       "averageRating": 3.6153846153846154,
@@ -41,7 +40,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
       "avatar": "123",
       "name": "Drr. Phat Phut Phitfasdfsdfsadfsfsdfasdfasd",
       "specialty": "gynaecologist",
-      
       "biography":
           "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
       "averageRating": 3.6153846153846154,
@@ -51,7 +49,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
       "avatar": "123",
       "name": "Drr. Phat Phut Phit",
       "specialty": "gynaecologist",
-      
       "biography":
           "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
       "averageRating": 3.6153846153846154,
@@ -109,6 +106,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
               padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
               child: const ListCategories(),
             ),
+            buildShimmer(),
             ...doctors.map(
               (e) => Padding(
                 padding: EdgeInsets.only(left: dimensWidth() * 3),
@@ -124,3 +122,77 @@ class _DoctorScreenState extends State<DoctorScreen> {
         );
   }
 }
+
+Widget buildShimmer() => Padding(
+      padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(dimensWidth() * 2),
+              margin: EdgeInsets.symmetric(vertical: dimensHeight() * 1),
+              decoration: BoxDecoration(
+                color: white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(.1),
+                    spreadRadius: dimensWidth() * .4,
+                    blurRadius: dimensWidth() * .4,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(dimensWidth() * 3),
+                border:
+                    Border.all(color: colorA8B1CE.withOpacity(.2), width: 2),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            ShimmerWidget.circular(
+                                width: dimensWidth() * 9,
+                                height: dimensWidth() * 9),
+                            SizedBox(
+                              width: dimensWidth() * 2.5,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ShimmerWidget.retangular(
+                                      height: dimensHeight() * 3),
+                                  SizedBox(
+                                    height: dimensHeight() * .5,
+                                  ),
+                                  ShimmerWidget.retangular(
+                                      height: dimensHeight() * 1.5),
+                                  SizedBox(
+                                    height: dimensHeight() * .5,
+                                  ),
+                                  ShimmerWidget.retangular(
+                                    height: dimensHeight() * 3.5,
+                                    width: dimensWidth() * 17,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: dimensHeight(),
+                        ),
+                        ShimmerWidget.retangular(
+                          height: dimensHeight() * 10,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );

@@ -31,7 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         child: ListView(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          children: [
+          children: const [
             Center(
               child: Text('notification'),
             )

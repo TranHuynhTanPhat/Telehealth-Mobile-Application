@@ -63,12 +63,11 @@ class AppController {
     // Lấy các token được lưu tạm từ local storage
     try {
       // LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
-      LoginResponse? user =await AppStorage().getUser();
+      LoginResponse? user = await AppStorage().getUser();
       String? accessToken = user?.jwtToken;
       if (accessToken != null) {
         await initApi(token: accessToken);
         authState = AuthState.authorized;
-        
       } else {
         await initApi();
         authState = AuthState.unauthorized;

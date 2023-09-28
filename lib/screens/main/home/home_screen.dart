@@ -8,6 +8,7 @@ import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/bases/base_gridview.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
+import 'package:healthline/screens/widgets/shimmer_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -219,30 +220,39 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               if (state is HomeLoading)
-                // LoadingItem(
-                //     widget: SizedBox(
-                //   width: double.infinity,
-                //   height: dimensHeight() * 5,
-                // )
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: dimensWidth() * 3),
-                    child: const LinearProgressIndicator())
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: dimensWidth() * 3),
+                      child: const LinearProgressIndicator(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: dimensWidth() * 2,
+                          horizontal: dimensWidth() * 3),
+                      child: BaseGridview(
+                        children: [buildShimmer(), buildShimmer()],
+                      ),
+                    )
+                  ],
+                )
               else
-                const SizedBox(),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensWidth() * 2, horizontal: dimensWidth() * 3),
-                child: BaseGridview(
-                  children: state.doctors
-                      .map(
-                        (e) => DoctorCard(
-                          doctor: e,
-                        ),
-                      )
-                      .toList(),
-                ),
-              )
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensWidth() * 2,
+                      horizontal: dimensWidth() * 3),
+                  child: BaseGridview(children: [
+                    ...state.doctors
+                        .map(
+                          (e) => DoctorCard(
+                            doctor: e,
+                          ),
+                        )
+                        .toList(),
+                  ]),
+                )
             ],
           ),
         );
@@ -250,3 +260,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+Widget buildShimmer() => Container(
+      decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(dimensWidth() * 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(.1),
+            spreadRadius: dimensWidth() * .4,
+            blurRadius: dimensWidth() * .4,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 6,
+            child: ShimmerWidget.retangular(
+              height: double.maxFinite,
+              shapeBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(dimensWidth() * 2),
+                topRight: Radius.circular(dimensWidth() * 2),
+              )),
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: dimensWidth(), horizontal: dimensWidth() * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: ShimmerWidget.retangular(
+                      height: dimensHeight() * .5,
+                      width: dimensWidth() * 14,
+                    ),
+                  ),
+                  SizedBox(
+                    height: dimensHeight(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: ShimmerWidget.retangular(
+                      height: double.maxFinite,
+                      width: dimensWidth() * 10,
+                    ),
+                  ),
+                  SizedBox(
+                    height: dimensHeight(),
+                  ),
+                  const Expanded(
+                    flex: 3,
+                    child: ShimmerWidget.retangular(height: double.maxFinite),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
