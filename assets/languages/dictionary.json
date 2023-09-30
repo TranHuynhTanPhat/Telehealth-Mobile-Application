@@ -871,7 +871,7 @@
         "vi": "Từ tối thiểu 2 tuần",
         "en": "Minimum interval two weeks"
     },
-    "a_booster_every_three_years": {
+    "a_booster_dose_every_three_years": {
         "vi": "Tiêm 1 mũi bổ sung mỗi 3 năm",
         "en": "A booster every three years"
     },
@@ -882,6 +882,62 @@
     "single_dose_recommended_to_person_traveling_to_or_living_in_areas_at_risk_for_yellow_fever_virus": {
         "vi": "Tiêm 1 liều khi đi du lịch đến những vùng có nguy cơ cao",
         "en": "Single dose recommended to person traveling to or living in areas at risk for yellow fever virus"
+    },
+    "twelve_to_eighteen_months_old": {
+        "vi": "12 đến 18 tháng tuổi",
+        "en": "12 to 18 months old"
+    },
+    "two_to_nine_years_old": {
+        "vi": "2 đến 9 tuổi",
+        "en": "2 to 9 years old"
+    },
+    "nine_months_to_nine_years_old": {
+        "vi": "9 tháng đến 9 năm tuổi",
+        "en": "9 months to 9 years old"
+    },
+    "minimum_interval_three_months": {
+        "vi": "Từ tối thiểu 3 tháng",
+        "en": "Minimum interval three months"
+    },
+    "minimum_interval_six_months": {
+        "vi": "Từ tối thiểu 3 tháng",
+        "en": "Minimum interval three months"
+    },
+    "new_born": {
+        "vi": "Sơ sinh",
+        "en": "New born"
+    },
+    "two_months_old": {
+        "vi": "2 tháng tuổi",
+        "en": "2 months old"
+    },
+    "three_months_old": {
+        "vi": "3 tháng tuổi",
+        "en": "3 months old"
+    },
+    "four_months_old": {
+        "vi": "4 tháng tuổi",
+        "en": "4 months old"
+    },
+    "eighteen_months_old": {
+        "vi": "18 tháng tuổi",
+        "en": "18 months old"
+    },
+    "fourteen_months_old": {
+        "vi": "14 tháng tuổi",
+        "en": "14 months old"
+    },
+    "five_to_six_years_old": {
+        "vi": "5 đến 6 tuổi",
+        "en": "5 to six years old"
+    },
+    "two_to_six_months_old": {
+        "vi": "2 đến 6 tháng",
+        "en": "2 to six months old"
+    },
+    "ten_to_elevent_months_old": {
+        "vi": "10 đến 11 tháng tuổi",
+        "en": "10 to 11 months old"
     },
     "feedbacks": {
         "vi": "Nhận xét",

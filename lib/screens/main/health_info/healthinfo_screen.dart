@@ -110,7 +110,8 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
               pinned: true,
               floating: true,
               expandedHeight:
-                  dimensHeight() * 15 * _animation.value + dimensHeight() * 12,
+                  dimensHeight() * 15 * _animation.value + dimensHeight() * 15,
+                  // collapsedHeight: dimensHeight()*20,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 expandedTitleScale: 1,
@@ -180,16 +181,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   padding: EdgeInsets.symmetric(horizontal: dimensWidth()),
                   child: Row(
                     children: [
-                      // CircleAvatar(
-                      //   radius: dimensWidth() * 2,
-                      //   backgroundColor: primary,
-                      //   backgroundImage: AssetImage(DImages.placeholder),
-                      //   onBackgroundImageError: (exception, stackTrace) =>
-                      //       AssetImage(DImages.placeholder),
-                      // ),
-                      // SizedBox(
-                      //   width: dimensWidth(),
-                      // ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

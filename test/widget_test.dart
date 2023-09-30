@@ -5,9 +5,10 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:healthline/app/app_controller.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
@@ -23,10 +24,10 @@ Future<void> main() async {
   // await AppController.instance.init();
 
   test('Check ENV', () {
-    var BASE_URL = dotenv.env['BASE_URL'];
-    var SENTRY_DSN = dotenv.env['SENTRY_DSN'];
-    var CLOUDINARY_URL = dotenv.env['CLOUDINARY_URL'];
-    var CLOUDINARY_API = dotenv.env['CLOUDINARY_API'];
+    var baseUrl = dotenv.env['BASE_URL'];
+    var sentryDsn = dotenv.env['SENTRY_DSN'];
+    var cloudinaryUrl = dotenv.env['CLOUDINARY_URL'];
+    var cloudinaryApi = dotenv.env['CLOUDINARY_API'];
   });
 
   Storage storage;
