@@ -12,4 +12,5 @@ const privacyPolicyName = '/privacy_policy';
 const doctorName = '/doctor';
 const detailDoctorName = '/detail_doctor';
 const changePasswordName = '/change_password';
+const refVaccinationName = '/ref_vaccination';
 const vaccinationName = '/vaccination';

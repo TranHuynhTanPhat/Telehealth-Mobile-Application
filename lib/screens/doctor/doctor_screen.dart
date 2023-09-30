@@ -81,7 +81,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: dimensHeight() * 0,
+                  top: dimensHeight() * 1,
                   right: dimensWidth() * 3,
                   left: dimensWidth() * 3),
               child: TextFieldWidget(
@@ -92,12 +92,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 focusedBorderColor: colorF2F5FF,
                 enabledBorderColor: colorF2F5FF,
                 controller: _searchController,
-                suffixIcon: IconButton(
+                prefixIcon: IconButton(
+                  padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
                   onPressed: () {},
                   icon: FaIcon(
                     FontAwesomeIcons.magnifyingGlass,
                     color: color6A6E83,
-                    size: dimensIcon(),
+                    size: dimensIcon() * .8,
                   ),
                 ),
               ),

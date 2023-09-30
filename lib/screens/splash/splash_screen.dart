@@ -30,17 +30,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // // prefs.setBool('first_time', true);
 
-      if (firstTime != null && !firstTime) {
-        if (AppController().authState == AuthState.authorized) {
-          Navigator.pushReplacementNamed(context, mainScreenName);
-        } else if (AppController().authState == AuthState.unauthorized) {
-          Navigator.pushReplacementNamed(context, logInName);
-        }
-      } else {
-        prefs.setBool('first_time', false);
-        Navigator.pushReplacementNamed(context, onboardingName);
-      }
-      // Navigator.pushReplacementNamed(context, onboardingName);
+      // if (firstTime != null && !firstTime) {
+      //   if (AppController().authState == AuthState.authorized) {
+      //     Navigator.pushReplacementNamed(context, mainScreenName);
+      //   } else if (AppController().authState == AuthState.unauthorized) {
+      //     Navigator.pushReplacementNamed(context, logInName);
+      //   }
+      // } else {
+      //   prefs.setBool('first_time', false);
+      //   Navigator.pushReplacementNamed(context, onboardingName);
+      // }
+      Navigator.pushReplacementNamed(context, mainScreenName);
     });
   }
 

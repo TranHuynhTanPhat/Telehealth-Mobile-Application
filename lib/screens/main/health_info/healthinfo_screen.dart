@@ -1,9 +1,9 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/main/health_info/components/export.dart';
+import 'package:healthline/screens/main/health_info/components/list_record.dart';
 import 'package:healthline/utils/translate.dart';
 
 class HealthInfoScreen extends StatefulWidget {
@@ -22,47 +22,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
 
   late bool _showUsers;
 
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    )..addListener(() {
-        setState(() {});
-      });
-    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
-    _animationIC =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _showUsers = false;
-    super.initState();
-  }
-
-  final List<Map<String, dynamic>> reports = [
-    {
-      'name': 'head_circumference',
-      'color': colorDF9F1E,
-      'icon': FontAwesomeIcons.ruler,
-      'unit': 'cm'
-    },
-    {
-      'name': 'vaccination',
-      'color': color9D4B6C,
-      'icon': FontAwesomeIcons.syringe,
-      'unit': 'types'
-    },
-    {
-      'name': 'medical_record',
-      'color': color009DC7,
-      'icon': FontAwesomeIcons.solidFolder,
-      'unit': 'records'
-    },
-    {
-      'name': 'prescription',
-      'color': color1C6AA3,
-      'icon': FontAwesomeIcons.prescription,
-      'unit': 'prescriptions'
-    },
-  ];
   final List<Map<String, dynamic>> users = [
     {
       'name': 'Phat',
@@ -90,6 +49,21 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
     },
   ];
 
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )..addListener(() {
+        setState(() {});
+      });
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    _animationIC =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _showUsers = false;
+    super.initState();
+  }
+
   Future<void> showDialogInput(BuildContext context) async {
     await showDialog(
         barrierDismissible: true,
@@ -111,7 +85,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
               floating: true,
               expandedHeight:
                   dimensHeight() * 15 * _animation.value + dimensHeight() * 15,
-                  // collapsedHeight: dimensHeight()*20,
+              // collapsedHeight: dimensHeight()*20,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 expandedTitleScale: 1,
@@ -122,9 +96,10 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          left: dimensWidth() * 3,
-                          right: dimensWidth() * 3,
-                          top: dimensHeight() * 1.5,),
+                        left: dimensWidth() * 3,
+                        right: dimensWidth() * 3,
+                        top: dimensHeight() * 1.5,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,6 +123,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                             child: AnimatedIcon(
                               icon: AnimatedIcons.menu_close,
                               progress: _animationIC,
+                              color: color1F1F1F,
                               size: dimensIcon(),
                             ),
                             onTap: () {
@@ -238,13 +214,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
               SizedBox(
                 height: dimensHeight() * 2,
               ),
-              ...reports
-                  .map(
-                    (e) => ReportCard(
-                      object: e,
-                    ),
-                  )
-                  .toList(),
+              const ListRecord()
             ]),
       ),
     );

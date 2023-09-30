@@ -950,5 +950,9 @@
     "biography": {
         "vi": "Tiểu sử",
         "en": "Biography"
+    },
+    "vaccination_record": {
+        "vi": "Hồ sơ vắc xin",
+        "en": "Vaccination record"
     }
 }

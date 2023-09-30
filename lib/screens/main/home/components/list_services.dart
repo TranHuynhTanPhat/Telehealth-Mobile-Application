@@ -65,7 +65,7 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 2,
               press: () {
-                Navigator.pushNamed(context, vaccinationName);
+                Navigator.pushNamed(context, refVaccinationName);
               },
             ),
             ServiceCard(

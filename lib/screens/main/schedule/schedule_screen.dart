@@ -69,7 +69,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                     alignment: Alignment.center,
                     child: FaIcon(
                       FontAwesomeIcons.plus,
-                      size: dimensIcon(),
+                      size: dimensIcon()*.8,
                       color: color1F1F1F,
                     ),
                   )

@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    top: dimensHeight() * 4,
+                    top: dimensHeight() * 3,
                     left: dimensWidth() * 3,
                     right: dimensWidth() * 3),
                 child: TextFieldWidget(
@@ -127,12 +127,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   focusedBorderColor: colorF2F5FF,
                   enabledBorderColor: colorF2F5FF,
                   controller: _searchController,
-                  suffixIcon: IconButton(
+                  prefixIcon: IconButton(
+                    padding: EdgeInsets.symmetric(horizontal:dimensWidth()*2),
                     onPressed: () {},
                     icon: FaIcon(
                       FontAwesomeIcons.magnifyingGlass,
                       color: color6A6E83,
-                      size: dimensIcon(),
+                      size: dimensIcon()*.8,
                     ),
                   ),
                 ),

@@ -13,6 +13,7 @@ class TextFieldWidget extends StatelessWidget {
     required this.controller,
     this.error,
     this.suffixIcon,
+    this.prefixIcon,
     this.filled = false,
     this.fillColor = white,
     this.enabledBorderColor = colorA8B1CE,
@@ -32,6 +33,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool? enableSuggestions;
   final bool? autocorrect;
   final IconButton? suffixIcon;
+  final IconButton? prefixIcon;
   final Widget? suffix;
   final bool? filled;
   final Color? fillColor;
@@ -71,6 +73,7 @@ class TextFieldWidget extends StatelessWidget {
             ?.copyWith(color: colorA8B1CE),
         errorText: error,
         suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
         suffix: suffix,
         prefix: prefix,
         border: OutlineInputBorder(
