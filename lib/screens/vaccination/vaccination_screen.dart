@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_pages.dart';
+import 'package:healthline/app/cubits/cubits_export.dart';
+import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/vaccination/components/export.dart';
 import 'package:healthline/utils/translate.dart';
 
 class VaccinationScreen extends StatelessWidget {
@@ -6,14 +12,33 @@ class VaccinationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(translate(context, 'vaccination_record'))),
-      body: ListView(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        children: const [
-          
-        ],
+    return BlocProvider(
+      create: (context) => VaccinationCubit(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        extendBody: true,
+        backgroundColor: white,
+        appBar: AppBar(
+          title: Text(
+            translate(context, 'vaccination_record'),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: dimensWidth() * 3),
+              child: InkWell(
+                onTap: () => Navigator.pushNamed(context, addVaccinationName),
+                splashColor: transparent,
+                highlightColor: transparent,
+                child: FaIcon(
+                  FontAwesomeIcons.plus,
+                  color: color1F1F1F,
+                  size: dimensIcon() * .7,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: const ListInjectedVaccination(),
       ),
     );
   }

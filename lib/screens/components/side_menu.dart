@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/info_card.dart';
@@ -24,14 +23,14 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   void initState() {
-    selectedMenu = SideMenus.home;
+    selectedMenu = SideMenus.Home;
     super.initState();
   }
 
   void comeback() {
     setState(
       () {
-        selectedMenu = SideMenus.home;
+        selectedMenu = SideMenus.Home;
       },
     );
   }
@@ -60,9 +59,16 @@ class _SideMenuState extends State<SideMenu> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InfoCard(
-                  name: "Tran Huynh Tan Phat",
-                  profession: translate(context, 'patient'),
+                BlocBuilder<HealthInfoCubit, HealthInfoState>(
+                  builder: (context, state) {
+                    return InfoCard(
+                      name: state.subUsers
+                          .firstWhere((element) => element.isMainProfile!)
+                          .fullName
+                          ?? "undefine",
+                      profession: translate(context, 'patient'),
+                    );
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -90,7 +96,7 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.edit_contact_info;
+                      selectedMenu = SideMenus.EditContactInfo;
                       Navigator.pushNamed(context, contactName);
                     });
                   },
@@ -101,7 +107,7 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.change_password;
+                      selectedMenu = SideMenus.ChangePassword;
                       Navigator.pushNamed(context, changePasswordName);
                     });
                   },
@@ -112,7 +118,7 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.wallet;
+                      selectedMenu = SideMenus.Wallet;
                       Navigator.pushNamed(context, walletName);
                     });
                   },
@@ -136,18 +142,18 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.faq;
+                      selectedMenu = SideMenus.Faqs;
                     });
                     Navigator.pushNamed(context, faqsName);
                   },
                   isActive: false,
-                  name: translate(context, 'FAQ'),
+                  name: translate(context, 'FAQs'),
                   icon: FontAwesomeIcons.circleQuestion,
                 ),
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.terms_and_conditions;
+                      selectedMenu = SideMenus.TermsAndConditions;
                       Navigator.pushNamed(context, termsAndConditionsName);
                     });
                   },
@@ -158,7 +164,7 @@ class _SideMenuState extends State<SideMenu> {
                 SideMenuTile(
                   press: () {
                     setState(() {
-                      selectedMenu = SideMenus.privacy_policy;
+                      selectedMenu = SideMenus.PrivacyPolicy;
                     });
                     Navigator.pushNamed(context, privacyPolicyName);
                   },
@@ -206,15 +212,4 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
-}
-
-enum SideMenus {
-  home,
-  edit_contact_info,
-  change_password,
-  wallet,
-  setting,
-  faq,
-  terms_and_conditions,
-  privacy_policy
 }

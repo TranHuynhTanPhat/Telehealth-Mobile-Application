@@ -21,7 +21,7 @@ import 'package:healthline/utils/log_data.dart';
 class AppController {
   late PackageInfo packageInfo;
   late String deviceId;
-  AuthState authState = AuthState.unauthorized;
+  AuthState authState = AuthState.Unauthorized;
 
   // singleton
   static final AppController instance = AppController._internal();
@@ -67,14 +67,14 @@ class AppController {
       String? accessToken = user?.jwtToken;
       if (accessToken != null) {
         await initApi(token: accessToken);
-        authState = AuthState.authorized;
+        authState = AuthState.Authorized;
       } else {
         await initApi();
-        authState = AuthState.unauthorized;
+        authState = AuthState.Unauthorized;
       }
     } catch (e) {
       await initApi();
-      authState = AuthState.unauthorized;
+      authState = AuthState.Unauthorized;
     }
   }
 
@@ -112,4 +112,3 @@ class AppController {
   }
 }
 
-enum AuthState { unauthorized, authorized, new_install }

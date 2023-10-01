@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
@@ -18,7 +19,7 @@ class HealthInforInputDialog extends StatefulWidget {
 }
 
 class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
-  final List<String> bloodGroup = ['a', 'b', 'ab', 'o'];
+  final List<String> bloodGroup = BloodGroup.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerHeartRate;
   late TextEditingController _controllerBloodGroup;
@@ -146,10 +147,10 @@ class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
                                               MaterialStatePropertyAll(white)),
                                       onPressed: () => setState(() {
                                         _controllerBloodGroup.text =
-                                            translate(context, e).toUpperCase();
+                                            translate(context, e);
                                       }),
                                       child: Text(
-                                        translate(context, e).toUpperCase(),
+                                        translate(context, e),
                                       ),
                                     ),
                                   )
@@ -227,8 +228,8 @@ class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8),
-                      child: ElevatedButton(
-                        child: Text(translate(context, 'update_information')),
+                      child: ElevatedButtonWidget(
+                        text:translate(context, 'update_information'),
                         onPressed: () {
                           if (widget._formKey.currentState!.validate()) {
                             widget._formKey.currentState!.save();

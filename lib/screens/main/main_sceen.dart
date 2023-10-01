@@ -5,8 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
-import 'package:healthline/app/cubits/cubit_side_menu/side_menu_cubit.dart';
+import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/components/side_menu.dart';
 import 'package:healthline/screens/main/health_info/healthinfo_screen.dart';
@@ -54,7 +53,7 @@ class _MainScreenState extends State<MainScreen>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-    _homeCubit.fetchData();
+    // _homeCubit.fetchData();
     super.initState();
   }
 
@@ -109,6 +108,9 @@ class _MainScreenState extends State<MainScreen>
         BlocProvider(
           create: (context) => _homeCubit,
         ),
+        BlocProvider(
+          create: (context) => HealthInfoCubit(),
+        )
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,

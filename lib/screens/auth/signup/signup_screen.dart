@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/app/cubits/cubit_signup/sign_up_cubit.dart';
+import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/auth/signup/components/exports.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/main/health_info/components/export.dart';
 import 'package:healthline/screens/main/health_info/components/subuser_input_dialog.dart';
@@ -10,7 +11,7 @@ class ListSubUser extends StatefulWidget {
     required this.users,
   });
 
-  final List<Map<String, dynamic>> users;
+  final List<UserResponse> users;
 
   @override
   State<ListSubUser> createState() => _ListSubUserState();

@@ -19,6 +19,10 @@
         "vi": "Huỷ",
         "en": "Cancel"
     },
+    "save": {
+        "vi": "Lưu",
+        "en": "Save"
+    },
     "log_in": {
         "vi": "Đăng nhập",
         "en": "Log in"
@@ -242,6 +246,10 @@
     "edit_contact_info": {
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
+    },
+    "add_vaccination": {
+        "vi": "Thêm vắc xin",
+        "en": "Add vaccination"
     },
     "notification": {
         "vi": "Thông báo",
@@ -540,12 +548,16 @@
         "en": "Head circumference"
     },
     "children": {
-        "vi": "Trẻ",
+        "vi": "Con",
         "en": "Children"
     },
     "child": {
         "vi": "Con",
         "en": "Child"
+    },
+    "sibling": {
+        "vi": "Anh/Chị",
+        "en": "Sibling"
     },
     "parent": {
         "vi": "Ba/mẹ",
@@ -767,6 +779,10 @@
         "vi": "Cách mũi gần nhất",
         "en": "From last dose"
     },
+    "day_of_last_dose": {
+        "vi": "Thời gian tiêm mũi cuối",
+        "en": "Day of last dose"
+    },
     "women_should_receive_the_vaccine_at_least_three_month_before_getting_pregnant": {
         "vi": "Phụ nữ hoàn tất lịch tiêm trước khi mang thai tối thiểu 3 tháng",
         "en": "Women should receive the vaccine at least 3 month before getting pregnant"
@@ -938,6 +954,10 @@
     "ten_to_elevent_months_old": {
         "vi": "10 đến 11 tháng tuổi",
         "en": "10 to 11 months old"
+    },
+    "how_many_doses_have_you_received": {
+        "vi": "Số mũi bạn đã tiêm?",
+        "en": "How many doses have you received?"
     },
     "profile": {
         "vi": "Hồ sơ",

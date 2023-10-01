@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/repositories/base_repository.dart';
 import 'package:healthline/data/api/services/user_service.dart';
 
@@ -43,6 +44,10 @@ class UserRepository extends BaseRepository {
         address: address,
         email: email);
     return await _userService.updateAccount(request);
+  }
+
+  Future<List<UserResponse>> fetchProfile() async{
+    return await _userService.profile();
   }
 
   Future<void> refreshToken() async {

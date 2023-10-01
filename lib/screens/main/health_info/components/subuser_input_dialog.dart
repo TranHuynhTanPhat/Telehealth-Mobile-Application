@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
@@ -20,9 +21,8 @@ class SubUserInputDialog extends StatefulWidget {
 }
 
 class _SubUserInputDialogState extends State<SubUserInputDialog> {
-  final List<String> bloodGroup = ['a', 'b', 'ab', 'o'];
-  List<String> genders = ['Male', 'Female'];
-  List<String> relationships = ['Children', 'Parent', 'Grandparent', 'Sibling'];
+  List<String> genders = Gender.values.map((e) => e.name).toList();
+  List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerRelationship;
   late TextEditingController _controllerFullname;
@@ -189,7 +189,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                             translate(context, e);
                                       }),
                                       child: Text(
-                                        translate(context, e),
+                                        translate(context, e.toLowerCase()),
                                       ),
                                     ),
                                   )
@@ -253,7 +253,10 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                             translate(context, e.toLowerCase());
                                       }),
                                       child: Text(
-                                        translate(context, translate(context,e.toLowerCase())),
+                                        translate(
+                                            context,
+                                            translate(
+                                                context, e.toLowerCase())),
                                       ),
                                     ),
                                   )
@@ -265,8 +268,8 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8),
-                      child: ElevatedButton(
-                        child: Text(translate(context, 'add_member')),
+                      child: ElevatedButtonWidget(
+                        text:translate(context, 'add_member'),
                         onPressed: () {
                           if (widget._formKey.currentState!.validate()) {
                             widget._formKey.currentState!.save();

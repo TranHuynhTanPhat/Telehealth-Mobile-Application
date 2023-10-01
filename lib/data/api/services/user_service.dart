@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -31,9 +32,13 @@ class UserService extends BaseService {
     final response = await patch(ApiConstants.USER, data: jsonRequest);
     return response.code;
   }
-  Future<int?> profile() async {
+
+  Future<List<UserResponse>> profile() async {
     final response = await get(ApiConstants.PROFILE);
-    return response.code;
+    List<UserResponse> userResponse = response.data
+        .map<UserResponse>((e) => UserResponse.fromMap(e))
+        .toList();
+    return userResponse;
   }
 
   Future<void> refreshToken() async {

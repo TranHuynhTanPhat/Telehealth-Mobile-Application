@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_pages.dart';
-import 'package:healthline/app/cubits/cubit_home/home_cubit.dart';
+import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/bases/base_gridview.dart';
 import 'package:healthline/screens/main/home/components/export.dart';
@@ -85,12 +85,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         .titleMedium
                         ?.copyWith(color: color6A6E83),
                   ),
-                  Text(
-                    'Tran Huynh Tan Phat',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: color1F1F1F),
+                  BlocBuilder<HealthInfoCubit, HealthInfoState>(
+                    builder: (context, state) {
+                      return Text(
+                        state.subUsers
+                                .firstWhere((element) => element.isMainProfile!)
+                                .fullName ??
+                            translate(context, 'undefine'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: color1F1F1F),
+                      );
+                    },
                   )
                 ],
               ),
@@ -128,12 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   enabledBorderColor: colorF2F5FF,
                   controller: _searchController,
                   prefixIcon: IconButton(
-                    padding: EdgeInsets.symmetric(horizontal:dimensWidth()*2),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
                     onPressed: () {},
                     icon: FaIcon(
                       FontAwesomeIcons.magnifyingGlass,
                       color: color6A6E83,
-                      size: dimensIcon()*.8,
+                      size: dimensIcon() * .8,
                     ),
                   ),
                 ),

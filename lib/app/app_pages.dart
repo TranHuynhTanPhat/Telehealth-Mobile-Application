@@ -14,3 +14,4 @@ const detailDoctorName = '/detail_doctor';
 const changePasswordName = '/change_password';
 const refVaccinationName = '/ref_vaccination';
 const vaccinationName = '/vaccination';
+const addVaccinationName = '/add_vaccination';

@@ -19,10 +19,11 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      
       onPressed: widget.onPressed,
       style: ButtonStyle(
         padding: MaterialStatePropertyAll(
-          EdgeInsets.symmetric(vertical: dimensHeight() * 2),
+          EdgeInsets.symmetric(vertical: dimensHeight() * 2, horizontal: dimensWidth()*2.5),
         ),
         backgroundColor: const MaterialStatePropertyAll(primary),
       ),

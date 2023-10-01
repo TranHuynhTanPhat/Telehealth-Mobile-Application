@@ -41,7 +41,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool showPassword = false;
   String? gender;
   int _currentStep = 0;
-  List<String> genders = ['Male', 'Female'];
+  List<String> genders = Gender.values.map((e) => e.name).toList();
 
   @override
   void initState() {
@@ -240,6 +240,8 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     ElevatedButton(
+                      style: const ButtonStyle(
+                          shadowColor: MaterialStatePropertyAll(white)),
                       onPressed: _currentStep < 2
                           ? () => setState(() {
                                 _currentStep += 1;
@@ -304,6 +306,8 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     ElevatedButton(
+                      style: const ButtonStyle(
+                          shadowColor: MaterialStatePropertyAll(white)),
                       onPressed: _currentStep < 2
                           ? () => setState(() {
                                 _currentStep += 1;
