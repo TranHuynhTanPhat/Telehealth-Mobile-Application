@@ -14,32 +14,35 @@ class VaccinationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => VaccinationCubit(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        extendBody: true,
-        backgroundColor: white,
-        appBar: AppBar(
-          title: Text(
-            translate(context, 'vaccination_record'),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: dimensWidth() * 3),
-              child: InkWell(
-                onTap: () => Navigator.pushNamed(context, addVaccinationName),
-                splashColor: transparent,
-                highlightColor: transparent,
-                child: FaIcon(
-                  FontAwesomeIcons.plus,
-                  color: color1F1F1F,
-                  size: dimensIcon() * .7,
+      child: Builder(builder: (context) {
+        context.read<VaccinationCubit>().fetchData();
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          extendBody: true,
+          backgroundColor: white,
+          appBar: AppBar(
+            title: Text(
+              translate(context, 'vaccination_record'),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: dimensWidth() * 3),
+                child: InkWell(
+                  onTap: () => Navigator.pushNamed(context, addVaccinationName),
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  child: FaIcon(
+                    FontAwesomeIcons.plus,
+                    color: color1F1F1F,
+                    size: dimensIcon() * .7,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        body: const ListInjectedVaccination(),
-      ),
+            ],
+          ),
+          body: const ListInjectedVaccination(),
+        );
+      }),
     );
   }
 }

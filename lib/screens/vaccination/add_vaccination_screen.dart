@@ -165,6 +165,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             onOpen: () {
                               setState(() {
                                 _dose = null;
+                                _currentStep = 0;
                                 _controllerDayOfLastDose.text = '';
                               });
                             },
@@ -188,8 +189,6 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                   vertical: dimensHeight(),
                                 ),
                               ),
-                              // minimumSize: MaterialStatePropertyAll(
-                              //     Size(dimensWidth() * 30, dimensHeight() * 50)),
                               maximumSize: MaterialStatePropertyAll(
                                 Size(dimensWidth() * 40, dimensHeight() * 55),
                               ),
@@ -225,6 +224,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                           translate(context, e.dose.toString());
                                       setState(() {
                                         _dose = e.dose;
+                                        _injectedDose=1;
                                       });
                                     }),
                                     child: Container(

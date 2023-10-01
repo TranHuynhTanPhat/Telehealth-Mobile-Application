@@ -62,7 +62,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   snap: false,
                   pinned: true,
                   floating: true,
-                  expandedHeight: dimensHeight() * 15 * _animation.value +
+                  expandedHeight: dimensHeight() * 17 * _animation.value +
                       dimensHeight() * 14,
                   // collapsedHeight: dimensHeight()*20,
                   flexibleSpace: FlexibleSpaceBar(
