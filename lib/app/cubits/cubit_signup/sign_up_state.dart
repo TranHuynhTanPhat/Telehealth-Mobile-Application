@@ -22,8 +22,9 @@ final class SignUpLoadingActionState extends SignUpActionState {}
 
 final class SignUpErrorActionState extends SignUpActionState {
   final String message;
+  final int? code;
 
-  SignUpErrorActionState({required this.message});
+  SignUpErrorActionState({required this.code, required this.message});
 }
 
 final class RegisterAccountActionState extends SignUpActionState {

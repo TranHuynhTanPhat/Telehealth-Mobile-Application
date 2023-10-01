@@ -132,7 +132,7 @@ class _EditContactFormState extends State<EditContactForm> {
           //     // hint: translate(context, 'ex_full_name'),
           //     controller: _controllerBirthday,
           //     validate: (value) => value!.isEmpty
-          //         ? translate(context, 'please_choose_birthday')
+          //         ? translate(context, 'please_choose_day_of_birth')
           //         : null,
           //     suffixIcon: const IconButton(
           //         onPressed: null,

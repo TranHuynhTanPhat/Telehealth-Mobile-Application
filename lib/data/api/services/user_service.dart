@@ -31,6 +31,10 @@ class UserService extends BaseService {
     final response = await patch(ApiConstants.USER, data: jsonRequest);
     return response.code;
   }
+  Future<int?> profile() async {
+    final response = await get(ApiConstants.PROFILE);
+    return response.code;
+  }
 
   Future<void> refreshToken() async {
     await post(baseUrl + ApiConstants.USER_REFRESH_TOKEN);

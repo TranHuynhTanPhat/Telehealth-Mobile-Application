@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/linear_progress_indicator.dart';
@@ -30,17 +30,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // // prefs.setBool('first_time', true);
 
-      // if (firstTime != null && !firstTime) {
-      //   if (AppController().authState == AuthState.authorized) {
-      //     Navigator.pushReplacementNamed(context, mainScreenName);
-      //   } else if (AppController().authState == AuthState.unauthorized) {
-      //     Navigator.pushReplacementNamed(context, logInName);
-      //   }
-      // } else {
-      //   prefs.setBool('first_time', false);
-      //   Navigator.pushReplacementNamed(context, onboardingName);
-      // }
-      Navigator.pushReplacementNamed(context, mainScreenName);
+      if (firstTime != null && !firstTime) {
+        if (AppController().authState == AuthState.authorized) {
+          Navigator.pushReplacementNamed(context, mainScreenName);
+        } else if (AppController().authState == AuthState.unauthorized) {
+          Navigator.pushReplacementNamed(context, logInName);
+        }
+      } else {
+        prefs.setBool('first_time', false);
+        Navigator.pushReplacementNamed(context, onboardingName);
+      }
+      // Navigator.pushReplacementNamed(context, mainScreenName);
     });
   }
 

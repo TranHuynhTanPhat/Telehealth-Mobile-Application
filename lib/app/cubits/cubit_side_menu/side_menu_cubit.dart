@@ -17,6 +17,7 @@ class SideMenuCubit extends Cubit<SideMenuState> {
       emit(LogoutActionState());
     } catch (e) {
       logPrint(e);
+      emit(LogoutActionState());
     }
   }
 }

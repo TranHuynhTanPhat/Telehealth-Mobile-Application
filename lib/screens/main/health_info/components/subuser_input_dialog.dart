@@ -21,8 +21,8 @@ class SubUserInputDialog extends StatefulWidget {
 
 class _SubUserInputDialogState extends State<SubUserInputDialog> {
   final List<String> bloodGroup = ['a', 'b', 'ab', 'o'];
-  List<String> genders = ['male', 'female', 'undefine'];
-  List<String> relationships = ['child', 'parent', 'grandparent'];
+  List<String> genders = ['Male', 'Female'];
+  List<String> relationships = ['Children', 'Parent', 'Grandparent', 'Sibling'];
 
   late TextEditingController _controllerRelationship;
   late TextEditingController _controllerFullname;
@@ -123,7 +123,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                         // hint: translate(context, 'ex_full_name'),
                         controller: _controllerBirthday,
                         validate: (value) => value!.isEmpty
-                            ? translate(context, 'please_choose_birthday')
+                            ? translate(context, 'please_choose_day_of_birth')
                             : null,
                         suffixIcon: const IconButton(
                             onPressed: null,
@@ -250,10 +250,10 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                               MaterialStatePropertyAll(white)),
                                       onPressed: () => setState(() {
                                         _controllerRelationship.text =
-                                            translate(context, e);
+                                            translate(context, e.toLowerCase());
                                       }),
                                       child: Text(
-                                        translate(context, e),
+                                        translate(context, translate(context,e.toLowerCase())),
                                       ),
                                     ),
                                   )

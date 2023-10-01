@@ -12,7 +12,6 @@ class OptionSignUp extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              top: dimensHeight() * 4,
               right: dimensWidth() * 3,
               left: dimensWidth() * 3),
           child: const Divider(),

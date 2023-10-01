@@ -32,7 +32,7 @@ class _LogInScreenState extends State<LogInScreen> {
             Navigator.pushReplacementNamed(context, mainScreenName);
           } else if (state is LogInErrorActionState) {
             // EasyLoading.dismiss();
-            EasyLoading.showToast(state.message);
+            EasyLoading.showToast(translate(context, state.message));
           }
         },
         child: BlocBuilder<LogInCubit, LogInState>(

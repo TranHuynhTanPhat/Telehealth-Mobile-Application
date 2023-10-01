@@ -13,6 +13,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   Future<void> registerAccount(
       String fullName,
       String phone,
+      String email,
       String password,
       String passwordConfirm,
       String gender,
@@ -20,13 +21,13 @@ class SignUpCubit extends Cubit<SignUpState> {
       String address) async {
     emit(SignUpLoadingActionState());
     try {
-      int? code = await _userRepository.registerAccount(fullName, phone,
+      int? code = await _userRepository.registerAccount(fullName, phone, email,
           password, passwordConfirm, gender, birthday, address);
       emit(RegisterAccountActionState(
           message: code == 201 ? 'success_register' : ''));
     } catch (error) {
       DioException er = error as DioException;
-      emit(SignUpErrorActionState(
+      emit(SignUpErrorActionState(code:er.response!.statusCode,
           message: er.response!.data['message'].toString()));
     }
   }

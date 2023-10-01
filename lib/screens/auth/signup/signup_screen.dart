@@ -42,16 +42,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
               resizeToAvoidBottomInset: true,
               body: ListView(
                 // crossAxisAlignment: CrossAxisAlignment.start,
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 10,
-                    horizontal: dimensWidth() * 3),
+                // physics: ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: dimensHeight() * 10),
                 children: [
-                  const HeaderSignUp(),
-                  SizedBox(
-                    height: dimensHeight() * 5,
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                    child: const HeaderSignUp(),
                   ),
+                  // SizedBox(
+                  //   height: dimensHeight() * 3,
+                  // ),
                   const SignUpForm(),
-                  const OptionSignUp(),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                    child: const OptionSignUp(),
+                  ),
                 ],
               ),
             ),

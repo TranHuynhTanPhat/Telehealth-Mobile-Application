@@ -15,6 +15,7 @@ class UserRepository extends BaseRepository {
   Future<int?> registerAccount(
       String fullName,
       String phone,
+      String email,
       String password,
       String passwordConfirm,
       String gender,
@@ -22,6 +23,7 @@ class UserRepository extends BaseRepository {
       String address) async {
     UserRequest request = UserRequest(
         phone: phone,
+        email: email,
         password: password,
         passwordConfirm: passwordConfirm,
         fullName: fullName,
@@ -34,7 +36,7 @@ class UserRepository extends BaseRepository {
   Future<int?> updateAccount(String fullName, String email, String gender,
       String birthday, String address, String avatar) async {
     UserRequest request = UserRequest(
-      avatar: avatar,
+        avatar: avatar,
         fullName: fullName,
         gender: gender,
         birthday: birthday,
