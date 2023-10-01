@@ -87,6 +87,19 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                           _dose = null;
                         });
                       },
+                      onClose: () {
+                        if (_index != null) {
+                          if (state.diseaseAdult[_index!].vaccinations.length ==
+                              1) {
+                            int dose = state
+                                .diseaseAdult[_index!].vaccinations.first.dose;
+                            _controllVaccine.text = dose.toString();
+                            _currentStep = 0;
+                            _injectedDose = 1;
+                            _dose = dose;
+                          }
+                        }
+                      },
                       style: MenuStyle(
                         elevation: const MaterialStatePropertyAll(10),
                         // shadowColor: MaterialStatePropertyAll(black26),
@@ -144,7 +157,9 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                 });
                               }),
                               child: Container(
-                                // margin: EdgeInsets.all(dimensWidth()),
+                                margin: EdgeInsets.only(
+                                    top: dimensHeight(),
+                                    bottom: dimensHeight()),
                                 color: white,
                                 width: dimensWidth() * 30,
                                 child: Text(
@@ -224,7 +239,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                           translate(context, e.dose.toString());
                                       setState(() {
                                         _dose = e.dose;
-                                        _injectedDose=1;
+                                        _injectedDose = 1;
                                       });
                                     }),
                                     child: Container(

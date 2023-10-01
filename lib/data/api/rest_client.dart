@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, constant_identifier_names
 import 'dart:io';
 
+import 'package:alice/alice.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -21,6 +22,13 @@ class RestClient {
   static const ENABLE_LOG = true;
   static const ACCESS_TOKEN_HEADER = 'Authorization';
   static const LANGUAGE = 'Accept-Language';
+
+  Alice alice = Alice(
+    showNotification: false,
+    showInspectorOnShake: false,
+    darkTheme: false,
+    maxCallsCount: 1000,
+  );
 
   // singleton
   static final RestClient instance = RestClient._internal();
@@ -81,6 +89,8 @@ class RestClient {
 
   Dio getDio({bool isUpload = false}) {
     var dio = Dio(instance.getDioBaseOption());
+    dio.interceptors.add(alice.getDioInterceptor());
+
     dio.interceptors.add(CookieManager(instance.cookieJar));
 
     if (ENABLE_LOG) {
@@ -197,5 +207,9 @@ class RestClient {
     await getDio().delete(
         dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
     instance.cookieJar.deleteAll();
+  }
+
+  void runHttpInspector() {
+    alice.showInspector();
   }
 }

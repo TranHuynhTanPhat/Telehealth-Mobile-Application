@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/app/app_routes.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
+import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/config_loading.dart';
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
                     AppLocalizationsSetup.localizationsDelegates,
                 locale: state.locale,
                 builder: EasyLoading.init(),
+                navigatorKey: RestClient().alice.getNavigatorKey(),
               );
             },
           ),
