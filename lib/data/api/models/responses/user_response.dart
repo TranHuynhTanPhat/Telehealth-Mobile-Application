@@ -11,6 +11,9 @@ class UserResponse {
   String? avatar;
   String? address;
   bool? isMainProfile;
+  String? phone;
+  String? email;
+  int? accountBalance;
   UserResponse({
     this.id,
     this.fullName,
@@ -20,6 +23,9 @@ class UserResponse {
     this.avatar,
     this.address,
     this.isMainProfile,
+    this.phone,
+    this.email,
+    this.accountBalance,
   });
 
   Map<String, dynamic> toMap() {
@@ -49,6 +55,15 @@ class UserResponse {
     if (isMainProfile != null) {
       result.addAll({'isMainProfile': isMainProfile});
     }
+    if (email != null) {
+      result.addAll({'email': email});
+    }
+    if (phone != null) {
+      result.addAll({'phone': phone});
+    }
+    if (accountBalance != null) {
+      result.addAll({'account_balance': accountBalance});
+    }
 
     return result;
   }
@@ -59,11 +74,15 @@ class UserResponse {
       fullName: map['full_name'],
       dateOfBirth: map['date_of_birth'],
       gender: map['gender'],
-      relationship:map['relationship']!=null?
-          Relationship.values.firstWhere((e) => e.name == map['relationship']):null,
+      relationship: map['relationship'] != null
+          ? Relationship.values.firstWhere((e) => e.name == map['relationship'])
+          : null,
       avatar: map['avatar'],
       address: map['address'],
       isMainProfile: map['isMainProfile'],
+      email: map['email'],
+      phone: map['phone'],
+      accountBalance: map['account_balance'],
     );
   }
 

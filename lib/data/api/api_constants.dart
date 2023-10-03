@@ -20,7 +20,7 @@ class ApiConstants {
 // user
   static const _USER = '/user-management';
   static const USER = '$_USER/user';
-  static const PROFILE = '$USER/profile';
+  static const MEDICAL_RECORD = '$_USER/medical-record';
 
 // doctor
   static const _DOCTOR = '/doctor-management';

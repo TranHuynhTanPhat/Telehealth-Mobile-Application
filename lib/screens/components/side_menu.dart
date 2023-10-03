@@ -62,10 +62,11 @@ class _SideMenuState extends State<SideMenu> {
                 BlocBuilder<HealthInfoCubit, HealthInfoState>(
                   builder: (context, state) {
                     return InfoCard(
-                      name: state.subUsers
-                          .firstWhere((element) => element.isMainProfile!)
-                          .fullName
-                          ?? "undefine",
+                      name: 
+                      state.subUsers.isNotEmpty?state.subUsers
+                              .firstWhere((element) => element.isMainProfile!)
+                              .fullName ??
+                          translate(context, 'undefine'): translate(context, 'undefine'),
                       profession: translate(context, 'patient'),
                     );
                   },

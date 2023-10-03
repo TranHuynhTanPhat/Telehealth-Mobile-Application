@@ -88,10 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   BlocBuilder<HealthInfoCubit, HealthInfoState>(
                     builder: (context, state) {
                       return Text(
-                        state.subUsers
-                                .firstWhere((element) => element.isMainProfile!)
-                                .fullName ??
-                            translate(context, 'undefine'),
+                        state.subUsers.isNotEmpty
+                            ? state.subUsers
+                                    .firstWhere(
+                                        (element) => element.isMainProfile!)
+                                    .fullName ??
+                                translate(context, 'undefine')
+                            : translate(context, 'undefine'),
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge

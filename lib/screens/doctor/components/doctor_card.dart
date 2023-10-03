@@ -19,16 +19,16 @@ class DoctorCard extends StatefulWidget {
 }
 
 class _DoctorCardState extends State<DoctorCard> {
-  var imgVariable;
+  var _image;
   @override
   void initState() {
-    imgVariable = null;
+    _image = null;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    imgVariable = imgVariable ??
+    _image = _image ??
         NetworkImage(
           CloudinaryContext.cloudinary
               .image(widget.doctor['avatar'] ?? '')
@@ -66,11 +66,11 @@ class _DoctorCardState extends State<DoctorCard> {
                           children: [
                             CircleAvatar(
                                 radius: dimensWidth() * 4.5,
-                                backgroundImage: imgVariable,
+                                backgroundImage: _image,
                                 backgroundColor: white,
                                 onBackgroundImageError:
                                     (exception, stackTrace) => setState(() {
-                                          imgVariable =
+                                          _image =
                                               AssetImage(DImages.placeholder);
                                         })),
                             SizedBox(

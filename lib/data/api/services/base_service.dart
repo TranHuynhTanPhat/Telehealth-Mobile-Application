@@ -42,16 +42,20 @@ abstract class BaseService {
   Future<DataResponse> postUpload(String path, {formData}) async {
     final response =
         await RestClient().getDio(isUpload: true).post(path, data: formData);
-    return await _handleResponse(response);
+    return await _handleResponse(response, isUpload: true);
   }
 
-  Future<DataResponse> _handleResponse(Response response) async {
+  Future<DataResponse> _handleResponse(Response response,
+      {bool isUpload = false}) async {
     switch (response.statusCode) {
       case 200:
       case 201:
+      if(isUpload){
+        return DataResponse(data: response.data, message: response.statusMessage);
+      }
         return DataResponse(
             data: response.data['data'],
-            message: response.statusMessage,
+            message: response.data['message'],
             code: response.statusCode);
       default:
         var apiResponse = ApiException.fromJson(response.data);

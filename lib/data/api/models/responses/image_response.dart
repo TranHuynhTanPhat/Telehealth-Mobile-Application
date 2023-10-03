@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ImageResponse {
   String? assetId;
   String? publicId;
@@ -43,54 +45,103 @@ class ImageResponse {
       this.accessMode,
       this.existing,
       this.originalFilename});
-
-  ImageResponse.fromJson(Map<String, dynamic> json) {
-    assetId = json['asset_id'];
-    publicId = json['public_id'];
-    version = json['version'];
-    versionId = json['version_id'];
-    signature = json['signature'];
-    width = json['width'];
-    height = json['height'];
-    format = json['format'];
-    resourceType = json['resource_type'];
-    createdAt = json['created_at'];
-    tags = json['tags'].cast<String>();
-    bytes = json['bytes'];
-    type = json['type'];
-    etag = json['etag'];
-    placeholder = json['placeholder'];
-    url = json['url'];
-    secureUrl = json['secure_url'];
-    folder = json['folder'];
-    accessMode = json['access_mode'];
-    existing = json['existing'];
-    originalFilename = json['original_filename'];
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+  
+    if(assetId != null){
+      result.addAll({'asset_id': assetId});
+    }
+    if(publicId != null){
+      result.addAll({'public_id': publicId});
+    }
+    if(version != null){
+      result.addAll({'version': version});
+    }
+    if(versionId != null){
+      result.addAll({'version_id': versionId});
+    }
+    if(signature != null){
+      result.addAll({'signature': signature});
+    }
+    if(width != null){
+      result.addAll({'width': width});
+    }
+    if(height != null){
+      result.addAll({'height': height});
+    }
+    if(format != null){
+      result.addAll({'format': format});
+    }
+    if(resourceType != null){
+      result.addAll({'resource_type': resourceType});
+    }
+    if(createdAt != null){
+      result.addAll({'created_at': createdAt});
+    }
+    if(tags != null){
+      result.addAll({'tags': tags});
+    }
+    if(bytes != null){
+      result.addAll({'bytes': bytes});
+    }
+    if(type != null){
+      result.addAll({'type': type});
+    }
+    if(etag != null){
+      result.addAll({'etag': etag});
+    }
+    if(placeholder != null){
+      result.addAll({'placeholder': placeholder});
+    }
+    if(url != null){
+      result.addAll({'url': url});
+    }
+    if(secureUrl != null){
+      result.addAll({'secure_url': secureUrl});
+    }
+    if(folder != null){
+      result.addAll({'folder': folder});
+    }
+    if(accessMode != null){
+      result.addAll({'access_mode': accessMode});
+    }
+    if(existing != null){
+      result.addAll({'existing': existing});
+    }
+    if(originalFilename != null){
+      result.addAll({'original_filename': originalFilename});
+    }
+  
+    return result;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['asset_id'] = assetId;
-    data['public_id'] = publicId;
-    data['version'] = version;
-    data['version_id'] = versionId;
-    data['signature'] = signature;
-    data['width'] = width;
-    data['height'] = height;
-    data['format'] = format;
-    data['resource_type'] = resourceType;
-    data['created_at'] = createdAt;
-    data['tags'] = tags;
-    data['bytes'] = bytes;
-    data['type'] = type;
-    data['etag'] = etag;
-    data['placeholder'] = placeholder;
-    data['url'] = url;
-    data['secure_url'] = secureUrl;
-    data['folder'] = folder;
-    data['access_mode'] = accessMode;
-    data['existing'] = existing;
-    data['original_filename'] = originalFilename;
-    return data;
+  factory ImageResponse.fromMap(Map<String, dynamic> map) {
+    return ImageResponse(
+      assetId : map['asset_id'],
+    publicId : map['public_id'],
+    version : map['version'],
+    versionId : map['version_id'],
+    signature : map['signature'],
+    width : map['width'],
+    height : map['height'],
+    format : map['format'],
+    resourceType : map['resource_type'],
+    createdAt : map['created_at'],
+    tags : map['tags'].cast<String>(),
+    bytes : map['bytes'],
+    type : map['type'],
+    etag : map['etag'],
+    placeholder : map['placeholder'],
+    url : map['url'],
+    secureUrl : map['secure_url'],
+    folder : map['folder'],
+    accessMode : map['access_mode'],
+    existing : map['existing'],
+    originalFilename : map['original_filename'],
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory ImageResponse.fromJson(String source) => ImageResponse.fromMap(json.decode(source));
 }

@@ -20,16 +20,16 @@ class DoctorCard extends StatefulWidget {
 }
 
 class _DoctorCardState extends State<DoctorCard> {
-  var imgVariable;
+  var _image;
   @override
   void initState() {
-    imgVariable = null;
+    _image = null;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    imgVariable = imgVariable ??
+    _image = _image ??
         NetworkImage(
           CloudinaryContext.cloudinary
               .image(widget.doctor.avatar ?? '')
@@ -64,10 +64,10 @@ class _DoctorCardState extends State<DoctorCard> {
                     fit: BoxFit.cover,
                     onError: (exception, stackTrace) {
                       setState(() {
-                        imgVariable = AssetImage(DImages.placeholder);
+                        _image = AssetImage(DImages.placeholder);
                       });
                     },
-                    image: imgVariable),
+                    image: _image),
               ),
             ),
           ),

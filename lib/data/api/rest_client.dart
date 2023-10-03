@@ -1,18 +1,18 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, constant_identifier_names
 import 'dart:io';
 
-import 'package:alice/alice.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 
@@ -22,13 +22,6 @@ class RestClient {
   static const ENABLE_LOG = true;
   static const ACCESS_TOKEN_HEADER = 'Authorization';
   static const LANGUAGE = 'Accept-Language';
-
-  Alice alice = Alice(
-    showNotification: false,
-    showInspectorOnShake: false,
-    darkTheme: false,
-    maxCallsCount: 1000,
-  );
 
   // singleton
   static final RestClient instance = RestClient._internal();
@@ -78,7 +71,8 @@ class RestClient {
     instance.headers.remove(ACCESS_TOKEN_HEADER);
   }
 
-  BaseOptions getDioBaseOption() {
+  BaseOptions getDioBaseOption(isUpload) {
+    isUpload ? clearToken() : null;
     return BaseOptions(
       connectTimeout: const Duration(seconds: CONNECT_TIME_OUT),
       receiveTimeout: const Duration(seconds: RECEIVE_TIME_OUT),
@@ -88,8 +82,8 @@ class RestClient {
   }
 
   Dio getDio({bool isUpload = false}) {
-    var dio = Dio(instance.getDioBaseOption());
-    dio.interceptors.add(alice.getDioInterceptor());
+    var dio = Dio(instance.getDioBaseOption(isUpload));
+    dio.interceptors.add(AliceInspector().alice.getDioInterceptor());
 
     dio.interceptors.add(CookieManager(instance.cookieJar));
 
@@ -156,11 +150,14 @@ class RestClient {
           } else {
             logPrint('CALL_CLOUDINARY_API');
 
+            options.headers.remove('ACCESS_TOKEN_HEADER');
+
             /// check path
             if (!options.path.contains('http')) {
               options.path =
                   dotenv.get('CLOUDINARY_API', fallback: '') + options.path;
             }
+            return handler.next(options);
           }
         },
         onResponse: (Response response, handler) async {
@@ -210,6 +207,6 @@ class RestClient {
   }
 
   void runHttpInspector() {
-    alice.showInspector();
+    AliceInspector().alice.showInspector();
   }
 }

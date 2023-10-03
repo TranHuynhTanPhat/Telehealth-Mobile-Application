@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/cubits/cubit_healthInfo/health_info_cubit.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/res/style.dart';
@@ -15,19 +17,22 @@ import 'package:healthline/utils/file_picker.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
-class SubUserInputDialog extends StatefulWidget {
-  const SubUserInputDialog({
+class UpdateSubUserInputDialog extends StatefulWidget {
+  const UpdateSubUserInputDialog({
     super.key,
-    required GlobalKey<FormState> formKey,
-  }) : _formKey = formKey;
+    required UserResponse userResponse,
+  }) : _subUser = userResponse;
 
-  final GlobalKey<FormState> _formKey;
+  final UserResponse _subUser;
 
   @override
-  State<SubUserInputDialog> createState() => _SubUserInputDialogState();
+  State<UpdateSubUserInputDialog> createState() =>
+      _UpdateSubUserInputDialogState();
 }
 
-class _SubUserInputDialogState extends State<SubUserInputDialog> {
+class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   List<String> genders = Gender.values.map((e) => e.name).toList();
   List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
@@ -38,9 +43,10 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   late TextEditingController _controllerAddress;
 
   late File? _file;
+  var _image;
 
-  String gender = '';
-  String relationship = '';
+  String? gender;
+  String? relationship;
 
   @override
   void initState() {
@@ -51,21 +57,52 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
     _controllerAddress = TextEditingController();
 
     _file = null;
+    _image = null;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _image = widget._subUser.avatar != 'default'
+        ? _image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget._subUser.avatar ?? '')
+                  .toString(),
+            )
+        : AssetImage(DImages.placeholder);
+    _controllerFullname.text = _controllerFullname.text == ''
+        ? translate(context, widget._subUser.fullName!)
+        : _controllerFullname.text;
+    _controllerRelationship.text = _controllerRelationship.text == '' &&
+            widget._subUser.relationship != null
+        ? translate(context, widget._subUser.relationship!.name.toLowerCase())
+        : _controllerRelationship.text;
+    _controllerGender.text = _controllerGender.text == ''
+        ? translate(context, widget._subUser.gender!.toLowerCase())
+        : _controllerGender.text;
+    if (_controllerBirthday.text == '') {
+      DateTime date = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+          .parse(widget._subUser.dateOfBirth!);
+      _controllerBirthday.text = formatDayMonthYear(context, date);
+    }
+    _controllerAddress.text = _controllerAddress.text == ''
+        ? widget._subUser.address!
+        : _controllerAddress.text;
+    gender = gender ?? widget._subUser.gender!;
+    if (widget._subUser.relationship != null) {
+      relationship = relationship ?? widget._subUser.relationship!.name;
+    }
     return BlocProvider(
       create: (context) => HealthInfoCubit(),
       child: BlocListener<HealthInfoCubit, HealthInfoState>(
         listener: (context, state) {
           if (state is HealthInfoLoading) {
             EasyLoading.show();
-          } else if (state is AddUserSuccessfully) {
+          } else if (state is UpdateUserSuccessfully) {
             EasyLoading.showToast(translate(context, state.message));
             Navigator.pop(context);
-          } else if (state is AddUserFailure) {
+          } else if (state is UpdateUserFailure) {
             EasyLoading.showToast(translate(context, state.message));
           }
         },
@@ -90,7 +127,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Form(
-                        key: widget._formKey,
+                        key: _formKey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,12 +160,13 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                     )
                                   : CircleAvatar(
                                       radius: dimensWidth() * 5,
-                                      backgroundColor: primary,
-                                      backgroundImage:
-                                          AssetImage(DImages.placeholder),
+                                      backgroundImage: _image,
                                       onBackgroundImageError:
                                           (exception, stackTrace) =>
-                                              AssetImage(DImages.placeholder),
+                                              setState(() {
+                                        _image =
+                                            AssetImage(DImages.placeholder);
+                                      }),
                                       child: InkWell(
                                         splashColor: transparent,
                                         highlightColor: transparent,
@@ -178,7 +216,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                       context: context,
                                       initialDate: _controllerBirthday
                                               .text.isNotEmpty
-                                          ? DateFormat('dd/MM/yyyy')
+                                          ? DateFormat("dd/MM/yyyy")
                                               .parse(_controllerBirthday.text)
                                           : DateTime.now(),
                                       firstDate: DateTime(1900),
@@ -372,23 +410,18 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                             Padding(
                               padding: const EdgeInsets.all(8),
                               child: ElevatedButtonWidget(
-                                text: translate(context, 'add_member'),
+                                text: translate(context, 'update_member'),
                                 onPressed: () {
-                                  if (widget._formKey.currentState!
-                                          .validate() &&
-                                      _file != null) {
-                                    widget._formKey.currentState!.save();
-                                    context.read<HealthInfoCubit>().addSubUser(
-                                        _file!.path,
+                                  if (_formKey.currentState!.validate() ) {
+                                    _formKey.currentState!.save();
+                                    context.read<HealthInfoCubit>().updateUser(
+                                        _file,
                                         _controllerFullname.text,
                                         _controllerBirthday.text,
-                                        gender,
-                                        relationship,
+                                        gender!,
+                                        relationship!,
                                         _controllerAddress.text);
-                                  } else if (_file == null) {
-                                    EasyLoading.showToast(
-                                        'please_choose_image');
-                                  }
+                                  } 
                                 },
                               ),
                             )

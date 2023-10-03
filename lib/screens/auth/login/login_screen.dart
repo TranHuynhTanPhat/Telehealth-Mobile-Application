@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/app/app_pages.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
-import 'package:healthline/data/api/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/auth/login/components/exports.dart';
 import 'package:healthline/utils/keyboard.dart';
@@ -20,21 +19,42 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LogInCubit(UserRepository()),
-      child: BlocListener<LogInCubit, LogInState>(
-        listener: (context, state) {
-          if (state is LogInLoadingActionState) {
-            EasyLoading.show();
-          }  else if (state is SignInActionState) {
-            // EasyLoading.dismiss();
-            EasyLoading.showToast(translate(context, 'success_login'));
-            Navigator.pushReplacementNamed(context, mainScreenName);
-          } else if (state is LogInErrorActionState) {
-            // EasyLoading.dismiss();
-            EasyLoading.showToast(translate(context, state.message));
-          }
-        },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LogInCubit(),
+        ),
+        BlocProvider(
+          create: (context) => HealthInfoCubit(),
+        ),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<LogInCubit, LogInState>(
+            listener: (context, state) {
+              if (state is LogInLoadingActionState) {
+                EasyLoading.show();
+              } else if (state is SignInActionState) {
+                // EasyLoading.dismiss();
+
+                context.read<HealthInfoCubit>().fetchMedicalRecord();
+              } else if (state is LogInErrorActionState) {
+                // EasyLoading.dismiss();
+                EasyLoading.showToast(translate(context, state.message));
+              }
+            },
+          ),
+          BlocListener<HealthInfoCubit, HealthInfoState>(
+            listener: (context, state) {
+              if (state is HealthInfoLoaded) {
+                EasyLoading.showToast(translate(context, 'success_login'));
+                Navigator.pushReplacementNamed(context, mainScreenName);
+              } else if (state is HealthInfoError) {
+                EasyLoading.showToast(translate(context, 'cant_load_data'));
+              }
+            },
+          ),
+        ],
         child: BlocBuilder<LogInCubit, LogInState>(
           builder: (context, state) {
             return GestureDetector(
@@ -61,5 +81,3 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 }
-
-

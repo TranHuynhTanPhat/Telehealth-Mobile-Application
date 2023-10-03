@@ -15,16 +15,16 @@ class DetailDoctorScreen extends StatefulWidget {
 
 class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   // ignore: prefer_typing_uninitialized_variables
-  var imgVariable;
+  var _image;
   @override
   void initState() {
-    imgVariable = null;
+    _image = null;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    imgVariable = imgVariable ??
+    _image = _image ??
         NetworkImage(
           CloudinaryContext.cloudinary
               .image('healthline/avatar/doctor/eoohtomji5dgvhvl2oga')
@@ -63,9 +63,9 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: imgVariable,
+                      image: _image,
                       onError: (exception, stackTrace) => setState(() {
-                        imgVariable = AssetImage(DImages.placeholder);
+                        _image = AssetImage(DImages.placeholder);
                       }),
                       fit: BoxFit.cover,
                     ),

@@ -221,10 +221,17 @@ class _MainScreenState extends State<MainScreen>
             ),
           ),
         ),
-        floatingActionButton: ElevatedButton.icon(
-          onPressed: () => RestClient().runHttpInspector(),
-          icon: FaIcon(FontAwesomeIcons.bug),
-          label: Text(''),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(right: dimensWidth()*40),
+          child: IconButton(
+            onPressed: () => RestClient().runHttpInspector(),
+            padding: EdgeInsets.all(dimensWidth()*2),
+            icon: const FaIcon(FontAwesomeIcons.bug),
+            color: white,
+            style:
+                const ButtonStyle(backgroundColor: MaterialStatePropertyAll(secondary)),
+          ),
         ),
         body: Stack(
           children: [

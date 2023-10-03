@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:healthline/res/enum.dart';
+
 class UserRequest {
+  String? profileId;
   String? avatar;
   String? phone;
   String? password;
@@ -8,40 +13,81 @@ class UserRequest {
   String? birthday;
   String? address;
   String? email;
-  UserRequest(
-      {this.phone,
-      this.avatar,
-      this.password,
-      this.passwordConfirm,
-      this.fullName,
-      this.gender,
-      this.birthday,
-      this.address,
-      this.email});
+  Relationship? relationship;
+  UserRequest({
+    this.profileId,
+    this.avatar,
+    this.phone,
+    this.password,
+    this.passwordConfirm,
+    this.fullName,
+    this.gender,
+    this.birthday,
+    this.address,
+    this.email,
+    this.relationship,
+  });
 
-  UserRequest.fromJson(Map<String, dynamic> json) {
-    phone = json['phone'];
-    avatar = json['avatar'];
-    password = json['password'];
-    fullName = json['full_name'];
-    birthday = json['date_of_birth'];
-    gender = json['gender'];
-    address = json['address'];
-    passwordConfirm = json['passwordConfirm'];
-    email = json['email'];
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    if (profileId != null) {
+      result.addAll({'profileId': profileId});
+    }
+    if (avatar != null) {
+      result.addAll({'avatar': avatar});
+    }
+    if (phone != null) {
+      result.addAll({'phone': phone});
+    }
+    if (password != null) {
+      result.addAll({'password': password});
+    }
+    if (passwordConfirm != null) {
+      result.addAll({'passwordConfirm': passwordConfirm});
+    }
+    if (fullName != null) {
+      result.addAll({'full_name': fullName});
+    }
+    if (gender != null) {
+      result.addAll({'gender': gender});
+    }
+    if (birthday != null) {
+      result.addAll({'date_of_birth': birthday});
+    }
+    if (address != null) {
+      result.addAll({'address': address});
+    }
+    if (email != null) {
+      result.addAll({'email': email});
+    }
+    if (relationship != null) {
+      result.addAll({'relationship': relationship!.name});
+    }
+
+    return result;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['phone'] = phone;
-    data['avatar'] = avatar;
-    data['password'] = password;
-    data['passwordConfirm'] = passwordConfirm;
-    data['full_name'] = fullName;
-    data['gender'] = gender;
-    data['date_of_birth'] = birthday;
-    data['address'] = address;
-    data['email'] = email;
-    return data;
+  factory UserRequest.fromMap(Map<String, dynamic> map) {
+    return UserRequest(
+      profileId: map['profileId'],
+      avatar: map['avatar'],
+      phone: map['phone'],
+      password: map['password'],
+      passwordConfirm: map['passwordConfirm'],
+      fullName: map['full_name'],
+      gender: map['gender'],
+      birthday: map['date_of_birth'],
+      address: map['address'],
+      email: map['email'],
+      relationship: map['relationship'] != null
+          ? Relationship.values.firstWhere((e) => e.name == map['relationship'])
+          : null,
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserRequest.fromJson(String source) =>
+      UserRequest.fromMap(json.decode(source));
 }

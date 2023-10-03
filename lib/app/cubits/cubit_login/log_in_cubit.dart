@@ -10,8 +10,8 @@ import 'package:healthline/data/storage/app_storage.dart';
 part 'log_in_state.dart';
 
 class LogInCubit extends Cubit<LogInState> {
-  LogInCubit(this._userRepository) : super(LogInInitial());
-  final UserRepository _userRepository;
+  LogInCubit() : super(LogInInitial());
+  final UserRepository _userRepository=UserRepository();
 
   Future<void> signIn(String phone, String password) async {
     emit(LogInLoadingActionState());

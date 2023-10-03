@@ -9,9 +9,11 @@ class FileRepository extends BaseRepository {
   final FileService _fileService = FileService();
 
   Future<ImageResponse> uploadImage(
-      {required String path, required String uploadPreset}) async {
-    ImageRequest request =
-        ImageRequest(imagePath: path, uploadPreset: uploadPreset);
+      {required String path,
+      required String uploadPreset,
+      required String publicId, required String folder}) async {
+    ImageRequest request = ImageRequest(
+        imagePath: path, uploadPreset: uploadPreset, publicId: publicId, folder: folder);
     return await _fileService.uploadImage(request);
   }
 }

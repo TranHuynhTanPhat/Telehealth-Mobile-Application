@@ -5,6 +5,7 @@ import 'package:healthline/app/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/widgets/elevated_button_widget.dart';
 import 'package:healthline/screens/widgets/text_field_widget.dart';
+import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:healthline/utils/validate.dart';
 
@@ -160,6 +161,7 @@ class _LogInFormState extends State<LogInForm> {
                 if (_formKey.currentState!.validate() &&
                     errorCheckTermsAndConditons == true) {
                   _formKey.currentState!.save();
+                  KeyboardUtil.hideKeyboard(context);
                   context.read<LogInCubit>().signIn(
                       Validate().changePhoneFormat(_controllerPhone.text),
                       _controllerPassword.text);
@@ -168,7 +170,9 @@ class _LogInFormState extends State<LogInForm> {
             ),
           ),
           TextButton(
-            onPressed: null,
+            onPressed: () {
+              KeyboardUtil.hideKeyboard(context);
+            },
             style: const ButtonStyle(
                 padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
             child: Text(

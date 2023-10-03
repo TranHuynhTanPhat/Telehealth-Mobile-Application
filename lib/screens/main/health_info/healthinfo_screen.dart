@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screens/main/health_info/components/export.dart';
 import 'package:healthline/screens/main/health_info/components/list_record.dart';
+import 'package:healthline/screens/main/health_info/components/update_subuser_input_dialog.dart';
 import 'package:healthline/utils/translate.dart';
 
 class HealthInfoScreen extends StatefulWidget {
@@ -47,165 +50,228 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
         builder: (context) => HealthInforInputDialog(formKey: _formKey));
   }
 
+  Future<void> showUpdateDialogInput(
+      BuildContext context, UserResponse subUser) async {
+    await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) => UpdateSubUserInputDialog(
+              userResponse: subUser,
+            )).whenComplete(
+        () => context.read<HealthInfoCubit>().fetchMedicalRecord());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HealthInfoCubit, HealthInfoState>(
-      builder: (context, state) {
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: white,
-          body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  snap: false,
-                  pinned: true,
-                  floating: true,
-                  expandedHeight: dimensHeight() * 17 * _animation.value +
-                      dimensHeight() * 14,
-                  // collapsedHeight: dimensHeight()*20,
-                  flexibleSpace: FlexibleSpaceBar(
-                    collapseMode: CollapseMode.parallax,
-                    expandedTitleScale: 1,
-                    background: ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: dimensWidth() * 3,
-                            right: dimensWidth() * 3,
-                            top: dimensHeight() * 1.5,
-                          ),
+    return Builder(
+      builder: (context) {
+        return BlocBuilder<HealthInfoCubit, HealthInfoState>(
+          builder: (context, state) {
+            return Scaffold(
+              resizeToAvoidBottomInset: true,
+              backgroundColor: white,
+              floatingActionButton: Container(
+                margin: EdgeInsets.only(bottom: dimensHeight() * 13),
+                // width: dimensWidth()*7,
+                height: dimensWidth() * 6,
+                child: FloatingActionButton.extended(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(dimensWidth() * 10)),
+                  icon: FaIcon(
+                    FontAwesomeIcons.userPen,
+                    color: white,
+                    size: dimensIcon() * .5,
+                  ),
+                  onPressed: () {
+                    if (state.subUsers.isNotEmpty && state.currentUser != -1) {
+                      showUpdateDialogInput(
+                          context, state.subUsers[state.currentUser]);
+                    }
+                  },
+                  extendedPadding: EdgeInsets.all(dimensWidth() * 2),
+                  label: Text(
+                    'Cập nhật',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium!
+                        .copyWith(color: white),
+                  ),
+                ),
+              ),
+              // floatingActionButtonLocation:
+              //     FloatingActionButtonLocation.endDocked,
+              body: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      snap: false,
+                      pinned: true,
+                      floating: true,
+                      expandedHeight: dimensHeight() * 17 * _animation.value +
+                          dimensHeight() * 14,
+                      flexibleSpace: FlexibleSpaceBar(
+                        collapseMode: CollapseMode.parallax,
+                        expandedTitleScale: 1,
+                        background: ListView(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: dimensWidth() * 3,
+                                right: dimensWidth() * 3,
+                                top: dimensHeight() * 1.5,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      translate(context, 'patient_records'),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(
+                                              color: color1F1F1F,
+                                              fontWeight: FontWeight.w900),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    splashColor: transparent,
+                                    highlightColor: transparent,
+                                    child: AnimatedIcon(
+                                      icon: AnimatedIcons.menu_close,
+                                      progress: _animationIC,
+                                      color: color1F1F1F,
+                                      size: dimensIcon(),
+                                    ),
+                                    onTap: () {
+                                      if (_showUsers) {
+                                        _animationController.reverse();
+                                        _showUsers = false;
+                                      } else {
+                                        _animationController.forward();
+                                        _showUsers = true;
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _animation.value > 0
+                                ? AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    color: white,
+                                    height:
+                                        dimensHeight() * 15 * _animation.value,
+                                    width: double.maxFinite,
+                                    curve: Curves.fastEaseInToSlowEaseOut,
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.only(
+                                        bottom: dimensHeight() * 2,
+                                        top: dimensHeight()),
+                                    child: const ListSubUser(),
+                                  )
+                                : const SizedBox(),
+                            state is HealthInfoLoading
+                                ? const LinearProgressIndicator()
+                                : SizedBox(),
+                          ],
+                        ),
+                      ),
+                      bottom: AppBar(
+                        title: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: dimensWidth()),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: Text(
-                                  translate(context, 'patient_records'),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                          color: color1F1F1F,
-                                          fontWeight: FontWeight.w900),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.currentUser != -1
+                                          ? state.subUsers[state.currentUser]
+                                                  .fullName ??
+                                              ''
+                                          : '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                    Text(
+                                      state.subUsers.isNotEmpty &&
+                                              state.subUsers[state.currentUser]
+                                                      .relationship !=
+                                                  null
+                                          ? translate(
+                                              context,
+                                              state.subUsers[state.currentUser].relationship!
+                                                  .name
+                                                  .toLowerCase())
+                                          : '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              InkWell(
-                                splashColor: transparent,
-                                highlightColor: transparent,
-                                child: AnimatedIcon(
-                                  icon: AnimatedIcons.menu_close,
-                                  progress: _animationIC,
-                                  color: color1F1F1F,
-                                  size: dimensIcon(),
-                                ),
-                                onTap: () {
-                                  if (_showUsers) {
-                                    _animationController.reverse();
-                                    _showUsers = false;
-                                  } else {
-                                    _animationController.forward();
-                                    _showUsers = true;
-                                  }
-                                },
                               ),
                             ],
                           ),
                         ),
-                        _animation.value >0 
-                            ? AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                color: white,
-                                height: dimensHeight() * 15 * _animation.value,
-                                width: double.maxFinite,
-                                curve: Curves.fastEaseInToSlowEaseOut,
-                                alignment: Alignment.topLeft,
-                                margin:
-                                    EdgeInsets.only(bottom: dimensHeight() * 2, top: dimensHeight()),
-                                child: ListSubUser(users: state.subUsers),
-                              )
-                            : const SizedBox(),
+                      ),
+                    )
+                  ];
+                },
+                body: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensHeight(), horizontal: dimensWidth() * 3),
+                  children: [
+                    InkWell(
+                      onTap: () => showDialogInput(context),
+                      child: const HeartRateCard(),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async => await showDialogInput(context),
+                            child: const BloodGroupCard(),
+                          ),
+                        ),
+                        SizedBox(
+                          width: dimensWidth() * 2,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async => await showDialogInput(context),
+                            child: const BMICard(),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  bottom: AppBar(
-                    title: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: dimensWidth()),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.subUsers.first.fullName ??
-                                      translate(context, 'undefine'),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  state.subUsers.first.relationship != null
-                                      ? translate(
-                                          context,
-                                          state
-                                              .subUsers.first.relationship!.name
-                                              .toLowerCase())
-                                      : '',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    SizedBox(
+                      height: dimensHeight() * 2,
                     ),
-                  ),
-                )
-              ];
-            },
-            body: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight(), horizontal: dimensWidth() * 3),
-                children: [
-                  InkWell(
-                    onTap: () => showDialogInput(context),
-                    child: const HeartRateCard(),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () async => await showDialogInput(context),
-                          child: const BloodGroupCard(),
-                        ),
-                      ),
-                      SizedBox(
-                        width: dimensWidth() * 2,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () async => await showDialogInput(context),
-                          child: const BMICard(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 2,
-                  ),
-                  const ListRecord()
-                ]),
-          ),
+                    const ListRecord()
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );

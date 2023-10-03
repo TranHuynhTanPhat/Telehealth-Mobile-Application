@@ -38,6 +38,9 @@ class _SplashScreenState extends State<SplashScreen> {
         if (AppController().authState == AuthState.Unauthorized) {
           Navigator.pushReplacementNamed(context, logInName);
         }
+        // else if (AppController().authState == AuthState.Authorized) {
+        //   Navigator.pushReplacementNamed(context, mainScreenName);
+        // }
       } else {
         prefs.setBool('first_time', false);
         Navigator.pushReplacementNamed(context, onboardingName);
@@ -60,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
           }
         },
         child: Builder(builder: (context) {
-          context.read<HealthInfoCubit>().fetchProfile();
+          context.read<HealthInfoCubit>().fetchMedicalRecord();
           return Scaffold(
             backgroundColor: primary,
             body: Column(
