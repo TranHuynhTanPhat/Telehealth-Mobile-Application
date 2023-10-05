@@ -48,7 +48,7 @@ class _LabelDrawerState extends State<LabelDrawer> {
           splashColor: transparent,
           onTap: widget.press,
           dense: true,
-          visualDensity: VisualDensity(vertical: 0),
+          visualDensity: const VisualDensity(vertical: 0),
           title: Text(
             translate(context, widget.lable),
             style: Theme.of(context)

@@ -27,7 +27,7 @@ class FilePickerCustom {
     if (Platform.isAndroid) {
       logPrint("fdsjflskdjflds");
       result = await Permission.storage.request();
-      logPrint("fdsjflskdjflds");
+      logPrint(result);
 
     } else {
       result = await Permission.photos.request();
@@ -45,6 +45,8 @@ class FilePickerCustom {
       logPrint("NOT PERMISSION FOR GALLERY");
       checkPermission = await requestGalleryPermission();
       if (checkPermission) {
+      logPrint("PERMISSION FOR GALLERY");
+
         return openGallery();
       }
     }
