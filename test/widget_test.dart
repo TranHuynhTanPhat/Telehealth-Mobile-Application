@@ -13,7 +13,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
 
-import 'package:healthline/app/app_routes.dart';
+import 'package:healthline/routes/app_routes.dart';
 import 'package:healthline/app/healthline_app.dart';
 
 class MockStorage extends Mock implements Storage {}

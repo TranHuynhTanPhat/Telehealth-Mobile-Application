@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-enum AuthState { Unauthorized, Authorized, NewInstall }
+enum AuthState { Unauthorized, PatientAuthorized, DoctorAuthorized, AllAuthorized }
 
 enum AppTheme { LightTheme, DartTheme }
 
@@ -16,6 +16,7 @@ enum SideMenus {
 }
 
 enum Gender { Male, Female }
+enum Role { Patient, Doctor }
 
 enum Relationship {
   Children,

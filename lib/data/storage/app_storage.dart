@@ -1,4 +1,3 @@
-
 // ignore_for_file: constant_identifier_names
 
 import 'package:healthline/data/api/models/responses/login_response.dart';
@@ -8,7 +7,8 @@ import 'package:healthline/utils/log_data.dart';
 
 class AppStorage {
   late SharedPreferences _pref;
-  static const USER = "user";
+  static const PATIENT = "patient";
+  static const DOCTOR = "doctor";
   static const REFRESH_TOKEN = "refresh_token";
 
   static final AppStorage instance = AppStorage._internal();
@@ -23,17 +23,30 @@ class AppStorage {
     _pref = await SharedPreferences.getInstance();
   }
 
-  Future<void> saveUser({required LoginResponse user}) async {
-    _pref.setString(USER, user.toJson());
+  Future<void> savePatient({required LoginResponse user}) async {
+    _pref.setString(PATIENT, user.toJson());
   }
 
-  Future<void> saveRefreshToken({required String refresh}) async {
-    _pref.setString(REFRESH_TOKEN, refresh);
+  Future<void> saveDoctor({required LoginResponse user}) async {
+    _pref.setString(DOCTOR, user.toJson());
   }
 
-  Future<LoginResponse?> getUser() async {
+  // Future<void> saveRefreshToken({required String refresh}) async {
+  //   _pref.setString(REFRESH_TOKEN, refresh);
+  // }
+
+  Future<LoginResponse?> getPatient() async {
     try {
-      LoginResponse user = LoginResponse.fromJson(_pref.getString(USER)!);
+      LoginResponse user = LoginResponse.fromJson(_pref.getString(PATIENT)!);
+      return user;
+    } catch (e) {
+      logPrint(e);
+      return null;
+    }
+  }
+  Future<LoginResponse?> getDoctor() async {
+    try {
+      LoginResponse user = LoginResponse.fromJson(_pref.getString(DOCTOR)!);
       return user;
     } catch (e) {
       logPrint(e);
@@ -41,22 +54,26 @@ class AppStorage {
     }
   }
 
-  Future<String?> getRefreshToken() async{
-    try{
-      return _pref.getString(REFRESH_TOKEN);
-    }catch(e){
-      logPrint(e);
-      return null;
-    }
+  // Future<String?> getRefreshToken() async {
+  //   try {
+  //     return _pref.getString(REFRESH_TOKEN);
+  //   } catch (e) {
+  //     logPrint(e);
+  //     return null;
+  //   }
+  // }
+
+  clearPatient() async {
+    _pref.remove(PATIENT);
   }
 
-  clearUser() async {
-    _pref.remove(USER);
+  clearDoctor() async {
+    _pref.remove(DOCTOR);
   }
 
-  clearRefreshToken() async{
-    _pref.remove(REFRESH_TOKEN);
-  }
+  // clearRefreshToken() async {
+  //   _pref.remove(REFRESH_TOKEN);
+  // }
 
 //   Future<void> saveUserInfo(User user) async {
 //     String json = jsonEncode(user.toJson());

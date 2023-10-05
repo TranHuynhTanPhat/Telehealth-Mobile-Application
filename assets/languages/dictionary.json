@@ -231,6 +231,10 @@
         "vi": "Đăng nhập thành công",
         "en": "Login successfully"
     },
+    "unauthorized": {
+        "vi": "Không thể xác thực",
+        "en": "Unauthorized"
+    },
     "patient": {
         "vi": "Bệnh nhân",
         "en": "Patient"
@@ -250,6 +254,18 @@
     "add_vaccination": {
         "vi": "Thêm vắc xin",
         "en": "Add vaccination"
+    },
+    "update": {
+        "vi": "Cập nhật",
+        "en": "Update"
+    },
+    "cant_load_data": {
+        "vi": "Không thể tải dữ liệu",
+        "en": "Can't load data"
+    },
+    "failure": {
+        "vi": "Thất bại",
+        "en": "Failure"
     },
     "notification": {
         "vi": "Thông báo",

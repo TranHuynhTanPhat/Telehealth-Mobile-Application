@@ -10,6 +10,7 @@ class ApiConstants {
 
   /// dont need cookie
   static const USER_LOG_IN = '$_COMMON_USER/auth';
+  static const DOCTOR_LOG_IN = '$_COMMON_DOCTOR/auth';
 
   /// need cookie
   static const USER_REFRESH_TOKEN = '$_COMMON_USER/refresh';

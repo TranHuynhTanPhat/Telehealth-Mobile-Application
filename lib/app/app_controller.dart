@@ -61,12 +61,24 @@ class AppController {
 
     // Lấy các token được lưu tạm từ local storage
     try {
-      // LoginResponse user = LoginResponse.fromJson(prefs.getString("user")!);
-      LoginResponse? user = await AppStorage().getUser();
-      String? accessToken = user?.jwtToken;
-      if (accessToken != null) {
-        await initApi(token: accessToken);
-        authState = AuthState.Authorized;
+
+      LoginResponse? patient = await AppStorage().getPatient();
+      LoginResponse? doctor = await AppStorage().getDoctor();
+      String? accessTokenPatient = patient?.jwtToken;
+      String? accessTokenDoctor = doctor?.jwtToken;
+
+      if (accessTokenDoctor != null &&
+          accessTokenPatient != null &&
+          accessTokenDoctor.isNotEmpty &&
+          accessTokenPatient.isNotEmpty) {
+        await initApi();
+        authState = AuthState.AllAuthorized;
+      } else if (accessTokenPatient != null && accessTokenPatient.isNotEmpty) {
+        await initApi();
+        authState = AuthState.PatientAuthorized;
+      } else if (accessTokenDoctor != null && accessTokenDoctor.isNotEmpty) {
+        await initApi();
+        authState = AuthState.DoctorAuthorized;
       } else {
         await initApi();
         authState = AuthState.Unauthorized;
@@ -78,15 +90,13 @@ class AppController {
   }
 
   Future<void> setupLocator() async {
-    AppStorage().init();
-    DbManager().init();
+    await AppStorage().init();
+    await DbManager().init();
   }
 
-  initApi({String? token}) async {
+  initApi() async {
     packageInfo = await PackageInfo.fromPlatform();
     await RestClient.instance.init(
-        
-        accessToken: token ?? "",
         platform: Platform.isAndroid ? "android" : "ios",
         appVersion: packageInfo.version,
         deviceId: await getDeviceId(),
