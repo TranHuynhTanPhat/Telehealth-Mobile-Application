@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
@@ -35,7 +36,14 @@ class _LogInScreenState extends State<LogInScreen> {
               EasyLoading.showToast(
                   translate(context, 'login_to_patient_account_failed'));
             }
-            Navigator.pushReplacementNamed(context, mainScreenPatientName);
+            if (AppController.instance.authState == AuthState.AllAuthorized ||
+                AppController.instance.authState ==
+                    AuthState.DoctorAuthorized) {
+              Navigator.pushReplacementNamed(context, mainScreenDoctorName);
+            } else {
+              Navigator.pushReplacementNamed(context, mainScreenPatientName);
+            }
+
           } else if (state is LogInError) {
             EasyLoading.dismiss();
             EasyLoading.showToast(
