@@ -3,7 +3,8 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/cubits/cubit_healthInfo/health_info_cubit.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';

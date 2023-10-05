@@ -30,7 +30,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.healthline"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -59,14 +59,15 @@ android {
 
     flavorDimensions "track"
     productFlavors {
-        internal {
+        dev {
             dimension "track"
-            applicationIdSuffix ".internal"
-            manifestPlaceholders = [applicationLabel: "[Internal] Shorebird Example"]
+            applicationIdSuffix ".dev"
+            manifestPlaceholders = [applicationLabel: "[Internal] HealthLine"]
+
         }
-        stable {
+        prod {
             dimension "track"
-            manifestPlaceholders = [applicationLabel: "Shorebird Example"]
+            manifestPlaceholders = [applicationLabel: "HealthLine"]
         }
     }
 

@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/cubits/cubits_export.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/components/side_menu.dart';
@@ -242,7 +242,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               duration: const Duration(milliseconds: 500),
               curve: Curves.fastOutSlowIn,
               left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
-              width: dimensWidth()*40,
+              width: double.maxFinite,
               height: MediaQuery.of(context).size.height,
               child: const SideMenu(),
             ),

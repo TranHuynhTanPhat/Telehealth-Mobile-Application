@@ -243,6 +243,10 @@
         "vi": "Bác sĩ",
         "en": "Doctor"
     },
+    "use_patient_account": {
+        "vi": "Sử dụng tài khoản khám bệnh",
+        "en": "Use patient account"
+    },
     "setting": {
         "vi": "Cài đặt",
         "en": "Setting"
@@ -539,6 +543,34 @@
         "vi": "Hồ sơ bệnh án",
         "en": "Medical record"
     },
+    "revenue": {
+        "vi": "Thu nhập",
+        "en": "Revenue"
+    },
+    "reported": {
+        "vi": "Bị tố cáo",
+        "en": "Reported"
+    },
+    "images": {
+        "vi": "Hình ảnh",
+        "en": "Images"
+    },
+    "file": {
+        "vi": "Tệp",
+        "en": "File"
+    },
+    "statistics": {
+        "vi": "Thống kê",
+        "en": "Statistics"
+    },
+    "next_patient_profile": {
+        "vi": "Hồ sơ bệnh nhân tiếp theo",
+        "en": "Next patient's profile"
+    },
+    "appointment": {
+        "vi": "Cuộc hẹn",
+        "en": "Appointment"
+    },
     "types": {
         "vi": "Loại",
         "en": "Types"
@@ -590,6 +622,14 @@
     "supports": {
         "vi": "Hỗ trợ",
         "en": "Supports"
+    },
+    "overview": {
+        "vi": "Tổng quan",
+        "en": "Overview"
+    },
+    "helps": {
+        "vi": "Trợ giúp",
+        "en": "Helps"
     },
     "wallet": {
         "vi": "Ví",

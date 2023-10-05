@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/cubits/cubit_healthInfo/health_info_cubit.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -15,19 +16,17 @@ class InfoCard extends StatelessWidget {
         builder: (context, state) {
           return Row(
             children: [
-              Expanded(
-                child: Text(
-                  state.subUsers.isNotEmpty
-                      ? state.subUsers
-                              .firstWhere((element) => element.isMainProfile!)
-                              .fullName ??
-                          translate(context, 'undefine')
-                      : translate(context, 'undefine'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: white),
-                ),
+              Text(
+                state.subUsers.isNotEmpty
+                    ? state.subUsers
+                            .firstWhere((element) => element.isMainProfile!)
+                            .fullName ??
+                        translate(context, 'undefine')
+                    : translate(context, 'undefine'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: white),
               ),
             ],
           );

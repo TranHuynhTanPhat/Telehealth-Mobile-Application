@@ -8,7 +8,11 @@
             "name": "Healthline",
             "request": "launch",
             "type": "dart",
-            "program": "lib/flavors/main_development.dart"
+            "program": "lib/flavors/main_development.dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ]
         },
         {
             "name": "Healthline (profile mode)",

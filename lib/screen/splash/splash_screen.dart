@@ -31,8 +31,12 @@ class _SplashScreenState extends State<SplashScreen> {
       // // prefs.setBool('first_time', true);
 
       if (firstTime != null && !firstTime) {
-        if (AppController().authState == AuthState.Unauthorized) {
+        if (AppController.instance.authState == AuthState.Unauthorized) {
           Navigator.pushReplacementNamed(context, logInName);
+        } else if (AppController.instance.authState ==
+                AuthState.AllAuthorized ||
+            AppController.instance.authState == AuthState.DoctorAuthorized) {
+          Navigator.pushReplacementNamed(context, mainScreenDoctorName);
         } else {
           Navigator.pushReplacementNamed(context, mainScreenPatientName);
         }

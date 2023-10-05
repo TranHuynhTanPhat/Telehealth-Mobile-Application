@@ -1,67 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
-class DrawerMenu extends StatelessWidget {
-  const DrawerMenu({
-    super.key,
-  });
+class LabelDrawer extends StatefulWidget {
+  const LabelDrawer(
+      {super.key,
+      required this.active,
+      this.press,
+      required this.lable,
+      required this.icon});
+  final bool active;
+  final String lable;
+  final IconData icon;
+  final Function()? press;
 
   @override
+  State<LabelDrawer> createState() => _LabelDrawerState();
+}
+
+class _LabelDrawerState extends State<LabelDrawer> {
+  @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: secondary,
-            ),
-            padding: EdgeInsets.zero,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundImage: AssetImage(DImages.placeholder),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Bs. Lê Đình Trường',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: white),
-                ),
-                Text(
-                  'leditruong@gmail.com',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: white),
-                ),
-              ],
-            ),
+    return Stack(
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastEaseInToSlowEaseOut,
+          margin: EdgeInsets.only(
+            right: dimensWidth(),
           ),
-          ListTile(
-            title: Text(translate(context, 'schedule')),
-            onTap: () {},
+          decoration: BoxDecoration(
+            color: primary.withOpacity(.2),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(
+                  dimensWidth() * 2,
+                ),
+                bottomRight: Radius.circular(
+                  dimensWidth() * 2,
+                )),
           ),
-          ListTile(
-            title: Text(translate(context, 'wallet')),
-            onTap: () {
-            },
+          width: widget.active == true ? dimensWidth() * 40 : 0,
+          height: dimensHeight() * 7,
+        ),
+        ListTile(
+          splashColor: transparent,
+          onTap: widget.press,
+          dense: true,
+          visualDensity: VisualDensity(vertical: 0),
+          title: Text(
+            translate(context, widget.lable),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: color1F1F1F),
           ),
-        ],
-      ),
+          leading: FaIcon(
+            widget.icon,
+            size: dimensIcon() * .5,
+            color: color1F1F1F,
+          ),
+        ),
+      ],
     );
   }
 }

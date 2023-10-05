@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FilePickerCustom {
@@ -8,34 +9,55 @@ class FilePickerCustom {
     openAppSettings();
   }
 
-  Future<bool> requestFilePermission() async {
+  Future<bool> checkGalleryPermission() async {
+    // In Android we need to request the storage permission,
+    // while in iOS is the photos permission
+    if (Platform.isAndroid) {
+      logPrint("AHJDK");
+      return Permission.storage.isGranted;
+    } else {
+      return Permission.photos.isGranted;
+    }
+  }
+
+  Future<bool> requestGalleryPermission() async {
     PermissionStatus result;
     // In Android we need to request the storage permission,
     // while in iOS is the photos permission
     if (Platform.isAndroid) {
+      logPrint("fdsjflskdjflds");
       result = await Permission.storage.request();
+      logPrint("fdsjflskdjflds");
+
     } else {
       result = await Permission.photos.request();
     }
-
-    if (result.isGranted) {
-  
-      return true;
-    } 
-    return false;
+    return result.isGranted;
   }
 
   Future<File?> getImage() async {
-    bool checkPermission = await requestFilePermission();
-    
-    if (checkPermission) {
-      FilePickerResult? result = await FilePicker.platform
-          .pickFiles(type: FileType.image, allowMultiple: false);
+    bool checkPermission = await checkGalleryPermission();
 
-      if (result != null) {
-        final file = File(result.files.single.path!);
-        return file;
+    if (checkPermission) {
+      logPrint("PERMISSION FOR GALLERY");
+      return await openGallery();
+    } else {
+      logPrint("NOT PERMISSION FOR GALLERY");
+      checkPermission = await requestGalleryPermission();
+      if (checkPermission) {
+        return openGallery();
       }
+    }
+    return null;
+  }
+
+  Future<File?> openGallery() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.image, allowMultiple: false);
+
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      return file;
     }
     return null;
   }

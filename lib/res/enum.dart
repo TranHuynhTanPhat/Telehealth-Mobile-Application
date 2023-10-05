@@ -4,15 +4,12 @@ enum AuthState { Unauthorized, PatientAuthorized, DoctorAuthorized, AllAuthorize
 
 enum AppTheme { LightTheme, DartTheme }
 
-enum SideMenus {
-  Home,
-  EditContactInfo,
-  ChangePassword,
-  Wallet,
+enum DrawerMenus{
+  Overview,
+  Schedule,
+  Patient,
   Setting,
-  Faqs,
-  TermsAndConditions,
-  PrivacyPolicy
+  Helps
 }
 
 enum Gender { Male, Female }

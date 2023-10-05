@@ -14,7 +14,7 @@ import 'package:healthline/screen/ui_patient/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/screen/ui_patient/ref_vaccination/ref_vaccination_screen.dart';
-import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
+import 'package:healthline/screen/ui_doctor/main/main_screen_doctor.dart';
 import 'package:healthline/screen/ui_patient/vaccination/add_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
