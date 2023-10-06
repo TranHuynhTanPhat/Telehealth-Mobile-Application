@@ -20,12 +20,21 @@ class UserService extends BaseService {
     final response = await post(ApiConstants.USER, data: request.toJson());
     return response.code;
   }
+
   Future<DataResponse> addSubUser(UserRequest request) async {
-    final response = await post(ApiConstants.MEDICAL_RECORD, data: request.toJson());
+    final response =
+        await post(ApiConstants.MEDICAL_RECORD, data: request.toJson());
     return response;
   }
+
   Future<DataResponse> updateSubUser(UserRequest request) async {
-    final response = await patch(ApiConstants.MEDICAL_RECORD, data: request.toJson());
+    final response =
+        await patch(ApiConstants.MEDICAL_RECORD, data: request.toJson());
+    return response;
+  }
+
+  Future<DataResponse> deleteSubUser(String recordId) async {
+    final response = await delete('${ApiConstants.MEDICAL_RECORD}/$recordId');
     return response;
   }
 

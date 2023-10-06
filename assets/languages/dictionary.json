@@ -147,6 +147,10 @@
         "vi": "Vui lòng chọn",
         "en": "Please choose"
     },
+    "please_choose_image": {
+        "vi": "Vui lòng chọn ảnh",
+        "en": "Please choose image"
+    },
     "please_choose_day_of_birth": {
         "vi": "Vui lòng chọn ngày sinh",
         "en": "Please choose birthday"
@@ -262,6 +266,10 @@
     "update": {
         "vi": "Cập nhật",
         "en": "Update"
+    },
+    "delete_record": {
+        "vi": "Xoá hồ sơ",
+        "en": "Delete record"
     },
     "cant_load_data": {
         "vi": "Không thể tải dữ liệu",
@@ -563,6 +571,14 @@
         "vi": "Thống kê",
         "en": "Statistics"
     },
+    "your_shift": {
+        "vi": "Ca làm việc của bạn",
+        "en": "Your shift"
+    },
+    "today": {
+        "vi": "Hôm nay",
+        "en": "Today"
+    },
     "next_patient_profile": {
         "vi": "Hồ sơ bệnh nhân tiếp theo",
         "en": "Next patient's profile"
@@ -570,6 +586,22 @@
     "appointment": {
         "vi": "Cuộc hẹn",
         "en": "Appointment"
+    },
+    "available": {
+        "vi": "Có sẵn",
+        "en": "Available"
+    },
+    "empty": {
+        "vi": "Trống",
+        "en": "Empty"
+    },
+    "booked": {
+        "vi": "Đã được đặt",
+        "en": "Booked"
+    },
+    "loading": {
+        "vi": "Đang tải",
+        "en": "Loading"
     },
     "types": {
         "vi": "Loại",
@@ -1030,6 +1062,10 @@
     "user_not_found": {
         "vi": "Không tìm thấy tài khoản",
         "en": "User not found"
+    },
+    "doctor_not_found": {
+        "vi": "Không tìm thấy bác sĩ",
+        "en": "Doctor not found"
     },
     "feedbacks": {
         "vi": "Nhận xét",

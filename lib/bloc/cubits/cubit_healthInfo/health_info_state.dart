@@ -34,6 +34,9 @@ abstract class UpdateUser extends HealthInfoState {
 abstract class FetchUser extends HealthInfoState {
   FetchUser(super.subUsers, super.currentUser);
 }
+abstract class deleteUser extends HealthInfoState {
+  deleteUser(super.subUsers, super.currentUser);
+}
 
 final class HealthInfoInitial extends FetchUser {
   HealthInfoInitial(super.subUsers, super.currentUser);
@@ -76,5 +79,18 @@ final class UpdateUserSuccessfully extends UpdateUser {
 
 final class UpdateUserFailure extends UpdateUser {
   UpdateUserFailure(super.subUsers, super.currentUser, this.message);
+  final String message;
+}
+final class DeleteUserLoading extends UpdateUser {
+  DeleteUserLoading(super.subUsers, super.currentUser);
+}
+
+final class DeleteUserSuccessfully extends UpdateUser {
+  DeleteUserSuccessfully(super.subUsers, super.currentUser, this.message);
+  final String message;
+}
+
+final class DeleteUserFailure extends UpdateUser {
+  DeleteUserFailure(super.subUsers, super.currentUser, this.message);
   final String message;
 }

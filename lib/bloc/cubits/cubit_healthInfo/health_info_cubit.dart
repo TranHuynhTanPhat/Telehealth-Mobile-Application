@@ -24,8 +24,11 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
       List<UserResponse> userResponses =
           await _userRepository.fetchMdicalRecord();
 
-      emit(HealthInfoLoaded(userResponses,
-          userResponses.indexWhere((element) => element.isMainProfile!)));
+      emit(HealthInfoLoaded(
+          userResponses,
+          state.currentUser == -1
+              ? userResponses.indexWhere((element) => element.isMainProfile!)
+              : state.currentUser));
     } catch (e) {
       logPrint(e.toString());
       emit(HealthInfoError(state.subUsers, state.currentUser));
@@ -106,6 +109,23 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
       DioException er = e as DioException;
 
       emit(UpdateUserFailure(
+          state.subUsers, state.currentUser, er.message.toString()));
+    }
+  }
+
+  Future<void> deleteUser(String recordId) async {
+    emit(DeleteUserLoading(state.subUsers, state.currentUser));
+    try {
+      DataResponse response = await _userRepository.deleteSubUser(
+        recordId,
+      );
+      emit(DeleteUserSuccessfully(
+          state.subUsers, state.currentUser, response.message));
+    } catch (e) {
+      logPrint(e.toString());
+      DioException er = e as DioException;
+
+      emit(DeleteUserFailure(
           state.subUsers, state.currentUser, er.message.toString()));
     }
   }

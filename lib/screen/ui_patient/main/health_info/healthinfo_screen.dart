@@ -52,14 +52,16 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
 
   Future<void> showUpdateDialogInput(
       BuildContext context, UserResponse subUser) async {
-    await showDialog(
+    final result = await showDialog(
         barrierDismissible: true,
         context: context,
         builder: (context) => UpdateSubUserInputDialog(
               userResponse: subUser,
             ));
-    //     .whenComplete(
-    // () => context.read<HealthInfoCubit>().fetchMedicalRecord());
+    if (result == true) {
+      // ignore: use_build_context_synchronously
+      context.read<HealthInfoCubit>().fetchMedicalRecord();
+    }
   }
 
   @override
@@ -240,6 +242,8 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                       vertical: dimensHeight(), horizontal: dimensWidth() * 3),
                   children: [
                     InkWell(
+                      splashColor: transparent,
+                      highlightColor: transparent,
                       onTap: () => showDialogInput(context),
                       child: const HeartRateCard(),
                     ),
@@ -247,6 +251,8 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                       children: [
                         Expanded(
                           child: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
                             onTap: () async => await showDialogInput(context),
                             child: const BloodGroupCard(),
                           ),
@@ -256,6 +262,8 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                         ),
                         Expanded(
                           child: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
                             onTap: () async => await showDialogInput(context),
                             child: const BMICard(),
                           ),

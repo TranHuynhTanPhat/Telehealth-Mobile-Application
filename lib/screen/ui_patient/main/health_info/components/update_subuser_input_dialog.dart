@@ -105,8 +105,15 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
             EasyLoading.show();
           } else if (state is UpdateUserSuccessfully) {
             EasyLoading.showToast(translate(context, state.message));
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           } else if (state is UpdateUserFailure) {
+            EasyLoading.showToast(translate(context, state.message));
+          } else if (state is DeleteUserLoading) {
+            EasyLoading.show();
+          } else if (state is DeleteUserSuccessfully) {
+            EasyLoading.showToast(translate(context, state.message));
+            Navigator.pop(context, true);
+          } else if (state is DeleteUserFailure) {
             EasyLoading.showToast(translate(context, state.message));
           }
         },
@@ -118,7 +125,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                 KeyboardUtil.hideKeyboard(context);
               },
               child: AbsorbPointer(
-                absorbing: state is UpdateUserLoading,
+                absorbing:
+                    state is UpdateUserLoading || state is DeleteUserLoading,
                 child: Dialog(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(dimensWidth() * 3),
@@ -429,25 +437,65 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                     textInputType: TextInputType.text,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: ElevatedButtonWidget(
-                                    text: translate(context, 'update'),
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        context
-                                            .read<HealthInfoCubit>()
-                                            .updateUser(
-                                                _file,
-                                                _controllerFullname.text,
-                                                _controllerBirthday.text,
-                                                gender!,
-                                                relationship!,
-                                                _controllerAddress.text);
-                                      }
-                                    },
-                                  ),
+                                Row(
+                                  children: [
+                                    widget._subUser.isMainProfile == false
+                                        ? Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: TextButton(
+                                                child: Text(
+                                                    translate(context,
+                                                        'delete_record'),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall
+                                                        ?.copyWith(
+                                                            color: color9D4B6C,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            decorationColor:
+                                                                color9D4B6C)),
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    _formKey.currentState!
+                                                        .save();
+                                                    context
+                                                        .read<HealthInfoCubit>()
+                                                        .deleteUser(widget
+                                                            ._subUser.id!);
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: ElevatedButtonWidget(
+                                          text: translate(context, 'update'),
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              _formKey.currentState!.save();
+                                              context
+                                                  .read<HealthInfoCubit>()
+                                                  .updateUser(
+                                                      _file,
+                                                      _controllerFullname.text,
+                                                      _controllerBirthday.text,
+                                                      gender!,
+                                                      relationship!,
+                                                      _controllerAddress.text);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 )
                               ],
                             ),

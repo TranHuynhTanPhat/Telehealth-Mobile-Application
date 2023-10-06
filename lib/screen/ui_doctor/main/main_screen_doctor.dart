@@ -25,6 +25,14 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
   DrawerMenus _currentPage = DrawerMenus.Overview;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      EasyLoading.dismiss();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SideMenuCubit(),
@@ -104,8 +112,11 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   AppController.instance.authState == AuthState.AllAuthorized
                       ? ListTile(
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, mainScreenPatientName);
+                            EasyLoading.show();
+                            Future.delayed(const Duration(seconds: 1), () {
+                              Navigator.pushReplacementNamed(
+                                  context, mainScreenPatientName);
+                            });
                           },
                           title: Text(
                             translate(context, 'use_patient_account'),

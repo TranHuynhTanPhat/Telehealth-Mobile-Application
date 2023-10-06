@@ -95,6 +95,8 @@ class _DoctorCardState extends State<DoctorCard> {
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
                                   InkWell(
+                                    splashColor: transparent,
+                                    highlightColor: transparent,
                                     child: Container(
                                       width: dimensWidth() * 17,
                                       padding:

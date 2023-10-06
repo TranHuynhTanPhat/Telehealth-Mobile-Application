@@ -73,6 +73,11 @@ class UserRepository extends BaseRepository {
         address: address);
     return await _userService.updateSubUser(request);
   }
+  Future<DataResponse> deleteSubUser(
+      String recordId,) async {
+   
+    return await _userService.deleteSubUser(recordId);
+  }
 
   Future<DataResponse> updateEmail(String email) async {
     return await _userService.updateEmail(email);

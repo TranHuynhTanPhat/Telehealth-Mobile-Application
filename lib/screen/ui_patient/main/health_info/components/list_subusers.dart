@@ -20,10 +20,14 @@ class _ListSubUserState extends State<ListSubUser> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> showDialogInput(BuildContext context) async {
-    await showDialog(
+    final result = await showDialog(
         barrierDismissible: true,
         context: context,
         builder: (context) => SubUserInputDialog(formKey: _formKey));
+    if (result == true) {
+      // ignore: use_build_context_synchronously
+      context.read<HealthInfoCubit>().fetchMedicalRecord();
+    }
     // .whenComplete(
     //     () => context.read<HealthInfoCubit>().fetchMedicalRecord());
   }
@@ -31,7 +35,6 @@ class _ListSubUserState extends State<ListSubUser> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HealthInfoCubit, HealthInfoState>(
-      buildWhen: (previous, current) => current is FetchUser,
       builder: (context, state) {
         return ListView(
           shrinkWrap: true,

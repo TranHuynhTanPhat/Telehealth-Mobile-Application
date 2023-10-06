@@ -275,6 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: dimensWidth() * 2,
                           horizontal: dimensWidth() * 3),
                       child: BaseGridview(
+                        radio: 0.8,
                         children: [buildShimmer(), buildShimmer()],
                       ),
                     )
@@ -285,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.symmetric(
                       vertical: dimensWidth() * 2,
                       horizontal: dimensWidth() * 3),
-                  child: BaseGridview(children: [
+                  child: BaseGridview(radio: 0.8, children: [
                     ...state.doctors
                         .map(
                           (e) => DoctorCard(

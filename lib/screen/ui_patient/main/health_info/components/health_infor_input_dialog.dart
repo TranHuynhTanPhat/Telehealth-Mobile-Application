@@ -108,11 +108,9 @@ class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
                                 surfaceTintColor:
                                     const MaterialStatePropertyAll(white),
                                 padding: MaterialStatePropertyAll(
-                                    EdgeInsets.only(
-                                        right: dimensWidth() * 25,
-                                        left: dimensWidth() * 2,
-                                        top: dimensHeight(),
-                                        bottom: dimensHeight())),
+                                    EdgeInsets.symmetric(
+                                        horizontal: dimensWidth() * 2,
+                                        vertical: dimensHeight())),
                               ),
                               builder: (BuildContext context,
                                   MenuController controller, Widget? child) {
@@ -229,7 +227,7 @@ class _HealthInforInputDialogState extends State<HealthInforInputDialog> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: ElevatedButtonWidget(
-                        text:translate(context, 'update_information'),
+                        text: translate(context, 'update_information'),
                         onPressed: () {
                           if (widget._formKey.currentState!.validate()) {
                             widget._formKey.currentState!.save();

@@ -44,22 +44,27 @@ class _LabelDrawerState extends State<LabelDrawer> {
           width: widget.active == true ? dimensWidth() * 40 : 0,
           height: dimensHeight() * 7,
         ),
-        ListTile(
-          splashColor: transparent,
-          onTap: widget.press,
-          dense: true,
-          visualDensity: const VisualDensity(vertical: 0),
-          title: Text(
-            translate(context, widget.lable),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: color1F1F1F),
-          ),
-          leading: FaIcon(
-            widget.icon,
-            size: dimensIcon() * .5,
-            color: color1F1F1F,
+        Container(
+          width:  dimensWidth() * 40 ,
+          height: dimensHeight() * 7,
+          alignment: Alignment.center,
+          child: ListTile(
+            splashColor: transparent,
+            onTap: widget.press,
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 0),
+            title: Text(
+              translate(context, widget.lable),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: color1F1F1F),
+            ),
+            leading: FaIcon(
+              widget.icon,
+              size: dimensIcon() * .5,
+              color: color1F1F1F,
+            ),
           ),
         ),
       ],

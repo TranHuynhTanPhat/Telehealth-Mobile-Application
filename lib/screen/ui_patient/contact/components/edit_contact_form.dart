@@ -74,13 +74,13 @@ class _EditContactFormState extends State<EditContactForm> {
         EasyLoading.dismiss();
       }
       if (state is ContactUpdate) {
-        EasyLoading.showToast(
-            translate(context, state.response.message), toastPosition: EasyLoadingToastPosition.bottom);
+        EasyLoading.showToast(translate(context, state.response.message),
+            toastPosition: EasyLoadingToastPosition.bottom);
       }
       state.phone != null
           ? _controllerPhone.text = state.phone!.replaceFirst('+84', '')
           : '';
-      state.email != null ? _controllerEmail.text = state.email! : '';
+      _controllerEmail.text = state.email ?? '';
       return Form(
         key: _formKey,
         child: Column(
@@ -229,7 +229,7 @@ class _EditContactFormState extends State<EditContactForm> {
             Padding(
               padding: EdgeInsets.only(bottom: dimensHeight() * 3),
               child: TextFieldWidget(
-                  readOnly: state.email == null,
+                  readOnly: state is ContactLoading,
                   label: translate(context, 'email'),
                   hint: translate(context, 'ex_email'),
                   controller: _controllerEmail,
@@ -253,14 +253,16 @@ class _EditContactFormState extends State<EditContactForm> {
                 width: double.infinity,
                 child: ElevatedButtonWidget(
                   text: translate(context, 'update_information'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      context
-                          .read<ContactCubit>()
-                          .updateEmail(_controllerEmail.text);
-                    }
-                  },
+                  onPressed: _controllerEmail.text != state.email
+                      ? () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            context
+                                .read<ContactCubit>()
+                                .updateEmail(_controllerEmail.text);
+                          }
+                        }
+                      : null,
                 ),
               ),
             ),

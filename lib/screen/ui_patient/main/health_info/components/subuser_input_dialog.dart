@@ -65,7 +65,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
             EasyLoading.show();
           } else if (state is AddUserSuccessfully) {
             EasyLoading.showToast(translate(context, state.message));
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           } else if (state is AddUserFailure) {
             EasyLoading.showToast(translate(context, state.message));
           }

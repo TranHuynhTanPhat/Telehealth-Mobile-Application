@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
@@ -38,6 +39,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      EasyLoading.dismiss();
+    });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))
       ..addListener(() {
@@ -261,6 +265,8 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                             isSideMenuClosed ? 0 : dimensWidth() * 3),
                       ),
                       child: InkWell(
+                        splashColor: transparent,
+                        highlightColor: transparent,
                         onTap: () {
                           if (!isSideMenuClosed) {
                             _animationController.reverse();
@@ -276,7 +282,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                         ),
                       ),
                     ),
-                  )),
+                  ),),
             ),
           ],
         ),

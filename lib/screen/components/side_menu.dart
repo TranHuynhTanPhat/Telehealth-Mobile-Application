@@ -51,8 +51,11 @@ class _SideMenuState extends State<SideMenu> {
                 AppController.instance.authState == AuthState.AllAuthorized
                     ? ListTile(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, mainScreenDoctorName);
+                          EasyLoading.show();
+                          Future.delayed(const Duration(seconds: 1), () {
+                            Navigator.pushReplacementNamed(
+                                context, mainScreenDoctorName);
+                          });
                         },
                         title: Text(
                           translate(context, 'Phòng khám của tôi'),
