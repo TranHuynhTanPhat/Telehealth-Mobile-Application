@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/canceled_frame.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/completed_frame.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/upcoming_frame.dart';
+import './canceled_frame.dart';
+import './completed_frame.dart';
+import './upcoming_frame.dart';
 import 'package:healthline/utils/translate.dart';
 
 class ScheduleScreen extends StatefulWidget {

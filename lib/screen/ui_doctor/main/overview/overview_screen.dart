@@ -88,7 +88,7 @@ class OverviewScreen extends StatelessWidget {
                   ),
                   trailing: Text(
                     TimeOfDay.now().format(context).toString(),
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 Divider(
@@ -122,7 +122,7 @@ class OverviewScreen extends StatelessWidget {
                   ),
                   trailing: Text(
                     TimeOfDay.now().format(context).toString(),
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 Divider(
@@ -156,7 +156,7 @@ class OverviewScreen extends StatelessWidget {
                   ),
                   trailing: Text(
                     TimeOfDay.now().format(context).toString(),
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ],
@@ -235,7 +235,7 @@ class OverviewScreen extends StatelessWidget {
                   ),
                   title: Text(
                     'Cảm',
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   trailing: FaIcon(FontAwesomeIcons.chevronRight,
                       size: dimensIcon() * .5),
@@ -257,7 +257,7 @@ class OverviewScreen extends StatelessWidget {
                   ),
                   title: Text(
                     'Cảm',
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   trailing: FaIcon(FontAwesomeIcons.chevronRight,
                       size: dimensIcon() * .5),
@@ -279,7 +279,7 @@ class OverviewScreen extends StatelessWidget {
                   visualDensity: const VisualDensity(vertical: 0),
                   title: Text(
                     'Cảm',
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   trailing: FaIcon(FontAwesomeIcons.chevronRight,
                       size: dimensIcon() * .5),

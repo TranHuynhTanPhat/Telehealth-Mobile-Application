@@ -60,9 +60,7 @@ class UpcomingCard extends StatelessWidget {
                               .textTheme
                               .labelLarge
                               ?.copyWith(
-                                  color: object['status'] == 'pending'
-                                      ? colorDF9F1E
-                                      : secondary,
+                                  color: color1F1F1F,
                                   fontWeight: FontWeight.w900),
                         ),
                         SizedBox(
@@ -73,10 +71,7 @@ class UpcomingCard extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
-                                ?.copyWith(
-                                    color: object['status'] == 'pending'
-                                        ? colorDF9F1E
-                                        : secondary),
+                                ?.copyWith(color: color1F1F1F),
                           ),
                         ),
                       ],
@@ -86,13 +81,12 @@ class UpcomingCard extends StatelessWidget {
               ),
               InkWell(
                 splashColor: transparent,
-                      highlightColor: transparent,
+                highlightColor: transparent,
                 onTap: () {},
                 child: FaIcon(
                   FontAwesomeIcons.ellipsis,
                   size: dimensWidth() * 2.5,
-                  color:
-                      object['status'] == 'Pending' ? colorDF9F1E : secondary,
+                  color: color1F1F1F,
                 ),
               ),
             ],
@@ -105,9 +99,7 @@ class UpcomingCard extends StatelessWidget {
                 "${translate(context, 'patient')}: ${object['patient']}",
                 overflow: TextOverflow.visible,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: object['status'] == 'pending'
-                          ? colorDF9F1E
-                          : secondary,
+                      color: color1F1F1F,
                     ),
               ),
             ),
@@ -115,8 +107,7 @@ class UpcomingCard extends StatelessWidget {
           Text(
             formatFullDate(context, object['date']),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color:
-                      object['status'] == 'pending' ? colorDF9F1E : secondary,
+                  color: color1F1F1F,
                 ),
           ),
           Row(
@@ -127,8 +118,7 @@ class UpcomingCard extends StatelessWidget {
                 children: [
                   FaIcon(
                     FontAwesomeIcons.clock,
-                    color:
-                        object['status'] == 'pending' ? colorDF9F1E : secondary,
+                    color: color1F1F1F,
                     size: dimensWidth() * 2,
                   ),
                   SizedBox(
@@ -137,10 +127,7 @@ class UpcomingCard extends StatelessWidget {
                   Text(
                     object['begin'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
+                        color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -148,10 +135,7 @@ class UpcomingCard extends StatelessWidget {
                   Text(
                     "-",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
+                        color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth() * .3,
@@ -159,10 +143,7 @@ class UpcomingCard extends StatelessWidget {
                   Text(
                     object['end'].format(context).toString(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
+                        color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -172,10 +153,7 @@ class UpcomingCard extends StatelessWidget {
                   Text(
                     translate(context, object['status']),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
+                        color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: dimensWidth(),
@@ -183,12 +161,12 @@ class UpcomingCard extends StatelessWidget {
                   object['status'] == 'confirmed'
                       ? FaIcon(
                           FontAwesomeIcons.check,
-                          color: secondary,
+                          color: color1F1F1F,
                           size: dimensWidth() * 2,
                         )
                       : FaIcon(
                           FontAwesomeIcons.arrowsRotate,
-                          color: colorDF9F1E,
+                          color: color1F1F1F,
                           size: dimensWidth() * 2,
                         ),
                 ],

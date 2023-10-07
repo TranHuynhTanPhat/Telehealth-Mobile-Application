@@ -71,8 +71,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                             }),
                             child: FaIcon(
                               FontAwesomeIcons.chevronLeft,
-                              size: dimensIcon() * .8,
-                              color: secondary,
+                              size: dimensIcon() * .6,
+                              color: color1F1F1F,
                             ),
                           ),
                   ),
@@ -89,7 +89,7 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                     label: Text(
                       formatDateToMonthYear(context, _current),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w900, color: secondary),
+                          fontWeight: FontWeight.w900, color: color1F1F1F),
                     ),
                   ),
                 ),
@@ -107,8 +107,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                     }),
                     child: FaIcon(
                       FontAwesomeIcons.chevronRight,
-                      size: dimensIcon() * .8,
-                      color: secondary,
+                      size: dimensIcon() * .6,
+                      color: color1F1F1F,
                     ),
                   ),
                 ),
@@ -161,8 +161,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                               .titleLarge
                               ?.copyWith(
                                   color: _daySelected == index
-                                      ? secondary
-                                      : primary,
+                                      ? color1F1F1F
+                                      : color1F1F1F,
                                   fontWeight: FontWeight.w900),
                         ),
                       ),
@@ -174,8 +174,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                               .bodyMedium
                               ?.copyWith(
                                   color: _daySelected == index
-                                      ? secondary
-                                      : primary),
+                                      ? color1F1F1F
+                                      : color1F1F1F),
                         ),
                       )
                     ],

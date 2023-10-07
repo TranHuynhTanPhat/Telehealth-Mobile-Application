@@ -42,8 +42,8 @@ class _SlideMonthsInYearState extends State<SlideMonthsInYear> {
                     }),
                     child: FaIcon(
                       FontAwesomeIcons.chevronLeft,
-                      size: dimensIcon() * .8,
-                      color: secondary,
+                      size: dimensIcon() * .6,
+                      color: color1F1F1F,
                     ),
                   ),
                 ),
@@ -59,7 +59,7 @@ class _SlideMonthsInYearState extends State<SlideMonthsInYear> {
                     label: Text(
                       _current.year.toString(),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w900, color: secondary),
+                          fontWeight: FontWeight.w900, color: color1F1F1F),
                     ),
                   ),
                 ),
@@ -90,8 +90,8 @@ class _SlideMonthsInYearState extends State<SlideMonthsInYear> {
                             }),
                             child: FaIcon(
                               FontAwesomeIcons.chevronRight,
-                              size: dimensIcon() * .8,
-                              color: secondary,
+                              size: dimensIcon() * .6,
+                              color: color1F1F1F,
                             ),
                           ),
                   ),
@@ -144,8 +144,8 @@ class _SlideMonthsInYearState extends State<SlideMonthsInYear> {
                                 .titleMedium
                                 ?.copyWith(
                                     color: _daySelected == index
-                                        ? secondary
-                                        : primary,
+                                        ? color1F1F1F
+                                        : color1F1F1F,
                                     fontWeight: FontWeight.bold),
                           ),
                         ),

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/components/export.dart';
+import './components/export.dart';
 
 class UpcomingFrame extends StatefulWidget {
   const UpcomingFrame({super.key});

@@ -7,34 +7,34 @@ import 'package:healthline/data/api/rest_client.dart';
 /// Request require Cookie => baseUrl + path
 abstract class BaseService {
   final String baseUrl = dotenv.get('BASE_URL', fallback: '');
-  Future<DataResponse> get(String path, {Map<String, dynamic>? params}) async {
+  Future<DataResponse> get(String path, {Map<String, dynamic>? params, bool isDoctor = false}) async {
     // ignore: prefer_typing_uninitialized_variables
     final response;
     if (params != null) {
-      response = await RestClient().getDio().get(path, queryParameters: params);
+      response = await RestClient().getDio(isDoctor: isDoctor).get(path, queryParameters: params);
     } else {
-      response = await RestClient().getDio().get(path);
+      response = await RestClient().getDio(isDoctor: isDoctor).get(path);
       // print(response.toString());
     }
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> post(String path, {data}) async {
-    final response = await RestClient().getDio().post(path, data: data);
+  Future<DataResponse> post(String path, {data, bool isDoctor = false}) async {
+    final response = await RestClient().getDio(isDoctor: isDoctor).post(path, data: data);
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> put(String path, {data}) async {
-    final response = await RestClient().getDio().put(path, data: data);
+  Future<DataResponse> put(String path, {data, bool isDoctor = false}) async {
+    final response = await RestClient().getDio(isDoctor: isDoctor).put(path, data: data);
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> delete(String path, {data}) async {
-    final response = await RestClient().getDio().delete(path, data: data);
+  Future<DataResponse> delete(String path, {data, bool isDoctor = false}) async {
+    final response = await RestClient().getDio(isDoctor: isDoctor).delete(path, data: data);
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> patch(String path, {data}) async {
+  Future<DataResponse> patch(String path, {data, bool isDoctor = false}) async {
     final response = await RestClient().getDio().patch(path, data: data);
     return await _handleResponse(response);
   }

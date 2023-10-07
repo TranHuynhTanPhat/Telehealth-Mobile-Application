@@ -34,8 +34,8 @@ abstract class UpdateUser extends HealthInfoState {
 abstract class FetchUser extends HealthInfoState {
   FetchUser(super.subUsers, super.currentUser);
 }
-abstract class deleteUser extends HealthInfoState {
-  deleteUser(super.subUsers, super.currentUser);
+abstract class DeleteUser extends HealthInfoState {
+  DeleteUser(super.subUsers, super.currentUser);
 }
 
 final class HealthInfoInitial extends FetchUser {

@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/drawer_menu.dart';
@@ -239,6 +240,18 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: Container(
+              margin: EdgeInsets.only(right: dimensWidth() * 40),
+              child: IconButton(
+                onPressed: () => RestClient().runHttpInspector(),
+                padding: EdgeInsets.all(dimensWidth() * 2),
+                icon: const FaIcon(FontAwesomeIcons.bug),
+                color: white,
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(secondary)),
               ),
             ),
             body: _currentPage == DrawerMenus.Setting

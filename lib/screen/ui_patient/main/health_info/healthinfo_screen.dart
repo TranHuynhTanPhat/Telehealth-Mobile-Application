@@ -180,9 +180,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                                     child: const ListSubUser(),
                                   )
                                 : const SizedBox(),
-                            state is HealthInfoLoading
-                                ? const LinearProgressIndicator()
-                                : const SizedBox(),
                           ],
                         ),
                       ),

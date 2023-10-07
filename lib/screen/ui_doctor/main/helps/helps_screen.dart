@@ -20,7 +20,7 @@ class HelpsScreen extends StatelessWidget {
             top: 0,
             child: FaIcon(
               FontAwesomeIcons.question,
-              color: color1F1F1F.withOpacity(.2),
+              color: color1F1F1F.withOpacity(.05),
               size: dimensWidth() * 110,
             ),
           ),
