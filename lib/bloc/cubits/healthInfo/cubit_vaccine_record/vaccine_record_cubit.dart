@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/vaccination_response.dart';
 import 'package:healthline/repository/vaccination_repository.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'vaccine_record_state.dart';
@@ -53,6 +54,8 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
       );
     } catch (e) {
       DioException er = e as DioException;
+      logPrint(er);
+
       emit(
         FetchVaccinationError(
           vaccinations: state.vaccinations,
@@ -87,6 +90,7 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
       );
     } catch (e) {
       DioException er = e as DioException;
+      logPrint(er);
       emit(
         FetchInjectedVaccinationError(
           vaccinations: state.vaccinations,
@@ -124,6 +128,8 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
       );
     } catch (e) {
       DioException er = e as DioException;
+      logPrint(er);
+
       emit(CreateInjectedVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,

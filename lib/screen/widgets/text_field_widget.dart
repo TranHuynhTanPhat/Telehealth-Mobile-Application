@@ -23,6 +23,7 @@ class TextFieldWidget extends StatelessWidget {
     required this.validate,
     this.readOnly = false,
     this.onTap,
+    this.maxLine = 1,
   });
   final TextEditingController controller;
   final String? label;
@@ -43,10 +44,13 @@ class TextFieldWidget extends StatelessWidget {
   final String? Function(String?) validate;
   final bool readOnly;
   final Function()? onTap;
+  final int maxLine;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLine,
+      textAlign: TextAlign.start,
       onTap: onTap,
       readOnly: readOnly,
       validator: validate,
@@ -57,6 +61,7 @@ class TextFieldWidget extends StatelessWidget {
       enableSuggestions: enableSuggestions!,
       autocorrect: autocorrect!,
       decoration: InputDecoration(
+        alignLabelWithHint: true,
         fillColor: fillColor,
         filled: filled,
         contentPadding: EdgeInsets.all(dimensHeight() * 2),

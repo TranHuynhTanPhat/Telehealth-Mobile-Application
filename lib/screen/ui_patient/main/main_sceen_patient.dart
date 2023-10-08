@@ -117,7 +117,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
     ];
     return WillPopScope(
       onWillPop: () async {
-        if(isSideMenuClosed == false){
+        if (isSideMenuClosed == false) {
           setState(() {
             isSideMenuClosed = true;
           });
@@ -143,7 +143,13 @@ class _MainScreenPatientState extends State<MainScreenPatient>
           ),
           BlocProvider(
             create: (context) => _subUserCubit,
-          )
+          ),
+          BlocProvider(
+            create: (context) => _vaccineRecordCubit,
+          ),
+          BlocProvider(
+            create: (context) => HealthStatCubit(),
+          ),
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,

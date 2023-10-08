@@ -19,19 +19,41 @@ class SettingScreen extends StatelessWidget {
         children: [
           ListTile(
             onTap: () {
-              Navigator.pushNamed(context, contactName);
+              Navigator.pushNamed(context, updateBiographyDoctorName);
             },
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(
-              translate(context, 'edit_contact_info'),
+              translate(context, 'update_biography'),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
                   ?.copyWith(color: color1F1F1F),
             ),
             leading: FaIcon(
-              FontAwesomeIcons.userGear,
+              FontAwesomeIcons.solidAddressCard,
+              size: dimensIcon() * .7,
+              color: color1F1F1F,
+            ),
+            trailing:
+                FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .5),
+          ),
+          const Divider(),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, contactName);
+            },
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 0),
+            title: Text(
+              translate(context, 'update_avatar'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: color1F1F1F),
+            ),
+            leading: FaIcon(
+              FontAwesomeIcons.solidCircleUser,
               size: dimensIcon() * .7,
               color: color1F1F1F,
             ),

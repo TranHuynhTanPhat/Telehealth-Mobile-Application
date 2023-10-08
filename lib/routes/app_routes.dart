@@ -6,6 +6,7 @@ import 'package:healthline/screen/auth/license/terms_and_conditions_screen.dart'
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
+import 'package:healthline/screen/ui_doctor/main/setting/update_biography_screen.dart';
 import 'package:healthline/screen/ui_patient/change_password/change_password_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/subscreen/detail_doctor_screen.dart';
@@ -62,6 +63,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const MainScreenDoctor());
       case shiftDoctorName:
         return MaterialPageRoute(builder: (_) => const ShiftScreen());
+      case updateBiographyDoctorName:
+        return MaterialPageRoute(builder: (_) => const UpdateBiographyScreen());
       default:
         return null;
     }

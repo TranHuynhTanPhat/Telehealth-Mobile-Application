@@ -38,6 +38,10 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
           int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
               .parse(user.dateOfBirth!));
           context.read<VaccineRecordCubit>().updateAge(age, user.id!);
+          context
+              .read<VaccineRecordCubit>()
+              .fetchInjectedVaccination(state.subUsers[state.currentUser].id!);
+
           return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
             buildWhen: (previous, current) =>
                 current is FetchInjectedVaccination,
@@ -76,8 +80,7 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                   ],
                 ),
                 body: AbsorbPointer(
-                  absorbing: state is FetchInjectedVaccinationLoading ||
-                      state is VaccinationLoading,
+                  absorbing: state is FetchInjectedVaccinationLoading,
                   child: const ListInjectedVaccination(),
                 ),
               );

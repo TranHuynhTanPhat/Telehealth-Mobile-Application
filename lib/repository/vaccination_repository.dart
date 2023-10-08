@@ -12,8 +12,8 @@ class VaccinationRepository extends BaseRepository {
 
   Future<List<InjectedVaccinationResponse>> fetchInjectedVaccination(
       String recordId) async {
-    Map<String, String> request = {"record_id": recordId};
-    return await _vaccinationService.getInjectedVaccination(request);
+    // Map<String, String> request = {"record_id": recordId};
+    return await _vaccinationService.getInjectedVaccination(recordId);
   }
 
   Future<InjectedVaccinationResponse> createInjectedVaccination(

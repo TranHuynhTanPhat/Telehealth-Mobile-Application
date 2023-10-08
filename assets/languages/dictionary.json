@@ -259,6 +259,18 @@
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
     },
+    "update_biography": {
+        "vi": "Cập nhật tiểu sử",
+        "en": "Update biography"
+    },
+    "update_avatar": {
+        "vi": "Cập nhật ảnh đại diện",
+        "en": "Update avatar"
+    },
+    "biography_must_be_at_least_100_words": {
+        "vi": "Tiểu sử phải có ít nhất 100 từ",
+        "en": "Bio must be at least 100 words"
+    },
     "add_vaccination": {
         "vi": "Thêm vắc xin",
         "en": "Add vaccination"

@@ -1,16 +1,16 @@
-
 import 'package:healthline/data/api/api_constants.dart';
-import 'package:healthline/data/api/models/requests/user_request.dart';
-import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class PatientService extends BaseService {
-  ///
-  Future<LoginResponse> login(UserRequest request) async {
-    final response =
-        await post(ApiConstants.USER_LOG_IN, data: request.toJson());
-    return LoginResponse.fromMap(response.data);
-  }
 
-  
+  Future<List<HealthStatResponse>> getStats(String recordId) async {
+    final response =
+        await get('${ApiConstants.PATIENT_HEALTH_STAT}/$recordId');
+    List<HealthStatResponse> stats = response.data
+        .map<HealthStatResponse>(
+            (e) => HealthStatResponse.fromMap(e))
+        .toList();
+    return stats;
+  }
 }

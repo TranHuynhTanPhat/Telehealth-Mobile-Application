@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:lottie/lottie.dart';
 
 class HeartRateCard extends StatelessWidget {
   const HeartRateCard({
     super.key,
+    required this.healthStatResponse,
   });
+  final HealthStatResponse? healthStatResponse;
 
   @override
   Widget build(BuildContext context) {
+    int value = -1;
+    if (healthStatResponse == null) {
+      value = -1;
+    } else {
+      value = healthStatResponse!.value ?? -1;
+    }
     return Container(
       margin: EdgeInsets.only(bottom: dimensWidth() * 2.5),
       padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
@@ -32,7 +42,7 @@ class HeartRateCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    translate(context, '96'),
+                    translate(context, value == -1 ? '0' : value.toString()),
                     style: Theme.of(context)
                         .textTheme
                         .displayLarge

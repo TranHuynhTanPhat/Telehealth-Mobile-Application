@@ -14,21 +14,21 @@ class VaccinationService extends BaseService {
   }
 
   Future<List<InjectedVaccinationResponse>> getInjectedVaccination(
-      Map<String, String> request) async {
+      String recordId) async {
     final response =
-        await get(ApiConstants.VACCINATION_RECORD, data: request);
+        await get('${ApiConstants.VACCINATION_RECORD}/$recordId');
     List<InjectedVaccinationResponse> vaccinations = response.data
-        .map<InjectedVaccinationResponse>((e) => InjectedVaccinationResponse.fromMap(e))
+        .map<InjectedVaccinationResponse>(
+            (e) => InjectedVaccinationResponse.fromMap(e))
         .toList();
     return vaccinations;
   }
-  Future<InjectedVaccinationResponse>createdInjectedVaccination(
+
+  Future<InjectedVaccinationResponse> createdInjectedVaccination(
       InjectedVaccinationRequest request) async {
     final response =
         await post(ApiConstants.VACCINATION_RECORD, data: request.toJson());
-    // List<InjectedVaccinationResponse> vaccinations = response.data
-    //     .map<InjectedVaccinationResponse>((e) => InjectedVaccinationResponse.fromMap(e))
-    //     .toList();
+   
     return InjectedVaccinationResponse.fromMap(response.data);
   }
 }
