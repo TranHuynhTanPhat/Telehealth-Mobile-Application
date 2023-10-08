@@ -26,7 +26,7 @@ class _ListSubUserState extends State<ListSubUser> {
         builder: (context) => SubUserInputDialog(formKey: _formKey));
     if (result == true) {
       // ignore: use_build_context_synchronously
-      context.read<HealthInfoCubit>().fetchMedicalRecord();
+      context.read<SubUserCubit>().fetchMedicalRecord();
     }
     // .whenComplete(
     //     () => context.read<HealthInfoCubit>().fetchMedicalRecord());
@@ -34,7 +34,7 @@ class _ListSubUserState extends State<ListSubUser> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HealthInfoCubit, HealthInfoState>(
+    return BlocBuilder<SubUserCubit, SubUserState>(
       builder: (context, state) {
         return ListView(
           shrinkWrap: true,
@@ -58,7 +58,7 @@ class _ListSubUserState extends State<ListSubUser> {
                   ),
                   child: const FaIcon(FontAwesomeIcons.circlePlus)),
             ),
-            if (state is HealthInfoLoading)
+            if (state is FetchSubUserLoading)
               ...shimmerBuilder()
             else
               ...state.subUsers

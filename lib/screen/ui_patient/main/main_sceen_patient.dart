@@ -27,7 +27,8 @@ class MainScreenPatient extends StatefulWidget {
 class _MainScreenPatientState extends State<MainScreenPatient>
     with SingleTickerProviderStateMixin {
   final _homeCubit = HomeCubit();
-  final _healthInfoCubit = HealthInfoCubit();
+  final _subUserCubit = SubUserCubit();
+  final _vaccineRecordCubit = VaccineRecordCubit();
   var _currentIndex = 0;
 
   late int _countBackClick;
@@ -61,7 +62,8 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-    _healthInfoCubit.fetchMedicalRecord();
+    _subUserCubit.fetchMedicalRecord();
+    _vaccineRecordCubit.fetchVaccination();
 
     _countBackClick = 0;
 
@@ -137,7 +139,10 @@ class _MainScreenPatientState extends State<MainScreenPatient>
             create: (context) => _homeCubit,
           ),
           BlocProvider(
-            create: (context) => _healthInfoCubit,
+            create: (context) => _subUserCubit,
+          ),
+          BlocProvider(
+            create: (context) => _subUserCubit,
           )
         ],
         child: Scaffold(

@@ -7,13 +7,12 @@ class RecordCard extends StatelessWidget {
   const RecordCard({
     super.key,
     required this.name,
-    required this.unit,
     required this.color,
     required this.iconData,
     required this.press,
   });
   final String name;
-  final String unit;
+
   final Color color;
   final IconData iconData;
   final Function() press;
@@ -61,10 +60,6 @@ class RecordCard extends StatelessWidget {
                       translate(context, name),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Text(
-                      "10 ${translate(context, unit)}",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    )
                   ],
                 )
               ],

@@ -97,8 +97,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
       relationship = relationship ?? widget._subUser.relationship!.name;
     }
     return BlocProvider(
-      create: (context) => HealthInfoCubit(),
-      child: BlocListener<HealthInfoCubit, HealthInfoState>(
+      create: (context) => SubUserCubit(),
+      child: BlocListener<SubUserCubit, SubUserState>(
         listenWhen: (previous, current) => current is UpdateUser,
         listener: (context, state) {
           if (state is UpdateUserLoading) {
@@ -117,7 +117,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
             EasyLoading.showToast(translate(context, state.message));
           }
         },
-        child: BlocBuilder<HealthInfoCubit, HealthInfoState>(
+        child: BlocBuilder<SubUserCubit, SubUserState>(
           buildWhen: (previous, current) => current is UpdateUser,
           builder: (context, state) {
             return GestureDetector(
@@ -463,7 +463,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                                     _formKey.currentState!
                                                         .save();
                                                     context
-                                                        .read<HealthInfoCubit>()
+                                                        .read<SubUserCubit>()
                                                         .deleteUser(widget
                                                             ._subUser.id!);
                                                   }
@@ -482,7 +482,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                                 .validate()) {
                                               _formKey.currentState!.save();
                                               context
-                                                  .read<HealthInfoCubit>()
+                                                  .read<SubUserCubit>()
                                                   .updateUser(
                                                       _file,
                                                       _controllerFullname.text,

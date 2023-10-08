@@ -14,7 +14,7 @@ class ListInjectedVaccination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<VaccinationCubit, VaccinationState>(
+    return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
       builder: (context, state) {
         return ListView(
           shrinkWrap: false,
@@ -24,12 +24,11 @@ class ListInjectedVaccination extends StatelessWidget {
             vertical: dimensHeight(),
           ),
           children: [
-            state is FetchInjectedVaccinationLoading ||
-                    state is VaccinationLoading
+            state is FetchInjectedVaccinationLoading || state is FetchVaccination
                 ? const BuildShimmer()
-                : state.injectedVaccination.isNotEmpty
+                : state.injectedVaccinations.isNotEmpty
                     ? Column(
-                        children: state.injectedVaccination
+                        children: state.injectedVaccinations
                             .map(
                               (e) => Container(
                                 margin:
@@ -62,7 +61,7 @@ class ListInjectedVaccination extends StatelessWidget {
                                               child: Text(
                                                 translate(
                                                     context,
-                                                    e.vaccine!.disease
+                                                    e.vaccine?.disease
                                                         .toString()),
                                                 // maxLines: 1,
                                                 // overflow: TextOverflow.ellipsis,

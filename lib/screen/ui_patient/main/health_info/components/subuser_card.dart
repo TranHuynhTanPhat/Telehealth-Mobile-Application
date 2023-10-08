@@ -38,13 +38,13 @@ class _SubUserCardState extends State<SubUserCard> {
               .image(widget.subUser.avatar ?? '')
               .toString(),
         );
-    return BlocBuilder<HealthInfoCubit, HealthInfoState>(
+    return BlocBuilder<SubUserCubit, SubUserState>(
       builder: (context, state) {
         return InkWell(
           splashColor: transparent,
           highlightColor: transparent,
           onTap: () =>
-              context.read<HealthInfoCubit>().updateIndex(widget.index),
+              context.read<SubUserCubit>().updateIndex(widget.index),
           child: Padding(
             padding: EdgeInsets.all(
                 state.currentUser == widget.index ? 0 : dimensWidth()*.5),

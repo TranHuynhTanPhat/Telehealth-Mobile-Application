@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/data/api/models/responses/user_response.dart';
-import 'package:healthline/routes/app_pages.dart';
+import 'package:intl/intl.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/vaccination/components/export.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:intl/intl.dart';
 
 class VaccinationScreen extends StatefulWidget {
   const VaccinationScreen({super.key});
@@ -23,30 +25,22 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => VaccinationCubit(),
+          create: (context) => VaccineRecordCubit(),
         ),
         BlocProvider(
-          create: (context) => HealthInfoCubit(),
+          create: (context) => SubUserCubit(),
         ),
       ],
-      child: BlocBuilder<HealthInfoCubit, HealthInfoState>(
+      child: BlocBuilder<SubUserCubit, SubUserState>(
         builder: (context, state) {
           UserResponse user = state.subUsers[state.currentUser];
 
           int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
               .parse(user.dateOfBirth!));
-          context.read<VaccinationCubit>().fetchVaccination(age);
-          return BlocConsumer<VaccinationCubit, VaccinationState>(
-            listenWhen: (previous, current) => current is FetchVaccination,
+          context.read<VaccineRecordCubit>().updateAge(age, user.id!);
+          return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
             buildWhen: (previous, current) =>
                 current is FetchInjectedVaccination,
-            listener: (context, state) {
-              if (state is VaccinationLoaded) {
-                context
-                    .read<VaccinationCubit>()
-                    .fetchInjectedVaccination(user.id!);
-              }
-            },
             builder: (context, state) {
               return Scaffold(
                 resizeToAvoidBottomInset: true,
@@ -60,8 +54,16 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                     Padding(
                       padding: EdgeInsets.only(right: dimensWidth() * 3),
                       child: InkWell(
-                        onTap: () =>
-                            Navigator.pushNamed(context, addVaccinationName),
+                        onTap: () async {
+                          InjectedVaccinationResponse result =
+                              await Navigator.pushNamed(
+                                      context, addVaccinationName)
+                                  as InjectedVaccinationResponse;
+                          // ignore: use_build_context_synchronously
+                          context
+                              .read<VaccineRecordCubit>()
+                              .updateInjectedVaccinations(result);
+                        },
                         splashColor: transparent,
                         highlightColor: transparent,
                         child: FaIcon(

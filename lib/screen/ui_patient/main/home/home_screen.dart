@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: white,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(dimensHeight() * 8),
-            child: BlocBuilder<HealthInfoCubit, HealthInfoState>(
+            child: BlocBuilder<SubUserCubit, SubUserState>(
               buildWhen: (previous, current) => current is FetchUser,
               builder: (context, state) {
                 if (state.subUsers.isNotEmpty) {

@@ -9,17 +9,16 @@ import 'package:healthline/data/api/models/responses/image_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repository/file_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
-import 'package:healthline/utils/log_data.dart';
 
-part 'health_info_state.dart';
+part 'sub_user_state.dart';
 
-class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
-  HealthInfoCubit() : super(HealthInfoInitial([], -1));
+class SubUserCubit extends HydratedCubit<SubUserState> {
+  SubUserCubit() : super(SubUserInitial([], -1));
   final UserRepository _userRepository = UserRepository();
   final FileRepository _fileRepository = FileRepository();
 
   Future<void> fetchMedicalRecord() async {
-    emit(HealthInfoLoading(state.subUsers, state.currentUser));
+    emit(FetchSubUserLoading(state.subUsers, state.currentUser));
     try {
       List<UserResponse> userResponses =
           await _userRepository.fetchMdicalRecord();
@@ -27,14 +26,13 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
         (element) => print(element.toJson()),
       );
 
-      emit(HealthInfoLoaded(
+      emit(FetchSubUserLoaded(
           userResponses,
           state.currentUser == -1
               ? userResponses.indexWhere((element) => element.isMainProfile!)
               : state.currentUser));
     } catch (e) {
-      logPrint(e.toString());
-      emit(HealthInfoError(state.subUsers, state.currentUser));
+      emit(FetchSubUserError(state.subUsers, state.currentUser));
     }
   }
 
@@ -72,7 +70,7 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
   }
 
   void updateIndex(int index) {
-    emit(HealthInfoLoaded(state.subUsers, index));
+    emit(FetchSubUserLoaded(state.subUsers, index));
   }
 
   Future<void> updateUser(File? avatar, String fullName, String birthday,
@@ -108,7 +106,6 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
         emit(UpdateUserFailure(state.subUsers, state.currentUser, 'failure'));
       }
     } catch (e) {
-      logPrint(e.toString());
       DioException er = e as DioException;
 
       emit(UpdateUserFailure(
@@ -125,21 +122,20 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
       emit(DeleteUserSuccessfully(
           state.subUsers, state.currentUser, response.message));
     } catch (e) {
-      logPrint(e.toString());
       DioException er = e as DioException;
 
       emit(DeleteUserFailure(
           state.subUsers, state.currentUser, er.message.toString()));
     }
   }
-
+  
   @override
-  HealthInfoState? fromJson(Map<String, dynamic> json) {
-    return HealthInfoState.fromMap(json);
+  SubUserState? fromJson(Map<String, dynamic> json) {
+    return SubUserState.fromMap(json);
   }
-
+  
   @override
-  Map<String, dynamic>? toJson(HealthInfoState state) {
+  Map<String, dynamic>? toJson(SubUserState state) {
     return state.toMap();
   }
 }

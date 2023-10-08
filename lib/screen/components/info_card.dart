@@ -12,7 +12,7 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: BlocBuilder<HealthInfoCubit, HealthInfoState>(
+      title: BlocBuilder<SubUserCubit, SubUserState>(
         builder: (context, state) {
           return Row(
             children: [

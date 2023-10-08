@@ -60,7 +60,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
             ));
     if (result == true) {
       // ignore: use_build_context_synchronously
-      context.read<HealthInfoCubit>().fetchMedicalRecord();
+      context.read<SubUserCubit>().fetchMedicalRecord();
     }
   }
 
@@ -68,8 +68,13 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return BlocBuilder<HealthInfoCubit, HealthInfoState>(
+        return BlocBuilder<SubUserCubit, SubUserState>(
           builder: (context, state) {
+            state.currentUser != -1
+                ? context.read<VaccineRecordCubit>().fetchInjectedVaccination(
+                    state.subUsers[state.currentUser].id!)
+                : null;
+
             return Scaffold(
               resizeToAvoidBottomInset: true,
               backgroundColor: white,

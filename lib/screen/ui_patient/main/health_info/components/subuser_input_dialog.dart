@@ -57,8 +57,8 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HealthInfoCubit(),
-      child: BlocListener<HealthInfoCubit, HealthInfoState>(
+      create: (context) => SubUserCubit(),
+      child: BlocListener<SubUserCubit, SubUserState>(
         listenWhen: (previous, current) => current is AddUser,
         listener: (context, state) {
           if (state is AddUserLoading) {
@@ -70,7 +70,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
             EasyLoading.showToast(translate(context, state.message));
           }
         },
-        child: BlocBuilder<HealthInfoCubit, HealthInfoState>(
+        child: BlocBuilder<SubUserCubit, SubUserState>(
           buildWhen: (previous, current) => current is AddUser,
           builder: (context, state) {
             return GestureDetector(
@@ -398,7 +398,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                           _file != null) {
                                         widget._formKey.currentState!.save();
                                         context
-                                            .read<HealthInfoCubit>()
+                                            .read<SubUserCubit>()
                                             .addSubUser(
                                                 _file!.path,
                                                 _controllerFullname.text,
