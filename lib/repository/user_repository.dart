@@ -1,20 +1,15 @@
 // ignore_for_file: unused_field
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
-import 'package:healthline/repository/base_repository.dart';
 import 'package:healthline/data/api/services/user_service.dart';
+import 'package:healthline/repository/base_repository.dart';
 import 'package:healthline/res/enum.dart';
 
 class UserRepository extends BaseRepository {
   final UserService _userService = UserService();
 
-  Future<LoginResponse> login(String phone, String password) async {
-    UserRequest request = UserRequest(phone: phone, password: password);
-    return await _userService.login(request);
-  }
-
+ 
   Future<int?> registerAccount(
       String fullName,
       String phone,
@@ -36,7 +31,7 @@ class UserRepository extends BaseRepository {
     return await _userService.registerAccount(request);
   }
 
-  Future<DataResponse> addSubUser(
+  Future<DataResponse> addMedicalRecord(
       String avatar,
       String fullName,
       String birthday,
@@ -51,10 +46,10 @@ class UserRepository extends BaseRepository {
         relationship:
             Relationship.values.firstWhere((e) => e.name == relationship),
         address: address);
-    return await _userService.addSubUser(request);
+    return await _userService.addMedicalRecord(request);
   }
 
-  Future<DataResponse> updateSubUser(
+  Future<DataResponse> updateMedicalRecord(
       String profileId,
       String avatar,
       String fullName,
@@ -71,12 +66,12 @@ class UserRepository extends BaseRepository {
         relationship:
             Relationship.values.firstWhere((e) => e.name == relationship),
         address: address);
-    return await _userService.updateSubUser(request);
+    return await _userService.updateMedicalRecord(request);
   }
-  Future<DataResponse> deleteSubUser(
+  Future<DataResponse> deleteMedicalRecord(
       String recordId,) async {
    
-    return await _userService.deleteSubUser(recordId);
+    return await _userService.deleteMedicalRecord(recordId);
   }
 
   Future<DataResponse> updateEmail(String email) async {
@@ -89,10 +84,6 @@ class UserRepository extends BaseRepository {
 
   Future<List<UserResponse>> fetchMdicalRecord() async {
     return await _userService.getMedicalRecord();
-  }
-
-  Future<void> refreshToken() async {
-    await _userService.refreshToken();
   }
 
   // Future<void> logout() async {

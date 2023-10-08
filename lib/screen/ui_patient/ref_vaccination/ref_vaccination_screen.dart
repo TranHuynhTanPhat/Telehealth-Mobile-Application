@@ -13,7 +13,7 @@ class RefVaccinationScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => VaccinationCubit(),
       child: Builder(builder: (context) {
-        context.read<VaccinationCubit>().fetchData();
+        context.read<VaccinationCubit>().fetchVaccinationFromStorage();
         return Scaffold(
           appBar: AppBar(
             elevation: 10,

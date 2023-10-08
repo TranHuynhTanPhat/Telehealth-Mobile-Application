@@ -279,6 +279,10 @@
         "vi": "Thất bại",
         "en": "Failure"
     },
+    "click_again_to_exit": {
+        "vi": "Chạm lại để thoát",
+        "en": "Click again to exit"
+    },
     "notification": {
         "vi": "Thông báo",
         "en": "Notification"

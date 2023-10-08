@@ -23,6 +23,9 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
     try {
       List<UserResponse> userResponses =
           await _userRepository.fetchMdicalRecord();
+      userResponses.forEach(
+        (element) => print(element.toJson()),
+      );
 
       emit(HealthInfoLoaded(
           userResponses,
@@ -47,7 +50,7 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
             uploadPreset: dotenv.get('UPLOAD_PRESETS'),
             publicId: mainUserId + state.subUsers.length.toString(),
             folder: 'healthline/avatar/subusers');
-        DataResponse response = await _userRepository.addSubUser(
+        DataResponse response = await _userRepository.addMedicalRecord(
             imageResponse.publicId!,
             fullName,
             birthday,
@@ -91,7 +94,7 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
             avt = imageResponse.publicId;
           }
         }
-        DataResponse response = await _userRepository.updateSubUser(
+        DataResponse response = await _userRepository.updateMedicalRecord(
             id,
             avt ?? 'default',
             fullName,
@@ -116,7 +119,7 @@ class HealthInfoCubit extends HydratedCubit<HealthInfoState> {
   Future<void> deleteUser(String recordId) async {
     emit(DeleteUserLoading(state.subUsers, state.currentUser));
     try {
-      DataResponse response = await _userRepository.deleteSubUser(
+      DataResponse response = await _userRepository.deleteMedicalRecord(
         recordId,
       );
       emit(DeleteUserSuccessfully(

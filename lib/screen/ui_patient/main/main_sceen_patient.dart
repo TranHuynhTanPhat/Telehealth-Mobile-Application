@@ -30,6 +30,8 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   final _healthInfoCubit = HealthInfoCubit();
   var _currentIndex = 0;
 
+  late int _countBackClick;
+
   bool isSideMenuClosed = true;
 
   late AnimationController _animationController;
@@ -61,6 +63,8 @@ class _MainScreenPatientState extends State<MainScreenPatient>
     );
     _healthInfoCubit.fetchMedicalRecord();
 
+    _countBackClick = 0;
+
     // _homeCubit.fetchData();
     super.initState();
   }
@@ -86,6 +90,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
 
             setState(() {
               isSideMenuClosed = !isSideMenuClosed;
+              _countBackClick = 0;
             });
           },
         ),
@@ -108,154 +113,172 @@ class _MainScreenPatientState extends State<MainScreenPatient>
         "icon": FontAwesomeIcons.bookMedical
       },
     ];
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => SideMenuCubit(),
-        ),
-        BlocProvider(
-          create: (context) => _homeCubit,
-        ),
-        BlocProvider(
-          create: (context) => _healthInfoCubit,
-        )
-      ],
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        extendBody: true,
-        backgroundColor: secondary,
-        bottomNavigationBar: Transform.translate(
-          offset: Offset(0, dimensWidth() * 12 * animation.value),
-          child: Container(
-            margin: EdgeInsets.all(dimensWidth() * 2.5),
-            height: dimensWidth() * 7.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.1),
-                  blurRadius: 30,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(dimensImage() * 6),
-            ),
-            child: ListView.builder(
-              itemCount: _pageDetail.length,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
-              itemBuilder: (context, index) => InkWell(
-                onTap: () => setState(() {
-                  _currentIndex = index;
-                }),
-                splashColor: transparent,
-                highlightColor: transparent,
-                child: Stack(children: [
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                    width: index == _currentIndex ? dimensWidth() * 16.5 : 9,
-                    alignment: Alignment.center,
-                    child: AnimatedContainer(
+    return WillPopScope(
+      onWillPop: () async {
+        if(isSideMenuClosed == false){
+          setState(() {
+            isSideMenuClosed = true;
+          });
+        }
+        if (_countBackClick < 1 && !isSideMenuClosed) {
+          EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+          _countBackClick++;
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => SideMenuCubit(),
+          ),
+          BlocProvider(
+            create: (context) => _homeCubit,
+          ),
+          BlocProvider(
+            create: (context) => _healthInfoCubit,
+          )
+        ],
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
+          backgroundColor: secondary,
+          bottomNavigationBar: Transform.translate(
+            offset: Offset(0, dimensWidth() * 12 * animation.value),
+            child: Container(
+              margin: EdgeInsets.all(dimensWidth() * 2.5),
+              height: dimensWidth() * 7.8,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(.1),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(dimensImage() * 6),
+              ),
+              child: ListView.builder(
+                itemCount: _pageDetail.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () => setState(() {
+                    _currentIndex = index;
+                    _countBackClick = 0;
+                  }),
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  child: Stack(children: [
+                    AnimatedContainer(
                       duration: const Duration(seconds: 1),
-                      decoration: BoxDecoration(
-                          color: index == _currentIndex
-                              ? primary.withOpacity(.2)
-                              : transparent,
-                          borderRadius:
-                              BorderRadius.circular(dimensWidth() * 6)),
                       curve: Curves.fastLinearToSlowEaseIn,
-                      height: index == _currentIndex ? dimensWidth() * 6 : 0,
-                      width: index == _currentIndex ? dimensWidth() * 16.5 : 0,
+                      width: index == _currentIndex ? dimensWidth() * 16.5 : 9,
+                      alignment: Alignment.center,
+                      child: AnimatedContainer(
+                        duration: const Duration(seconds: 1),
+                        decoration: BoxDecoration(
+                            color: index == _currentIndex
+                                ? primary.withOpacity(.2)
+                                : transparent,
+                            borderRadius:
+                                BorderRadius.circular(dimensWidth() * 6)),
+                        curve: Curves.fastLinearToSlowEaseIn,
+                        height: index == _currentIndex ? dimensWidth() * 6 : 0,
+                        width:
+                            index == _currentIndex ? dimensWidth() * 16.5 : 0,
+                      ),
                     ),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                    width: index == _currentIndex
-                        ? dimensWidth() * 15.5
-                        : dimensWidth() * 9,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == _currentIndex
-                                  ? dimensWidth() * 6.5
-                                  : 0,
-                            ),
-                            AnimatedOpacity(
-                              opacity: index == _currentIndex ? 1 : 0,
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              child: Text(
-                                index == _currentIndex
-                                    ? translate(
-                                        context, _pageDetail[index]['title'])
-                                    : '',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: primary),
+                    AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      width: index == _currentIndex
+                          ? dimensWidth() * 15.5
+                          : dimensWidth() * 9,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                width: index == _currentIndex
+                                    ? dimensWidth() * 6.5
+                                    : 0,
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == _currentIndex
-                                  ? dimensWidth() * 1.5
-                                  : 20,
-                            ),
-                            FaIcon(
-                              _pageDetail[index]['icon'],
-                              size: dimensWidth() * 3.8,
-                              color: index == _currentIndex ? primary : black26,
-                            )
-                          ],
-                        ),
-                      ],
+                              AnimatedOpacity(
+                                opacity: index == _currentIndex ? 1 : 0,
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                child: Text(
+                                  index == _currentIndex
+                                      ? translate(
+                                          context, _pageDetail[index]['title'])
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(color: primary),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                width: index == _currentIndex
+                                    ? dimensWidth() * 1.5
+                                    : 20,
+                              ),
+                              FaIcon(
+                                _pageDetail[index]['icon'],
+                                size: dimensWidth() * 3.8,
+                                color:
+                                    index == _currentIndex ? primary : black26,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
             ),
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: Container(
-          margin: EdgeInsets.only(right: dimensWidth() * 40),
-          child: IconButton(
-            onPressed: () => RestClient().runHttpInspector(),
-            padding: EdgeInsets.all(dimensWidth() * 2),
-            icon: const FaIcon(FontAwesomeIcons.bug),
-            color: white,
-            style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(secondary)),
-          ),
-        ),
-        body: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn,
-              left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
-              width: double.maxFinite,
-              height: MediaQuery.of(context).size.height,
-              child: const SideMenu(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Container(
+            margin: EdgeInsets.only(right: dimensWidth() * 40),
+            child: IconButton(
+              onPressed: () => RestClient().runHttpInspector(),
+              padding: EdgeInsets.all(dimensWidth() * 2),
+              icon: const FaIcon(FontAwesomeIcons.bug),
+              color: white,
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(secondary)),
             ),
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(animation.value - 30 * animation.value * pi / 180),
-              child: Transform.translate(
+          ),
+          body: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.fastOutSlowIn,
+                left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
+                width: double.maxFinite,
+                height: MediaQuery.of(context).size.height,
+                child: const SideMenu(),
+              ),
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..rotateY(animation.value - 30 * animation.value * pi / 180),
+                child: Transform.translate(
                   offset: Offset(animation.value * dimensWidth() * 35, 0),
                   child: Transform.scale(
                     scale: scalAnimation.value,
@@ -274,6 +297,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                           KeyboardUtil.hideKeyboard(context);
                           setState(() {
                             isSideMenuClosed = true;
+                            _countBackClick = 0;
                           });
                         },
                         child: AbsorbPointer(
@@ -282,9 +306,11 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                         ),
                       ),
                     ),
-                  ),),
-            ),
-          ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

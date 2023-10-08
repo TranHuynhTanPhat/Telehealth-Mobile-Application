@@ -34,6 +34,7 @@ abstract class UpdateUser extends HealthInfoState {
 abstract class FetchUser extends HealthInfoState {
   FetchUser(super.subUsers, super.currentUser);
 }
+
 abstract class DeleteUser extends HealthInfoState {
   DeleteUser(super.subUsers, super.currentUser);
 }
@@ -81,6 +82,7 @@ final class UpdateUserFailure extends UpdateUser {
   UpdateUserFailure(super.subUsers, super.currentUser, this.message);
   final String message;
 }
+
 final class DeleteUserLoading extends UpdateUser {
   DeleteUserLoading(super.subUsers, super.currentUser);
 }

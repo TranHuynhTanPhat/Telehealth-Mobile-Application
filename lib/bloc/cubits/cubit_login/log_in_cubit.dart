@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/repository/common_repository.dart';
 import 'package:healthline/repository/doctor_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 import 'package:healthline/data/storage/app_storage.dart';
@@ -14,6 +15,7 @@ part 'log_in_state.dart';
 class LogInCubit extends Cubit<LogInState> {
   LogInCubit() : super(LogInInitial(isDoctor: false, isPatient: false));
   final UserRepository _userRepository = UserRepository();
+  final CommonRepository _commonRepository = CommonRepository();
   final DoctorRepository _doctorRepository = DoctorRepository();
 
   Future<void> logIn(String phone, String password,
@@ -26,7 +28,7 @@ class LogInCubit extends Cubit<LogInState> {
     if (isPatient == true) {
       try {
         LoginResponse response =
-            await _userRepository.login(phone.trim(), password.trim());
+            await _commonRepository.loginPatient(phone.trim(), password.trim());
         AppStorage().savePatient(user: response);
         patient = true;
       } catch (e) {
@@ -37,7 +39,7 @@ class LogInCubit extends Cubit<LogInState> {
     if (isDoctor == true) {
       try {
         LoginResponse response =
-            await _doctorRepository.login(phone.trim(), password.trim());
+            await _commonRepository.loginDoctor(phone.trim(), password.trim());
         AppStorage().saveDoctor(user: response);
         doctor = true;
       } catch (e) {

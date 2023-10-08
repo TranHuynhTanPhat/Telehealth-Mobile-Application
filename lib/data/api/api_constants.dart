@@ -21,7 +21,7 @@ class ApiConstants {
 // user-management
   static const _USER = '/user-management';
   static const USER = '$_USER/user';
-  static const MEDICAL_RECORD = '$_USER/medical-record';
+  static const USER_MEDICAL_RECORD = '$_USER/medical-record';
 
 // doctor-management
   static const _DOCTOR = '/doctor-management';
@@ -30,5 +30,14 @@ class ApiConstants {
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
   static const DOCTOR_CHANGE_FIXED_TIMES = '$DOCTOR/fixed-times';
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
-  
+
+// patient-record
+  static const _PATIENT = '/patient-record';
+  static const PATIENT_HEALTH_STAT = '$_PATIENT/health-stat';
+  static const PATIENT_RECORD = '$_PATIENT/record';
+
+  // vaccination
+  static const _VACCINATION = '/vaccination';
+  static const VACCINATION_RECORD = '$_VACCINATION/record';
+  static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
 }

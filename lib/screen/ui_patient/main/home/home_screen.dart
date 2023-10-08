@@ -4,10 +4,11 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/routes/app_pages.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
-import 'package:healthline/repository/doctor_repository.dart';
+import 'package:healthline/repository/common_repository.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
@@ -169,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: InkWell(
                       splashColor: transparent,
                       highlightColor: transparent,
-                      onTap: () => DoctorRepository().refreshToken(),
+                      onTap: () => CommonRepository().refreshTokenDoctor(),
                       child: FaIcon(
                         FontAwesomeIcons.magnifyingGlass,
                         color: color6A6E83,
