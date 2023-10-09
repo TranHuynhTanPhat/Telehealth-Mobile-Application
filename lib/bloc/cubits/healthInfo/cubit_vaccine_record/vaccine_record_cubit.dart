@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/vaccination_response.dart';
 import 'package:healthline/repository/vaccination_repository.dart';
@@ -10,7 +11,7 @@ part 'vaccine_record_state.dart';
 class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
   VaccineRecordCubit()
       : super(VaccineRecordInitial(
-            vaccinations: [], injectedVaccinations: [], age: 0, recordId: ''));
+            vaccinations: [], injectedVaccinations: [], age: 0, medicalRecord: ''));
   final VaccinationRepository _vaccinationRepository = VaccinationRepository();
   @override
   void onChange(Change<VaccineRecordState> change) {
@@ -18,34 +19,21 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
     logPrint(change);
   }
 
-  void updateAge(int age, String recordId) {
+  void updateAge(int age, String medicalRecord) {
     emit(
       VaccineRecordInitial(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: age,
-          recordId: recordId),
+          medicalRecord: medicalRecord),
     );
   }
-
-  // void updateInjectedVaccinations(
-  //     InjectedVaccinationResponse injectedVaccinationResponse) {
-  //   emit(
-  //     VaccineRecordInitial(
-  //         vaccinations: state.vaccinations,
-  // injectedVaccinations: List.from(state.injectedVaccinations)
-  //   ..add(injectedVaccinationResponse),
-  //         age: state.age,
-  //         recordId: state.recordId),
-  //   );
-  // }
-
   Future<void> fetchVaccination() async {
     emit(FetchVaccinationLoading(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
-        recordId: state.recordId));
+        medicalRecord: state.medicalRecord));
     try {
       List<VaccinationResponse> vaccinations =
           await _vaccinationRepository.fetchVaccination();
@@ -55,7 +43,7 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
             vaccinations: vaccinations,
             injectedVaccinations: state.injectedVaccinations,
             age: state.age,
-            recordId: state.recordId),
+            medicalRecord: state.medicalRecord),
       );
     } catch (e) {
       DioException er = e as DioException;
@@ -66,32 +54,33 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
-          recordId: state.recordId,
+          medicalRecord: state.medicalRecord,
           message: er.response!.data['message'].toString(),
         ),
       );
     }
   }
 
-  Future<void> fetchInjectedVaccination(String recordId) async {
+  Future<void> fetchInjectedVaccination(String medicalRecord) async {
     emit(
       FetchInjectedVaccinationLoading(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
-        recordId: state.recordId,
+        medicalRecord: state.medicalRecord,
       ),
     );
     try {
       List<InjectedVaccinationResponse> injectedVaccinations =
-          await _vaccinationRepository.fetchInjectedVaccination(recordId);
+          await _vaccinationRepository.fetchInjectedVaccination(medicalRecord);
+      injectedVaccinations.forEach((element) {print(element.toJson());});
 
       emit(
         FetchInjectedVaccinationLoaded(
             vaccinations: state.vaccinations,
             injectedVaccinations: injectedVaccinations,
             age: state.age,
-            recordId: state.recordId),
+            medicalRecord: state.medicalRecord),
       );
     } catch (e) {
       DioException er = e as DioException;
@@ -101,7 +90,7 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
-          recordId: state.recordId,
+          medicalRecord: state.medicalRecord,
           message: er.response!.data['message'].toString(),
         ),
       );
@@ -115,13 +104,13 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
-        recordId: state.recordId,
+        medicalRecord: state.medicalRecord,
       ),
     );
     try {
       InjectedVaccinationResponse vaccination =
           await _vaccinationRepository.createInjectedVaccination(
-              state.recordId, vaccineId, doseNumber, date);
+              state.medicalRecord, vaccineId, doseNumber, date);
 
       emit(
         CreateInjectedVaccinationLoaded(
@@ -129,7 +118,7 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
             injectedVaccinations: List.from(state.injectedVaccinations)
               ..add(vaccination),
             age: state.age,
-            recordId: state.recordId,),
+            medicalRecord: state.medicalRecord,),
       );
     } catch (e) {
       DioException er = e as DioException;
@@ -139,7 +128,41 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
-          recordId: state.recordId,
+          medicalRecord: state.medicalRecord,
+          message: er.response!.data['message'].toString()));
+    }
+  }
+
+  Future<void> deleteInjectedVaccination(String recordId) async {
+    emit(
+      DeleteInjectedVaccinationLoading(
+        vaccinations: state.vaccinations,
+        injectedVaccinations: state.injectedVaccinations,
+        age: state.age,
+        medicalRecord: state.medicalRecord,
+      ),
+    );
+    try {
+      DataResponse vaccination =
+      await _vaccinationRepository.deleteInjectedVaccination(recordId);
+
+      emit(
+        DeleteInjectedVaccinationLoaded(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: List.from(state.injectedVaccinations)
+            ..removeWhere((element)=> element.id == recordId),
+          age: state.age,
+          medicalRecord: state.medicalRecord,),
+      );
+    } catch (e) {
+      DioException er = e as DioException;
+      logPrint(er);
+
+      emit(DeleteInjectedVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
           message: er.response!.data['message'].toString()));
     }
   }

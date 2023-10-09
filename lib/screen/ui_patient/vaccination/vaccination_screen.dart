@@ -48,11 +48,10 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                     padding: EdgeInsets.only(right: dimensWidth() * 3),
                     child: InkWell(
                       onTap: () async {
-                        bool? result = await Navigator.pushNamed(
-                            context, addVaccinationName) as bool;
-                        if (result == true) {
-                          setState(() {});
-                        }
+                        await Navigator.pushNamed(context, addVaccinationName);
+                        // if (result == true) {
+                        //   setState(() {});
+                        // }
                       },
                       splashColor: transparent,
                       highlightColor: transparent,

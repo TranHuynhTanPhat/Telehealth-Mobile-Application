@@ -275,13 +275,33 @@
         "vi": "Thêm vắc xin",
         "en": "Add vaccination"
     },
+    "add_vaccination_record": {
+        "vi": "Thêm hồ sơ vắc xin",
+        "en": "Add vaccination record"
+    },
     "update": {
         "vi": "Cập nhật",
         "en": "Update"
     },
+    "delete": {
+        "vi": "Xoá",
+        "en": "Delete"
+    },
     "delete_record": {
         "vi": "Xoá hồ sơ",
         "en": "Delete record"
+    },
+    "delete_successfully": {
+        "vi": "Xoá thành công",
+        "en": "Delete successfully"
+    },
+    "record_not_found": {
+        "vi": "Không tìm thấy hồ sơ",
+        "en": "Record not found"
+    },
+    "successfully": {
+        "vi": "Thành công",
+        "en": "Successfully"
     },
     "cant_load_data": {
         "vi": "Không thể tải dữ liệu",

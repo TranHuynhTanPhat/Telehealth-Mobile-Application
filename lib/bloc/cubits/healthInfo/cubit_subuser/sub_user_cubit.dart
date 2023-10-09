@@ -23,9 +23,9 @@ class SubUserCubit extends HydratedCubit<SubUserState> {
     try {
       List<UserResponse> userResponses =
           await _userRepository.fetchMdicalRecord();
-      userResponses.forEach(
-        (element) => print(element.toJson()),
-      );
+      // userResponses.forEach(
+      //   (element) => print(element.toJson()),
+      // );
 
       emit(FetchSubUserLoaded(
           userResponses,

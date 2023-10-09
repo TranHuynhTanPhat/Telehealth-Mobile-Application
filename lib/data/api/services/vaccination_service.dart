@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/injected_vaccination_request.dart';
+import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/vaccination_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
@@ -24,11 +27,20 @@ class VaccinationService extends BaseService {
     return vaccinations;
   }
 
-  Future<InjectedVaccinationResponse> createdInjectedVaccination(
+  Future<InjectedVaccinationResponse> creatInjectedVaccination(
       InjectedVaccinationRequest request) async {
     final response =
         await post(ApiConstants.VACCINATION_RECORD, data: request.toJson());
    
     return InjectedVaccinationResponse.fromMap(response.data);
+  }
+  Future<DataResponse> deleteInjectedVaccination(
+      String recordId) async {
+    var jsonRequest = json.encode({
+      "record_id": recordId,
+    });
+    final response = await delete(ApiConstants.VACCINATION_RECORD, data: jsonRequest);
+
+    return response;
   }
 }

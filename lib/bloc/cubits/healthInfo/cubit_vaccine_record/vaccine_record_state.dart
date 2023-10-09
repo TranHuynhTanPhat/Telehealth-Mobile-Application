@@ -4,12 +4,12 @@ class VaccineRecordState {
   final List<VaccinationResponse> vaccinations;
   final List<InjectedVaccinationResponse> injectedVaccinations;
   final int age;
-  final String recordId;
+  final String medicalRecord;
   VaccineRecordState({
     required this.vaccinations,
     required this.injectedVaccinations,
     required this.age,
-    required this.recordId,
+    required this.medicalRecord,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,7 +21,7 @@ class VaccineRecordState {
       'injectedVaccination': injectedVaccinations.map((x) => x.toMap()).toList()
     });
     result.addAll({'age': age});
-    result.addAll({'recordId': recordId});
+    result.addAll({'medicalRecord': medicalRecord});
 
     return result;
   }
@@ -34,7 +34,7 @@ class VaccineRecordState {
           map['injectedVaccination']
               ?.map((x) => InjectedVaccinationResponse.fromMap(x))),
       age: map['age']?.toInt() ?? 0,
-      recordId: map['recordId'] ?? '',
+      medicalRecord: map['medicalRecord'] ?? '',
     );
   }
 }
@@ -44,7 +44,7 @@ final class VaccineRecordInitial extends VaccineRecordState {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 abstract class FetchInjectedVaccination extends VaccineRecordState {
@@ -52,7 +52,7 @@ abstract class FetchInjectedVaccination extends VaccineRecordState {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 abstract class FetchVaccination extends VaccineRecordState {
@@ -60,7 +60,23 @@ abstract class FetchVaccination extends VaccineRecordState {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
+}
+
+abstract class CreateInjectedVaccination extends VaccineRecordState {
+  CreateInjectedVaccination(
+      {required super.vaccinations,
+      required super.injectedVaccinations,
+      required super.age,
+      required super.medicalRecord});
+}
+
+abstract class DeleteInjectedVaccination extends VaccineRecordState {
+  DeleteInjectedVaccination(
+      {required super.vaccinations,
+      required super.injectedVaccinations,
+      required super.age,
+      required super.medicalRecord});
 }
 
 final class FetchVaccinationLoading extends FetchVaccination {
@@ -68,7 +84,7 @@ final class FetchVaccinationLoading extends FetchVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 final class FetchVaccinationLoaded extends FetchVaccination {
@@ -76,7 +92,7 @@ final class FetchVaccinationLoaded extends FetchVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 final class FetchVaccinationError extends FetchVaccination {
@@ -86,7 +102,7 @@ final class FetchVaccinationError extends FetchVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId,
+      required super.medicalRecord,
       required this.message});
 }
 
@@ -95,7 +111,7 @@ final class FetchInjectedVaccinationLoading extends FetchInjectedVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 final class FetchInjectedVaccinationLoaded extends FetchInjectedVaccination {
@@ -103,7 +119,7 @@ final class FetchInjectedVaccinationLoaded extends FetchInjectedVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
 final class FetchInjectedVaccinationError extends FetchInjectedVaccination {
@@ -113,34 +129,62 @@ final class FetchInjectedVaccinationError extends FetchInjectedVaccination {
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId,
+      required super.medicalRecord,
       required this.message});
 }
 
-final class CreateInjectedVaccinationLoading extends FetchInjectedVaccination {
+final class CreateInjectedVaccinationLoading extends CreateInjectedVaccination {
   CreateInjectedVaccinationLoading(
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId});
+      required super.medicalRecord});
 }
 
-final class CreateInjectedVaccinationLoaded extends FetchInjectedVaccination {
+final class CreateInjectedVaccinationLoaded extends CreateInjectedVaccination {
   CreateInjectedVaccinationLoaded({
     required super.vaccinations,
     required super.injectedVaccinations,
     required super.age,
-    required super.recordId,
+    required super.medicalRecord,
   });
 }
 
-final class CreateInjectedVaccinationError extends FetchInjectedVaccination {
+final class CreateInjectedVaccinationError extends CreateInjectedVaccination {
   final String message;
 
   CreateInjectedVaccinationError(
       {required super.vaccinations,
       required super.injectedVaccinations,
       required super.age,
-      required super.recordId,
+      required super.medicalRecord,
+      required this.message});
+}
+
+final class DeleteInjectedVaccinationLoading extends DeleteInjectedVaccination {
+  DeleteInjectedVaccinationLoading(
+      {required super.vaccinations,
+      required super.injectedVaccinations,
+      required super.age,
+      required super.medicalRecord});
+}
+
+final class DeleteInjectedVaccinationLoaded extends DeleteInjectedVaccination {
+  DeleteInjectedVaccinationLoaded({
+    required super.vaccinations,
+    required super.injectedVaccinations,
+    required super.age,
+    required super.medicalRecord,
+  });
+}
+
+final class DeleteInjectedVaccinationError extends DeleteInjectedVaccination {
+  final String message;
+
+  DeleteInjectedVaccinationError(
+      {required super.vaccinations,
+      required super.injectedVaccinations,
+      required super.age,
+      required super.medicalRecord,
       required this.message});
 }

@@ -24,7 +24,8 @@ class MainScreenDoctor extends StatefulWidget {
 
 class _MainScreenDoctorState extends State<MainScreenDoctor> {
   DrawerMenus _currentPage = DrawerMenus.Overview;
-  late int _countBackClick;
+
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
@@ -32,21 +33,24 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       EasyLoading.dismiss();
     });
-    _countBackClick = 0;
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (_countBackClick < 1) {
-          EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-          _countBackClick++;
-          return false;
-        } else {
-          return true;
-        }
-      },
+      onWillPop: onWillPop,
       child: BlocListener<SideMenuCubit, SideMenuState>(
         listener: (context, state) {
           if (state is SideMenuLoading) {
@@ -160,7 +164,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     active: _currentPage == DrawerMenus.Overview,
                     press: () {
                       setState(() {
-                        _countBackClick = 0;
                         _currentPage = DrawerMenus.Overview;
                       });
                     },
@@ -173,8 +176,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     icon: FontAwesomeIcons.solidCalendar,
                     press: () {
                       setState(() {
-                        _countBackClick = 0;
-
                         _currentPage = DrawerMenus.Schedule;
                       });
                     },
@@ -185,8 +186,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     icon: FontAwesomeIcons.hospitalUser,
                     press: () {
                       setState(() {
-                        _countBackClick = 0;
-
                         _currentPage = DrawerMenus.Patient;
                       });
                     },
@@ -197,8 +196,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     icon: FontAwesomeIcons.gear,
                     press: () {
                       setState(() {
-                        _countBackClick = 0;
-
                         _currentPage = DrawerMenus.Setting;
                       });
                     },
@@ -210,16 +207,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     icon: FontAwesomeIcons.solidCircleQuestion,
                     press: () {
                       setState(() {
-                        _countBackClick = 0;
-
                         _currentPage = DrawerMenus.Helps;
                       });
                     },
                   ),
                   ListTile(
                     onTap: () {
-                      _countBackClick = 0;
-
                       AppLocalizations.of(context).isVnLocale
                           ? context.read<ResCubit>().toEnglish()
                           : context.read<ResCubit>().toVietnamese();
@@ -244,7 +237,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     child: ListTile(
                       onTap: () {
                         // RestClient().logout();
-                        _countBackClick = 0;
 
                         context.read<SideMenuCubit>().logout();
                       },

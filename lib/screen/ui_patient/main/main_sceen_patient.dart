@@ -28,9 +28,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
     with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
 
-  late int _countBackClick;
-
   bool isSideMenuClosed = true;
+
+  DateTime? currentBackPressTime;
 
   late AnimationController _animationController;
   late Animation<double> animation;
@@ -60,8 +60,6 @@ class _MainScreenPatientState extends State<MainScreenPatient>
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
 
-    _countBackClick = 0;
-
     context.read<SubUserCubit>().fetchMedicalRecord();
     context.read<VaccineRecordCubit>().fetchVaccination();
     super.initState();
@@ -88,7 +86,6 @@ class _MainScreenPatientState extends State<MainScreenPatient>
 
             setState(() {
               isSideMenuClosed = !isSideMenuClosed;
-              _countBackClick = 0;
             });
           },
         ),
@@ -112,21 +109,20 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       },
     ];
 
+    Future<bool> onWillPop() {
+      DateTime now = DateTime.now();
+      if (currentBackPressTime == null ||
+          now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+        currentBackPressTime = now;
+        EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+
+        return Future.value(false);
+      }
+      return Future.value(true);
+    }
+
     return WillPopScope(
-      onWillPop: () async {
-        if (isSideMenuClosed == false) {
-          setState(() {
-            isSideMenuClosed = true;
-          });
-        }
-        if (_countBackClick < 1 && !isSideMenuClosed) {
-          EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-          _countBackClick++;
-          return false;
-        } else {
-          return true;
-        }
-      },
+      onWillPop: onWillPop,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
@@ -154,7 +150,6 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               itemBuilder: (context, index) => InkWell(
                 onTap: () => setState(() {
                   _currentIndex = index;
-                  _countBackClick = 0;
                 }),
                 splashColor: transparent,
                 highlightColor: transparent,
@@ -281,7 +276,6 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                         KeyboardUtil.hideKeyboard(context);
                         setState(() {
                           isSideMenuClosed = true;
-                          _countBackClick = 0;
                         });
                       },
                       child: AbsorbPointer(
