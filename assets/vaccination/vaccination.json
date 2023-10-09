@@ -1,0 +1,947 @@
+[
+    {
+        "disease": "influenza",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "a_booster_dose_every_year",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "pneumococcal_disease",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "measles_mumps_rubella",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "women_should_receive_the_vaccine_at_least_three_month_before_getting_pregnant",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "varicella",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "women_should_receive_the_vaccine_at_least_three_month_before_getting_pregnant",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "tetanus",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 3,
+                "notice": "women_in_fertility_age",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "asap_when_being_pregnant",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "",
+                        "daysFromLastDose": "at_least_six_months_or_can_be_received_in_the_next_pregnancy"
+                    }
+                ]
+            },
+            {
+                "dose": 3,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "when_in_need",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "",
+                        "daysFromLastDose": "six_to_twelve_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "diphtheria_tetanus_pertussis",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "a_booster_every_10_years",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "japanese_encephalitis",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "never_injected_yet",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "one_year"
+                    }
+                ]
+            },
+            {
+                "dose": 1,
+                "notice": "already_injected",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "meningococcal_acwy",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fifty_five_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "meningococcal_disease_caused_by_serogroups_b_and_c",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fourty_five_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_to_fourty_five_years_old",
+                        "daysFromLastDose": "minimum_interval_two_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_a",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_six_to_twelve_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_b",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 3,
+                "notice": "a_booster_dose_every_five_years",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "one_month_after_1st_dose"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "six_months_after_1st_dose"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_a_and_b",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fifteen_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_to_fifteen_years_old",
+                        "daysFromLastDose": "minimum_interval_six_to_twelve_months"
+                    }
+                ]
+            },
+            {
+                "dose": 3,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_sixteen_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_sixteen_years_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "from_sixteen_years_old",
+                        "daysFromLastDose": "minimum_interval_five_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hpv",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 3,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fourty_five_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fourty_five_years_old",
+                        "daysFromLastDose": "minimum_interval_one_to_two_months_after_1st_dose"
+                    },
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_to_fourty_five_years_old",
+                        "daysFromLastDose": "minimum_interval_six_months_after_1st_dose"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "cholera",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "a_booster_when_needed",
+                "required": false,
+                "method": "drink",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_two_weeks"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "typhoid",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "a_booster_dose_every_three_years",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "from_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "rabies",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 3,
+                "notice": "three_dose_series_depending_on_indication",
+                "required": false,
+                "method": "injection",
+                "schedule": []
+            }
+        ]
+    },
+    {
+        "disease": "yellow_fever",
+        "isChild": false,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "single_dose_recommended_to_person_traveling_to_or_living_in_areas_at_risk_for_yellow_fever_virus",
+                "required": false,
+                "method": "injection",
+                "schedule": []
+            }
+        ]
+    },
+    {
+        "disease": "tuberculosis",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "new_born",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_b",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 5,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "new_born",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "two_months_old",
+                        "daysFromLastDose": "two_months"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "three_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 4,
+                        "timeDose": "four_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 5,
+                        "timeDose": "eighteen_months_old",
+                        "daysFromLastDose": "fourteen_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "diphtheria_tetanus_pertussis",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 5,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "three_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "four_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 4,
+                        "timeDose": "eighteen_months_old",
+                        "daysFromLastDose": "fourteen_month"
+                    },
+                    {
+                        "dose": 5,
+                        "timeDose": "five_to_six_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "poliomyelitis",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 5,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "three_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "four_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 4,
+                        "timeDose": "eighteen_months_old",
+                        "daysFromLastDose": "fourteen_month"
+                    },
+                    {
+                        "dose": 5,
+                        "timeDose": "five_to_six_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hib_diseases",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 4,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "three_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "four_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 4,
+                        "timeDose": "eighteen_months_old",
+                        "daysFromLastDose": "fourteen_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "rotavirus",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_to_six_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "two_to_six_months_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    }
+                ]
+            },
+            {
+                "dose": 3,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_to_six_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "two_to_six_months_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "two_to_six_months_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "pneumococcal_disease",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 4,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "three_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "four_months_old",
+                        "daysFromLastDose": "one_month"
+                    },
+                    {
+                        "dose": 4,
+                        "timeDose": "ten_to_elevent_months_old",
+                        "daysFromLastDose": "six_to_seven_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "meningococcal_disease_caused_by_serogroups_b_and_c",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "six_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "eight_months_old",
+                        "daysFromLastDose": "two_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "influenza",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "a_booster_dose_every_year",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "six_months_to_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "six_months_to_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_one_month"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "measles",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "nine_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "eighteen_months_old",
+                        "daysFromLastDose": "nine_months_old"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "meningococcal_acwy",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "nine_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "twelve_months_old",
+                        "daysFromLastDose": "three_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "japanese_encephalitis",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "nine_months_to_two_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "nine_months_to_two_months_old",
+                        "daysFromLastDose": "minimum_interval_one_year"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "measles_mumps_rubella",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": true,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 2,
+                        "timeDose": "twelve_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 3,
+                        "timeDose": "three_to_six_years_old",
+                        "daysFromLastDose": "two_to_five_years_old"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "varicella",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "nine_months_to_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "nine_months_to_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_three_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_a",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "twelve_to_eighteen_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "twelve_to_eighteen_months_old",
+                        "daysFromLastDose": "minimum_interval_six_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "hepatitis_a_and_b",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "twelve_to_eighteen_months_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "twelve_to_eighteen_months_old",
+                        "daysFromLastDose": "minimum_interval_six_to_twelve_months"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "typhoid",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 1,
+                "notice": "a_booster_dose_every_three_years",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_to_nine_years_old",
+                        "daysFromLastDose": ""
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "disease": "cholera",
+        "isChild": true,
+        "vaccinations": [
+            {
+                "dose": 2,
+                "notice": "",
+                "required": false,
+                "method": "injection",
+                "schedule": [
+                    {
+                        "dose": 1,
+                        "timeDose": "two_to_nine_years_old",
+                        "daysFromLastDose": ""
+                    },
+                    {
+                        "dose": 2,
+                        "timeDose": "two_to_nine_years_old",
+                        "daysFromLastDose": "minimum_interval_two_weeks"
+                    }
+                ]
+            }
+        ]
+    }
+]

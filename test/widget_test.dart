@@ -5,29 +5,40 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+// ignore_for_file: unused_local_variable
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:healthline/app/app_routes.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+// ignore: depend_on_referenced_packages
+import 'package:mocktail/mocktail.dart';
+
 import 'package:healthline/app/healthline_app.dart';
-// import 'package:healthline/app/healthline_app.dart';
 
-void main() {
-  testWidgets('My App', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+class MockStorage extends Mock implements Storage {}
 
-    await tester.pumpWidget( MyApp(appRoute: AppRoute(),));
-    
-    
-    // // Verify that our counter starts at 0.
-    // expect(find.text('0'), findsOneWidget);
-    // expect(find.text('1'), findsNothing);
+Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  // await AppController.instance.init();
 
-
-    // // Tap the '+' icon and trigger a frame.
-    // await tester.tap(find.byIcon(Icons.add));
-    // await tester.pump();
-
-    // // Verify that our counter has incremented.
-    // expect(find.text('0'), findsNothing);
-    // expect(find.text('1'), findsOneWidget);
+  test('Check ENV', () {
+    var baseUrl = dotenv.env['BASE_URL'];
+    var sentryDsn = dotenv.env['SENTRY_DSN'];
+    var cloudinaryUrl = dotenv.env['CLOUDINARY_URL'];
+    var cloudinaryApi = dotenv.env['CLOUDINARY_API'];
   });
+
+  Storage storage;
+  setUp(() {
+    storage = MockStorage();
+    when(
+      () => storage.write(any(), any<dynamic>()),
+    ).thenAnswer((_) async {});
+    HydratedBloc.storage = storage;
+  });
+  testWidgets('My App', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp(
+    ));
+  }); 
 }

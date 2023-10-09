@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:healthline/app/app_routes.dart';
-import 'package:healthline/app/cubits/cubit_res/res_cubit.dart';
+
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_routes.dart';
+import 'package:healthline/screen/splash/splash_screen.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
 
-import 'package:healthline/screens/splash/splash_screen.dart';
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.appRoute});
-  final AppRoute appRoute;
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _router = AppRoute();
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +45,14 @@ class MyApp extends StatelessWidget {
                   ),
                   child: const SplashScreen(),
                 ),
-                theme: AppThemes.appThemeData[AppTheme.lightTheme],
-                onGenerateRoute: appRoute.onGeneralRoute,
+                theme: AppThemes.appThemeData[AppTheme.LightTheme],
+                onGenerateRoute: _router.onGeneralRoute,
                 supportedLocales: AppLocalizationsSetup.supportedLocales,
                 localizationsDelegates:
                     AppLocalizationsSetup.localizationsDelegates,
                 locale: state.locale,
                 builder: EasyLoading.init(),
+                navigatorKey: AliceInspector().alice.getNavigatorKey(),
               );
             },
           ),

@@ -15,6 +15,14 @@
         "vi": "Kế tiếp",
         "en": "Next"
     },
+    "cancel": {
+        "vi": "Huỷ",
+        "en": "Cancel"
+    },
+    "save": {
+        "vi": "Lưu",
+        "en": "Save"
+    },
     "log_in": {
         "vi": "Đăng nhập",
         "en": "Log in"
@@ -139,7 +147,11 @@
         "vi": "Vui lòng chọn",
         "en": "Please choose"
     },
-    "please_choose_birthday": {
+    "please_choose_image": {
+        "vi": "Vui lòng chọn ảnh",
+        "en": "Please choose image"
+    },
+    "please_choose_day_of_birth": {
         "vi": "Vui lòng chọn ngày sinh",
         "en": "Please choose birthday"
     },
@@ -223,6 +235,10 @@
         "vi": "Đăng nhập thành công",
         "en": "Login successfully"
     },
+    "unauthorized": {
+        "vi": "Không thể xác thực",
+        "en": "Unauthorized"
+    },
     "patient": {
         "vi": "Bệnh nhân",
         "en": "Patient"
@@ -231,6 +247,10 @@
         "vi": "Bác sĩ",
         "en": "Doctor"
     },
+    "use_patient_account": {
+        "vi": "Sử dụng tài khoản khám bệnh",
+        "en": "Use patient account"
+    },
     "setting": {
         "vi": "Cài đặt",
         "en": "Setting"
@@ -238,6 +258,42 @@
     "edit_contact_info": {
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
+    },
+    "update_biography": {
+        "vi": "Cập nhật tiểu sử",
+        "en": "Update biography"
+    },
+    "update_avatar": {
+        "vi": "Cập nhật ảnh đại diện",
+        "en": "Update avatar"
+    },
+    "biography_must_be_at_least_100_words": {
+        "vi": "Tiểu sử phải có ít nhất 100 từ",
+        "en": "Bio must be at least 100 words"
+    },
+    "add_vaccination": {
+        "vi": "Thêm vắc xin",
+        "en": "Add vaccination"
+    },
+    "update": {
+        "vi": "Cập nhật",
+        "en": "Update"
+    },
+    "delete_record": {
+        "vi": "Xoá hồ sơ",
+        "en": "Delete record"
+    },
+    "cant_load_data": {
+        "vi": "Không thể tải dữ liệu",
+        "en": "Can't load data"
+    },
+    "failure": {
+        "vi": "Thất bại",
+        "en": "Failure"
+    },
+    "click_again_to_exit": {
+        "vi": "Chạm lại để thoát",
+        "en": "Click again to exit"
     },
     "notification": {
         "vi": "Thông báo",
@@ -259,9 +315,9 @@
         "vi": "Vắc xin",
         "en": "Vaccination"
     },
-    "corona": {
-        "vi": "Covid-19",
-        "en": "Covid-19"
+    "news": {
+        "vi": "Tin tức",
+        "en": "News"
     },
     "all": {
         "vi": "Tất cả",
@@ -302,6 +358,10 @@
     "coming_soon": {
         "vi": "Sắp hoàn thành",
         "en": "Coming soon"
+    },
+    "book_appointment_now": {
+        "vi": "Đặt lịch khám ngay",
+        "en": "Book appointment now"
     },
     "see_all": {
         "vi": "Xem thêm",
@@ -507,6 +567,58 @@
         "vi": "Hồ sơ bệnh án",
         "en": "Medical record"
     },
+    "revenue": {
+        "vi": "Thu nhập",
+        "en": "Revenue"
+    },
+    "reported": {
+        "vi": "Bị tố cáo",
+        "en": "Reported"
+    },
+    "images": {
+        "vi": "Hình ảnh",
+        "en": "Images"
+    },
+    "file": {
+        "vi": "Tệp",
+        "en": "File"
+    },
+    "statistics": {
+        "vi": "Thống kê",
+        "en": "Statistics"
+    },
+    "your_shift": {
+        "vi": "Ca làm việc của bạn",
+        "en": "Your shift"
+    },
+    "today": {
+        "vi": "Hôm nay",
+        "en": "Today"
+    },
+    "next_patient_profile": {
+        "vi": "Hồ sơ bệnh nhân tiếp theo",
+        "en": "Next patient's profile"
+    },
+    "appointment": {
+        "vi": "Cuộc hẹn",
+        "en": "Appointment"
+    },
+    "available": {
+        "vi": "Có sẵn",
+        "en": "Available"
+    },
+    "empty": {
+        "vi": "Trống",
+        "en": "Empty"
+    },
+    "booked": {
+        "vi": "Đã được đặt",
+        "en": "Booked"
+    },
+    "loading": {
+        "vi": "Đang tải",
+        "en": "Loading"
+    },
     "types": {
         "vi": "Loại",
         "en": "Types"
@@ -532,12 +644,16 @@
         "en": "Head circumference"
     },
     "children": {
-        "vi": "Trẻ",
+        "vi": "Con",
         "en": "Children"
     },
     "child": {
         "vi": "Con",
         "en": "Child"
+    },
+    "sibling": {
+        "vi": "Anh/Chị",
+        "en": "Sibling"
     },
     "parent": {
         "vi": "Ba/mẹ",
@@ -554,6 +670,14 @@
     "supports": {
         "vi": "Hỗ trợ",
         "en": "Supports"
+    },
+    "overview": {
+        "vi": "Tổng quan",
+        "en": "Overview"
+    },
+    "helps": {
+        "vi": "Trợ giúp",
+        "en": "Helps"
     },
     "wallet": {
         "vi": "Ví",
@@ -683,13 +807,17 @@
         "vi": "Vắc xin phòng viêm não Nhật Bản sống giảm độc lực tái tổ hợp",
         "en": "Japanese encephalitis"
     },
-    "influmeasles_mumps_rubellaenza": {
+    "measles_mumps_rubella": {
         "vi": "Sởi, Quai bị, Rubella",
         "en": "Measles, Mumps, Rubella"
     },
     "varicella": {
         "vi": "Thuỷ đậu",
         "en": "Varicella"
+    },
+    "tetanus": {
+        "vi": "Uốn ván",
+        "en": "Tetanus"
     },
     "hepatitis_a": {
         "vi": "Viêm gan A",
@@ -706,5 +834,269 @@
     "cholera": {
         "vi": "Bệnh tả",
         "en": "Cholera"
+    },
+    "hpv": {
+        "vi": "Bệnh lây lan qua đường tình dục và ung thư cổ tử cung do HPV",
+        "en": "HPV"
+    },
+    "rabies": {
+        "vi": "Dại",
+        "en": "Rabies"
+    },
+    "yellow_fever": {
+        "vi": "Sốt vàng",
+        "en": "Yellow fever"
+    },
+    "over_fine_ages": {
+        "vi": "Trên 9 tuổi",
+        "en": "Over 9 ages"
+    },
+    "under_fine_ages": {
+        "vi": "Dưới 9 tuổi",
+        "en": "Under 9 ages"
+    },
+    "notice": {
+        "vi": "Chú ý",
+        "en": "Notice"
+    },
+    "a_booster_dose_every_year": {
+        "vi": "Tiêm nhắc lại mỗi năm một lần",
+        "en": "A booster dose every year"
+    },
+    "dose": {
+        "vi": "Mũi",
+        "en": "Dose"
+    },
+    "doses": {
+        "vi": "Số mũi",
+        "en": "Doses"
+    },
+    "time_dose": {
+        "vi": "Thời gian tiêm",
+        "en": "Dose time"
+    },
+    "from_nine_years_old": {
+        "vi": "Từ 9 tuổi",
+        "en": "From nine years old"
+    },
+    "days_from_last_dose": {
+        "vi": "Cách mũi gần nhất",
+        "en": "From last dose"
+    },
+    "day_of_last_dose": {
+        "vi": "Thời gian tiêm mũi cuối",
+        "en": "Day of last dose"
+    },
+    "women_should_receive_the_vaccine_at_least_three_month_before_getting_pregnant": {
+        "vi": "Phụ nữ hoàn tất lịch tiêm trước khi mang thai tối thiểu 3 tháng",
+        "en": "Women should receive the vaccine at least 3 month before getting pregnant"
+    },
+    "minimum_interval_one_month": {
+        "vi": "Tối thiểu 1 tháng",
+        "en": "Minimum interval one month"
+    },
+    "women_in_fertility_age": {
+        "vi": "Phụ nữ ở độ tuổi sinh sản",
+        "en": "Women in fertility age"
+    },
+    "asap_when_being_pregnant": {
+        "vi": "Càng sớm càng tốt khi mang thai",
+        "en": "Asap when being prepnant"
+    },
+    "one_month": {
+        "vi": "Một tháng",
+        "en": "One month"
+    },
+    "at_least_six_months_or_can_be_received_in_the_next_pregnancy": {
+        "vi": "Cách liều 2 tối thiểu 6 tháng hoặc trong thời kỳ có thai sau",
+        "en": "At least 6 months after the 2nd dose or can be received in the next pregnancy"
+    },
+    "when_in_need": {
+        "vi": "Khi cần",
+        "en": "When in need"
+    },
+    "six_to_twelve_months": {
+        "vi": "Từ 6 đến 12 tháng",
+        "en": "Six to twelve months"
+    },
+    "a_booster_every_10_years": {
+        "vi": "Tiêm bổ sung mỗi 10 năm",
+        "en": "A booster every 10 years"
+    },
+    "never_injected_yet": {
+        "vi": "Chưa từng tiêm trước đây",
+        "en": "Never injected yet"
+    },
+    "one_year": {
+        "vi": "1 năm",
+        "en": "1 year"
+    },
+    "already_injected": {
+        "vi": "Đã từng tiêm",
+        "en": "Already injected"
+    },
+    "from_nine_to_fifty_five_years_old": {
+        "vi": "Từ 9 đến 55 tuổi",
+        "en": "From 9 to 55 years old"
+    },
+    "from_nine_to_fourty_five_years_old": {
+        "vi": "Từ 9 đến 45 tuổi",
+        "en": "From 9 to 45 years old"
+    },
+    "minimum_interval_two_months": {
+        "vi": "Tối thiểu 2 tháng",
+        "en": "Minimum interval 2 months"
+    },
+    "one_month_after_1st_dose": {
+        "vi": "1 tháng sau mũi 1",
+        "en": "1 month after 1st dose"
+    },
+    "six_months_after_1st_dose": {
+        "vi": "6 tháng sau mũi 1",
+        "en": "6 months after 1st dose"
+    },
+    "from_nine_to_fifteen_years_old": {
+        "vi": "Từ 9 đến 15 tuổi",
+        "en": "From 9 to 15 years old"
+    },
+    "minimum_interval_six_to_twelve_months": {
+        "vi": "Tối thiểu 6 đến 12 tháng",
+        "en": "Minimun interval 6 to 12 months"
+    },
+    "a_booster_dose_every_five_years": {
+        "vi": "Một mũi tăng cường mỗi 5 năm",
+        "en": "A booster dose every 5 years"
+    },
+    "from_sixteen_years_old": {
+        "vi": "Từ 16 tuổi",
+        "en": "From 16 years old"
+    },
+    "minimum_interval_five_month": {
+        "vi": "Từ tối thiểu 5 tháng",
+        "en": "Minimum interval five months"
+    },
+    "minimum_interval_one_to_two_months_after_1st_dose": {
+        "vi": "Từ tối thiểu 1 đến 2 tháng sau mũi 1",
+        "en": "Minimum interval 1 to 2 months after 1st dose"
+    },
+    "minimum_interval_six_months_after_1st_dose": {
+        "vi": "Từ tối thiểu 6 tháng sau mũi 1",
+        "en": "Minimum interval 6 months after 1st dose"
+    },
+    "a_booster_when_needed": {
+        "vi": "Tiêm 1 mũi bổ sung khi cần",
+        "en": "A booster when needed"
+    },
+    "minimum_interval_two_weeks": {
+        "vi": "Từ tối thiểu 2 tuần",
+        "en": "Minimum interval two weeks"
+    },
+    "a_booster_dose_every_three_years": {
+        "vi": "Tiêm 1 mũi bổ sung mỗi 3 năm",
+        "en": "A booster every three years"
+    },
+    "three_dose_series_depending_on_indication": {
+        "vi": "Phác đồ dự phòng cho những đối tượng nguy cơ cao gồm 3 liều",
+        "en": "3 dose series depending on indication"
+    },
+    "single_dose_recommended_to_person_traveling_to_or_living_in_areas_at_risk_for_yellow_fever_virus": {
+        "vi": "Tiêm 1 liều khi đi du lịch đến những vùng có nguy cơ cao",
+        "en": "Single dose recommended to person traveling to or living in areas at risk for yellow fever virus"
+    },
+    "twelve_to_eighteen_months_old": {
+        "vi": "12 đến 18 tháng tuổi",
+        "en": "12 to 18 months old"
+    },
+    "two_to_nine_years_old": {
+        "vi": "2 đến 9 tuổi",
+        "en": "2 to 9 years old"
+    },
+    "nine_months_to_nine_years_old": {
+        "vi": "9 tháng đến 9 năm tuổi",
+        "en": "9 months to 9 years old"
+    },
+    "minimum_interval_three_months": {
+        "vi": "Từ tối thiểu 3 tháng",
+        "en": "Minimum interval three months"
+    },
+    "minimum_interval_six_months": {
+        "vi": "Từ tối thiểu 3 tháng",
+        "en": "Minimum interval three months"
+    },
+    "new_born": {
+        "vi": "Sơ sinh",
+        "en": "New born"
+    },
+    "two_months_old": {
+        "vi": "2 tháng tuổi",
+        "en": "2 months old"
+    },
+    "three_months_old": {
+        "vi": "3 tháng tuổi",
+        "en": "3 months old"
+    },
+    "four_months_old": {
+        "vi": "4 tháng tuổi",
+        "en": "4 months old"
+    },
+    "eighteen_months_old": {
+        "vi": "18 tháng tuổi",
+        "en": "18 months old"
+    },
+    "fourteen_months_old": {
+        "vi": "14 tháng tuổi",
+        "en": "14 months old"
+    },
+    "five_to_six_years_old": {
+        "vi": "5 đến 6 tuổi",
+        "en": "5 to six years old"
+    },
+    "two_to_six_months_old": {
+        "vi": "2 đến 6 tháng",
+        "en": "2 to six months old"
+    },
+    "ten_to_elevent_months_old": {
+        "vi": "10 đến 11 tháng tuổi",
+        "en": "10 to 11 months old"
+    },
+    "how_many_doses_have_you_received": {
+        "vi": "Số mũi bạn đã tiêm?",
+        "en": "How many doses have you received?"
+    },
+    "profile": {
+        "vi": "Hồ sơ",
+        "en": "Profile"
+    },
+    "contact": {
+        "vi": "Liên hệ",
+        "en": "Contact"
+    },
+    "security": {
+        "vi": "Bảo mật",
+        "en": "Security"
+    },
+    "user_not_found": {
+        "vi": "Không tìm thấy tài khoản",
+        "en": "User not found"
+    },
+    "doctor_not_found": {
+        "vi": "Không tìm thấy bác sĩ",
+        "en": "Doctor not found"
+    },
+    "feedbacks": {
+        "vi": "Nhận xét",
+        "en": "Feedbacks"
+    },
+    "working_time": {
+        "vi": "Thời gian làm việc",
+        "en": "Working time"
+    },
+    "biography": {
+        "vi": "Tiểu sử",
+        "en": "Biography"
+    },
+    "vaccination_record": {
+        "vi": "Hồ sơ vắc xin",
+        "en": "Vaccination record"
     }
 }

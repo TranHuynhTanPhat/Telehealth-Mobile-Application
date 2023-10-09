@@ -22,10 +22,10 @@ class Validate {
   String? validatePassword(BuildContext context, String? value) {
     RegExp uppercase = RegExp(r'^(?=.*[A-Z])');
     RegExp lowercase = RegExp(r'^(?=.*[a-z])');
-    RegExp number = RegExp(r'^(?=.*?[0-9]) ');
-    RegExp special = RegExp(r'^(?=.*?[!@#\$&*~])');
-    RegExp regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp number = RegExp(r'^(?=.*[0-9])');
+    RegExp special = RegExp(r'^(?=.*[\$\]\\`~!@#&*~%^&*()+=_{}[|;:<>,.?/-])');
+    RegExp regex = RegExp(
+        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\$\]\\`~!@#&*~%^&*()+=_{}[|;:<>,.?/-]).{8,}$');
 
     String error = "";
 

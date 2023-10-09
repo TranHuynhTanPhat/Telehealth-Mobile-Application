@@ -11,9 +11,9 @@ void configLoading(context) {
     ..indicatorSize = 40
     ..radius = 21.0
     ..progressColor = white
-    ..backgroundColor = secondary
+    ..backgroundColor = colorF2F5FF
     ..indicatorColor = primary
-    ..textColor = white
+    ..textColor = color1F1F1F
     ..maskColor = transparent
     ..userInteractions = true
     ..dismissOnTap = false
@@ -21,7 +21,7 @@ void configLoading(context) {
     ..animationStyle = EasyLoadingAnimationStyle.scale
     ..textAlign = TextAlign.center
     // ..textStyle = Theme.of(context).textTheme.bodyLarge
-    ..contentPadding = const EdgeInsets.all(12)
+    ..contentPadding = const EdgeInsets.all(10)
     ..textPadding = EdgeInsets.zero
     ..animationDuration = const Duration(milliseconds: 200)
     ..customAnimation = CustomAnimation();

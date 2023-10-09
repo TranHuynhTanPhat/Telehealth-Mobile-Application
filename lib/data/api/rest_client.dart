@@ -5,13 +5,16 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/sentry_log_error.dart';
 
@@ -38,8 +41,7 @@ class RestClient {
       {String? platform,
       String? deviceId,
       String? language,
-      String? appVersion,
-      String? accessToken}) async {
+      String? appVersion}) async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
     final String appDocPath = appDocDir.path;
     cookieJar = PersistCookieJar(
@@ -54,23 +56,18 @@ class RestClient {
       'X-Platform': platform,
       'x-device-id': deviceId
     };
-    if (accessToken != null) setToken(accessToken);
     setLanguage(language!);
   }
 
-  void setToken(String token) {
-    headers[ACCESS_TOKEN_HEADER] = "Bearer $token";
-  }
+  // void setToken(String token) {
+  //   headers[ACCESS_TOKEN_HEADER] = "Bearer $token";
+  // }
 
   void setLanguage(String language) {
     headers[LANGUAGE] = language;
   }
 
-  void clearToken() {
-    instance.headers.remove(ACCESS_TOKEN_HEADER);
-  }
-
-  BaseOptions getDioBaseOption() {
+  BaseOptions getDioBaseOption(isUpload) {
     return BaseOptions(
       connectTimeout: const Duration(seconds: CONNECT_TIME_OUT),
       receiveTimeout: const Duration(seconds: RECEIVE_TIME_OUT),
@@ -79,8 +76,10 @@ class RestClient {
     );
   }
 
-  Dio getDio({bool isUpload = false}) {
-    var dio = Dio(instance.getDioBaseOption());
+  Dio getDio({bool isUpload = false, bool isDoctor = false}) {
+    var dio = Dio(instance.getDioBaseOption(isUpload));
+    dio.interceptors.add(AliceInspector().alice.getDioInterceptor());
+
     dio.interceptors.add(CookieManager(instance.cookieJar));
 
     if (ENABLE_LOG) {
@@ -99,7 +98,9 @@ class RestClient {
             }
 
             /// check access token
-            LoginResponse? user = await AppStorage().getUser();
+            LoginResponse? user = isDoctor == true
+                ? await AppStorage().getDoctor()
+                : await AppStorage().getPatient();
             if (user == null || user.jwtToken == null) {
               return handler.next(options);
             }
@@ -118,21 +119,41 @@ class RestClient {
               try {
                 /// refresh token if success continue
                 /// else logout
-                final response = await dio.post(
-                    dotenv.get('BASE_URL', fallback: '') +
-                        ApiConstants.USER_REFRESH_TOKEN);
-                if (response.statusCode == 200) {
-                  if (response.data != false) {
-                    options.headers['Authorization'] =
-                        "Bearer ${response.data["jwtToken"]}";
-                    AppStorage()
-                        .saveUser(user: user.copyWith(jwtToken: response.data));
+
+                if (isDoctor == true) {
+                  final response = await dio.post(
+                      dotenv.get('BASE_URL', fallback: '') +
+                          ApiConstants.DOCTOR_REFRESH_TOKEN);
+                  if (response.statusCode == 200) {
+                    if (response.data != false) {
+                      options.headers[ACCESS_TOKEN_HEADER] =
+                          "Bearer ${response.data["jwtToken"]}";
+                      AppStorage().savePatient(
+                          user: user.copyWith(jwtToken: response.data));
+                    } else {
+                      logout();
+                    }
                   } else {
                     logout();
                   }
                 } else {
-                  logout();
+                  final response = await dio.post(
+                      dotenv.get('BASE_URL', fallback: '') +
+                          ApiConstants.USER_REFRESH_TOKEN);
+                  if (response.statusCode == 200) {
+                    if (response.data != false) {
+                      options.headers[ACCESS_TOKEN_HEADER] =
+                          "Bearer ${response.data["jwtToken"]}";
+                      AppStorage().savePatient(
+                          user: user.copyWith(jwtToken: response.data));
+                    } else {
+                      logout();
+                    }
+                  } else {
+                    logout();
+                  }
                 }
+
                 return handler.next(options);
               } on DioException catch (error) {
                 logout();
@@ -140,29 +161,28 @@ class RestClient {
                 return handler.reject(error, true);
               }
             } else {
-              options.headers['Authorization'] = "Bearer ${user.jwtToken}";
+              options.headers[ACCESS_TOKEN_HEADER] = "Bearer ${user.jwtToken}";
               return handler.next(options);
             }
           } else {
             logPrint('CALL_CLOUDINARY_API');
+
+            options.headers.remove('ACCESS_TOKEN_HEADER');
 
             /// check path
             if (!options.path.contains('http')) {
               options.path =
                   dotenv.get('CLOUDINARY_API', fallback: '') + options.path;
             }
+            return handler.next(options);
           }
         },
         onResponse: (Response response, handler) async {
           logPrint("RESPONSE");
           logPrint(response.headers);
           try {
-            String refreshToken = getRefreshToken(response.headers.toString());
-            if (refreshToken.isNotEmpty) {
-              AppStorage().saveRefreshToken(refresh: refreshToken);
-              await instance.cookieJar.saveFromResponse(
-                  Uri.parse('${dotenv.get('BASE_URL', fallback: '')}/'), []);
-            }
+            await instance.cookieJar.saveFromResponse(
+                Uri.parse('${dotenv.get('BASE_URL', fallback: '')}/'), []);
           } catch (e) {
             logPrint(e);
           }
@@ -181,21 +201,25 @@ class RestClient {
     return dio;
   }
 
-  String getRefreshToken(String headers) {
-    int refreshTokenStart = headers.indexOf("refresh_token=");
-    int refreshTokenEnd = headers.indexOf(";", refreshTokenStart);
-    String refreshToken = headers
-        .substring(refreshTokenStart, refreshTokenEnd)
-        .replaceAll('refresh_token=', '');
-    return refreshToken.trim();
+  Future<void> logout() async {
+    await AppStorage().clearPatient();
+    await AppStorage().clearDoctor();
+    if (AppController.instance.authState == AuthState.AllAuthorized) {
+      await getDio().delete(
+          dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+      await getDio().delete(
+          dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
+    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+      await getDio().delete(
+          dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
+    } else {
+      await getDio().delete(
+          dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+    }
+    instance.cookieJar.deleteAll();
   }
 
-  Future<void> logout() async {
-    clearToken();
-    await AppStorage().clearUser();
-    await AppStorage().clearRefreshToken();
-    await getDio().delete(
-        dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
-    instance.cookieJar.deleteAll();
+  void runHttpInspector() {
+    AliceInspector().alice.showInspector();
   }
 }
