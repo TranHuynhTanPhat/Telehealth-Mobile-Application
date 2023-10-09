@@ -1,3 +1,4 @@
+import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:healthline/data/storage/models/vaccination_model.dart';
@@ -7,6 +8,11 @@ part 'vaccination_state.dart';
 class VaccinationCubit extends HydratedCubit<VaccinationState> {
   VaccinationCubit()
       : super(VaccinationInitial(diseaseAdult: [], diseaseChild: []));
+  @override
+  void onChange(Change<VaccinationState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   Future<void> fetchVaccinationFromStorage() async {
     emit(VaccinationLoading(
@@ -23,14 +29,12 @@ class VaccinationCubit extends HydratedCubit<VaccinationState> {
       );
     } catch (e) {
       emit(VaccinationError(
-        message:e.toString(),
+        message: e.toString(),
         diseaseAdult: state.diseaseAdult,
         diseaseChild: state.diseaseChild,
       ));
     }
   }
-
-  
 
   @override
   VaccinationState? fromJson(Map<String, dynamic> json) {

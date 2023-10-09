@@ -2,14 +2,20 @@
 
 import 'dart:ui';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+
+import 'package:healthline/utils/log_data.dart';
 
 part 'res_state.dart';
 
 class ResCubit extends HydratedCubit<ResState> {
   ResCubit() : super(const ResInit(locale: Locale("vi"), switchTheme: false));
+  @override
+  void onChange(Change<ResState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   void toVietnamese() => emit(
       ResState(locale: const Locale('vi'), switchTheme: state.switchTheme));

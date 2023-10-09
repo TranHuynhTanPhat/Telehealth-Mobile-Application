@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
@@ -128,12 +129,18 @@ class SubUserCubit extends HydratedCubit<SubUserState> {
           state.subUsers, state.currentUser, er.message.toString()));
     }
   }
-  
+
+  @override
+  void onChange(Change<SubUserState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
+
   @override
   SubUserState? fromJson(Map<String, dynamic> json) {
     return SubUserState.fromMap(json);
   }
-  
+
   @override
   Map<String, dynamic>? toJson(SubUserState state) {
     return state.toMap();

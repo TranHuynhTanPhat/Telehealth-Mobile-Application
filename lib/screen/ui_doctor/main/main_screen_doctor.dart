@@ -47,251 +47,247 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           return true;
         }
       },
-      child: BlocProvider(
-        create: (context) => SideMenuCubit(),
-        child: BlocListener<SideMenuCubit, SideMenuState>(
-          listener: (context, state) {
-            if (state is SideMenuLoading) {
-              EasyLoading.show();
-            } else if (state is LogoutActionState) {
-              EasyLoading.dismiss();
-              Navigator.pushReplacementNamed(context, logInName);
-            } else if (state is ErrorActionState) {
-              EasyLoading.dismiss();
-            }
-          },
-          child: Builder(builder: (context) {
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              extendBody: true,
+      child: BlocListener<SideMenuCubit, SideMenuState>(
+        listener: (context, state) {
+          if (state is SideMenuLoading) {
+            EasyLoading.show();
+          } else if (state is LogoutActionState) {
+            EasyLoading.dismiss();
+            Navigator.pushReplacementNamed(context, logInName);
+          } else if (state is ErrorActionState) {
+            EasyLoading.dismiss();
+          }
+        },
+        child: Builder(builder: (context) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            extendBody: true,
+            backgroundColor: white,
+            appBar: AppBar(
+                title: Text(translate(
+                    context,
+                    _currentPage == DrawerMenus.Schedule
+                        ? 'schedule'
+                        : _currentPage == DrawerMenus.Patient
+                            ? 'patient'
+                            : _currentPage == DrawerMenus.Setting
+                                ? 'setting'
+                                : _currentPage == DrawerMenus.Helps
+                                    ? 'helps'
+                                    : "Bs. Lê Đình Trường"))),
+            drawer: Drawer(
+              width: dimensWidth() * 40,
               backgroundColor: white,
-              appBar: AppBar(
-                  title: Text(translate(
-                      context,
-                      _currentPage == DrawerMenus.Schedule
-                          ? 'schedule'
-                          : _currentPage == DrawerMenus.Patient
-                              ? 'patient'
-                              : _currentPage == DrawerMenus.Setting
-                                  ? 'setting'
-                                  : _currentPage == DrawerMenus.Helps
-                                      ? 'helps'
-                                      : "Bs. Lê Đình Trường"))),
-              drawer: Drawer(
-                width: dimensWidth() * 40,
-                backgroundColor: white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: DrawerHeader(
-                        decoration: const BoxDecoration(
-                          color: secondary,
-                        ),
-                        padding: EdgeInsets.zero,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 35,
-                              backgroundImage: AssetImage(DImages.placeholder),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Bs. Lê Đình Trường',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(color: white),
-                            ),
-                            Text(
-                              'leditruong@gmail.com',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(color: white),
-                            ),
-                          ],
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: DrawerHeader(
+                      decoration: const BoxDecoration(
+                        color: secondary,
+                      ),
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 35,
+                            backgroundImage: AssetImage(DImages.placeholder),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            'Bs. Lê Đình Trường',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: white),
+                          ),
+                          Text(
+                            'leditruong@gmail.com',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: white),
+                          ),
+                        ],
                       ),
                     ),
-                    AppController.instance.authState == AuthState.AllAuthorized
-                        ? ListTile(
-                            onTap: () {
-                              EasyLoading.show();
-                              Future.delayed(const Duration(seconds: 1), () {
-                                Navigator.pushReplacementNamed(
-                                    context, mainScreenPatientName);
-                              });
-                            },
-                            title: Text(
-                              translate(context, 'use_patient_account'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                            leading: FaIcon(
-                              FontAwesomeIcons.solidUser,
-                              size: dimensIcon() * .5,
-                              color: color1F1F1F,
-                            ),
-                          )
-                        : const SizedBox(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: dimensHeight() * 2,
-                          left: dimensWidth() * 2,
-                          bottom: dimensHeight()),
-                      child: Text(
-                        translate(context, 'general'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: color1F1F1F),
-                      ),
+                  ),
+                  AppController.instance.authState == AuthState.AllAuthorized
+                      ? ListTile(
+                          onTap: () {
+                            EasyLoading.show();
+                            Future.delayed(const Duration(seconds: 1), () {
+                              Navigator.pushReplacementNamed(
+                                  context, mainScreenPatientName);
+                            });
+                          },
+                          title: Text(
+                            translate(context, 'use_patient_account'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(color: color1F1F1F),
+                          ),
+                          leading: FaIcon(
+                            FontAwesomeIcons.solidUser,
+                            size: dimensIcon() * .5,
+                            color: color1F1F1F,
+                          ),
+                        )
+                      : const SizedBox(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: dimensHeight() * 2,
+                        left: dimensWidth() * 2,
+                        bottom: dimensHeight()),
+                    child: Text(
+                      translate(context, 'general'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: color1F1F1F),
                     ),
-                    LabelDrawer(
-                      active: _currentPage == DrawerMenus.Overview,
-                      press: () {
-                        setState(() {
-                          _countBackClick=0;
-                          _currentPage = DrawerMenus.Overview;
-                        });
-                      },
-                      lable: 'overview',
-                      icon: FontAwesomeIcons.houseMedical,
-                    ),
-                    LabelDrawer(
-                      active: _currentPage == DrawerMenus.Schedule,
-                      lable: 'schedule',
-                      icon: FontAwesomeIcons.solidCalendar,
-                      press: () {
-                        setState(() {
-                          _countBackClick=0;
+                  ),
+                  LabelDrawer(
+                    active: _currentPage == DrawerMenus.Overview,
+                    press: () {
+                      setState(() {
+                        _countBackClick = 0;
+                        _currentPage = DrawerMenus.Overview;
+                      });
+                    },
+                    lable: 'overview',
+                    icon: FontAwesomeIcons.houseMedical,
+                  ),
+                  LabelDrawer(
+                    active: _currentPage == DrawerMenus.Schedule,
+                    lable: 'schedule',
+                    icon: FontAwesomeIcons.solidCalendar,
+                    press: () {
+                      setState(() {
+                        _countBackClick = 0;
 
-                          _currentPage = DrawerMenus.Schedule;
-                        });
-                      },
-                    ),
-                    LabelDrawer(
-                      active: _currentPage == DrawerMenus.Patient,
-                      lable: 'patient',
-                      icon: FontAwesomeIcons.hospitalUser,
-                      press: () {
-                        setState(() {
-                          _countBackClick=0;
+                        _currentPage = DrawerMenus.Schedule;
+                      });
+                    },
+                  ),
+                  LabelDrawer(
+                    active: _currentPage == DrawerMenus.Patient,
+                    lable: 'patient',
+                    icon: FontAwesomeIcons.hospitalUser,
+                    press: () {
+                      setState(() {
+                        _countBackClick = 0;
 
-                          _currentPage = DrawerMenus.Patient;
-                        });
-                      },
-                    ),
-                    LabelDrawer(
-                      active: _currentPage == DrawerMenus.Setting,
-                      lable: 'setting',
-                      icon: FontAwesomeIcons.gear,
-                      press: () {
-                        setState(() {
-                          _countBackClick=0;
+                        _currentPage = DrawerMenus.Patient;
+                      });
+                    },
+                  ),
+                  LabelDrawer(
+                    active: _currentPage == DrawerMenus.Setting,
+                    lable: 'setting',
+                    icon: FontAwesomeIcons.gear,
+                    press: () {
+                      setState(() {
+                        _countBackClick = 0;
 
-                          _currentPage = DrawerMenus.Setting;
-                        });
-                      },
-                    ),
-                    const Spacer(),
-                    LabelDrawer(
-                      active: _currentPage == DrawerMenus.Helps,
-                      lable: 'helps',
-                      icon: FontAwesomeIcons.solidCircleQuestion,
-                      press: () {
-                        setState(() {
-                          _countBackClick=0;
+                        _currentPage = DrawerMenus.Setting;
+                      });
+                    },
+                  ),
+                  const Spacer(),
+                  LabelDrawer(
+                    active: _currentPage == DrawerMenus.Helps,
+                    lable: 'helps',
+                    icon: FontAwesomeIcons.solidCircleQuestion,
+                    press: () {
+                      setState(() {
+                        _countBackClick = 0;
 
-                          _currentPage = DrawerMenus.Helps;
-                        });
-                      },
+                        _currentPage = DrawerMenus.Helps;
+                      });
+                    },
+                  ),
+                  ListTile(
+                    onTap: () {
+                      _countBackClick = 0;
+
+                      AppLocalizations.of(context).isVnLocale
+                          ? context.read<ResCubit>().toEnglish()
+                          : context.read<ResCubit>().toVietnamese();
+                    },
+                    title: Text(
+                      AppLocalizations.of(context).isVnLocale
+                          ? translate(context, 'en')
+                          : translate(context, 'vi'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: color1F1F1F),
                     ),
-                    ListTile(
+                    leading: FaIcon(
+                      FontAwesomeIcons.language,
+                      size: dimensIcon() * .5,
+                      color: color1F1F1F,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: dimensHeight() * 5),
+                    child: ListTile(
                       onTap: () {
-                          _countBackClick=0;
+                        // RestClient().logout();
+                        _countBackClick = 0;
 
-                        AppLocalizations.of(context).isVnLocale
-                            ? context.read<ResCubit>().toEnglish()
-                            : context.read<ResCubit>().toVietnamese();
+                        context.read<SideMenuCubit>().logout();
                       },
+                      leading: FaIcon(
+                        FontAwesomeIcons.arrowRightFromBracket,
+                        size: dimensIcon() * .7,
+                        color: color9D4B6C,
+                      ),
                       title: Text(
-                        AppLocalizations.of(context).isVnLocale
-                            ? translate(context, 'en')
-                            : translate(context, 'vi'),
+                        translate(context, 'log_out'),
                         style: Theme.of(context)
                             .textTheme
-                            .titleMedium
-                            ?.copyWith(color: color1F1F1F),
-                      ),
-                      leading: FaIcon(
-                        FontAwesomeIcons.language,
-                        size: dimensIcon() * .5,
-                        color: color1F1F1F,
+                            .labelMedium
+                            ?.copyWith(color: color9D4B6C),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: dimensHeight() * 5),
-                      child: ListTile(
-                        onTap: () {
-                          // RestClient().logout();
-                          _countBackClick=0;
-
-                          context.read<SideMenuCubit>().logout();
-                        },
-                        leading: FaIcon(
-                          FontAwesomeIcons.arrowRightFromBracket,
-                          size: dimensIcon() * .7,
-                          color: color9D4B6C,
-                        ),
-                        title: Text(
-                          translate(context, 'log_out'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
-                              ?.copyWith(color: color9D4B6C),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.endFloat,
-              floatingActionButton: Container(
-                margin: EdgeInsets.only(right: dimensWidth() * 40),
-                child: IconButton(
-                  onPressed: () => RestClient().runHttpInspector(),
-                  padding: EdgeInsets.all(dimensWidth() * 2),
-                  icon: const FaIcon(FontAwesomeIcons.bug),
-                  color: white,
-                  style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(secondary)),
-                ),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: Container(
+              margin: EdgeInsets.only(right: dimensWidth() * 40),
+              child: IconButton(
+                onPressed: () => RestClient().runHttpInspector(),
+                padding: EdgeInsets.all(dimensWidth() * 2),
+                icon: const FaIcon(FontAwesomeIcons.bug),
+                color: white,
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(secondary)),
               ),
-              body: _currentPage == DrawerMenus.Setting
-                  ? const SettingScreen()
-                  : _currentPage == DrawerMenus.Schedule
-                      ? const ScheduleScreen()
-                      : _currentPage == DrawerMenus.Patient
-                          ? const PatientScreen()
-                          : _currentPage == DrawerMenus.Helps
-                              ? const HelpsScreen()
-                              : const OverviewScreen(),
-            );
-          }),
-        ),
+            ),
+            body: _currentPage == DrawerMenus.Setting
+                ? const SettingScreen()
+                : _currentPage == DrawerMenus.Schedule
+                    ? const ScheduleScreen()
+                    : _currentPage == DrawerMenus.Patient
+                        ? const PatientScreen()
+                        : _currentPage == DrawerMenus.Helps
+                            ? const HelpsScreen()
+                            : const OverviewScreen(),
+          );
+        }),
       ),
     );
   }

@@ -43,14 +43,20 @@ class _SubUserCardState extends State<SubUserCard> {
         return InkWell(
           splashColor: transparent,
           highlightColor: transparent,
-          onTap: () =>
-              context.read<SubUserCubit>().updateIndex(widget.index),
+          onTap: () {
+            context.read<SubUserCubit>().updateIndex(widget.index);
+            if (state.subUsers.isNotEmpty && state.currentUser != -1) {
+              context
+                  .read<HealthStatCubit>()
+                  .fetchStats(state.subUsers[state.currentUser].id!);
+            }
+          },
           child: Padding(
             padding: EdgeInsets.all(
-                state.currentUser == widget.index ? 0 : dimensWidth()*.5),
+                state.currentUser == widget.index ? 0 : dimensWidth() * .5),
             child: Container(
               margin: EdgeInsets.symmetric(
-                  vertical: dimensWidth(), horizontal: dimensWidth()*.5),
+                  vertical: dimensWidth(), horizontal: dimensWidth() * .5),
               alignment: Alignment.bottomCenter,
               width:
                   dimensWidth() * (state.currentUser == widget.index ? 10 : 9),

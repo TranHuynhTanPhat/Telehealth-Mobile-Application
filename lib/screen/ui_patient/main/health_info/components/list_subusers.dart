@@ -20,10 +20,14 @@ class _ListSubUserState extends State<ListSubUser> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> showDialogInput(BuildContext context) async {
+    final subUserCubit = context.read<SubUserCubit>();
     final result = await showDialog(
         barrierDismissible: true,
         context: context,
-        builder: (context) => SubUserInputDialog(formKey: _formKey));
+        builder: (context) => BlocProvider.value(
+              value: subUserCubit,
+              child: SubUserInputDialog(formKey: _formKey),
+            ));
     if (result == true) {
       // ignore: use_build_context_synchronously
       context.read<SubUserCubit>().fetchMedicalRecord();

@@ -19,56 +19,50 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  late ContactCubit _contactCubit;
   @override
   void initState() {
-    _contactCubit = ContactCubit();
-    _contactCubit.fetchContact();
+    context.read<ContactCubit>().fetchContact();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _contactCubit,
-      child: BlocListener<ContactCubit, ContactState>(
-        listener: (context, state) {
-          if (state is ContactError) {
-            EasyLoading.dismiss();
-            Navigator.pop(context);
-          }
-        },
-        child: GestureDetector(
-          onTap: () => KeyboardUtil.hideKeyboard(context),
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            extendBody: true,
-            backgroundColor: white,
-            appBar: AppBar(
-              elevation: 10,
-              title: Text(
-                translate(context, 'edit_contact_info'),
-              ),
-              leadingWidth: dimensWidth() * 10,
-              leading: cancelButton(context),
+    return BlocListener<ContactCubit, ContactState>(
+      listener: (context, state) {
+        if (state is ContactError) {
+          EasyLoading.dismiss();
+          Navigator.pop(context);
+        }
+      },
+      child: GestureDetector(
+        onTap: () => KeyboardUtil.hideKeyboard(context),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          extendBody: true,
+          backgroundColor: white,
+          appBar: AppBar(
+            elevation: 10,
+            title: Text(
+              translate(context, 'edit_contact_info'),
             ),
-            body: BlocBuilder<ContactCubit, ContactState>(
-              builder: (context, state) {
-                return AbsorbPointer(
-                  absorbing: state is ContactLoading,
-                  child: ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
-                    children: const [
-                      EditContactForm(),
-                    ],
-                  ),
-                );
-              },
-            ),
+            leadingWidth: dimensWidth() * 10,
+            leading: cancelButton(context),
+          ),
+          body: BlocBuilder<ContactCubit, ContactState>(
+            builder: (context, state) {
+              return AbsorbPointer(
+                absorbing: state is ContactLoading,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                  children: const [
+                    EditContactForm(),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

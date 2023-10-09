@@ -9,6 +9,11 @@ part 'side_menu_state.dart';
 
 class SideMenuCubit extends Cubit<SideMenuState> {
   SideMenuCubit() : super(SideMenuInitial());
+  @override
+  void onChange(Change<SideMenuState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   Future<void> logout() async {
     emit(SideMenuLoading());

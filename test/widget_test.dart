@@ -13,7 +13,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:mocktail/mocktail.dart';
 
-import 'package:healthline/routes/app_routes.dart';
 import 'package:healthline/app/healthline_app.dart';
 
 class MockStorage extends Mock implements Storage {}
@@ -39,8 +38,7 @@ Future<void> main() async {
     HydratedBloc.storage = storage;
   });
   testWidgets('My App', (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp(
-      appRoute: AppRoute(),
+    await tester.pumpWidget(const MyApp(
     ));
   }); 
 }

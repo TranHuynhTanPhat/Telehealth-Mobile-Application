@@ -5,12 +5,18 @@ import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'contact_state.dart';
 
 class ContactCubit extends Cubit<ContactState> {
   ContactCubit() : super(ContactInitial(phone: null, email: null));
   final UserRepository _userRepository = UserRepository();
+  @override
+  void onChange(Change<ContactState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   Future<void> fetchContact() async {
     emit(ContactLoading(phone: state.phone, email: state.email));
@@ -32,8 +38,7 @@ class ContactCubit extends Cubit<ContactState> {
     try {
       DataResponse response = await _userRepository.updateEmail(email);
       // print(response.message);
-      emit(ContactUpdate(
-          phone: state.phone, email: email, response: response));
+      emit(ContactUpdate(phone: state.phone, email: email, response: response));
     } catch (e) {
       DioException er = e as DioException;
       emit(ContactError(er.response!.data['message'].toString(),

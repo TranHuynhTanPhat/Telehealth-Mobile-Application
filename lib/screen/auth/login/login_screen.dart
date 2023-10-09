@@ -20,58 +20,53 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LogInCubit(),
-      child: BlocListener<LogInCubit, LogInState>(
-        listener: (context, state) {
-          if (state is LogInLoading) {
-            EasyLoading.show();
-          } else if (state is LogInSuccessed) {
-            EasyLoading.dismiss();
-            if (state.errorDoctor != null) {
-              EasyLoading.showToast(
-                  translate(context, 'login_to_doctor_account_failed'));
-            }
-            if (state.errorPatient != null) {
-              EasyLoading.showToast(
-                  translate(context, 'login_to_patient_account_failed'));
-            }
-            if (AppController.instance.authState == AuthState.AllAuthorized ||
-                AppController.instance.authState ==
-                    AuthState.DoctorAuthorized) {
-              Navigator.pushReplacementNamed(context, mainScreenDoctorName);
-            } else {
-              Navigator.pushReplacementNamed(context, mainScreenPatientName);
-            }
-
-          } else if (state is LogInError) {
-            EasyLoading.dismiss();
+    return BlocListener<LogInCubit, LogInState>(
+      listener: (context, state) {
+        if (state is LogInLoading) {
+          EasyLoading.show();
+        } else if (state is LogInSuccessed) {
+          EasyLoading.dismiss();
+          if (state.errorDoctor != null) {
             EasyLoading.showToast(
-                translate(context, state.errorDoctor.toString()));
+                translate(context, 'login_to_doctor_account_failed'));
           }
-        },
-        child: BlocBuilder<LogInCubit, LogInState>(
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () => KeyboardUtil.hideKeyboard(context),
-              child: Scaffold(
-                body: ListView(
-                  padding: EdgeInsets.symmetric(
-                      vertical: dimensHeight() * 10,
-                      horizontal: dimensWidth() * 3),
-                  children: [
-                    const HeaderLogIn(),
-                    SizedBox(
-                      height: dimensHeight() * 3,
-                    ),
-                    const LogInForm(),
-                    const OptionLogIn()
-                  ],
-                ),
+          if (state.errorPatient != null) {
+            EasyLoading.showToast(
+                translate(context, 'login_to_patient_account_failed'));
+          }
+          if (AppController.instance.authState == AuthState.AllAuthorized ||
+              AppController.instance.authState == AuthState.DoctorAuthorized) {
+            Navigator.pushReplacementNamed(context, mainScreenDoctorName);
+          } else {
+            Navigator.pushReplacementNamed(context, mainScreenPatientName);
+          }
+        } else if (state is LogInError) {
+          EasyLoading.dismiss();
+          EasyLoading.showToast(
+              translate(context, state.errorDoctor.toString()));
+        }
+      },
+      child: BlocBuilder<LogInCubit, LogInState>(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () => KeyboardUtil.hideKeyboard(context),
+            child: Scaffold(
+              body: ListView(
+                padding: EdgeInsets.symmetric(
+                    vertical: dimensHeight() * 10,
+                    horizontal: dimensWidth() * 3),
+                children: [
+                  const HeaderLogIn(),
+                  SizedBox(
+                    height: dimensHeight() * 3,
+                  ),
+                  const LogInForm(),
+                  const OptionLogIn()
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

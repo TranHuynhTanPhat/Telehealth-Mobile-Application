@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/routes/app_routes.dart';
-import 'package:healthline/app/healthline_app.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/app/healthline_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +21,8 @@ void main() async {
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 1.0;
     },
-    appRunner: () => runApp(MyApp(
-      appRoute: AppRoute(),
+    appRunner: () => runApp(const MyApp(
+      // appRoute: AppRoute(),
     )),
   );
 }

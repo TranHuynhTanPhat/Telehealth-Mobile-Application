@@ -51,9 +51,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => VaccineRecordCubit(),
-      child: BlocListener<VaccineRecordCubit, VaccineRecordState>(
+    return BlocListener<VaccineRecordCubit, VaccineRecordState>(
         listener: (context, state) {
           if (state is CreateInjectedVaccinationLoading) {
             EasyLoading.show();
@@ -380,7 +378,6 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
             );
           },
         ),
-      ),
-    );
+      );
   }
 }

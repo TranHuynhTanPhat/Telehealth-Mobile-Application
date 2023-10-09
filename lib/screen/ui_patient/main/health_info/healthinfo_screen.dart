@@ -45,23 +45,32 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   }
 
   Future<void> showDialogInput(BuildContext context) async {
+    final subUserCubit = context.read<SubUserCubit>();
+
     await showDialog(
         barrierDismissible: true,
         context: context,
-        builder: (context) => HealthInforInputDialog(formKey: _formKey));
+        builder: (context) => BlocProvider.value(
+              value: subUserCubit,
+              child: HealthInforInputDialog(formKey: _formKey),
+            ));
   }
 
   Future<void> showUpdateDialogInput(
       BuildContext context, UserResponse subUser) async {
+    final subUserCubit = context.read<SubUserCubit>();
     final result = await showDialog(
         barrierDismissible: true,
         context: context,
-        builder: (context) => UpdateSubUserInputDialog(
-              userResponse: subUser,
+        builder: (context) => BlocProvider.value(
+              value: subUserCubit,
+              child: UpdateSubUserInputDialog(
+                userResponse: subUser,
+              ),
             ));
     if (result == true) {
       // ignore: use_build_context_synchronously
-      context.read<SubUserCubit>().fetchMedicalRecord();
+      subUserCubit.fetchMedicalRecord();
     }
   }
 
@@ -69,17 +78,11 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   Widget build(BuildContext context) {
     return BlocBuilder<SubUserCubit, SubUserState>(
       builder: (context, state) {
-        if (state.subUsers.isNotEmpty && state.currentUser != -1) {
-          context
-              .read<HealthStatCubit>()
-              .fetchStats(state.subUsers[state.currentUser].id!);
-        }
         return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: white,
           floatingActionButton: Container(
             margin: EdgeInsets.only(bottom: dimensHeight() * 13),
-            // width: dimensWidth()*7,
             height: dimensWidth() * 6,
             child: FloatingActionButton.extended(
               shape: RoundedRectangleBorder(

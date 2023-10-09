@@ -12,6 +12,11 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
       : super(VaccineRecordInitial(
             vaccinations: [], injectedVaccinations: [], age: 0, recordId: ''));
   final VaccinationRepository _vaccinationRepository = VaccinationRepository();
+  @override
+  void onChange(Change<VaccineRecordState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   void updateAge(int age, String recordId) {
     emit(

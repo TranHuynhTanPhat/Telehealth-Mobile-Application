@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/license/faqs_screen.dart';
 import 'package:healthline/screen/auth/license/privacy_policy_screen.dart';
@@ -22,22 +24,78 @@ import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart
 import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
 
 class AppRoute {
+  final _homeCubit = HomeCubit();
+  final _subUserCubit = SubUserCubit();
+  final _vaccineRecordCubit = VaccineRecordCubit();
+  final _sideMenuCubit = SideMenuCubit();
+  final _healhStatCubit = HealthStatCubit();
+  final _contactCubit = ContactCubit();
+  final _vaccinationCubit = VaccinationCubit();
+  final _logInCubit = LogInCubit();
+  final _signUpCubit = SignUpCubit();
+  final _scheduleCubit = ScheduleCubit();
+
+  void dispose() {
+    _homeCubit.close();
+    _subUserCubit.close();
+    _vaccineRecordCubit.close();
+    _sideMenuCubit.close();
+    _healhStatCubit.close();
+    _contactCubit.close();
+    _vaccinationCubit.close();
+    _logInCubit.close();
+    _signUpCubit.close();
+    _scheduleCubit.close();
+  }
+
   Route? onGeneralRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case splashName:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case mainScreenPatientName:
-        return MaterialPageRoute(builder: (_) => const MainScreenPatient());
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _sideMenuCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _subUserCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _vaccineRecordCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _homeCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _healhStatCubit,
+                    ),
+                  ],
+                  child: const MainScreenPatient(),
+                ));
       case onboardingName:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case signUpName:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _signUpCubit,
+                  child: const SignUpScreen(),
+                ));
       case logInName:
-        return MaterialPageRoute(builder: (_) => const LogInScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _logInCubit,
+                  child: const LogInScreen(),
+                ));
       case walletName:
         return MaterialPageRoute(builder: (_) => const WalletScreen());
       case contactName:
-        return MaterialPageRoute(builder: (_) => const ContactScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _contactCubit,
+                  child: const ContactScreen(),
+                ));
       case errorName:
         return MaterialPageRoute(builder: (_) => const ErrorScreen());
       case termsAndConditionsName:
@@ -54,15 +112,42 @@ class AppRoute {
       case changePasswordName:
         return MaterialPageRoute(builder: (_) => const ChangePassword());
       case refVaccinationName:
-        return MaterialPageRoute(builder: (_) => const RefVaccinationScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => _vaccinationCubit,
+                  child: const RefVaccinationScreen(),
+                ));
       case vaccinationName:
-        return MaterialPageRoute(builder: (_) => const VaccinationScreen());
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _vaccineRecordCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _subUserCubit,
+                    ),
+                  ],
+                  child: const VaccinationScreen(),
+                ));
       case addVaccinationName:
-        return MaterialPageRoute(builder: (_) => const AddVaccinationScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _vaccineRecordCubit,
+                  child: const AddVaccinationScreen(),
+                ));
       case mainScreenDoctorName:
-        return MaterialPageRoute(builder: (_) => const MainScreenDoctor());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _sideMenuCubit,
+                  child: const MainScreenDoctor(),
+                ));
       case shiftDoctorName:
-        return MaterialPageRoute(builder: (_) => const ShiftScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _scheduleCubit,
+                  child: const ShiftScreen(),
+                ));
       case updateBiographyDoctorName:
         return MaterialPageRoute(builder: (_) => const UpdateBiographyScreen());
       default:

@@ -9,6 +9,7 @@ import 'package:healthline/repository/doctor_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/res/enum.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'log_in_state.dart';
 
@@ -17,6 +18,12 @@ class LogInCubit extends Cubit<LogInState> {
   final UserRepository _userRepository = UserRepository();
   final CommonRepository _commonRepository = CommonRepository();
   final DoctorRepository _doctorRepository = DoctorRepository();
+
+  @override
+  void onChange(Change<LogInState> change) {
+    super.onChange(change);
+    logPrint(change);
+  }
 
   Future<void> logIn(String phone, String password,
       {required bool isDoctor, required bool isPatient}) async {
