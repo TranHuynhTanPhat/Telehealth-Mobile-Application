@@ -15,9 +15,12 @@ class DoctorRepository extends BaseRepository {
   Future<List<ScheduleResponse>> fetchSchedule() async {
     return await _doctorService.getSchedule();
   }
+
   Future<DataResponse> updateBio(String bio) async {
-    return await _doctorService.updateBio( bio);
+    return await _doctorService.updateBio(bio);
   }
 
-  
+  Future<DataResponse> updateAvatar(String avatar) async {
+    return await _doctorService.updateBio(avatar);
+  }
 }

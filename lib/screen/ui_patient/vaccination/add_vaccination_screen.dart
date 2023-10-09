@@ -57,7 +57,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
             EasyLoading.show();
           } else if (state is CreateInjectedVaccinationLoaded) {
             EasyLoading.showToast(translate(context, 'succes'));
-            Navigator.pop(context, state.injectedVaccine);
+            Navigator.pop(context, true);
           } else if (state is CreateInjectedVaccinationError) {
             EasyLoading.showToast(state.message);
           }

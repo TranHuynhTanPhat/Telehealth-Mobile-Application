@@ -126,14 +126,12 @@ final class CreateInjectedVaccinationLoading extends FetchInjectedVaccination {
 }
 
 final class CreateInjectedVaccinationLoaded extends FetchInjectedVaccination {
-  final InjectedVaccinationResponse injectedVaccine;
-
-  CreateInjectedVaccinationLoaded(
-      {required super.vaccinations,
-      required super.injectedVaccinations,
-      required super.age,
-      required super.recordId,
-      required this.injectedVaccine});
+  CreateInjectedVaccinationLoaded({
+    required super.vaccinations,
+    required super.injectedVaccinations,
+    required super.age,
+    required super.recordId,
+  });
 }
 
 final class CreateInjectedVaccinationError extends FetchInjectedVaccination {

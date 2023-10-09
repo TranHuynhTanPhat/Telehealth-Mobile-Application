@@ -28,17 +28,17 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
     );
   }
 
-  void updateInjectedVaccinations(
-      InjectedVaccinationResponse injectedVaccinationResponse) {
-    emit(
-      VaccineRecordInitial(
-          vaccinations: state.vaccinations,
-          injectedVaccinations: List.from(state.injectedVaccinations)
-            ..add(injectedVaccinationResponse),
-          age: state.age,
-          recordId: state.recordId),
-    );
-  }
+  // void updateInjectedVaccinations(
+  //     InjectedVaccinationResponse injectedVaccinationResponse) {
+  //   emit(
+  //     VaccineRecordInitial(
+  //         vaccinations: state.vaccinations,
+  // injectedVaccinations: List.from(state.injectedVaccinations)
+  //   ..add(injectedVaccinationResponse),
+  //         age: state.age,
+  //         recordId: state.recordId),
+  //   );
+  // }
 
   Future<void> fetchVaccination() async {
     emit(FetchVaccinationLoading(
@@ -126,10 +126,10 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
       emit(
         CreateInjectedVaccinationLoaded(
             vaccinations: state.vaccinations,
-            injectedVaccinations: state.injectedVaccinations,
+            injectedVaccinations: List.from(state.injectedVaccinations)
+              ..add(vaccination),
             age: state.age,
-            recordId: state.recordId,
-            injectedVaccine: vaccination),
+            recordId: state.recordId,),
       );
     } catch (e) {
       DioException er = e as DioException;

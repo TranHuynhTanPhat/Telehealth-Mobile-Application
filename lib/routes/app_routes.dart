@@ -34,6 +34,7 @@ class AppRoute {
   final _logInCubit = LogInCubit();
   final _signUpCubit = SignUpCubit();
   final _scheduleCubit = ScheduleCubit();
+  final _doctorBiographyCubit = DoctorBiographyCubit();
 
   void dispose() {
     _homeCubit.close();
@@ -46,6 +47,7 @@ class AppRoute {
     _logInCubit.close();
     _signUpCubit.close();
     _scheduleCubit.close();
+    _doctorBiographyCubit.close();
   }
 
   Route? onGeneralRoute(RouteSettings routeSettings) {
@@ -149,7 +151,11 @@ class AppRoute {
                   child: const ShiftScreen(),
                 ));
       case updateBiographyDoctorName:
-        return MaterialPageRoute(builder: (_) => const UpdateBiographyScreen());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _doctorBiographyCubit,
+                  child: const UpdateBiographyScreen(),
+                ));
       default:
         return null;
     }

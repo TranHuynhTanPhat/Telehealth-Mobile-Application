@@ -43,7 +43,8 @@ abstract class BaseService {
   }
 
   Future<DataResponse> patch(String path, {data, bool isDoctor = false}) async {
-    final response = await RestClient().getDio().patch(path, data: data);
+    final response =
+        await RestClient().getDio(isDoctor: isDoctor).patch(path, data: data);
     return await _handleResponse(response);
   }
 

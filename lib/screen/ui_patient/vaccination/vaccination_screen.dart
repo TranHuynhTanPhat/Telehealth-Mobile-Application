@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
-import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -49,14 +48,11 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                     padding: EdgeInsets.only(right: dimensWidth() * 3),
                     child: InkWell(
                       onTap: () async {
-                        InjectedVaccinationResponse result =
-                            await Navigator.pushNamed(
-                                    context, addVaccinationName)
-                                as InjectedVaccinationResponse;
-                        // ignore: use_build_context_synchronously
-                        context
-                            .read<VaccineRecordCubit>()
-                            .updateInjectedVaccinations(result);
+                        bool? result = await Navigator.pushNamed(
+                            context, addVaccinationName) as bool;
+                        if (result == true) {
+                          setState(() {});
+                        }
                       },
                       splashColor: transparent,
                       highlightColor: transparent,
