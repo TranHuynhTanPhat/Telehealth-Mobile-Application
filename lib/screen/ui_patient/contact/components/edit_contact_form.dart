@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
@@ -68,15 +67,9 @@ class _EditContactFormState extends State<EditContactForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ContactCubit, ContactState>(builder: (context, state) {
-      if (state is ContactLoading) {
-        EasyLoading.show(maskType: EasyLoadingMaskType.black);
-      } else {
-        EasyLoading.dismiss();
-      }
-      if (state is ContactUpdate) {
-        EasyLoading.showToast(translate(context, state.response.message),
-            toastPosition: EasyLoadingToastPosition.bottom);
-      }
+      
+      
+      
       state.phone != null
           ? _controllerPhone.text = state.phone!.replaceFirst('+84', '')
           : '';

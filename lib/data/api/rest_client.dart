@@ -181,11 +181,8 @@ class RestClient {
           logPrint("RESPONSE");
           logPrint(response.headers);
           try {
-            // String refreshToken = getRefreshToken(response.headers.toString());
-            // if (refreshToken.isNotEmpty) {
             await instance.cookieJar.saveFromResponse(
                 Uri.parse('${dotenv.get('BASE_URL', fallback: '')}/'), []);
-            // }
           } catch (e) {
             logPrint(e);
           }
@@ -203,15 +200,6 @@ class RestClient {
 
     return dio;
   }
-
-  // String getRefreshToken(String headers) {
-  //   int refreshTokenStart = headers.indexOf("refresh_token=");
-  //   int refreshTokenEnd = headers.indexOf(";", refreshTokenStart);
-  //   String refreshToken = headers
-  //       .substring(refreshTokenStart, refreshTokenEnd)
-  //       .replaceAll('refresh_token=', '');
-  //   return refreshToken.trim();
-  // }
 
   Future<void> logout() async {
     await AppStorage().clearPatient();

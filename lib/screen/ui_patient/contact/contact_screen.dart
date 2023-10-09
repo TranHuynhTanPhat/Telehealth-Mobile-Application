@@ -30,9 +30,13 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     return BlocListener<ContactCubit, ContactState>(
       listener: (context, state) {
-        if (state is ContactError) {
-          EasyLoading.dismiss();
+        if (state is ContactLoading) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state is ContactError) {
+          EasyLoading.showToast(state.message);
           Navigator.pop(context);
+        } else if (state is ContactUpdate) {
+          EasyLoading.showToast(translate(context, state.response.message));
         }
       },
       child: GestureDetector(

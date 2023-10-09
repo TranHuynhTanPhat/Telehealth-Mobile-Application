@@ -1,4 +1,5 @@
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -17,6 +18,11 @@ class DoctorService extends BaseService {
         .map<ScheduleResponse>((e) => ScheduleResponse.fromMap(e))
         .toList();
     return schedules;
+  }
+  Future<DataResponse> updateBio(String) async {
+    final response = await get(ApiConstants.DOCTOR_CHANGE_BIOGRAPHY, isDoctor: true);
+    
+    return response;
   }
 
   

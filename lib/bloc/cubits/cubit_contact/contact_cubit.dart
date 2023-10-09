@@ -27,7 +27,8 @@ class ContactCubit extends Cubit<ContactState> {
       emit(ContactLoaded(phone: userResponse.phone, email: userResponse.email));
     } catch (e) {
       DioException er = e as DioException;
-      emit(ContactError(er.response!.data['message'].toString(),
+
+      emit(ContactError(er.message.toString(),
           phone: null, email: null));
     }
   }
