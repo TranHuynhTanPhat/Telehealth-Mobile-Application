@@ -30,7 +30,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.healthline"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -51,10 +51,25 @@ android {
         applicationId "com.example.healthline"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 28
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    flavorDimensions "track"
+    productFlavors {
+        dev {
+            dimension "track"
+            applicationIdSuffix ".dev"
+            manifestPlaceholders = [applicationLabel: "[dev] HealthLine"]
+
+        }
+        prod {
+            dimension "track"
+            manifestPlaceholders = [applicationLabel: "HealthLine"]
+        }
     }
 
     buildTypes {

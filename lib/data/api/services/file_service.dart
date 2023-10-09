@@ -10,9 +10,11 @@ class FileService extends BaseService{
       "file": await MultipartFile.fromFile(
         request.imagePath,
       ),
+      "public_id":request.publicId,
       "upload_preset": request.uploadPreset,
+      "folder":request.folder
     });
     final response = await postUpload(ApiConstants.UPLOAD, formData: formData);
-    return ImageResponse.fromJson(response.data);
+    return ImageResponse.fromMap(response.data);
   }
 }

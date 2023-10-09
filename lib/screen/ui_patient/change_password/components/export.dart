@@ -1,0 +1,1 @@
+export 'package:healthline/screen/ui_patient/change_password/components/change_password_form.dart';

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/colors.dart';
-import 'package:healthline/res/theme/text_theme.dart';
+import 'package:healthline/res/style.dart';
 
-enum AppTheme { lightTheme, dartTheme }
 
 class AppThemes {
   static final appThemeData = {
-    AppTheme.dartTheme: ThemeData(
+    AppTheme.DartTheme: ThemeData(
       brightness: Brightness.dark,
       useMaterial3: true,
       textTheme: textTheme,
@@ -40,7 +38,7 @@ class AppThemes {
         onSurface: Colors.white, //text
       ),
     ),
-    AppTheme.lightTheme: ThemeData(
+    AppTheme.LightTheme: ThemeData(
       brightness: Brightness.light,
       useMaterial3: true,
       textTheme: textTheme,

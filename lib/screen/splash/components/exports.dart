@@ -1,0 +1,1 @@
+export 'package:healthline/screen/splash/components/slider.dart';
