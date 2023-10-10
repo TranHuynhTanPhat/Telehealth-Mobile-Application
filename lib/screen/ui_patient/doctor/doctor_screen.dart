@@ -162,17 +162,17 @@ Widget buildShimmer() => Padding(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ShimmerWidget.retangular(
+                                  ShimmerWidget.rectangular(
                                       height: dimensHeight() * 3),
                                   SizedBox(
                                     height: dimensHeight() * .5,
                                   ),
-                                  ShimmerWidget.retangular(
+                                  ShimmerWidget.rectangular(
                                       height: dimensHeight() * 1.5),
                                   SizedBox(
                                     height: dimensHeight() * .5,
                                   ),
-                                  ShimmerWidget.retangular(
+                                  ShimmerWidget.rectangular(
                                     height: dimensHeight() * 3.5,
                                     width: dimensWidth() * 17,
                                   )
@@ -184,7 +184,7 @@ Widget buildShimmer() => Padding(
                         SizedBox(
                           height: dimensHeight(),
                         ),
-                        ShimmerWidget.retangular(
+                        ShimmerWidget.rectangular(
                           height: dimensHeight() * 10,
                         )
                       ],

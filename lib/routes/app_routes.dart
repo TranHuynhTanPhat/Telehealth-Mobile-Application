@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/license/faqs_screen.dart';
@@ -8,22 +9,22 @@ import 'package:healthline/screen/auth/license/terms_and_conditions_screen.dart'
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
-import 'package:healthline/screen/ui_doctor/main/setting/update_biography_screen.dart';
+import 'package:healthline/screen/ui_doctor/main/account_setting/update_biography_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
-import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
+import 'package:healthline/screen/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
-import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/screen/ui_patient/ref_vaccination/ref_vaccination_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/main_screen_doctor.dart';
 import 'package:healthline/screen/ui_patient/vaccination/add_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
+import 'package:healthline/screen/update/update_screen.dart';
 
 class AppRoute {
   final _homeCubit = HomeCubit();
@@ -37,6 +38,7 @@ class AppRoute {
   final _signUpCubit = SignUpCubit();
   final _scheduleCubit = ScheduleCubit();
   final _doctorBiographyCubit = DoctorBiographyCubit();
+  // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
     _homeCubit.close();
@@ -50,12 +52,15 @@ class AppRoute {
     _signUpCubit.close();
     _scheduleCubit.close();
     _doctorBiographyCubit.close();
+    // _applicationUpdateBloc.close();
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
     switch (settings.name) {
-      case splashName:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+      // case splashName:
+      //   return MaterialPageRoute(
+      //       builder: (_) => BlocProvider.value(
+      //           value: _applicationUpdateBloc, child: const SplashScreen()));
       case mainScreenPatientName:
         return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
@@ -97,7 +102,8 @@ class AppRoute {
       case accountSettingName:
         return MaterialPageRoute(builder: (_) => const AccountSettingScreen());
       case applicationSettingName:
-        return MaterialPageRoute(builder: (_) => const ApplicationSettingScreen());
+        return MaterialPageRoute(
+            builder: (_) => const ApplicationSettingScreen());
       case contactName:
         return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
@@ -106,6 +112,10 @@ class AppRoute {
                 ));
       case errorName:
         return MaterialPageRoute(builder: (_) => const ErrorScreen());
+      case updateName:
+        return MaterialPageRoute(
+            builder: (_) =>  const UpdateScreen(),
+                );
       case termsAndConditionsName:
         return MaterialPageRoute(
             builder: (_) => const TermsAndConditionsScreen());

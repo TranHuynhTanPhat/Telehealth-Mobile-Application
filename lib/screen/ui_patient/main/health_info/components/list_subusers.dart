@@ -86,7 +86,7 @@ class _ListSubUserState extends State<ListSubUser> {
         padding: EdgeInsets.all(dimensWidth() * .5),
         margin: EdgeInsets.symmetric(
             vertical: dimensWidth(), horizontal: dimensWidth() * .5),
-        child: ShimmerWidget.retangular(
+        child: ShimmerWidget.rectangular(
           height: double.maxFinite,
           width: dimensWidth() * 9,
         ),

@@ -267,9 +267,49 @@
         "vi": "Cập nhật ứng dụng",
         "en": "Update application"
     },
+    "downloading": {
+        "vi": "Đang tải ...",
+        "en": "Downloading..."
+    },
+    "a_new_patch_is_ready": {
+        "vi": "Bản vá mới đã sẵn sằng",
+        "en": "A new patch is ready"
+    },
+    "restart_app": {
+        "vi": "Khởi động ứng dụng",
+        "en": "Restart app"
+    },
+    "update_available": {
+        "vi": "Bản cập nhật sẵn sàng",
+        "en": "Update available"
+    },
+    "no_update_available": {
+        "vi": "Không có bản cập nhật",
+        "en": "No update available"
+    },
+    "no_patch_installed": {
+        "vi": "Không có bản vá được cài đặt",
+        "en": "No patch installed"
+    },
+    "current_patch_version": {
+        "vi": "Phiên bản hiện tại",
+        "en": "Current patch version"
+    },
+    "cant_connect_to_current_version": {
+        "vi": "Không thể kết nối đến phiên bản hiện tại",
+        "en": "Can't connect to current version"
+    },
     "edit_contact_info": {
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
+    },
+    "update_now": {
+        "vi": "Cập nhật ngay",
+        "en": "Update now"
+    },
+    "check_for_update": {
+        "vi": "Kiểm tra cập nhật",
+        "en": "Check for update"
     },
     "update_biography": {
         "vi": "Cập nhật tiểu sử",

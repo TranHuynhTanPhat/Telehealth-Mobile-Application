@@ -1,4 +1,3 @@
-const splashName = "/splash";
 const mainScreenPatientName = "/main_screen_patient";
 const onboardingName = "/onboarding";
 const signUpName = "/sign_up";
@@ -6,7 +5,7 @@ const logInName = "/log_in";
 const errorName = "/error";
 const accountSettingName = "/account_setting";
 const applicationSettingName = "/application_setting";
-
+const updateName="/update";
 const walletName = "/wallet";
 const contactName = "/contact";
 const termsAndConditionsName = '/terms_and_conditions';

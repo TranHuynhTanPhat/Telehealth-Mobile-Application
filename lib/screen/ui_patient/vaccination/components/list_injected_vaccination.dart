@@ -301,7 +301,7 @@ class BuildShimmer extends StatelessWidget {
         children: [
           Padding(
               padding: EdgeInsets.symmetric(horizontal: dimensWidth()),
-              child: ShimmerWidget.retangular(
+              child: ShimmerWidget.rectangular(
                 height: dimensWidth() * 2.2,
                 width: dimensWidth() * 15,
               )),
@@ -312,7 +312,7 @@ class BuildShimmer extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: dimensWidth(),
             ),
-            child: ShimmerWidget.retangular(
+            child: ShimmerWidget.rectangular(
               height: dimensWidth() * 2,
               width: dimensWidth() * 10,
             ),
@@ -357,7 +357,7 @@ class BuildShimmer extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: dimensWidth(),
               ),
-              child: ShimmerWidget.retangular(
+              child: ShimmerWidget.rectangular(
                 height: dimensWidth() * 2,
                 width: dimensWidth() * 30,
               ))

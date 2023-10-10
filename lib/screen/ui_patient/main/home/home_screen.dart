@@ -11,6 +11,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
+import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
@@ -134,12 +135,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       splashColor: transparent,
                       highlightColor: transparent,
                       onTap: widget.press,
-                      child: CircleAvatar(
-                        backgroundImage: _image,
-                        onBackgroundImageError: (exception, stackTrace) =>
-                            setState(() {
-                          _image = AssetImage(DImages.placeholder);
-                        }),
+                      child:
+                      BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
+                        builder: (context, state) {
+                          return badgeNotification(CircleAvatar(
+                            backgroundImage: _image,
+                            onBackgroundImageError: (exception, stackTrace) =>
+                                setState(() {
+                                  _image = AssetImage(DImages.placeholder);
+                                }),
+                          ), state is UpdateAvailable, Theme.of(context).colorScheme.error, 7, 7);
+                        }
                       ),
                     ),
                   ),
@@ -322,7 +328,7 @@ Widget buildShimmer() => Container(
         children: [
           Expanded(
             flex: 6,
-            child: ShimmerWidget.retangular(
+            child: ShimmerWidget.rectangular(
               height: double.maxFinite,
               shapeBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -341,7 +347,7 @@ Widget buildShimmer() => Container(
                 children: [
                   Expanded(
                     flex: 3,
-                    child: ShimmerWidget.retangular(
+                    child: ShimmerWidget.rectangular(
                       height: dimensHeight() * .5,
                       width: dimensWidth() * 14,
                     ),
@@ -351,7 +357,7 @@ Widget buildShimmer() => Container(
                   ),
                   Expanded(
                     flex: 2,
-                    child: ShimmerWidget.retangular(
+                    child: ShimmerWidget.rectangular(
                       height: double.maxFinite,
                       width: dimensWidth() * 10,
                     ),
@@ -361,7 +367,7 @@ Widget buildShimmer() => Container(
                   ),
                   const Expanded(
                     flex: 3,
-                    child: ShimmerWidget.retangular(height: double.maxFinite),
+                    child: ShimmerWidget.rectangular(height: double.maxFinite),
                   ),
                 ],
               ),

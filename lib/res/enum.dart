@@ -9,7 +9,7 @@ enum AuthState {
 
 enum AppTheme { LightTheme, DartTheme }
 
-enum DrawerMenus { Overview, Schedule, Patient, Setting, Helps }
+enum DrawerMenus { Overview, Schedule, Patient, AccountSetting,ApplicationSetting, Helps }
 
 enum Gender { Male, Female }
 
