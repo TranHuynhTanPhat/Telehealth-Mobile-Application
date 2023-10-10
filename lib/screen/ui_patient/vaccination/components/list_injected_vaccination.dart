@@ -5,10 +5,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/ui_patient/vaccination/update_vaccination.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
-import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../routes/app_pages.dart';
 
@@ -19,7 +18,6 @@ class ListInjectedVaccination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vaccineRecordCubit = context.read<VaccineRecordCubit>();
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
         listener: (context, state) {
       if (state is DeleteInjectedVaccinationLoading) {
@@ -105,150 +103,173 @@ class ListInjectedVaccination extends StatelessWidget {
                   const BuildShimmer()
                 else
                   Column(
-                      children: state.injectedVaccinations
-                          .map(
-                            (e) => Container(
+                    children: state.injectedVaccinations
+                        .map(
+                          (e) => Slidable(
+                            closeOnScroll: true,
+                            endActionPane: ActionPane(
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    context
+                                        .read<VaccineRecordCubit>()
+                                        .deleteInjectedVaccination(e.id!);
+                                  },
+                                  backgroundColor: transparent,
+                                  foregroundColor: color9D4B6C,
+                                  icon: FontAwesomeIcons.trash,
+                                  label: translate(context, 'delete'),
+                                ),
+                              ],
+                            ),
+                            child: Container(
                               margin:
                                   EdgeInsets.only(bottom: dimensWidth() * 2),
-                              child: Slidable(
-                                startActionPane: ActionPane(
-                                  motion: const BehindMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        vaccineRecordCubit
-                                            .deleteInjectedVaccination(e.id!);
-                                      },
-                                      backgroundColor: transparent,
-                                      foregroundColor: color9D4B6C,
-                                      icon: FontAwesomeIcons.trash,
-                                      label: translate(context, 'delete'),
-                                      borderRadius: BorderRadius.circular(
-                                          dimensWidth() * 1.8),
-                                    ),
-                                  ],
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: dimensHeight(),
+                                    horizontal: dimensWidth()),
+                                width: double.maxFinite,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: color1F1F1F.withOpacity(.1)),
+                                  borderRadius: BorderRadius.circular(
+                                      dimensWidth() * 1.8),
                                 ),
-                                endActionPane: ActionPane(
-                                  motion: const BehindMotion(),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        // Navigator.pushNamed(
-                                        //     context, updateVaccinationName);
-                                      },
-                                      backgroundColor: transparent,
-                                      foregroundColor: primary,
-                                      icon: FontAwesomeIcons.solidPenToSquare,
-                                      label: translate(context, 'update'),
-                                      borderRadius: BorderRadius.circular(
-                                          dimensWidth() * 1.8),
-                                    )
-                                  ],
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: dimensHeight(),
-                                      horizontal: dimensWidth()),
-                                  width: double.maxFinite,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: color1F1F1F.withOpacity(.1)),
-                                    borderRadius: BorderRadius.circular(
-                                        dimensWidth() * 1.8),
-                                  ),
-                                  child: InkWell(
-                                    splashColor: transparent,
-                                    highlightColor: transparent,
-                                    onTap: null,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: dimensWidth()),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  translate(
-                                                      context,
-                                                      e.vaccine?.disease
-                                                          .toString()),
-                                                  // maxLines: 1,
-                                                  // overflow: TextOverflow.ellipsis,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .labelLarge,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: dimensWidth(),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    translate(
+                                                        context,
+                                                        e.vaccine?.disease
+                                                            .toString()),
+                                                    // maxLines: 1,
+                                                    // overflow: TextOverflow.ellipsis,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .labelLarge,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: dimensWidth(),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: dimensWidth(),
+                                            ),
+                                            child: Text(
+                                                '${translate(context, 'doses')}: ${e.vaccine?.maxDose.toString()}'),
                                           ),
-                                          child: Text(
-                                              '${translate(context, 'doses')}: ${e.vaccine?.maxDose.toString()}'),
-                                        ),
-                                        SizedBox(
-                                          height: dimensHeight() * 13,
-                                          child: Stepper(
-                                            key: ValueKey(e),
-                                            elevation: 0,
-                                            margin: const EdgeInsets.all(0),
-                                            currentStep: e.doseNumber! - 1,
-                                            connectorColor:
-                                                const MaterialStatePropertyAll(
-                                                    secondary),
-                                            steps: [
-                                              ...List.generate(
-                                                  e.vaccine?.maxDose ?? 1,
-                                                  (i) => i + 1).map(
-                                                (j) => const Step(
-                                                    title: SizedBox(),
-                                                    content: SizedBox(),
-                                                    state: StepState.complete),
-                                              ),
-                                            ],
-                                            stepIconBuilder:
-                                                (index, stepState) {
-                                              if (index >= e.doseNumber!) {
-                                                return const SizedBox();
-                                              }
-                                              return null;
-                                            },
-                                            controlsBuilder:
-                                                (context, details) =>
-                                                    const SizedBox(),
-                                            onStepTapped: null,
-                                            type: StepperType.horizontal,
+                                          SizedBox(
+                                            height: dimensHeight() * 11,
+                                            child: Stepper(
+                                              key: ValueKey(e.toJson()+state.toString()),
+                                              elevation: 0,
+                                              margin: const EdgeInsets.all(0),
+                                              currentStep: e.doseNumber! - 1,
+                                              connectorColor:
+                                                  const MaterialStatePropertyAll(
+                                                      secondary),
+                                              steps: [
+                                                ...List.generate(
+                                                    e.vaccine?.maxDose ?? 1,
+                                                    (i) => i + 1).map(
+                                                  (j) => const Step(
+                                                      title: SizedBox(),
+                                                      content: SizedBox(),
+                                                      state:
+                                                          StepState.complete),
+                                                ),
+                                              ],
+                                              stepIconBuilder:
+                                                  (index, stepState) {
+                                                if (index >= e.doseNumber!) {
+                                                  return const SizedBox();
+                                                }
+                                                return null;
+                                              },
+                                              controlsBuilder:
+                                                  (context, details) =>
+                                                      const SizedBox(),
+                                              onStepTapped: null,
+                                              type: StepperType.horizontal,
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: dimensWidth(),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                    "${translate(context, 'day_of_last_dose')}: ${formatDayMonthYear(context, DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(e.updatedAt!))}"),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: dimensWidth(),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                      "${translate(context, 'day_of_last_dose')}: ${e.date!}"),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                    IconButton(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: dimensWidth()),
+                                      onPressed: () async {
+                                        bool? result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                BlocProvider.value(
+                                                  value: context
+                                                      .read<
+                                                      VaccineRecordCubit>(),
+                                                  child: UpdateVaccinationScreen(
+                                                    vaccineRecord: e,
+                                                  ),
+                                                ),
+                                          ),
+                                        ) as bool;
+                                        if(result==true){
+                                          // ignore: use_build_context_synchronously
+                                          context.read<VaccineRecordCubit>().fetchInjectedVaccination(state.medicalRecord);
+                                        }
+                                      },
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.solidPenToSquare,
+                                        size: dimensIcon() * .6,
+                                        color: primary,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              // ),
                             ),
-                          )
-                          .toList())
+                          ),
+                        )
+                        .toList(),
+                  )
               ],
             ),
           );

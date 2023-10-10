@@ -255,6 +255,18 @@
         "vi": "Cài đặt",
         "en": "Setting"
     },
+    "account_setting": {
+        "vi": "Cài đặt tài khoản",
+        "en": "Account setting"
+    },
+    "application_setting": {
+        "vi": "Cài đặt ứng dụng",
+        "en": "Application setting"
+    },
+    "update_application": {
+        "vi": "Cập nhật ứng dụng",
+        "en": "Update application"
+    },
     "edit_contact_info": {
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"

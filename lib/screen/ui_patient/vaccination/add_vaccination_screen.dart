@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/cancle_button.dart';
+import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';

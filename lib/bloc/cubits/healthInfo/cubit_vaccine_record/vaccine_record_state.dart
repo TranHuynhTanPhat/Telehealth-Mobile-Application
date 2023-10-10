@@ -71,6 +71,14 @@ abstract class CreateInjectedVaccination extends VaccineRecordState {
       required super.medicalRecord});
 }
 
+abstract class UpdateInjectedVaccination extends VaccineRecordState {
+  UpdateInjectedVaccination(
+      {required super.vaccinations,
+        required super.injectedVaccinations,
+        required super.age,
+        required super.medicalRecord});
+}
+
 abstract class DeleteInjectedVaccination extends VaccineRecordState {
   DeleteInjectedVaccination(
       {required super.vaccinations,
@@ -187,4 +195,33 @@ final class DeleteInjectedVaccinationError extends DeleteInjectedVaccination {
       required super.age,
       required super.medicalRecord,
       required this.message});
+}
+
+
+final class UpdateInjectedVaccinationLoading extends UpdateInjectedVaccination {
+  UpdateInjectedVaccinationLoading(
+      {required super.vaccinations,
+        required super.injectedVaccinations,
+        required super.age,
+        required super.medicalRecord});
+}
+
+final class UpdateInjectedVaccinationLoaded extends UpdateInjectedVaccination {
+  UpdateInjectedVaccinationLoaded({
+    required super.vaccinations,
+    required super.injectedVaccinations,
+    required super.age,
+    required super.medicalRecord,
+  });
+}
+
+final class UpdateInjectedVaccinationError extends UpdateInjectedVaccination {
+  final String message;
+
+  UpdateInjectedVaccinationError(
+      {required super.vaccinations,
+        required super.injectedVaccinations,
+        required super.age,
+        required super.medicalRecord,
+        required this.message});
 }

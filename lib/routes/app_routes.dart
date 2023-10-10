@@ -9,18 +9,19 @@ import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/setting/update_biography_screen.dart';
-import 'package:healthline/screen/ui_patient/change_password/change_password_screen.dart';
+import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
+import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
+import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
-import 'package:healthline/screen/ui_patient/contact/contact_screen.dart';
+import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/screen/ui_patient/ref_vaccination/ref_vaccination_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/main_screen_doctor.dart';
 import 'package:healthline/screen/ui_patient/vaccination/add_vaccination_screen.dart';
-import 'package:healthline/screen/ui_patient/vaccination/update_vaccination.dart';
 import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
 
@@ -93,6 +94,10 @@ class AppRoute {
                 ));
       case walletName:
         return MaterialPageRoute(builder: (_) => const WalletScreen());
+      case accountSettingName:
+        return MaterialPageRoute(builder: (_) => const AccountSettingScreen());
+      case applicationSettingName:
+        return MaterialPageRoute(builder: (_) => const ApplicationSettingScreen());
       case contactName:
         return MaterialPageRoute(
             builder: (_) => BlocProvider.value(

@@ -86,10 +86,10 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, contactName);
+                    Navigator.pushNamed(context, accountSettingName);
                   },
                   title: Text(
-                    translate(context, 'edit_contact_info'),
+                    translate(context, 'account_setting'),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -103,38 +103,22 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, changePasswordName);
+                    Navigator.pushNamed(context, applicationSettingName);
                   },
                   title: Text(
-                    translate(context, 'change_password'),
+                    translate(context, 'application_setting'),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
                         ?.copyWith(color: white),
                   ),
                   leading: FaIcon(
-                    FontAwesomeIcons.lock,
+                    FontAwesomeIcons.gear,
                     size: dimensIcon() * .5,
                     color: white,
                   ),
                 ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, walletName);
-                  },
-                  title: Text(
-                    translate(context, 'wallet'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.wallet,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
-                ),
+
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 3,

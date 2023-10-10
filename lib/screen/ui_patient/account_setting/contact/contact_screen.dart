@@ -6,8 +6,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/contact/components/export.dart';
-import 'package:healthline/screen/widgets/cancle_button.dart';
+import 'package:healthline/screen/ui_patient/account_setting/contact/components/export.dart';
+import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 

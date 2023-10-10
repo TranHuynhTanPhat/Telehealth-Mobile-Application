@@ -3,18 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/cancle_button.dart';
+import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:intl/intl.dart';
 
 class UpdateVaccinationScreen extends StatefulWidget {
-  const UpdateVaccinationScreen({super.key});
+  const UpdateVaccinationScreen({super.key, required this.vaccineRecord});
+  final InjectedVaccinationResponse vaccineRecord;
 
   @override
   State<UpdateVaccinationScreen> createState() =>
@@ -24,7 +25,6 @@ class UpdateVaccinationScreen extends StatefulWidget {
 class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
   late TextEditingController _controllerDisease;
   late TextEditingController _controllerDayOfLastDose;
-  int? _index;
   int? _dose;
   int _currentStep = 0;
 
@@ -34,8 +34,9 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
   void initState() {
     _controllerDisease = TextEditingController();
     _controllerDayOfLastDose = TextEditingController();
-    _dose = 1;
-    listId = [];
+    _dose = widget.vaccineRecord.vaccine!.maxDose;
+
+    _currentStep = widget.vaccineRecord.doseNumber! - 1;
     super.initState();
   }
 
@@ -48,59 +49,57 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _controllerDayOfLastDose.text = widget.vaccineRecord.date!;
+
+    _controllerDisease.text =
+        translate(context, widget.vaccineRecord.vaccine!.disease!);
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
-      listenWhen: (previous, current) => current is CreateInjectedVaccination,
-      listener: (context, state) {
-        if (state is CreateInjectedVaccinationLoading) {
-          EasyLoading.show();
-        } else if (state is CreateInjectedVaccinationLoaded) {
-          EasyLoading.showToast(translate(context, 'successfully'));
-          Navigator.pop(context, true);
-        } else if (state is CreateInjectedVaccinationError) {
-          EasyLoading.showToast(state.message);
-        }
-      },
-      child: BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
-        builder: (context, state) {
-          try {
-            listId =
-                state.injectedVaccinations.map((e) => e.vaccine!.id!).toList();
-          } catch (e) {
-            logPrint(e);
+        listenWhen: (previous, current) => current is UpdateInjectedVaccination,
+        listener: (context, state) {
+          if (state is UpdateInjectedVaccinationLoading) {
+            EasyLoading.show();
+          } else if (state is UpdateInjectedVaccinationLoaded) {
+            EasyLoading.showToast(translate(context, 'successfully'));
+            Navigator.pop(context, true);
+          } else if (state is UpdateInjectedVaccinationError) {
+            EasyLoading.showToast(state.message);
           }
-          return GestureDetector(
-            onTap: () => KeyboardUtil.hideKeyboard(context),
-            child: Scaffold(
-              resizeToAvoidBottomInset: true,
-              extendBody: true,
-              backgroundColor: white,
-              appBar: AppBar(
-                title: Text(
-                  translate(context, 'add_vaccination'),
-                ),
-                centerTitle: true,
-                leading: cancelButton(context),
-                actions: [
-                  checkValid()
-                      ? Padding(
-                          padding: EdgeInsets.only(right: dimensWidth() * 2),
-                          child: InkWell(
-                            splashColor: transparent,
-                            highlightColor: transparent,
-                            onTap: () => context
-                                .read<VaccineRecordCubit>()
-                                .createInjectedVaccination(
-                                    state.vaccinations[_index!].id!,
-                                    _currentStep + 1,
-                                    _controllerDayOfLastDose.text),
-                            child: saveButton(context),
-                          ),
-                        )
-                      : const SizedBox(),
-                ],
+        },
+        child: GestureDetector(
+          onTap: () => KeyboardUtil.hideKeyboard(context),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            extendBody: true,
+            backgroundColor: white,
+            appBar: AppBar(
+              title: Text(
+                translate(context, 'add_vaccination'),
               ),
-              body: AbsorbPointer(
-                absorbing: state is CreateInjectedVaccinationLoading,
+              centerTitle: true,
+              leading: cancelButton(context),
+              actions: [
+                checkValid()
+                    ? Padding(
+                        padding: EdgeInsets.only(right: dimensWidth() * 2),
+                        child: InkWell(
+                          splashColor: transparent,
+                          highlightColor: transparent,
+                          onTap: () => context
+                              .read<VaccineRecordCubit>()
+                              .updateInjectedVaccination(
+                                  widget.vaccineRecord.id!,
+                                  _currentStep + 1,
+                                  _controllerDayOfLastDose.text),
+                          child: saveButton(context),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
+            body: BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
+                builder: (context, state) {
+              return AbsorbPointer(
+                absorbing: state is UpdateInjectedVaccinationLoading,
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -110,102 +109,52 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
                       padding: EdgeInsets.symmetric(
                           vertical: dimensHeight(),
                           horizontal: dimensWidth() * 3),
-                      child: MenuAnchor(
-                        onOpen: () {
-                          setState(() {
-                            _dose = null;
-                          });
-                        },
-                        onClose: () {
-                          if (_index != null) {
-                            // if (state.diseaseAdult[_index!].vaccinations.length ==
-                            //     1) {
-                            int dose = state.vaccinations[_index!].maxDose!;
-                            _currentStep = 0;
-                            _dose = dose;
-                            // }
-                          }
-                        },
-                        style: MenuStyle(
-                          elevation: const MaterialStatePropertyAll(10),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(dimensWidth() * 3),
-                            ),
-                          ),
-                          backgroundColor:
-                              const MaterialStatePropertyAll(white),
-                          surfaceTintColor:
-                              const MaterialStatePropertyAll(white),
-                          padding: MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 2,
-                              vertical: dimensHeight(),
-                            ),
-                          ),
-                          maximumSize: MaterialStatePropertyAll(
-                            Size(dimensWidth() * 40, dimensHeight() * 55),
-                          ),
-                        ),
-                        builder: (BuildContext context,
-                            MenuController controller, Widget? child) {
-                          return TextFieldWidget(
-                            onTap: () {
-                              if (controller.isOpen) {
-                                controller.close();
-                              } else {
-                                controller.open();
-                              }
-                            },
-                            readOnly: true,
-                            label: translate(context, 'vaccination'),
-                            controller: _controllerDisease,
-                            validate: (value) => null,
-                            suffixIcon: const IconButton(
-                                onPressed: null,
-                                icon: FaIcon(FontAwesomeIcons.caretDown)),
-                          );
-                        },
-                        menuChildren: state.vaccinations
-                            .where((element) {
-                              if (listId.contains(element.id)) {
-                                return false;
-                              } else {
-                                if (state.age < 9) {
-                                  return element.isChild == true;
-                                } else {
-                                  return element.isChild == false;
-                                }
-                              }
-                            })
-                            .map(
-                              (e) => MenuItemButton(
-                                style: const ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll(white)),
-                                onPressed: () => setState(() {
-                                  _controllerDisease.text =
-                                      translate(context, e.disease.toString());
-                                  setState(() {
-                                    _index = state.vaccinations.indexOf(e);
-                                  });
-                                }),
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      top: dimensHeight(),
-                                      bottom: dimensHeight()),
-                                  color: white,
-                                  width: dimensWidth() * 30,
-                                  child: Text(
-                                    translate(context, e.disease.toString()),
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
+                      child: TextFieldWidget(
+                        readOnly: true,
+                        label: translate(context, 'vaccination'),
+                        controller: _controllerDisease,
+                        validate: (value) => null,
+
                       ),
+                      //     },
+                      //     menuChildren: state.vaccinations
+                      //         .where((element) {
+                      //           if (listId.contains(element.id)) {
+                      //             return false;
+                      //           } else {
+                      //             if (state.age < 9) {
+                      //               return element.isChild == true;
+                      //             } else {
+                      //               return element.isChild == false;
+                      //             }
+                      //           }
+                      //         })
+                      //         .map(
+                      //           (e) => MenuItemButton(
+                      //             style: const ButtonStyle(
+                      //                 backgroundColor:
+                      //                     MaterialStatePropertyAll(white)),
+                      //             onPressed: () => setState(() {
+                      //               _controllerDisease.text =
+                      //                   translate(context, e.disease.toString());
+                      //               setState(() {
+                      //                 _index = state.vaccinations.indexOf(e);
+                      //               });
+                      //             }),
+                      //             child: Container(
+                      //               margin: EdgeInsets.only(
+                      //                   top: dimensHeight(),
+                      //                   bottom: dimensHeight()),
+                      //               color: white,
+                      //               width: dimensWidth() * 30,
+                      //               child: Text(
+                      //                 translate(context, e.disease.toString()),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         )
+                      //         .toList(),
+                      //   ),
                     ),
                     _dose != null && _dose! > 0
                         ? Padding(
@@ -287,13 +236,14 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
                             ),
                           )
                         : const SizedBox(),
+                    SizedBox(
+                      height: dimensHeight() * 10,
+                    ),
                   ],
                 ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+              );
+            }),
+          ),
+        ));
   }
 }

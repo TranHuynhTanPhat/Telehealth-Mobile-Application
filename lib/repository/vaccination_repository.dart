@@ -24,12 +24,17 @@ class VaccinationRepository extends BaseRepository {
         vaccineId: vaccineId,
         doseNumber: doseNumber,
         date: date);
-    return await _vaccinationService.creatInjectedVaccination(request);
+    return await _vaccinationService.createInjectedVaccination(request);
   }
 
-  Future<DataResponse> deleteInjectedVaccination(
-      String recordId) async {
+  Future<InjectedVaccinationResponse> updateInjectedVaccination(
+      String recordId, int doseNumber, String date) async {
+    InjectedVaccinationRequest request = InjectedVaccinationRequest(
+        recorId: recordId, doseNumber: doseNumber, date: date);
+    return await _vaccinationService.updateInjectedVaccination(request);
+  }
 
+  Future<DataResponse> deleteInjectedVaccination(String recordId) async {
     return await _vaccinationService.deleteInjectedVaccination(recordId);
   }
 }
