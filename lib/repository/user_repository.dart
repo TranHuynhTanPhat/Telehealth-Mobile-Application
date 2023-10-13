@@ -55,7 +55,7 @@ class UserRepository extends BaseRepository {
       String fullName,
       String birthday,
       String gender,
-      String relationship,
+      String? relationship,
       String address) async {
     UserRequest request = UserRequest(
         profileId: profileId,
@@ -63,8 +63,8 @@ class UserRepository extends BaseRepository {
         fullName: fullName,
         gender: gender,
         birthday: birthday,
-        relationship:
-            Relationship.values.firstWhere((e) => e.name == relationship),
+        relationship:relationship!=null?
+            Relationship.values.firstWhere((e) => e.name == relationship):Relationship.Children,
         address: address);
     return await _userService.updateMedicalRecord(request);
   }

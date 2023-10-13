@@ -84,29 +84,18 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             ),
                       ),
                     ),
-                    BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-                        builder: (context, state) {
-                          DateTime? createAt ;
-                          try {
-                            createAt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                .parse(state.profile!.createdAt!);
-                          }catch(e){
-                            EasyLoading.showToast(translate(context, 'failure'),);
-                            Navigator.pop(context);
-                          }
-                      return CalendarDatePicker(
-                        initialDate: _currentDate,
-                        firstDate: createAt!, // Ngày tạo tk cho bác sĩ
-                        lastDate: DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day + 13),
-                        currentDate: _currentDate,
-                        onDateChanged: (value) {
-                          setState(() {
-                            _currentDate = value;
-                          });
-                        },
-                      );
-                    }),
+                    CalendarDatePicker(
+                      initialDate: _currentDate,
+                      firstDate: DateTime.now(), // Ngày tạo tk cho bác sĩ
+                      lastDate: DateTime(DateTime.now().year,
+                          DateTime.now().month, DateTime.now().day + 13),
+                      currentDate: _currentDate,
+                      onDateChanged: (value) {
+                        setState(() {
+                          _currentDate = value;
+                        });
+                      },
+                    ),
                     const Divider(
                       thickness: 2,
                     ),

@@ -56,27 +56,27 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SubUserCubit, SubUserState>(
-      listenWhen: (previous, current) => current is AddUser,
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
+      listenWhen: (previous, current) => current is AddSubUser,
       listener: (context, state) {
-        if (state is AddUserLoading) {
+        if (state is AddSubUserLoading) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is AddUserSuccessfully) {
+        } else if (state is AddSubUserSuccessfully) {
           EasyLoading.showToast(translate(context, state.message));
           Navigator.pop(context, true);
-        } else if (state is AddUserFailure) {
+        } else if (state is AddSubUserFailure) {
           EasyLoading.showToast(translate(context, state.message));
         }
       },
-      child: BlocBuilder<SubUserCubit, SubUserState>(
-        buildWhen: (previous, current) => current is AddUser,
+      child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
+        buildWhen: (previous, current) => current is AddSubUser,
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
               KeyboardUtil.hideKeyboard(context);
             },
             child: AbsorbPointer(
-              absorbing: state is AddUserLoading,
+              absorbing: state is AddSubUserLoading,
               child: Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(dimensWidth() * 3),
@@ -385,8 +385,9 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                     if (widget._formKey.currentState!
                                             .validate() &&
                                         _file != null) {
+                                          KeyboardUtil.hideKeyboard(context);
                                       widget._formKey.currentState!.save();
-                                      context.read<SubUserCubit>().addSubUser(
+                                      context.read<MedicalRecordCubit>().addSubUser(
                                           _file!.path,
                                           _controllerFullName.text,
                                           _controllerBirthday.text,

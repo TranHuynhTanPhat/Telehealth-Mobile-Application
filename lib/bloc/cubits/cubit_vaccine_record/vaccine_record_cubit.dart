@@ -7,7 +7,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'vaccine_record_state.dart';
 
-class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
+class VaccineRecordCubit extends Cubit<VaccineRecordState> {
   VaccineRecordCubit()
       : super(VaccineRecordInitial(
             vaccinations: [],
@@ -51,7 +51,6 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
     } catch (e) {
       DioException er = e as DioException;
       logPrint(er);
-
       emit(
         FetchVaccinationError(
           vaccinations: state.vaccinations,
@@ -207,13 +206,13 @@ class VaccineRecordCubit extends HydratedCubit<VaccineRecordState> {
     }
   }
 
-  @override
-  VaccineRecordState? fromJson(Map<String, dynamic> json) {
-    return VaccineRecordState.fromMap(json);
-  }
+  // @override
+  // VaccineRecordState? fromJson(Map<String, dynamic> json) {
+  //   return VaccineRecordState.fromMap(json);
+  // }
 
-  @override
-  Map<String, dynamic>? toJson(VaccineRecordState state) {
-    return state.toMap();
-  }
+  // @override
+  // Map<String, dynamic>? toJson(VaccineRecordState state) {
+  //   return state.toMap();
+  // }
 }

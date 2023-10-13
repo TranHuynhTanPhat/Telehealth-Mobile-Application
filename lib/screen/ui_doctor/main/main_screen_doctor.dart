@@ -75,26 +75,24 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           backgroundColor: white,
           appBar: AppBar(
             title: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-
                 builder: (context, state) {
-                  return Text(
-                    translate(
-                      context,
-                      _currentPage == DrawerMenus.Schedule
-                          ? 'schedule'
-                          : _currentPage == DrawerMenus.Patient
-                              ? 'patient'
-                              : _currentPage == DrawerMenus.AccountSetting
-                                  ? 'account_setting'
-                                  : _currentPage == DrawerMenus.Helps
-                                      ? 'helps'
-                                      : state.profile != null
-                                          ? state.profile?.fullName ??
-                                              'undefine'
-                                          : 'overview',
-                    ),
-                  );
-                }),
+              return Text(
+                translate(
+                  context,
+                  _currentPage == DrawerMenus.Schedule
+                      ? 'schedule'
+                      : _currentPage == DrawerMenus.Patient
+                          ? 'patient'
+                          : _currentPage == DrawerMenus.AccountSetting
+                              ? 'account_setting'
+                              : _currentPage == DrawerMenus.Helps
+                                  ? 'helps'
+                                  : state.profile != null
+                                      ? state.profile?.fullName ?? 'undefine'
+                                      : 'overview',
+                ),
+              );
+            }),
             leading:
                 BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
               builder: (context, state) {
@@ -120,62 +118,62 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               children: [
                 BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
                     builder: (context, state) {
-                      _image = _image ??
-                          NetworkImage(
-                            CloudinaryContext.cloudinary
-                                .image(state.profile!.avatar ?? '')
-                                .toString(),
-                          );
-                      if (state.profile != null) {
-                        return SizedBox(
-                          width: double.maxFinite,
-                          child: DrawerHeader(
-                            decoration: const BoxDecoration(
-                              color: secondary,
-                            ),
-                            padding: EdgeInsets.zero,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 35,
-                                  backgroundImage: _image,
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) => setState(() {
-                                    _image = AssetImage(DImages.placeholder);
-                                  }),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Text(
-                                  state.profile?.fullName ??
-                                      translate(context, 'undefine'),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(color: white),
-                                ),
-                                Text(
-                                  state.profile?.email ??
-                                      translate(context, 'undefine'),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(color: white),
-                                ),
-                              ],
-                            ),
-                          ),
+                  if (state.profile != null) {
+                    _image = _image ??
+                        NetworkImage(
+                          CloudinaryContext.cloudinary
+                              .image(state.profile!.avatar ?? '')
+                              .toString(),
                         );
-                      } else {
-                        return const SizedBox();
-                      }
-                    }),
+                    return SizedBox(
+                      width: double.maxFinite,
+                      child: DrawerHeader(
+                        decoration: const BoxDecoration(
+                          color: secondary,
+                        ),
+                        padding: EdgeInsets.zero,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundImage: _image,
+                              onBackgroundImageError: (exception, stackTrace) =>
+                                  setState(() {
+                                _image = AssetImage(DImages.placeholder);
+                              }),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              state.profile?.fullName ??
+                                  translate(context, 'undefine'),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(color: white),
+                            ),
+                            Text(
+                              state.profile?.email ??
+                                  translate(context, 'undefine'),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                }),
                 if (AppController.instance.authState == AuthState.AllAuthorized)
                   ListTile(
                     onTap: () {

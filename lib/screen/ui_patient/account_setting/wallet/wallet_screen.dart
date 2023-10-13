@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/wallet/components/exports.dart';
+import 'package:healthline/screen/ui_patient/account_setting/wallet/components/exports.dart';
 import 'package:healthline/utils/translate.dart';
 
 class WalletScreen extends StatefulWidget {

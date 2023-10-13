@@ -311,6 +311,10 @@
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
     },
+    "edit": {
+        "vi": "Sửa",
+        "en": "Edit"
+    },
     "update_now": {
         "vi": "Cập nhật ngay",
         "en": "Update now"
@@ -374,6 +378,10 @@
     "failure": {
         "vi": "Thất bại",
         "en": "Failure"
+    },
+    "i_am_healthline": {
+        "vi": "Tôi là HealthLine",
+        "en": "I'm HealthLine"
     },
     "click_again_to_exit": {
         "vi": "Chạm lại để thoát",

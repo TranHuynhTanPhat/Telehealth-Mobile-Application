@@ -3,15 +3,18 @@ import 'dart:convert';
 import 'package:healthline/res/style.dart';
 
 class HealthStatResponse {
+  String? id;
   TypeHealthStat? type;
   int? value;
   String? unit;
   List<History>? history;
-  HealthStatResponse({this.type, this.value, this.unit, this.history});
+  HealthStatResponse({this.id, this.type, this.value, this.unit, this.history});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-
+    if (id != null) {
+      result.addAll({'id': id});
+    }
     if (type != null) {
       result.addAll({'type': type?.name});
     }
@@ -30,12 +33,15 @@ class HealthStatResponse {
 
   factory HealthStatResponse.fromMap(Map<String, dynamic> map) {
     return HealthStatResponse(
+      id: map['id'],
       type: map['type'] != null
           ? TypeHealthStat.values.firstWhere((e) => e.name == map['type'])
           : null,
       value: map['value']?.toInt(),
       unit: map['unit'],
-      history: map['history'] != null ? List<History>.from(map['history']?.map((x) => History.fromMap(x))) : null,
+      history: map['history'] != null
+          ? List<History>.from(map['history']?.map((x) => History.fromMap(x)))
+          : null,
     );
   }
 
@@ -77,7 +83,6 @@ class History {
   }
 
   factory History.fromMap(Map<String, dynamic> map) {
-    print(map);
     return History(
       id: map['id'],
       value: map['value']?.toInt(),

@@ -7,7 +7,7 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/ui_patient/vaccination/components/export.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/vaccination/components/export.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -21,7 +21,7 @@ class VaccinationScreen extends StatefulWidget {
 class _VaccinationScreenState extends State<VaccinationScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubUserCubit, SubUserState>(
+    return BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
       builder: (context, state) {
         UserResponse user = state.subUsers[state.currentUser];
 
@@ -33,7 +33,6 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
             .fetchInjectedVaccination(state.subUsers[state.currentUser].id!);
 
         return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
-          buildWhen: (previous, current) => current is FetchInjectedVaccination,
           builder: (context, state) {
             return Scaffold(
               resizeToAvoidBottomInset: true,
@@ -46,19 +45,19 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                 actions: [
                   Padding(
                     padding: EdgeInsets.only(right: dimensWidth() * 3),
-                    child: InkWell(
-                      onTap: () async {
-                        await Navigator.pushNamed(context, addVaccinationName);
-                        // if (result == true) {
-                        //   setState(() {});
-                        // }
-                      },
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      child: FaIcon(
-                        FontAwesomeIcons.plus,
-                        color: color1F1F1F,
-                        size: dimensIcon() * .7,
+                    child: AbsorbPointer(
+                      absorbing: state is FetchInjectedVaccinationLoading,
+                      child: InkWell(
+                        onTap: () async {
+                          await Navigator.pushNamed(context, addVaccinationName);
+                        },
+                        splashColor: transparent,
+                        highlightColor: transparent,
+                        child: FaIcon(
+                          FontAwesomeIcons.plus,
+                          color: color1F1F1F,
+                          size: dimensIcon() * .7,
+                        ),
                       ),
                     ),
                   ),

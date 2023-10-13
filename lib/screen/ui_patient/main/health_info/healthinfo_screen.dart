@@ -6,12 +6,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
-import 'package:healthline/data/api/models/responses/user_response.dart';
 
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/export.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/list_record.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/components/update_subuser_input_dialog.dart';
 import 'package:healthline/utils/translate.dart';
 
 class HealthInfoScreen extends StatefulWidget {
@@ -44,270 +43,368 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
     super.initState();
   }
 
-  // Future<void> showDialogInput(BuildContext context) async {
-  //   final subUserCubit = context.read<SubUserCubit>();
-  //
-  //   await showDialog(
-  //       barrierDismissible: true,
-  //       context: context,
-  //       builder: (context) => BlocProvider.value(
-  //             value: subUserCubit,
-  //             child: HealthInforInputDialog(formKey: _formKey),
-  //           ));
-  // }
-
-  Future<void> showUpdateDialogInput(
-      BuildContext context, UserResponse subUser) async {
-    final subUserCubit = context.read<SubUserCubit>();
-    final result = await showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (context) => BlocProvider.value(
-        value: subUserCubit,
-        child: UpdateSubUserInputDialog(
-          userResponse: subUser,
-        ),
-      ),
-    );
-    if (result == true) {
-      // ignore: use_build_context_synchronously
-      subUserCubit.fetchMedicalRecord();
-    }
+  @override
+  void deactivate() {
+    _animationController.dispose();
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<HealthStatCubit, HealthStatState>(
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
-        if (state is HealthStatLoading) {
+        if (state is UpdateIndexSubUser || state is FetchSubUserLoaded) {
+          if (state.subUsers.isNotEmpty &&
+              state.currentUser < state.subUsers.length) {
+            context
+                .read<MedicalRecordCubit>()
+                .fetchStats(state.subUsers[state.currentUser].id!);
+          }
+        } else if (state is MedicalRecordLoadingState) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is HealthStatInitial) {
+        } else if (state is HealthStatLoaded || state is FetchSubUserLoaded) {
           EasyLoading.dismiss();
         } else if (state is HealthStatError) {
-          EasyLoading.showToast(
-            translate(
-              context,
-              state.message.toString(),
-            ),
-          );
+          EasyLoading.dismiss();
         }
       },
-      child: BlocBuilder<HealthStatCubit, HealthStatState>(
+      child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
         builder: (context, state) {
+          int heartRate = state.stats
+                  .firstWhere(
+                      (element) => element.type == TypeHealthStat.Heart_rate,
+                      orElse: () => HealthStatResponse())
+                  .value ??
+              0;
+
+          int? bloodIndex = state.stats
+              .firstWhere(
+                  (element) => element.type == TypeHealthStat.Blood_group,
+                  orElse: () => HealthStatResponse())
+              .value;
+          String bloodGroup = bloodIndex == 0
+              ? 'A'
+              : bloodIndex == 1
+                  ? 'B'
+                  : bloodIndex == 2
+                      ? '0'
+                      : bloodIndex == 3
+                          ? 'AB'
+                          : '--';
+          int temperature = state.stats
+                  .firstWhere(
+                      (element) => element.type == TypeHealthStat.Temperature,
+                      orElse: () => HealthStatResponse())
+                  .value ??
+              0;
+          int weight = state.stats
+                  .firstWhere(
+                      (element) => element.type == TypeHealthStat.Weight,
+                      orElse: () => HealthStatResponse())
+                  .value ??
+              0;
+          double height = (state.stats
+                      .firstWhere(
+                          (element) => element.type == TypeHealthStat.Height,
+                          orElse: () => HealthStatResponse())
+                      .value ??
+                  0) /
+              100;
+          double bmi =
+              (height == 0 && weight == 0) ? 0 : weight / (height * height);
           return AbsorbPointer(
-            absorbing: state is HealthStatLoading,
+            absorbing: state is MedicalRecordLoadingState,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               backgroundColor: white,
-              floatingActionButton: BlocBuilder<SubUserCubit, SubUserState>(
-                builder: (context, state) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: dimensHeight() * 13),
-                    height: dimensWidth() * 6,
-                    child: FloatingActionButton.extended(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(dimensWidth() * 10)),
-                      icon: FaIcon(
-                        FontAwesomeIcons.userPen,
-                        color: white,
-                        size: dimensIcon() * .5,
+              appBar: AppBar(
+                title: Text(
+                  translate(context, 'patient_records'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: color1F1F1F, fontWeight: FontWeight.w900),
+                ),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.only(right: dimensWidth() * 2),
+                    child: InkWell(
+                      splashColor: transparent,
+                      highlightColor: transparent,
+                      child: AnimatedIcon(
+                        icon: AnimatedIcons.menu_close,
+                        progress: _animationIC,
+                        color: color1F1F1F,
+                        size: dimensIcon(),
                       ),
-                      onPressed: () {
-                        if (state.subUsers.isNotEmpty) {
-                          showUpdateDialogInput(
-                              context, state.subUsers[state.currentUser]);
+                      onTap: () {
+                        if (_showUsers) {
+                          _animationController.reverse();
+                          _showUsers = false;
+                        } else {
+                          _animationController.forward();
+                          _showUsers = true;
                         }
                       },
-                      extendedPadding: EdgeInsets.all(dimensWidth() * 2),
-                      label: Text(
-                        translate(context, 'update'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(color: white),
-                      ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-              body: NestedScrollView(
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      snap: false,
-                      pinned: true,
-                      floating: true,
-                      expandedHeight: dimensHeight() * 17 * _animation.value +
-                          dimensHeight() * 14,
-                      flexibleSpace: FlexibleSpaceBar(
-                        collapseMode: CollapseMode.parallax,
-                        expandedTitleScale: 1,
-                        background: ListView(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
+              body: ListView(
+                shrinkWrap: false,
+                scrollDirection: Axis.vertical,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                    horizontal: dimensWidth() * 3, vertical: dimensHeight()),
+                children: [
+                  _animation.value > 0
+                      ? AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          color: white,
+                          height: 130 * _animation.value,
+                          width: double.maxFinite,
+                          curve: Curves.fastEaseInToSlowEaseOut,
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(
+                              bottom: dimensHeight() * 3, top: dimensHeight()),
+                          child: const ListSubUser(),
+                        )
+                      : const SizedBox(),
+                  Container(
+                    margin: EdgeInsets.only(bottom: dimensWidth() * 2),
+                    padding: EdgeInsets.symmetric(
+                        vertical: dimensHeight(),
+                        horizontal: dimensWidth() * 1.5),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: color1F1F1F.withOpacity(.1)),
+                      borderRadius: BorderRadius.circular(dimensWidth() * 1.8),
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(
-                                left: dimensWidth() * 3,
-                                right: dimensWidth() * 3,
-                                top: dimensHeight() * 1.5,
-                              ),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
+                                  Text(
+                                    '${translate(context, 'full_name')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
                                   Expanded(
                                     child: Text(
-                                      translate(context, 'patient_records'),
+                                      state.subUsers[state.currentUser]
+                                              .fullName ??
+                                          translate(context, 'undefine'),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineMedium
-                                          ?.copyWith(
-                                              color: color1F1F1F,
-                                              fontWeight: FontWeight.w900),
+                                          .titleMedium,
                                     ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'relationship')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
                                   ),
-                                  InkWell(
-                                    splashColor: transparent,
-                                    highlightColor: transparent,
-                                    child: AnimatedIcon(
-                                      icon: AnimatedIcons.menu_close,
-                                      progress: _animationIC,
-                                      color: color1F1F1F,
-                                      size: dimensIcon(),
+                                  Expanded(
+                                    child: Text(
+                                      state.subUsers.isNotEmpty &&
+                                              state.subUsers[state.currentUser]
+                                                      .relationship !=
+                                                  null
+                                          ? translate(
+                                              context,
+                                              state.subUsers[state.currentUser]
+                                                  .relationship!.name
+                                                  .toLowerCase())
+                                          : '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
                                     ),
-                                    onTap: () {
-                                      if (_showUsers) {
-                                        _animationController.reverse();
-                                        _showUsers = false;
-                                      } else {
-                                        _animationController.forward();
-                                        _showUsers = true;
-                                      }
-                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'heart_rate')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '$heartRate bpm',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'blood_group')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      bloodGroup,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'height')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '$height m',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'weight')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '$weight Kg',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            _animation.value > 0
-                                ? AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    color: white,
-                                    height:
-                                        dimensHeight() * 15 * _animation.value,
-                                    width: double.maxFinite,
-                                    curve: Curves.fastEaseInToSlowEaseOut,
-                                    alignment: Alignment.topLeft,
-                                    margin: EdgeInsets.only(
-                                        bottom: dimensHeight() * 2,
-                                        top: dimensHeight()),
-                                    child: const ListSubUser(),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'BMI')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${double.parse(
+                                        bmi.toStringAsFixed(2),
+                                      )} ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
                                   )
-                                : const SizedBox(),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight()),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${translate(context, 'temperature')}: ',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '$temperature °C',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                      bottom: AppBar(
-                        title: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: dimensWidth()),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: BlocBuilder<SubUserCubit, SubUserState>(
-                                  builder: (context, state) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          state.subUsers[state.currentUser]
-                                                  .fullName ??
-                                              translate(context, 'undefine'),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Text(
-                                          state.subUsers.isNotEmpty &&
-                                                  state
-                                                          .subUsers[
-                                                              state.currentUser]
-                                                          .relationship !=
-                                                      null
-                                              ? translate(
-                                                  context,
-                                                  state
-                                                      .subUsers[
-                                                          state.currentUser]
-                                                      .relationship!
-                                                      .name
-                                                      .toLowerCase())
-                                              : '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, updateHealthStatName);
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.solidPenToSquare,
+                              size: dimensIcon() * .8,
+                              color: black26,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ];
-                },
-                body: BlocBuilder<HealthStatCubit, HealthStatState>(
-                  builder: (context, state) {
-                    return ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                          vertical: dimensHeight(),
-                          horizontal: dimensWidth() * 3),
-                      children: [
-                        HeartRateCard(
-                          healthStatResponse: state.stats.firstWhere(
-                              (element) =>
-                                  element.type == TypeHealthStat.Heart_rate,
-                              orElse: () => HealthStatResponse()),
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: BloodGroupCard(),
-                            ),
-                            SizedBox(
-                              width: dimensWidth() * 2,
-                            ),
-                            const Expanded(
-                              child: BMICard(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dimensHeight() * 2,
-                        ),
-                        const ListRecord()
                       ],
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  const ListRecord(),
+                  SizedBox(
+                    height: dimensHeight() * 10,
+                  ),
+                ],
               ),
             ),
+            // ),
           );
         },
       ),

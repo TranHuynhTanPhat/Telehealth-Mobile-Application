@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/export.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/subuser_input_dialog.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/components/update_subuser_input_dialog.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 
 class ListSubUser extends StatefulWidget {
@@ -19,18 +21,36 @@ class ListSubUser extends StatefulWidget {
 class _ListSubUserState extends State<ListSubUser> {
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> showUpdateDialogInput(
+      BuildContext context, UserResponse subUser) async {
+    final medicalRecordCubit = context.read<MedicalRecordCubit>();
+    bool? result =await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => BlocProvider.value(
+        value: medicalRecordCubit,
+        child: UpdateSubUserInputDialog(
+          userResponse: subUser,
+        ),
+      ),
+    );
+    if (result == true) {
+
+      medicalRecordCubit.fetchMedicalRecord();
+    }
+  }
+
   Future<void> showDialogInput(BuildContext context) async {
-    final subUserCubit = context.read<SubUserCubit>();
+    final medicalRecordCubit = context.read<MedicalRecordCubit>();
     final result = await showDialog(
         barrierDismissible: true,
         context: context,
         builder: (context) => BlocProvider.value(
-              value: subUserCubit,
+              value: medicalRecordCubit,
               child: SubUserInputDialog(formKey: _formKey),
             ));
     if (result == true) {
-      if(!mounted)return;
-      context.read<SubUserCubit>().fetchMedicalRecord();
+      medicalRecordCubit.fetchMedicalRecord();
     }
     // .whenComplete(
     //     () => context.read<HealthInfoCubit>().fetchMedicalRecord());
@@ -38,7 +58,7 @@ class _ListSubUserState extends State<ListSubUser> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubUserCubit, SubUserState>(
+    return BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
       builder: (context, state) {
         return ListView(
           shrinkWrap: true,
@@ -65,14 +85,54 @@ class _ListSubUserState extends State<ListSubUser> {
             if (state is FetchSubUserLoading)
               ...shimmerBuilder()
             else
-              ...state.subUsers
-                  .map(
-                    (e) => SubUserCard(
-                        subUser: e,
-                        index: state.subUsers
-                            .indexWhere((element) => element.id == e.id)),
-                  )
-                  .toList(),
+              ...state.subUsers.map((e) {
+                int index =
+                    state.subUsers.indexWhere((element) => element.id == e.id);
+                return Stack(
+                  children: [
+                    InkWell(
+                      splashColor: transparent,
+                      highlightColor: transparent,
+                      onTap: () {
+                        if (index != state.currentUser) {
+                          context.read<MedicalRecordCubit>().updateIndex(index);
+                        }
+                      },
+                      child: SubUserCard(
+                          subUser: e, active: index == state.currentUser),
+                    ),
+                    if (index == state.currentUser)
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () => showUpdateDialogInput(context, e),
+                          child: Container(
+                            padding: EdgeInsets.all(dimensWidth()),
+                            decoration: BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.circular(180),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(.1),
+                                  spreadRadius: dimensWidth() * .4,
+                                  blurRadius: dimensWidth() * .4,
+                                ),
+                              ],
+                            ),
+                            child: FaIcon(
+                              FontAwesomeIcons.userPen,
+                              size: dimensIcon() * .5,
+                              color: color1F1F1F,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      const SizedBox(),
+                  ],
+                );
+              }).toList(),
           ],
         );
       },
@@ -86,9 +146,9 @@ class _ListSubUserState extends State<ListSubUser> {
         padding: EdgeInsets.all(dimensWidth() * .5),
         margin: EdgeInsets.symmetric(
             vertical: dimensWidth(), horizontal: dimensWidth() * .5),
-        child: ShimmerWidget.rectangular(
+        child: const ShimmerWidget.rectangular(
           height: double.maxFinite,
-          width: dimensWidth() * 9,
+          width: 80,
         ),
       ),
     );

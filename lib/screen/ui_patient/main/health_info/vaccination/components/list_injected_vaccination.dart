@@ -5,11 +5,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/vaccination/update_vaccination.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/vaccination/update_vaccination.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
-import '../../../../routes/app_pages.dart';
+import '../../../../../../routes/app_pages.dart';
 
 class ListInjectedVaccination extends StatelessWidget {
   const ListInjectedVaccination({
@@ -76,11 +76,8 @@ class ListInjectedVaccination extends StatelessWidget {
                         )
                       ],
                     ),
-                    onPressed: () async {
-                      await Navigator.pushNamed(context, addVaccinationName);
-                      // if (result == true) {
-                      //   setState(() {});
-                      // }
+                    onPressed: () {
+                      Navigator.pushNamed(context, addVaccinationName);
                     },
                   ),
                 )
@@ -89,7 +86,7 @@ class ListInjectedVaccination extends StatelessWidget {
           );
         } else {
           return AbsorbPointer(
-            absorbing: state is DeleteInjectedVaccinationLoading,
+            absorbing: state is VaccineRecordLoadingState,
             child: ListView(
               shrinkWrap: false,
               scrollDirection: Axis.vertical,
@@ -98,8 +95,7 @@ class ListInjectedVaccination extends StatelessWidget {
                 vertical: dimensHeight(),
               ),
               children: [
-                if (state is FetchInjectedVaccinationLoading ||
-                    state is FetchVaccination)
+                if (state is FetchInjectedVaccinationLoading)
                   const BuildShimmer()
                 else
                   Column(
@@ -184,7 +180,8 @@ class ListInjectedVaccination extends StatelessWidget {
                                           SizedBox(
                                             height: dimensHeight() * 11,
                                             child: Stepper(
-                                              key: ValueKey(e.toJson()+state.toString()),
+                                              key: ValueKey(e.toJson() +
+                                                  state.toString()),
                                               elevation: 0,
                                               margin: const EdgeInsets.all(0),
                                               currentStep: e.doseNumber! - 1,
@@ -239,20 +236,21 @@ class ListInjectedVaccination extends StatelessWidget {
                                         bool? result = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) =>
-                                                BlocProvider.value(
-                                                  value: context
-                                                      .read<
-                                                      VaccineRecordCubit>(),
-                                                  child: UpdateVaccinationScreen(
-                                                    vaccineRecord: e,
-                                                  ),
-                                                ),
+                                            builder: (_) => BlocProvider.value(
+                                              value: context
+                                                  .read<VaccineRecordCubit>(),
+                                              child: UpdateVaccinationScreen(
+                                                vaccineRecord: e,
+                                              ),
+                                            ),
                                           ),
                                         ) as bool;
-                                        if(result==true){
+                                        if (result == true) {
                                           // ignore: use_build_context_synchronously
-                                          context.read<VaccineRecordCubit>().fetchInjectedVaccination(state.medicalRecord);
+                                          context
+                                              .read<VaccineRecordCubit>()
+                                              .fetchInjectedVaccination(
+                                                  state.medicalRecord);
                                         }
                                       },
                                       icon: FaIcon(

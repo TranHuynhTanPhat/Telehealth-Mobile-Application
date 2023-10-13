@@ -46,6 +46,7 @@ class _MyAppState extends State<MyApp> {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: "healthline",
+                
                 home: MediaQuery(
                   data: MediaQuery.of(context).copyWith(
                     textScaleFactor: 1.0,

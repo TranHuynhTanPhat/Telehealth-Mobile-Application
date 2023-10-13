@@ -22,7 +22,6 @@ class AddVaccinationScreen extends StatefulWidget {
 
 class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   late TextEditingController _controllerDisease;
-  // late TextEditingController _controllerVaccine;
   late TextEditingController _controllerDayOfLastDose;
   int? _index;
   int? _dose;
@@ -33,16 +32,14 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   @override
   void initState() {
     _controllerDisease = TextEditingController();
-    // _controllerVaccine = TextEditingController();
     _controllerDayOfLastDose = TextEditingController();
-    _dose = 1;
+    _dose = null;
     listId = [];
     super.initState();
   }
 
   bool checkValid() {
     return _controllerDisease.text.isNotEmpty &&
-            // _controllerVaccine.text.isNotEmpty &&
             _controllerDayOfLastDose.text.isNotEmpty
         ? true
         : false;
@@ -51,10 +48,16 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
-      listenWhen: (previous, current)=> current is CreateInjectedVaccination,
       listener: (context, state) {
-        if (state is CreateInjectedVaccinationLoading) {
+        if (state is FetchVaccinationError) {
+          EasyLoading.showToast(translate(context, state.message));
+          Navigator.pop(context);
+        } else if (state is FetchInjectedVaccinationLoading ||
+            state is FetchVaccinationLoading ||
+            state is CreateInjectedVaccinationLoading) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state is FetchVaccinationLoaded) {
+          EasyLoading.dismiss();
         } else if (state is CreateInjectedVaccinationLoaded) {
           EasyLoading.showToast(translate(context, 'successfully'));
           Navigator.pop(context, true);
@@ -69,6 +72,9 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                 state.injectedVaccinations.map((e) => e.vaccine!.id!).toList();
           } catch (e) {
             logPrint(e);
+          }
+          if (state.vaccinations.isEmpty) {
+            context.read<VaccineRecordCubit>().fetchVaccination();
           }
           return GestureDetector(
             onTap: () => KeyboardUtil.hideKeyboard(context),
@@ -102,7 +108,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                 ],
               ),
               body: AbsorbPointer(
-                absorbing: state is CreateInjectedVaccinationLoading,
+                absorbing: state is VaccineRecordLoadingState,
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -139,8 +145,10 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                   BorderRadius.circular(dimensWidth() * 3),
                             ),
                           ),
-                          backgroundColor: const MaterialStatePropertyAll(white),
-                          surfaceTintColor: const MaterialStatePropertyAll(white),
+                          backgroundColor:
+                              const MaterialStatePropertyAll(white),
+                          surfaceTintColor:
+                              const MaterialStatePropertyAll(white),
                           padding: MaterialStatePropertyAll(
                             EdgeInsets.symmetric(
                               horizontal: dimensWidth() * 2,
@@ -151,8 +159,8 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             Size(dimensWidth() * 40, dimensHeight() * 55),
                           ),
                         ),
-                        builder: (BuildContext context, MenuController controller,
-                            Widget? child) {
+                        builder: (BuildContext context,
+                            MenuController controller, Widget? child) {
                           return TextFieldWidget(
                             onTap: () {
                               if (controller.isOpen) {
@@ -209,90 +217,6 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             .toList(),
                       ),
                     ),
-                    // _index != null
-                    //     ? Padding(
-                    //         padding: EdgeInsets.symmetric(
-                    //             vertical: dimensHeight() * 2,
-                    //             horizontal: dimensWidth() * 3),
-                    //         child: MenuAnchor(
-                    //           onOpen: () {
-                    //             setState(() {
-                    //               _dose = null;
-                    //               _currentStep = 0;
-                    //               _controllerDayOfLastDose.text = '';
-                    //             });
-                    //           },
-                    //           style: MenuStyle(
-                    //             elevation: const MaterialStatePropertyAll(10),
-                    //             shape: MaterialStateProperty.all<
-                    //                 RoundedRectangleBorder>(
-                    //               RoundedRectangleBorder(
-                    //                 borderRadius: BorderRadius.circular(
-                    //                     dimensWidth() * 3),
-                    //               ),
-                    //             ),
-                    //             backgroundColor:
-                    //                 const MaterialStatePropertyAll(white),
-                    //             surfaceTintColor:
-                    //                 const MaterialStatePropertyAll(white),
-                    //             padding: MaterialStatePropertyAll(
-                    //               EdgeInsets.symmetric(
-                    //                 horizontal: dimensWidth() * 2,
-                    //                 vertical: dimensHeight(),
-                    //               ),
-                    //             ),
-                    //             maximumSize: MaterialStatePropertyAll(
-                    //               Size(dimensWidth() * 40, dimensHeight() * 55),
-                    //             ),
-                    //           ),
-                    //           builder: (BuildContext context,
-                    //               MenuController controller, Widget? child) {
-                    //             return TextFieldWidget(
-                    //               onTap: () {
-                    //                 if (controller.isOpen) {
-                    //                   controller.close();
-                    //                 } else {
-                    //                   controller.open();
-                    //                 }
-                    //               },
-                    //               readOnly: true,
-                    //               label: translate(context, 'doses'),
-                    //               controller: _controllVaccine,
-                    //               validate: (value) => null,
-                    //               suffixIcon: const IconButton(
-                    //                   onPressed: null,
-                    //                   icon: FaIcon(FontAwesomeIcons.caretDown)),
-                    //             );
-                    //           },
-                    //           menuChildren: state
-                    //               .vaccinations[_index!].maxDose
-                    //               .map(
-                    //                 (e) => MenuItemButton(
-                    //                   style: const ButtonStyle(
-                    //                       backgroundColor:
-                    //                           MaterialStatePropertyAll(white)),
-                    //                   onPressed: () => setState(() {
-                    //                     _controllVaccine.text = translate(
-                    //                         context, e.dose.toString());
-                    //                     setState(() {
-                    //                       _dose = e.dose;
-                    //                       _injectedDose = 1;
-                    //                     });
-                    //                   }),
-                    //                   child: Container(
-                    //                     // margin: EdgeInsets.all(dimensWidth()),
-                    //                     color: white,
-                    //                     width: dimensWidth() * 30,
-                    //                     child: Text(
-                    //                       translate(context, e.dose.toString()),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               )
-                    //               .toList(),
-                    //         ),
-                    //       )
-                    //     : const SizedBox(),
                     _dose != null && _dose! > 0
                         ? Padding(
                             padding: EdgeInsets.symmetric(
@@ -346,11 +270,11 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                         DatePickerEntryMode.calendarOnly,
                                     initialDatePickerMode: DatePickerMode.day,
                                     context: context,
-                                    initialDate: _controllerDayOfLastDose
-                                            .text.isNotEmpty
-                                        ? DateFormat('dd/MM/yyyy')
-                                            .parse(_controllerDayOfLastDose.text)
-                                        : DateTime.now(),
+                                    initialDate:
+                                        _controllerDayOfLastDose.text.isNotEmpty
+                                            ? DateFormat('dd/MM/yyyy').parse(
+                                                _controllerDayOfLastDose.text)
+                                            : DateTime.now(),
                                     firstDate: DateTime(1900),
                                     lastDate: DateTime.now());
                                 if (date != null) {

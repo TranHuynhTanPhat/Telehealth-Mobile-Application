@@ -12,28 +12,27 @@ import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
 import 'package:healthline/screen/application_setting/application_setting_screen.dart';
-import 'package:healthline/screen/ui_patient/doctor/doctor_screen.dart';
-import 'package:healthline/screen/ui_patient/doctor/subscreen/detail_doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/components/health_stat_update.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
-import 'package:healthline/screen/ui_patient/ref_vaccination/ref_vaccination_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/ref_vaccination_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/main_screen_doctor.dart';
-import 'package:healthline/screen/ui_patient/vaccination/add_vaccination_screen.dart';
-import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart';
-import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_vaccination_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
+import 'package:healthline/screen/ui_patient/account_setting/wallet/wallet_screen.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 
 import '../screen/ui_doctor/main/account_setting/update_profile_screen.dart';
 
 class AppRoute {
   final _homeCubit = HomeCubit();
-  final _subUserCubit = SubUserCubit();
   final _vaccineRecordCubit = VaccineRecordCubit();
   final _sideMenuCubit = SideMenuCubit();
-  final _healthStatCubit = HealthStatCubit();
+  final _medicalRecordCubit = MedicalRecordCubit();
   final _contactCubit = ContactCubit();
   final _vaccinationCubit = VaccinationCubit();
   final _logInCubit = LogInCubit();
@@ -44,10 +43,9 @@ class AppRoute {
 
   void dispose() {
     _homeCubit.close();
-    _subUserCubit.close();
     _vaccineRecordCubit.close();
     _sideMenuCubit.close();
-    _healthStatCubit.close();
+    _medicalRecordCubit.close();
     _contactCubit.close();
     _vaccinationCubit.close();
     _logInCubit.close();
@@ -71,16 +69,13 @@ class AppRoute {
                       value: _sideMenuCubit,
                     ),
                     BlocProvider.value(
-                      value: _subUserCubit,
-                    ),
-                    BlocProvider.value(
                       value: _vaccineRecordCubit,
                     ),
                     BlocProvider.value(
                       value: _homeCubit,
                     ),
                     BlocProvider.value(
-                      value: _healthStatCubit,
+                      value: _medicalRecordCubit,
                     ),
                   ],
                   child: const MainScreenPatient(),
@@ -145,7 +140,7 @@ class AppRoute {
                       value: _vaccineRecordCubit,
                     ),
                     BlocProvider.value(
-                      value: _subUserCubit,
+                      value: _medicalRecordCubit,
                     ),
                   ],
                   child: const VaccinationScreen(),
@@ -189,11 +184,8 @@ class AppRoute {
             builder: (_) => MultiBlocProvider(
                   providers: [
                     BlocProvider.value(
-                      value: _healthStatCubit,
+                      value: _medicalRecordCubit,
                     ),
-                    BlocProvider.value(
-                      value: _subUserCubit,
-                    )
                   ],
                   child: const HealthStatUpdateScreen(),
                 ));

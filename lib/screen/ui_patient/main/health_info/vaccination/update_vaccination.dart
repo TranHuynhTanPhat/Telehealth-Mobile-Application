@@ -54,10 +54,10 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
     _controllerDisease.text =
         translate(context, widget.vaccineRecord.vaccine!.disease!);
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
-        listenWhen: (previous, current) => current is UpdateInjectedVaccination,
+        // listenWhen: (previous, current) => current is UpdateInjectedVaccination,
         listener: (context, state) {
           if (state is UpdateInjectedVaccinationLoading) {
-            EasyLoading.show();
+            EasyLoading.show(maskType: EasyLoadingMaskType.black);
           } else if (state is UpdateInjectedVaccinationLoaded) {
             EasyLoading.showToast(translate(context, 'successfully'));
             Navigator.pop(context, true);

@@ -96,35 +96,35 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
     if (widget._subUser.relationship != null) {
       relationship = relationship ?? widget._subUser.relationship!.name;
     }
-    return BlocListener<SubUserCubit, SubUserState>(
-      listenWhen: (previous, current) => current is UpdateUser,
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
+      listenWhen: (previous, current) => current is UpdateSubUser,
       listener: (context, state) {
-        if (state is UpdateUserLoading) {
+        if (state is UpdateSubUserLoading) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is UpdateUserSuccessfully) {
+        } else if (state is UpdateSubUserSuccessfully) {
           EasyLoading.showToast(translate(context, state.message));
           Navigator.pop(context, true);
-        } else if (state is UpdateUserFailure) {
+        } else if (state is UpdateSubUserFailure) {
           EasyLoading.showToast(translate(context, state.message));
-        } else if (state is DeleteUserLoading) {
+        } else if (state is DeleteSubUserLoading) {
           EasyLoading.show();
-        } else if (state is DeleteUserSuccessfully) {
-          EasyLoading.showToast(translate(context, state.message));
+        } else if (state is DeleteSubUserSuccessfully) {
+          EasyLoading.showToast(translate(context, 'successfully'));
           Navigator.pop(context, true);
-        } else if (state is DeleteUserFailure) {
+        } else if (state is DeleteSubUserFailure) {
           EasyLoading.showToast(translate(context, state.message));
         }
       },
-      child: BlocBuilder<SubUserCubit, SubUserState>(
-        buildWhen: (previous, current) => current is UpdateUser,
+      child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
+        buildWhen: (previous, current) => current is UpdateSubUser,
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
               KeyboardUtil.hideKeyboard(context);
             },
             child: AbsorbPointer(
-              absorbing:
-                  state is UpdateUserLoading || state is DeleteUserLoading,
+              absorbing: state is UpdateSubUserLoading ||
+                  state is DeleteSubUserLoading,
               child: Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(dimensWidth() * 3),
@@ -337,6 +337,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                     SizedBox(
                                       width: dimensWidth() * 1.5,
                                     ),
+                                    !state.subUsers[state.currentUser].isMainProfile!?
                                     Expanded(
                                       child: MenuAnchor(
                                         style: MenuStyle(
@@ -412,7 +413,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                             )
                                             .toList(),
                                       ),
-                                    ),
+                                    ):const SizedBox(),
                                   ],
                                 ),
                               ),
@@ -451,8 +452,9 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                                     .validate()) {
                                                   _formKey.currentState!.save();
                                                   context
-                                                      .read<SubUserCubit>()
-                                                      .deleteUser(
+                                                      .read<
+                                                          MedicalRecordCubit>()
+                                                      .deleteSubUser(
                                                           widget._subUser.id!);
                                                 }
                                               },
@@ -468,16 +470,18 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {
+                                                KeyboardUtil.hideKeyboard(context);
                                             _formKey.currentState!.save();
                                             context
-                                                .read<SubUserCubit>()
-                                                .updateUser(
-                                                    _file?.path,
-                                                    _controllerFullName.text,
-                                                    _controllerBirthday.text,
-                                                    gender!,
-                                                    relationship!,
-                                                    _controllerAddress.text);
+                                                .read<MedicalRecordCubit>()
+                                                .updateSubUser(
+                                                  _file?.path,
+                                                  _controllerFullName.text,
+                                                  _controllerBirthday.text,
+                                                  gender!,
+                                                  relationship,
+                                                  _controllerAddress.text,
+                                                );
                                           }
                                         },
                                       ),

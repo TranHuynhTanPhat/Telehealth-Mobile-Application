@@ -78,8 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: white,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(dimensHeight() * 8),
-            child: BlocBuilder<SubUserCubit, SubUserState>(
-              buildWhen: (previous, current) => current is FetchUser,
+            child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
               builder: (context, state) {
                 if (state.subUsers.isNotEmpty) {
                   int index = state.subUsers
@@ -117,8 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .firstWhere(
                                         (element) => element.isMainProfile!)
                                     .fullName ??
-                                translate(context, 'undefine')
-                            : translate(context, 'undefine'),
+                                translate(context, 'i_am_healthline')
+                            : translate(context, 'i_am_healthline'),
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge
@@ -139,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ApplicationUpdateState>(builder: (context, state) {
                         return badgeNotification(
                             CircleAvatar(
-                              radius: dimensWidth()*3,
+                              radius: dimensWidth() * 5,
                               backgroundImage: _image,
                               onBackgroundImageError: (exception, stackTrace) =>
                                   setState(() {

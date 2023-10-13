@@ -5,7 +5,7 @@ import 'package:healthline/data/storage/models/vaccination_model.dart';
 
 part 'vaccination_state.dart';
 
-class VaccinationCubit extends HydratedCubit<VaccinationState> {
+class VaccinationCubit extends Cubit<VaccinationState> {
   VaccinationCubit()
       : super(VaccinationInitial(diseaseAdult: [], diseaseChild: []));
   @override
@@ -36,13 +36,13 @@ class VaccinationCubit extends HydratedCubit<VaccinationState> {
     }
   }
 
-  @override
-  VaccinationState? fromJson(Map<String, dynamic> json) {
-    return VaccinationState.fromMap(json);
-  }
+  // @override
+  // VaccinationState? fromJson(Map<String, dynamic> json) {
+  //   return VaccinationState.fromMap(json);
+  // }
 
-  @override
-  Map<String, dynamic>? toJson(VaccinationState state) {
-    return state.toMap();
-  }
+  // @override
+  // Map<String, dynamic>? toJson(VaccinationState state) {
+  //   return state.toMap();
+  // }
 }

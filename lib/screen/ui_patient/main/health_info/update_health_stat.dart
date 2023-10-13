@@ -6,10 +6,10 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/res/style.dart';
 
-import '../../../../../utils/keyboard.dart';
-import '../../../../../utils/translate.dart';
-import '../../../../widgets/elevated_button_widget.dart';
-import '../../../../widgets/text_field_widget.dart';
+import '../../../../utils/keyboard.dart';
+import '../../../../utils/translate.dart';
+import '../../../widgets/elevated_button_widget.dart';
+import '../../../widgets/text_field_widget.dart';
 
 class HealthStatUpdateScreen extends StatefulWidget {
   const HealthStatUpdateScreen({super.key});
@@ -42,8 +42,14 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
   }
 
   @override
+  void deactivate() {
+    EasyLoading.dismiss();
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<HealthStatCubit, HealthStatState>(
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
         if (state is UpdateStatLoading) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
@@ -67,23 +73,22 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
             ),
             centerTitle: true,
           ),
-          body: BlocBuilder<HealthStatCubit, HealthStatState>(
+          body: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
             builder: (context, state) {
-              print(state.stats.length);
-              print('check');
-              _controllerBloodGroup.text = _controllerBloodGroup.text == ''
-                  ? translate(
-                      context,
-                      state.stats
-                              .firstWhere(
-                                  (element) =>
-                                      element.type ==
-                                      TypeHealthStat.Blood_group,
-                                  orElse: () => HealthStatResponse())
-                              .value
-                              ?.toString() ??
-                          '')
-                  : _controllerBloodGroup.text;
+              int? bloodIndex = state.stats
+                  .firstWhere(
+                      (element) => element.type == TypeHealthStat.Blood_group,
+                      orElse: () => HealthStatResponse())
+                  .value;
+              _controllerBloodGroup.text = _controllerBloodGroup.text != ''
+                  ? _controllerBloodGroup.text
+                  : bloodIndex == 0
+                      ? 'A'
+                      : bloodIndex == 1
+                          ? 'B'
+                          : bloodIndex == 2
+                              ? '0'
+                              : 'AB';
               _controllerHeartRate.text = _controllerHeartRate.text == ''
                   ? translate(
                       context,
@@ -240,6 +245,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                     return translate(
                                         context, 'invalid_heart_rate');
                                   }
+
                                   return null;
                                 } catch (e) {
                                   return translate(
@@ -367,57 +373,49 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                               ),
                             ],
                           ),
-                          BlocBuilder<SubUserCubit, SubUserState>(
-                            builder: (context, state) {
-                              //// Check Age to show head cri
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: dimensHeight() * 3),
-                                      child: ElevatedButtonWidget(
-                                        text: translate(
-                                            context, 'update_information'),
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            _formKey.currentState!.save();
-                                            context
-                                                .read<HealthStatCubit>()
-                                                .updateStats(
-                                                    state
-                                                        .subUsers[state
-                                                            .currentUser]
-                                                        .id!,
-                                                    _controllerBloodGroup.text,
-                                                    int.tryParse(
-                                                            _controllerHeartRate
-                                                                .text) ??
-                                                        0,
-                                                    int.tryParse(
-                                                            _controllerHeight
-                                                                .text) ??
-                                                        0,
-                                                    int.tryParse(
-                                                            _controllerWeight
-                                                                .text) ??
-                                                        0,
-                                                    int.tryParse(_controllerHead
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: dimensHeight() * 3),
+                                  child: ElevatedButtonWidget(
+                                    text: translate(
+                                        context, 'update_information'),
+                                    onPressed: () {
+                                      KeyboardUtil.hideKeyboard(context);
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        context
+                                            .read<MedicalRecordCubit>()
+                                            .updateStats(
+                                                state
+                                                    .subUsers[state.currentUser]
+                                                    .id!,
+                                                _controllerBloodGroup.text,
+                                                int.tryParse(
+                                                        _controllerHeartRate
                                                             .text) ??
-                                                        0,
-                                                    int.tryParse(
-                                                            _controllerTemperature
-                                                                .text) ??
-                                                        0);
-                                          }
-                                        },
-                                      ),
-                                    ),
+                                                    0,
+                                                int.tryParse(_controllerHeight
+                                                        .text) ??
+                                                    0,
+                                                int.tryParse(_controllerWeight
+                                                        .text) ??
+                                                    0,
+                                                int.tryParse(
+                                                        _controllerHead.text) ??
+                                                    0,
+                                                int.tryParse(
+                                                        _controllerTemperature
+                                                            .text) ??
+                                                    0);
+                                      }
+                                    },
                                   ),
-                                ],
-                              );
-                            },
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
