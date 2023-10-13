@@ -29,7 +29,7 @@ class _ListSubUserState extends State<ListSubUser> {
               child: SubUserInputDialog(formKey: _formKey),
             ));
     if (result == true) {
-      // ignore: use_build_context_synchronously
+      if(!mounted)return;
       context.read<SubUserCubit>().fetchMedicalRecord();
     }
     // .whenComplete(

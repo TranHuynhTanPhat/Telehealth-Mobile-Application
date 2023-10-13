@@ -171,6 +171,14 @@
         "vi": "Vui lòng nhập mật khẩu",
         "en": "Please enter password"
     },
+    "please_enter_head_circumference": {
+        "vi": "Vui lòng nhập số đo vòng đầu",
+        "en": "Please enter head circumference"
+    },
+    "please_enter_temperature": {
+        "vi": "Vui lòng nhập nhiệt độ",
+        "en": "Please enter temperature"
+    },
     "least_8_characters_long": {
         "vi": "Ít nhất 8 kí tự",
         "en": "Least 8 characters long"
@@ -310,6 +318,10 @@
     "check_for_update": {
         "vi": "Kiểm tra cập nhật",
         "en": "Check for update"
+    },
+    "update_profile": {
+        "vi": "Cập nhật hồ sơ",
+        "en": "Update profile"
     },
     "update_biography": {
         "vi": "Cập nhật tiểu sử",
@@ -795,6 +807,10 @@
         "vi": "Cân nặng",
         "en": "Weight"
     },
+    "temperature": {
+        "vi": "Nhiệt độ",
+        "en": "Temperature"
+    },
     "invalid_age": {
         "vi": "Tuổi không hợp lệ",
         "en": "Invalid age"
@@ -814,6 +830,14 @@
     "invalid_heart_rate": {
         "vi": "Nhịp tim không hợp lệ",
         "en": "Invalid heart rate"
+    },
+    "invalid_head_circumference": {
+        "vi": "Số đo vòng đầu không hợp lệ",
+        "en": "Invalid head circumference"
+    },
+    "invalid_temperature": {
+        "vi": "Nhiệt độ không hợp lệ",
+        "en": "Invalid temperature"
     },
     "update_information": {
         "vi": "Cập nhật thông tin",
@@ -1170,5 +1194,9 @@
     "vaccination_record": {
         "vi": "Hồ sơ vắc xin",
         "en": "Vaccination record"
+    },
+    "update_health_stat": {
+        "vi": "Cập nhật chỉ sức khoẻ",
+        "en": "Update health stat"
     }
 }

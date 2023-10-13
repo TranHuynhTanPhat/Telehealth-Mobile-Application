@@ -19,4 +19,6 @@ const vaccinationName = '/vaccination';
 const addVaccinationName = '/add_vaccination';
 const mainScreenDoctorName = '/main_screen_doctor';
 const shiftDoctorName = '/shift_doctor';
-const updateBiographyDoctorName = '/update_biography_doctor';
+const updateProfileDoctorName = '/update_profile_doctor';
+const updateHealthStatName = '/update_health_stat';
+

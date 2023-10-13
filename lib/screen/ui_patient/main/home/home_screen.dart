@@ -135,18 +135,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       splashColor: transparent,
                       highlightColor: transparent,
                       onTap: widget.press,
-                      child:
-                      BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
-                        builder: (context, state) {
-                          return badgeNotification(CircleAvatar(
-                            backgroundImage: _image,
-                            onBackgroundImageError: (exception, stackTrace) =>
-                                setState(() {
-                                  _image = AssetImage(DImages.placeholder);
-                                }),
-                          ), state is UpdateAvailable, Theme.of(context).colorScheme.error, 7, 7);
-                        }
-                      ),
+                      child: BlocBuilder<ApplicationUpdateCubit,
+                          ApplicationUpdateState>(builder: (context, state) {
+                        return badgeNotification(
+                            CircleAvatar(
+                              radius: dimensWidth()*3,
+                              backgroundImage: _image,
+                              onBackgroundImageError: (exception, stackTrace) =>
+                                  setState(() {
+                                _image = AssetImage(DImages.placeholder);
+                              }),
+                            ),
+                            state is UpdateAvailable,
+                            Theme.of(context).colorScheme.error,
+                            7,
+                            7);
+                      }),
                     ),
                   ),
                 );

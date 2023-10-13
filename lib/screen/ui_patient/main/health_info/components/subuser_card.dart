@@ -45,11 +45,7 @@ class _SubUserCardState extends State<SubUserCard> {
           highlightColor: transparent,
           onTap: () {
             context.read<SubUserCubit>().updateIndex(widget.index);
-            if (state.subUsers.isNotEmpty && state.currentUser != -1) {
-              context
-                  .read<HealthStatCubit>()
-                  .fetchStats(state.subUsers[state.currentUser].id!);
-            }
+            
           },
           child: Padding(
             padding: EdgeInsets.all(

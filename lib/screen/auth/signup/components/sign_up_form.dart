@@ -34,7 +34,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool agreeTermsAndConditions = false;
 
-  bool? errorCheckTermsAndConditons;
+  bool? errorCheckTermsAndConditions;
   late bool errorProfile;
   late bool errorContact;
   late bool errorPassword;
@@ -399,8 +399,8 @@ class _SignUpFormState extends State<SignUpForm> {
                             height: 24,
                             width: 24,
                             child: Checkbox(
-                              side: errorCheckTermsAndConditons == true ||
-                                      errorCheckTermsAndConditons == null
+                              side: errorCheckTermsAndConditions == true ||
+                                      errorCheckTermsAndConditions == null
                                   ? const BorderSide(width: .5)
                                   : BorderSide(
                                       width: 1,
@@ -445,7 +445,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         text: translate(context, 'create_account'),
                         onPressed: () {
                           setState(() {
-                            errorCheckTermsAndConditons =
+                            errorCheckTermsAndConditions =
                                 agreeTermsAndConditions;
                           });
 
@@ -454,7 +454,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           errorPassword = false;
 
                           if (_formKey.currentState!.validate() &&
-                              errorCheckTermsAndConditons == true) {
+                              errorCheckTermsAndConditions == true) {
                             _formKey.currentState!.save();
                             context.read<SignUpCubit>().registerAccount(
                                   _controllerFullName.text,

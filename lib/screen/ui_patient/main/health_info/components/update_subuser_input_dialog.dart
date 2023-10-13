@@ -40,7 +40,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
   List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerRelationship;
-  late TextEditingController _controllerFullname;
+  late TextEditingController _controllerFullName;
   late TextEditingController _controllerBirthday;
   late TextEditingController _controllerGender;
   late TextEditingController _controllerAddress;
@@ -55,7 +55,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
   void initState() {
     _controllerGender = TextEditingController();
     _controllerRelationship = TextEditingController();
-    _controllerFullname = TextEditingController();
+    _controllerFullName = TextEditingController();
     _controllerBirthday = TextEditingController();
     _controllerAddress = TextEditingController();
 
@@ -74,9 +74,9 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                   .toString(),
             )
         : AssetImage(DImages.placeholder);
-    _controllerFullname.text = _controllerFullname.text == ''
+    _controllerFullName.text = _controllerFullName.text == ''
         ? translate(context, widget._subUser.fullName!)
-        : _controllerFullname.text;
+        : _controllerFullName.text;
     _controllerRelationship.text = _controllerRelationship.text == '' &&
             widget._subUser.relationship != null
         ? translate(context, widget._subUser.relationship!.name.toLowerCase())
@@ -100,7 +100,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
       listenWhen: (previous, current) => current is UpdateUser,
       listener: (context, state) {
         if (state is UpdateUserLoading) {
-          EasyLoading.show();
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state is UpdateUserSuccessfully) {
           EasyLoading.showToast(translate(context, state.message));
           Navigator.pop(context, true);
@@ -213,7 +213,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                           context, 'please_enter_full_name');
                                     }
                                   },
-                                  controller: _controllerFullname,
+                                  controller: _controllerFullName,
                                   label: translate(context, 'full_name'),
                                   textInputType: TextInputType.text,
                                 ),
@@ -472,8 +472,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                             context
                                                 .read<SubUserCubit>()
                                                 .updateUser(
-                                                    _file,
-                                                    _controllerFullname.text,
+                                                    _file?.path,
+                                                    _controllerFullName.text,
                                                     _controllerBirthday.text,
                                                     gender!,
                                                     relationship!,

@@ -28,6 +28,7 @@ class ApiConstants {
   static const DOCTOR = '$_DOCTOR/doctor';
   static const DOCTOR_CHANGE_AVATAR = '$DOCTOR/avatar';
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
+  static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
   static const DOCTOR_CHANGE_FIXED_TIMES = '$DOCTOR/fixed-times';
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
 

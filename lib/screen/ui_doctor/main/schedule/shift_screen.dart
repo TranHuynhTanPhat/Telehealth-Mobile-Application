@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/schedule_response.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
@@ -24,6 +25,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
   @override
   void initState() {
     _currentDate = DateTime.now();
+    context.read<ScheduleCubit>().fetchSchedule();
 
     super.initState();
   }
@@ -31,181 +33,184 @@ class _ShiftScreenState extends State<ShiftScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ScheduleCubit, ScheduleState>(
-        listenWhen: (previous, current) => current is FetchSchedule,
-        listener: (context, state) {
-          if (state is FetchScheduleLoading) {
-            EasyLoading.show();
-          } else if (state is FetchScheduleSuccessfully) {
-            EasyLoading.dismiss();
-          } else if (state is FetchScheduleError) {
-            EasyLoading.showToast(state.message);
-          }
-        },
-        child: Builder(builder: (context) {
-          context.read<ScheduleCubit>().fetchSchedule();
-
-          return BlocBuilder<ScheduleCubit, ScheduleState>(
-            buildWhen: (previous, current) => current is FetchSchedule,
-            builder: (context, state) {
-              return Scaffold(
-                resizeToAvoidBottomInset: true,
-                backgroundColor: white,
-                appBar: AppBar(
-                  title: Text(
-                    translate(context, 'your_shift'),
-                  ),
-                ),
-                body: AbsorbPointer(
-                  absorbing: state is FetchScheduleLoading,
-                  child: SafeArea(
-                    child: ListView(
-                      padding: EdgeInsets.only(bottom: dimensHeight() * 3),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3),
-                          child: Text(
-                            formatyMMMMd(context, DateTime.now()),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: color1F1F1F.withOpacity(.3),
-                                ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3),
-                          child: Text(
-                            translate(context, 'today'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                        CalendarDatePicker(
-                          initialDate: _currentDate,
-                          firstDate: DateTime(2023), // Ngày tạo tk cho bác sĩ
-                          lastDate: DateTime(2025),
-                          currentDate: _currentDate,
-                          onDateChanged: (value) {
-                            setState(() {
-                              _currentDate = value;
-                            });
-                          },
-                        ),
-                        const Divider(
-                          thickness: 2,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3,
-                              vertical: dimensHeight()),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor: colorCDDEFF,
-                                    ),
-                                    Text(
-                                      translate(context, 'available'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor:
-                                          colorDF9F1E.withOpacity(.2),
-                                    ),
-                                    Text(
-                                      translate(context, 'booked'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor: colorCDDEFF,
-                                      child: CircleAvatar(
-                                        radius: 9,
-                                        backgroundColor: white,
-                                      ),
-                                    ),
-                                    Text(
-                                      translate(context, 'empty'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3,
-                              vertical: dimensHeight()),
-                          child: BaseGridview(radio: 3.2, children: [
-                            ...time.map(
-                              (e) => state.schedules
-                                      .firstWhere((element) {
-                                        DateTime dateTime =
-                                            DateFormat('dd/MM/yyyy')
-                                                .parse(element.date!);
-                                        if (dateTime.day == _currentDate.day &&
-                                            dateTime.month ==
-                                                _currentDate.month &&
-                                            dateTime.year ==
-                                                _currentDate.year) {
-                                          return true;
-                                        } else {
-                                          return false;
-                                        }
-                                      })
-                                      .workingTimes!
-                                      .contains(e)
-                                  ? ValidShift(
-                                      time: convertIntToTime(e),
-                                    )
-                                  : InvalidShift(
-                                      time: convertIntToTime(e),
-                                    ),
-                            )
-                            // ValidShift(time: '09:00'),
-                            // InvalidShift(
-                            //   time: '09:30',
-                            // ),
-                            // BookedShift(
-                            //   time: '10:00',
-                            // ),
-                          ]),
-                        )
-                      ],
+      listenWhen: (previous, current) => current is FetchSchedule,
+      listener: (context, state) {
+        if (state is FetchScheduleLoading) {
+          EasyLoading.show();
+        } else if (state is FetchScheduleSuccessfully) {
+          EasyLoading.dismiss();
+        } else if (state is FetchScheduleError) {
+          EasyLoading.showToast(state.message);
+        }
+      },
+      child: BlocBuilder<ScheduleCubit, ScheduleState>(
+        buildWhen: (previous, current) => current is FetchSchedule,
+        builder: (context, state) {
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: white,
+            appBar: AppBar(
+              title: Text(
+                translate(context, 'your_shift'),
+              ),
+            ),
+            body: AbsorbPointer(
+              absorbing: state is FetchScheduleLoading,
+              child: SafeArea(
+                child: ListView(
+                  padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                      child: Text(
+                        formatyMMMMd(context, DateTime.now()),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: color1F1F1F.withOpacity(.3),
+                            ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                      child: Text(
+                        translate(context, 'today'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+                        builder: (context, state) {
+                          DateTime? createAt ;
+                          try {
+                            createAt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                .parse(state.profile!.createdAt!);
+                          }catch(e){
+                            EasyLoading.showToast(translate(context, 'failure'),);
+                            Navigator.pop(context);
+                          }
+                      return CalendarDatePicker(
+                        initialDate: _currentDate,
+                        firstDate: createAt!, // Ngày tạo tk cho bác sĩ
+                        lastDate: DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day + 13),
+                        currentDate: _currentDate,
+                        onDateChanged: (value) {
+                          setState(() {
+                            _currentDate = value;
+                          });
+                        },
+                      );
+                    }),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight()),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: colorCDDEFF,
+                                ),
+                                Text(
+                                  translate(context, 'available'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: colorDF9F1E.withOpacity(.2),
+                                ),
+                                Text(
+                                  translate(context, 'booked'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: colorCDDEFF,
+                                  child: CircleAvatar(
+                                    radius: 9,
+                                    backgroundColor: white,
+                                  ),
+                                ),
+                                Text(
+                                  translate(context, 'empty'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight()),
+                      child: BaseGridview(radio: 3.2, children: [
+                        ...time.map(
+                          (e) => state.schedules
+                                  .firstWhere(
+                                    (element) {
+                                      DateTime dateTime =
+                                          DateFormat('dd/MM/yyyy')
+                                              .parse(element.date!);
+                                      if (dateTime.day == _currentDate.day &&
+                                          dateTime.month ==
+                                              _currentDate.month &&
+                                          dateTime.year == _currentDate.year) {
+                                        return true;
+                                      } else {
+                                        return false;
+                                      }
+                                    },
+                                    orElse: () => ScheduleResponse(
+                                      date: _currentDate.toString(),
+                                      workingTimes: [],
+                                    ),
+                                  )
+                                  .workingTimes!
+                                  .contains(e)
+                              ? ValidShift(
+                                  time: convertIntToTime(e),
+                                )
+                              : InvalidShift(
+                                  time: convertIntToTime(e),
+                                ),
+                        )
+                      ]),
+                    )
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           );
-        }));
+        },
+      ),
+    );
   }
 }
 

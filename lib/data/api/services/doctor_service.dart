@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -11,6 +12,12 @@ class DoctorService extends BaseService {
   //   List<dynamic> doctors = response.data.toList();
   //   return doctors.map((e) => TopDoctorsResponse.fromMap(e)).toList();
   // }
+
+  Future<DoctorProfileResponse> getProfile() async {
+    final response = await get(ApiConstants.DOCTOR, isDoctor: true);
+
+    return DoctorProfileResponse.fromMap(response.data);
+  }
 
   Future<List<ScheduleResponse>> getSchedule() async {
     final response = await get(ApiConstants.DOCTOR_SCHEDULE, isDoctor: true);
@@ -29,6 +36,17 @@ class DoctorService extends BaseService {
 
     return response;
   }
+
+  Future<DataResponse> updateEmail(String email) async {
+    var jsonRequest = json.encode({
+      "email": email,
+    });
+    final response = await patch(ApiConstants.DOCTOR_CHANGE_EMAIL,
+        data: jsonRequest, isDoctor: true);
+
+    return response;
+  }
+
   Future<DataResponse> updateAvatar(String avatar) async {
     var jsonRequest = json.encode({
       "avatar": avatar,

@@ -19,12 +19,17 @@ class SettingScreen extends StatelessWidget {
         children: [
           ListTile(
             onTap: () {
-              Navigator.pushNamed(context, updateBiographyDoctorName);
+              Navigator.pushNamed(context, updateProfileDoctorName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(
-              translate(context, 'update_biography'),
+              translate(context, 'update_profile'),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
@@ -41,30 +46,13 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              Navigator.pushNamed(context, contactName);
-            },
-            dense: true,
-            visualDensity: const VisualDensity(vertical: 0),
-            title: Text(
-              translate(context, 'update_avatar'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: color1F1F1F),
-            ),
-            leading: FaIcon(
-              FontAwesomeIcons.solidCircleUser,
-              size: dimensIcon() * .7,
-              color: color1F1F1F,
-            ),
-            trailing:
-                FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .5),
-          ),
-          const Divider(),
-          ListTile(
-            onTap: () {
               Navigator.pushNamed(context, changePasswordName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(
@@ -87,6 +75,11 @@ class SettingScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, walletName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(

@@ -29,9 +29,11 @@ class ApplicationSettingScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
           children: [
             ListTile(
-              focusColor: transparent,
-              hoverColor: transparent,
-              splashColor: transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  dimensWidth(),
+                ),
+              ),
               onTap: () {
                 Navigator.pushNamed(context, updateName);
               },

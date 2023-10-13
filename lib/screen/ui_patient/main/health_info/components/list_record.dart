@@ -13,15 +13,15 @@ class ListRecord extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         RecordCard(
-          name: 'head_circumference',
-
-          color: colorDF9F1E,
-          iconData: FontAwesomeIcons.ruler,
-          press: () {},
+          name: 'update_health_stat',
+          color: secondary,
+          iconData: FontAwesomeIcons.solidPenToSquare,
+          press: () {
+            Navigator.pushNamed(context, updateHealthStatName);
+          },
         ),
         RecordCard(
           name: 'vaccination',
-
           color: color9D4B6C,
           iconData: FontAwesomeIcons.syringe,
           press: () {
@@ -30,14 +30,12 @@ class ListRecord extends StatelessWidget {
         ),
         RecordCard(
           name: 'medical_record',
-
           color: color009DC7,
           iconData: FontAwesomeIcons.solidFolder,
           press: () {},
         ),
         RecordCard(
           name: 'prescription',
-
           color: color1C6AA3,
           iconData: FontAwesomeIcons.prescription,
           press: () {},

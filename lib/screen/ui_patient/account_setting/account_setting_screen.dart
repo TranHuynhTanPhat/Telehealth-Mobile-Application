@@ -28,6 +28,11 @@ class AccountSettingScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, contactName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(
@@ -50,6 +55,11 @@ class AccountSettingScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, changePasswordName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(
@@ -72,6 +82,11 @@ class AccountSettingScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, walletName);
             },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
             title: Text(

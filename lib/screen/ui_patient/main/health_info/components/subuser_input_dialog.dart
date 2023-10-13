@@ -32,7 +32,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerRelationship;
-  late TextEditingController _controllerFullname;
+  late TextEditingController _controllerFullName;
   late TextEditingController _controllerBirthday;
   late TextEditingController _controllerGender;
   late TextEditingController _controllerAddress;
@@ -46,7 +46,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   void initState() {
     _controllerGender = TextEditingController();
     _controllerRelationship = TextEditingController();
-    _controllerFullname = TextEditingController();
+    _controllerFullName = TextEditingController();
     _controllerBirthday = TextEditingController();
     _controllerAddress = TextEditingController();
 
@@ -60,7 +60,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
       listenWhen: (previous, current) => current is AddUser,
       listener: (context, state) {
         if (state is AddUserLoading) {
-          EasyLoading.show();
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state is AddUserSuccessfully) {
           EasyLoading.showToast(translate(context, state.message));
           Navigator.pop(context, true);
@@ -164,7 +164,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                           context, 'please_enter_full_name');
                                     }
                                   },
-                                  controller: _controllerFullname,
+                                  controller: _controllerFullName,
                                   label: translate(context, 'full_name'),
                                   textInputType: TextInputType.text,
                                 ),
@@ -388,7 +388,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                       widget._formKey.currentState!.save();
                                       context.read<SubUserCubit>().addSubUser(
                                           _file!.path,
-                                          _controllerFullname.text,
+                                          _controllerFullName.text,
                                           _controllerBirthday.text,
                                           gender,
                                           relationship,

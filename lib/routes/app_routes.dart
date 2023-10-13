@@ -9,13 +9,13 @@ import 'package:healthline/screen/auth/license/terms_and_conditions_screen.dart'
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
-import 'package:healthline/screen/ui_doctor/main/account_setting/update_biography_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
 import 'package:healthline/screen/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/components/health_stat_update.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
@@ -26,18 +26,20 @@ import 'package:healthline/screen/ui_patient/vaccination/vaccination_screen.dart
 import 'package:healthline/screen/ui_patient/wallet/wallet_screen.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 
+import '../screen/ui_doctor/main/account_setting/update_profile_screen.dart';
+
 class AppRoute {
   final _homeCubit = HomeCubit();
   final _subUserCubit = SubUserCubit();
   final _vaccineRecordCubit = VaccineRecordCubit();
   final _sideMenuCubit = SideMenuCubit();
-  final _healhStatCubit = HealthStatCubit();
+  final _healthStatCubit = HealthStatCubit();
   final _contactCubit = ContactCubit();
   final _vaccinationCubit = VaccinationCubit();
   final _logInCubit = LogInCubit();
   final _signUpCubit = SignUpCubit();
   final _scheduleCubit = ScheduleCubit();
-  final _doctorBiographyCubit = DoctorBiographyCubit();
+  final _doctorProfileCubit = DoctorProfileCubit();
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
@@ -45,13 +47,13 @@ class AppRoute {
     _subUserCubit.close();
     _vaccineRecordCubit.close();
     _sideMenuCubit.close();
-    _healhStatCubit.close();
+    _healthStatCubit.close();
     _contactCubit.close();
     _vaccinationCubit.close();
     _logInCubit.close();
     _signUpCubit.close();
     _scheduleCubit.close();
-    _doctorBiographyCubit.close();
+    _doctorProfileCubit.close();
     // _applicationUpdateBloc.close();
   }
 
@@ -78,7 +80,7 @@ class AppRoute {
                       value: _homeCubit,
                     ),
                     BlocProvider.value(
-                      value: _healhStatCubit,
+                      value: _healthStatCubit,
                     ),
                   ],
                   child: const MainScreenPatient(),
@@ -114,8 +116,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const ErrorScreen());
       case updateName:
         return MaterialPageRoute(
-            builder: (_) =>  const UpdateScreen(),
-                );
+          builder: (_) => const UpdateScreen(),
+        );
       case termsAndConditionsName:
         return MaterialPageRoute(
             builder: (_) => const TermsAndConditionsScreen());
@@ -156,21 +158,44 @@ class AppRoute {
                 ));
       case mainScreenDoctorName:
         return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                  value: _sideMenuCubit,
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _sideMenuCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _doctorProfileCubit,
+                    )
+                  ],
                   child: const MainScreenDoctor(),
                 ));
       case shiftDoctorName:
         return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-                  value: _scheduleCubit,
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(value: _scheduleCubit),
+                    BlocProvider.value(value: _doctorProfileCubit),
+                  ],
                   child: const ShiftScreen(),
                 ));
-      case updateBiographyDoctorName:
+      case updateProfileDoctorName:
         return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
-                  value: _doctorBiographyCubit,
-                  child: const UpdateBiographyScreen(),
+                  value: _doctorProfileCubit,
+                  child: const UpdateProfileScreen(),
+                ));
+      case updateHealthStatName:
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: _healthStatCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _subUserCubit,
+                    )
+                  ],
+                  child: const HealthStatUpdateScreen(),
                 ));
       default:
         return null;
