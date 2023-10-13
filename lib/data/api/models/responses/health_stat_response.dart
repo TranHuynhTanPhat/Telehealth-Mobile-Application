@@ -5,7 +5,7 @@ import 'package:healthline/res/style.dart';
 class HealthStatResponse {
   String? id;
   TypeHealthStat? type;
-  int? value;
+  num? value;
   String? unit;
   List<History>? history;
   HealthStatResponse({this.id, this.type, this.value, this.unit, this.history});
@@ -37,7 +37,7 @@ class HealthStatResponse {
       type: map['type'] != null
           ? TypeHealthStat.values.firstWhere((e) => e.name == map['type'])
           : null,
-      value: map['value']?.toInt(),
+      value: map['value'],
       unit: map['unit'],
       history: map['history'] != null
           ? List<History>.from(map['history']?.map((x) => History.fromMap(x)))
@@ -53,7 +53,7 @@ class HealthStatResponse {
 
 class History {
   String? id;
-  int? value;
+  num? value;
   String? unit;
   String? updatedAt;
   History({
@@ -85,7 +85,7 @@ class History {
   factory History.fromMap(Map<String, dynamic> map) {
     return History(
       id: map['id'],
-      value: map['value']?.toInt(),
+      value: map['value'],
       unit: map['unit'],
       updatedAt: map['updated_at'],
     );

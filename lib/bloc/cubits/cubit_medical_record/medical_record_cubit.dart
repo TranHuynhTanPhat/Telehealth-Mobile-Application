@@ -15,7 +15,7 @@ part 'medical_record_state.dart';
 
 class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
   MedicalRecordCubit()
-      : super(MedicalRecordInitial(stats: [], subUsers: [], currentUser: 0));
+      : super(MedicalRecordInitial(stats: [], subUsers: [], currentId: null));
 
   final PatientRepository _patientRepository = PatientRepository();
   final UserRepository _userRepository = UserRepository();
@@ -27,25 +27,23 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     logPrint(change);
   }
 
-  Future<void> fetchStats(String medicalId) async {
+  Future<void> fetchStats() async {
     emit(HealthStatLoading(
         stats: state.stats,
         subUsers: state.subUsers,
-        currentUser: state.currentUser));
+        currentId: state.currentId));
     try {
       List<HealthStatResponse> stats =
-          await _patientRepository.fetchStats(medicalId);
+          await _patientRepository.fetchStats(state.currentId!);
       emit(HealthStatLoaded(
-          stats: stats,
-          subUsers: state.subUsers,
-          currentUser: state.currentUser));
+          stats: stats, subUsers: state.subUsers, currentId: state.currentId));
     } on DioException catch (e) {
       emit(
         HealthStatError(
           stats: state.stats,
           message: e.message.toString(),
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ),
       );
     } catch (e) {
@@ -54,25 +52,25 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
           stats: state.stats,
           message: e.toString(),
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ),
       );
     }
   }
 
-  Future<void> updateStats(String medicalId, String bloodGroup, int heartRate,
-      int height, int weight, int headCircumference, int temperature) async {
+  Future<void> updateStats(String medicalId, String bloodGroup, num heartRate,
+      num height, num weight, num headCircumference, num temperature) async {
     emit(UpdateStatLoading(
         stats: state.stats,
         subUsers: state.subUsers,
-        currentUser: state.currentUser));
+        currentId: state.currentId));
     try {
-      int? blG;
-      int? hR;
-      int? h;
-      int? w;
-      int? t;
-      int? hc;
+      num? blG;
+      num? hR;
+      num? h;
+      num? w;
+      num? t;
+      num? hc;
       blG = bloodGroup == 'A'
           ? 0
           : bloodGroup == 'B'
@@ -82,6 +80,15 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
                   : bloodGroup == 'AB'
                       ? 3
                       : null;
+      blG = blG ==
+              state.stats
+                  .firstWhere(
+                    (element) => element.type == TypeHealthStat.Blood_group,
+                    orElse: () => HealthStatResponse(),
+                  )
+                  .value
+          ? null
+          : blG;
       hR = heartRate ==
               state.stats
                   .firstWhere(
@@ -114,33 +121,25 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
                   .value
           ? null
           : temperature;
-      hc = headCircumference ==
-              state.stats
-                  .firstWhere(
-                      (element) => element.type == TypeHealthStat.Temperature,
-                      orElse: () => HealthStatResponse())
-                  .value
-          ? null
-          : headCircumference;
+      hc = headCircumference == 0 ? null : headCircumference;
       if (blG == null &&
           hR == null &&
           h == null &&
           w == null &&
           hc == null &&
           t == null) {
-        emit(UpdateStatSuccessfully(
+        emit(NoChange(
           stats: state.stats,
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ));
       } else {
         await _patientRepository.updateStats(medicalId, blG, hR, h, w, hc, t);
         emit(UpdateStatSuccessfully(
           stats: state.stats,
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ));
-        await fetchStats(medicalId);
       }
     } catch (e) {
       DioException er = e as DioException;
@@ -150,7 +149,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
           stats: state.stats,
           message: er.message.toString(),
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ),
       );
     }
@@ -161,7 +160,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     emit(FetchSubUserLoading(
       stats: state.stats,
       subUsers: state.subUsers,
-      currentUser: state.currentUser,
+      currentId: state.currentId,
     ));
     try {
       List<UserResponse> userResponses =
@@ -170,14 +169,18 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       emit(FetchSubUserLoaded(
           stats: state.stats,
           subUsers: userResponses,
-          currentUser: state.currentUser > state.subUsers.length
-              ? userResponses.indexWhere((element) => element.isMainProfile!)
-              : state.currentUser));
+          currentId: state.subUsers
+                  .where((element) => element.id == state.currentId)
+                  .toList()
+                  .isEmpty
+              ? userResponses.firstWhere((element) => element.isMainProfile!).id
+              : state.currentId));
+      await fetchStats();
     } catch (e) {
       emit(FetchSubUserError(
         stats: state.stats,
         subUsers: state.subUsers,
-        currentUser: state.currentUser,
+        currentId: state.currentId,
       ));
     }
   }
@@ -187,7 +190,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     emit(AddSubUserLoading(
       stats: state.stats,
       subUsers: state.subUsers,
-      currentUser: state.currentUser,
+      currentId: state.currentId,
     ));
     try {
       String? mainUserId =
@@ -209,14 +212,14 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         emit(AddSubUserSuccessfully(
           stats: state.stats,
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
           message: response.message,
         ));
       } else {
         emit(AddSubUserFailure(
           stats: state.stats,
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
           message: 'failure',
         ));
       }
@@ -227,14 +230,14 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         stats: state.stats,
         message: er.message.toString(),
         subUsers: state.subUsers,
-        currentUser: state.currentUser,
+        currentId: state.currentId,
       ));
     }
   }
 
-  void updateIndex(int index) {
-    emit(UpdateIndexSubUser(
-        stats: state.stats, subUsers: state.subUsers, currentUser: index));
+  void updateCurrentId(String id) {
+    emit(UpdateCurrentId(
+        stats: state.stats, subUsers: state.subUsers, currentId: id));
   }
 
   Future<void> updateSubUser(String? path, String fullName, String birthday,
@@ -242,11 +245,15 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     emit(UpdateSubUserLoading(
       stats: state.stats,
       subUsers: state.subUsers,
-      currentUser: state.currentUser,
+      currentId: state.currentId,
     ));
     try {
-      String? avt = state.subUsers[state.currentUser].avatar;
-      String? id = state.subUsers[state.currentUser].id;
+      String? avt = state.subUsers
+          .firstWhere((element) => element.id == state.currentId)
+          .avatar;
+      String? id = state.subUsers
+          .firstWhere((element) => element.id == state.currentId)
+          .id;
 
       if (id != null) {
         if (path != null) {
@@ -255,38 +262,38 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
                 path: path,
                 uploadPreset: dotenv.get('UPLOAD_PRESETS'),
                 publicId:
-                    avt == 'default' ? id + state.currentUser.toString() : avt,
+                    avt == 'default' ? id + state.currentId.toString() : avt,
                 folder: '');
             avt = imageResponse.publicId;
           }
         }
         DataResponse response = await _userRepository.updateMedicalRecord(
             id, avt!, fullName, birthday, gender, relationship, address);
-        List<UserResponse> newLists = state.subUsers;
-        int index = newLists.indexWhere(
-          (element) => element.id == id,
-        );
-        newLists[index] = newLists[index].copyWith(
-            avatar: avt,
-            fullName: fullName,
-            dateOfBirth: birthday,
-            gender: gender,
-            relationship: relationship != null
-                ? Relationship.values.firstWhere((e) => e.name == relationship)
-                : null,
-            address: address);
+        // List<UserResponse> newLists = state.subUsers;
+        // int index = newLists.indexWhere(
+        //   (element) => element.id == id,
+        // );
+        // newLists[index] = newLists[index].copyWith(
+        //     avatar: avt,
+        //     fullName: fullName,
+        //     dateOfBirth: birthday,
+        //     gender: gender,
+        //     relationship: relationship != null
+        //         ? Relationship.values.firstWhere((e) => e.name == relationship)
+        //         : null,
+        //     address: address);
         emit(UpdateSubUserSuccessfully(
           stats: state.stats,
           message: response.message,
-          subUsers: newLists,
-          currentUser: state.currentUser,
+          subUsers: state.subUsers,
+          currentId: state.currentId,
         ));
       } else {
         emit(UpdateSubUserFailure(
           stats: state.stats,
           message: 'failure',
           subUsers: state.subUsers,
-          currentUser: state.currentUser,
+          currentId: state.currentId,
         ));
       }
     } catch (e) {
@@ -296,7 +303,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         stats: state.stats,
         message: er.message.toString(),
         subUsers: state.subUsers,
-        currentUser: state.currentUser,
+        currentId: state.currentId,
       ));
     }
   }
@@ -305,7 +312,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     emit(DeleteSubUserLoading(
       stats: state.stats,
       subUsers: state.subUsers,
-      currentUser: state.currentUser,
+      currentId: state.currentId,
     ));
     try {
       await _userRepository.deleteMedicalRecord(
@@ -314,13 +321,13 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       emit(DeleteSubUserSuccessfully(
         stats: state.stats,
         subUsers: state.subUsers,
-        currentUser: state.currentUser,
+        currentId: state.subUsers.first.id,
       ));
     } catch (e) {
       emit(DeleteSubUserFailure(
         stats: state.stats,
         subUsers: state.subUsers,
-        currentUser: state.currentUser,
+        currentId: state.currentId,
         message: e.toString(),
       ));
     }

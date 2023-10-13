@@ -59,7 +59,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-
+    if(!mounted)return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
     super.initState();
   }

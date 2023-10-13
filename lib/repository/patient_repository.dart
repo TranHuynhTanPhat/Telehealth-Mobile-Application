@@ -13,12 +13,12 @@ class PatientRepository extends BaseRepository {
 
   Future<DataResponse> updateStats(
       String medicalId,
-      int? bloodGroup,
-      int? heartRate,
-      int? height,
-      int? weight,
-      int? headCircumference,
-      int? temperature) async {
+      num? bloodGroup,
+      num? heartRate,
+      num? height,
+      num? weight,
+      num? headCircumference,
+      num? temperature) async {
     HealthStatRequest request =
         HealthStatRequest(medicalId: medicalId, stats: []);
     if (height != null) {

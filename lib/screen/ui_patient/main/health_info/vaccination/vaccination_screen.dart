@@ -23,14 +23,14 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
       builder: (context, state) {
-        UserResponse user = state.subUsers[state.currentUser];
+        UserResponse user = state.subUsers.firstWhere((element) => element.id == state.currentId);
 
         int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .parse(user.dateOfBirth!));
         context.read<VaccineRecordCubit>().updateAge(age, user.id!);
         context
             .read<VaccineRecordCubit>()
-            .fetchInjectedVaccination(state.subUsers[state.currentUser].id!);
+            .fetchInjectedVaccination(state.subUsers.firstWhere((element) => element.id == state.currentId).id!);
 
         return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
           builder: (context, state) {

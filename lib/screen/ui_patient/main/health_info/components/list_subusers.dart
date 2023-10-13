@@ -86,22 +86,22 @@ class _ListSubUserState extends State<ListSubUser> {
               ...shimmerBuilder()
             else
               ...state.subUsers.map((e) {
-                int index =
-                    state.subUsers.indexWhere((element) => element.id == e.id);
+                // int index =
+                //     state.subUsers.indexWhere((element) => element.id == e.id);
                 return Stack(
                   children: [
                     InkWell(
                       splashColor: transparent,
                       highlightColor: transparent,
                       onTap: () {
-                        if (index != state.currentUser) {
-                          context.read<MedicalRecordCubit>().updateIndex(index);
+                        if (e.id != state.currentId) {
+                          context.read<MedicalRecordCubit>().updateCurrentId(e.id!);
                         }
                       },
                       child: SubUserCard(
-                          subUser: e, active: index == state.currentUser),
+                          subUser: e, active: e.id == state.currentId),
                     ),
-                    if (index == state.currentUser)
+                    if (e.id == state.currentId)
                       Positioned(
                         top: 0,
                         right: 0,
@@ -141,7 +141,7 @@ class _ListSubUserState extends State<ListSubUser> {
 
   List<Widget> shimmerBuilder() {
     return List<Widget>.generate(
-      6,
+      1,
       (index) => Container(
         padding: EdgeInsets.all(dimensWidth() * .5),
         margin: EdgeInsets.symmetric(
