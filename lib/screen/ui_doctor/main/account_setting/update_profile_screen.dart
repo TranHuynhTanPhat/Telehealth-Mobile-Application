@@ -27,7 +27,8 @@ class _UpdateBiographyScreenState extends State<UpdateBiographyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DoctorBiographyCubit, DoctorBiographyState>(
+    return BlocListener<DoctorProfileCubit, DoctorProfileState>(
+      listenWhen: (previous, current) => current is DoctorBiographyState,
       listener: (context, state) {
         if (state is DoctorBiographyError) {
           EasyLoading.showToast(
@@ -39,7 +40,7 @@ class _UpdateBiographyScreenState extends State<UpdateBiographyScreen> {
         } else if (state is DoctorBiographyUpdating) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state is DoctorBiographySuccessfully) {
-          EasyLoading.dismiss();
+          EasyLoading.showToast(translate(context, 'successfully'));
         }
       },
       child: GestureDetector(
@@ -54,8 +55,12 @@ class _UpdateBiographyScreenState extends State<UpdateBiographyScreen> {
             ),
             centerTitle: true,
           ),
-          body: BlocBuilder<DoctorBiographyCubit, DoctorBiographyState>(
+          body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
             builder: (context, state) {
+              _controller.text = _controller.text.isEmpty
+                  ? state.profile?.biography ?? ''
+                  : _controller.text;
+
               return AbsorbPointer(
                 absorbing: state is DoctorBiographyUpdating,
                 child: ListView(
@@ -84,14 +89,17 @@ class _UpdateBiographyScreenState extends State<UpdateBiographyScreen> {
                             width: double.infinity,
                             child: ElevatedButtonWidget(
                               text: translate(context, 'update'),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  context
-                                      .read<DoctorBiographyCubit>()
-                                      .updateBio(_controller.text);
-                                }
-                              },
+                              onPressed: _controller.text !=
+                                      state.profile?.biography
+                                  ? () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        context
+                                            .read<DoctorProfileCubit>()
+                                            .updateBio(_controller.text);
+                                      }
+                                    }
+                                  : null,
                             ),
                           ),
                         ],
