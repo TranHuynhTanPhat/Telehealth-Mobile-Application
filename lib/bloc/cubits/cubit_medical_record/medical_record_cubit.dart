@@ -192,28 +192,19 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       currentId: state.currentId,
     ));
     try {
-      String? mainUserId =
-          state.subUsers.firstWhere((element) => element.isMainProfile!).id;
-      if (mainUserId != null) {
-        FileResponse fileResponse = await _fileRepository.uploadFile (
-            path: avatar,
-            publicId: mainUserId + state.subUsers.length.toString());
-        await _userRepository.addMedicalRecord(fileResponse.publicId!, fullName,
-            birthday, gender, relationship, address);
+      String? avt =
+          state.subUsers.firstWhere((element) => element.isMainProfile!).avatar;
 
-        emit(AddSubUserSuccessfully(
-          stats: state.stats,
-          subUsers: state.subUsers,
-          currentId: state.currentId,
-        ));
-      } else {
-        emit(AddSubUserFailure(
-          stats: state.stats,
-          subUsers: state.subUsers,
-          currentId: state.currentId,
-          message: 'failure',
-        ));
-      }
+      FileResponse fileResponse =
+          await _fileRepository.uploadAvatarUser(path: avatar, publicId: avt!);
+      await _userRepository.addMedicalRecord(fileResponse.publicId!, fullName,
+          birthday, gender, relationship, address);
+
+      emit(AddSubUserSuccessfully(
+        stats: state.stats,
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+      ));
     } catch (e) {
       DioException er = e as DioException;
 
@@ -242,48 +233,34 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       String? avt = state.subUsers
           .firstWhere((element) => element.id == state.currentId)
           .avatar;
-      String? id = state.subUsers
-          .firstWhere((element) => element.id == state.currentId)
-          .id;
 
-      if (id != null) {
-        if (path != null) {
-          if (avt != null) {
-            FileResponse fileResponse = await _fileRepository.uploadFile (
-                path: path,
-                publicId:
-                   id);
-            avt = fileResponse.publicId;
-          }
+      if (path != null) {
+        if (avt != null) {
+          FileResponse fileResponse =
+              await _fileRepository.uploadAvatarUser(path: path, publicId: avt);
+          avt = fileResponse.publicId;
         }
-        await _userRepository.updateMedicalRecord(
-            id, avt!, fullName, birthday, gender, relationship, address);
-        // List<UserResponse> newLists = state.subUsers;
-        // int index = newLists.indexWhere(
-        //   (element) => element.id == id,
-        // );
-        // newLists[index] = newLists[index].copyWith(
-        //     avatar: avt,
-        //     fullName: fullName,
-        //     dateOfBirth: birthday,
-        //     gender: gender,
-        //     relationship: relationship != null
-        //         ? Relationship.values.firstWhere((e) => e.name == relationship)
-        //         : null,
-        //     address: address);
-        emit(UpdateSubUserSuccessfully(
-          stats: state.stats,
-          subUsers: state.subUsers,
-          currentId: state.currentId,
-        ));
-      } else {
-        emit(UpdateSubUserFailure(
-          stats: state.stats,
-          message: 'failure',
-          subUsers: state.subUsers,
-          currentId: state.currentId,
-        ));
       }
+      // await _userRepository.updateMedicalRecord(
+      //     id, avt!, fullName, birthday, gender, relationship, address);
+      // List<UserResponse> newLists = state.subUsers;
+      // int index = newLists.indexWhere(
+      //   (element) => element.id == id,
+      // );
+      // newLists[index] = newLists[index].copyWith(
+      //     avatar: avt,
+      //     fullName: fullName,
+      //     dateOfBirth: birthday,
+      //     gender: gender,
+      //     relationship: relationship != null
+      //         ? Relationship.values.firstWhere((e) => e.name == relationship)
+      //         : null,
+      //     address: address);
+      emit(UpdateSubUserSuccessfully(
+        stats: state.stats,
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+      ));
     } catch (e) {
       DioException er = e as DioException;
 

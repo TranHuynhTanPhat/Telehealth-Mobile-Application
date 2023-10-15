@@ -16,31 +16,33 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
   final FileRepository _fileRepository = FileRepository();
 
   Future<void> fetchProfile() async {
-    emit(DoctorProfileLoading(state.profile));
+    emit(FetchDoctorProfileLoading(state.profile));
     try {
       DoctorProfileResponse profile = await _doctorRepository.fetchProfile();
       emit(DoctorProfileInitial(profile));
     } catch (e) {
       // DioException er = e as DioException;
-      emit(DoctorProfileError(state.profile));
+      emit(FetchDoctorProfileError(state.profile));
     }
   }
 
-  Future<void> updateProfile(String? bio, String? path, String? email) async{
-    emit(DoctorProfileLoading(state.profile),);
-    if(bio!=null){
+  Future<void> updateProfile(String? bio, String? path, String? email) async {
+    emit(
+      DoctorProfileUpdating(state.profile),
+    );
+    if (bio != null) {
       await updateBio(bio);
     }
-    if(path!=null){
+    if (path != null) {
       await updateAvatar(path);
     }
-    if(email!= null){
+    if (email != null) {
       await updateEmail(email);
     }
-    emit(DoctorProfileSuccessfully(state.profile));
+    emit(DoctorProfileUpdateSuccessfully(state.profile));
   }
 
-  Future<void> updateEmail(String email)async{
+  Future<void> updateEmail(String email) async {
     emit(DoctorEmailUpdating(state.profile));
     try {
       DataResponse response = await _doctorRepository.updateEmail(email);
@@ -84,29 +86,21 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
       String? id = state.profile?.id;
       String? avatar = state.profile?.avatar;
       if (id != null) {
-        FileResponse fileResponse = await _fileRepository.uploadFile (
-            path: path,
-            publicId: id,);
-        String? publicId = fileResponse.publicId;
-        if (publicId != null) {
-          if (avatar != publicId) {
-            await _doctorRepository.updateAvatar(publicId);
-            emit(
-              DoctorAvatarSuccessfully(
-                state.profile?.copyWith(avatar: publicId),
-              ),
-            );
-          } else {
-            emit(
-              DoctorAvatarSuccessfully(state.profile),
-            );
-          }
+        FileResponse fileResponse = await _fileRepository.uploadAvatarDoctor(
+          path: path,
+        );
+        String publicId = fileResponse.publicId!;
+
+        if (avatar != publicId) {
+          await _doctorRepository.updateAvatar(publicId);
+          emit(
+            DoctorAvatarSuccessfully(
+              state.profile?.copyWith(avatar: publicId),
+            ),
+          );
         } else {
           emit(
-            DoctorAvatarError(
-              state.profile,
-              message: 'failure',
-            ),
+            DoctorAvatarSuccessfully(state.profile),
           );
         }
       } else {

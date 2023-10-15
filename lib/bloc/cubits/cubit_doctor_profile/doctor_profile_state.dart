@@ -39,16 +39,28 @@ abstract class DoctorEmailState extends DoctorProfileState {
   DoctorEmailState(super.profile);
 }
 
-final class DoctorProfileLoading extends DoctorProfileState {
+abstract final class DoctorProfileLoading extends DoctorProfileState {
   DoctorProfileLoading(super.profile);
 }
 
-final class DoctorProfileSuccessfully extends DoctorProfileState {
-  DoctorProfileSuccessfully(super.profile);
+final class FetchDoctorProfileLoading extends DoctorProfileLoading{
+  FetchDoctorProfileLoading(super.profile);
+
 }
 
-final class DoctorProfileError extends DoctorProfileState {
-  DoctorProfileError(super.profile);
+final class FetchDoctorProfileSuccessfully extends DoctorProfileState {
+  FetchDoctorProfileSuccessfully(super.profile);
+}
+
+final class FetchDoctorProfileError extends DoctorProfileState {
+  FetchDoctorProfileError(super.profile);
+}
+
+final class DoctorProfileUpdating extends DoctorProfileLoading{
+  DoctorProfileUpdating(super.profile);
+}
+final class DoctorProfileUpdateSuccessfully extends DoctorProfileState{
+  DoctorProfileUpdateSuccessfully(super.profile);
 }
 
 final class DoctorBiographyUpdating extends DoctorProfileLoading {

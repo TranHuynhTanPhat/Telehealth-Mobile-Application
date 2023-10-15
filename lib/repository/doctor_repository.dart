@@ -17,6 +17,10 @@ class DoctorRepository extends BaseRepository {
     return await _doctorService.getSchedule();
   }
 
+  Future<DataResponse> getScheduleCron() async {
+    return await _doctorService.getScheduleCron();
+  }
+
   Future<DataResponse> updateBio(String bio) async {
     return await _doctorService.updateBio(bio);
   }
@@ -27,5 +31,13 @@ class DoctorRepository extends BaseRepository {
 
   Future<DataResponse> updateEmail(String email) async {
     return await _doctorService.updateEmail(email);
+  }
+
+  Future<DataResponse> updateFixedSchedule(List<List<int>> fixedTime) async {
+    return await _doctorService.updateFixedSchedule(fixedTime);
+  }
+
+  Future<DataResponse> updateScheduleByDay(List<int> workingTimes, String scheduleId) async {
+    return await _doctorService.updateScheduleByDay(workingTimes, scheduleId);
   }
 }

@@ -58,19 +58,28 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onWillPop,
-      child: BlocListener<SideMenuCubit, SideMenuState>(
-        listener: (context, state) {
-          if (state is SideMenuLoading) {
-            EasyLoading.show();
-          } else if (state is LogoutActionState) {
-            EasyLoading.dismiss();
-            Navigator.pushReplacementNamed(context, logInName);
-          } else if (state is ErrorActionState) {
-            EasyLoading.dismiss();
-          } else if (state is DoctorAvatarSuccessfully) {
-            _image = null;
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<SideMenuCubit, SideMenuState>(
+            listener: (context, state) {
+              if (state is SideMenuLoading) {
+                EasyLoading.show();
+              } else if (state is LogoutActionState) {
+                EasyLoading.dismiss();
+                Navigator.pushReplacementNamed(context, logInName);
+              } else if (state is ErrorActionState) {
+                EasyLoading.dismiss();
+              }
+            },
+          ),
+          BlocListener<DoctorProfileCubit, DoctorProfileState>(
+            listener: (context, state) {
+              // if (state is DoctorProfileUpdateSuccessfully) {
+              //   print(state);
+              // }
+            },
+          ),
+        ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           extendBody: true,
@@ -127,6 +136,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                               .image(state.profile!.avatar ?? '')
                               .toString(),
                         );
+                    if (state is DoctorProfileUpdating) {
+                      _image = AssetImage(DImages.placeholder);
+                    }
 
                     return SizedBox(
                       width: double.maxFinite,

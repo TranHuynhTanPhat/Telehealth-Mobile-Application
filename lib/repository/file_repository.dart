@@ -8,14 +8,23 @@ import 'package:healthline/data/api/services/file_service.dart';
 class FileRepository extends BaseRepository {
   final FileService _fileService = FileService();
 
-  Future<FileResponse> uploadFile(
-      {required String path,
-      required String publicId,}) async {
-    FileRequest request = FileRequest(
-        imagePath: path, publicId: publicId);
-    return await _fileService.updateFile(request);
+  Future<FileResponse> uploadAvatarUser({
+    required String path,
+    required String publicId,
+  }) async {
+    FileRequest request = FileRequest(imagePath: path, publicId: publicId);
+    return await _fileService.uploadAvatarUser(request);
   }
-  Future<String> downloadFile({required String url, required String filePath}) async{
+
+  Future<FileResponse> uploadAvatarDoctor({
+    required String path,
+  }) async {
+    FileRequest request = FileRequest(imagePath: path);
+    return await _fileService.uploadAvatarDoctor(request);
+  }
+
+  Future<String> downloadFile(
+      {required String url, required String filePath}) async {
     return await _fileService.downloadFile(filePath: filePath, url: url);
   }
 }

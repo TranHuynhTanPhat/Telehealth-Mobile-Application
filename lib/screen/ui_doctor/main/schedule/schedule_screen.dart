@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_doctor_schdule/doctor_schedule_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import './canceled_frame.dart';
@@ -19,6 +21,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
+    if(!mounted)return;
+    context.read<DoctorScheduleCubit>().getCron();
   }
 
   @override

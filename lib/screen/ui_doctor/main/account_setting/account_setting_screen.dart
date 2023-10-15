@@ -18,7 +18,7 @@ class SettingScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
         children: [
           ListTile(
-            onTap: () {
+            onTap: () async {
               Navigator.pushNamed(context, updateProfileDoctorName);
             },
             shape: RoundedRectangleBorder(

@@ -19,7 +19,6 @@ abstract class BaseService {
     } else {
       response =
           await RestClient().getDio(isDoctor: isDoctor).get(path, data: data);
-      // print(response.toString());
     }
     return await _handleResponse(response);
   }
@@ -49,9 +48,11 @@ abstract class BaseService {
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> postUpload(String path, {formData}) async {
-    final response =
-        await RestClient().getDio(isUpload: true).post(path, data: formData);
+  Future<DataResponse> putUpload(String path,
+      {formData, bool isDoctor = false}) async {
+    final response = await RestClient()
+        .getDio(isUpload: true, isDoctor: isDoctor)
+        .put(path, data: formData);
     return await _handleResponse(response, isUpload: true);
   }
 

@@ -31,6 +31,7 @@ class ApiConstants {
   static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
   static const DOCTOR_CHANGE_FIXED_TIMES = '$DOCTOR/fixed-times';
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
+  static const DOCTOR_SCHEDULE_CRON = '$DOCTOR_SCHEDULE/cron';
 
 // patient-record
   static const _PATIENT = '/patient-record';
@@ -45,5 +46,6 @@ class ApiConstants {
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';
-  static const FILE_UPLOAD = '$_FILE_UPLOAD/cloudinary';
+  static const UPLOAD_AVATAR_DOCTOR = '$_FILE_UPLOAD/doctor/avatar';
+  static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
 }

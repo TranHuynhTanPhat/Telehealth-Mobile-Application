@@ -1199,6 +1199,10 @@
         "vi": "Tiểu sử",
         "en": "Biography"
     },
+    "avatar": {
+        "vi": "Ảnh đại diện",
+        "en": "Avatar"
+    },
     "vaccination_record": {
         "vi": "Hồ sơ vắc xin",
         "en": "Vaccination record"
@@ -1206,6 +1210,14 @@
     "update_health_stat": {
         "vi": "Cập nhật chỉ sức khoẻ",
         "en": "Update health stat"
+    },
+    "update_fixed_schedule": {
+        "vi": "Cập nhật lịch cố đinh",
+        "en": "Update fixed schedule"
+    },
+    "update_schedule_by_day": {
+        "vi": "Cập nhật lịch theo ngày",
+        "en": "Update schedule by day"
     },
     "login_to_doctor_account_failed": {
         "vi": "Đăng nhập vào tài khoản bác sĩ thất bại",
@@ -1218,5 +1230,9 @@
     "cant_open": {
         "vi": "Không thể mở",
         "en": "Can't open"
+    },
+    "day": {
+        "vi": "Ngày",
+        "en": "Day"
     }
 }

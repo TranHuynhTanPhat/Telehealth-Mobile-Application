@@ -8,7 +8,7 @@ export './cubit_vaccination/vaccination_cubit.dart';
 // export './healthInfo/cubit_subuser/sub_user_cubit.dart';
 // export './healthInfo/cubit_vaccine_record/vaccine_record_cubit.dart';
 // export './healthInfo/cubit_health_stat/health_stat_cubit.dart';
-export './cubit_schedule/schedule_cubit.dart';
+export './cubit_doctor_schdule/doctor_schedule_cubit.dart';
 export './cubit_doctor_profile/doctor_profile_cubit.dart';
 export './cubit_application_update/application_update_cubit.dart';
 export './cubit_medical_record/medical_record_cubit.dart';

@@ -27,6 +27,15 @@ class DoctorService extends BaseService {
     return schedules;
   }
 
+  Future<DataResponse> getScheduleCron() async {
+    final response =
+        await get(ApiConstants.DOCTOR_SCHEDULE_CRON, isDoctor: true);
+    // List<ScheduleResponse> schedules = response.data
+    //     .map<ScheduleResponse>((e) => ScheduleResponse.fromMap(e))
+    //     .toList();
+    return response;
+  }
+
   Future<DataResponse> updateBio(String bio) async {
     var jsonRequest = json.encode({
       "biography": bio,
@@ -57,4 +66,23 @@ class DoctorService extends BaseService {
     return response;
   }
 
+  Future<DataResponse> updateFixedSchedule(List<List<int>> fixTime) async {
+    var jsonRequest = json.encode({
+      "fixed_times": fixTime,
+    });
+    final response = await patch(ApiConstants.DOCTOR_CHANGE_FIXED_TIMES,
+        data: jsonRequest, isDoctor: true);
+
+    return response;
+  }
+
+  Future<DataResponse> updateScheduleByDay(
+      List<int> workingTimes, String scheduleId) async {
+    var jsonRequest =
+        json.encode({"schedule_id": scheduleId, "working_times": workingTimes});
+    final response = await patch(ApiConstants.DOCTOR_CHANGE_FIXED_TIMES,
+        data: jsonRequest, isDoctor: true);
+
+    return response;
+  }
 }

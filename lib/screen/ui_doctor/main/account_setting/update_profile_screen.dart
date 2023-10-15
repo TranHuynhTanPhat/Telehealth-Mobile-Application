@@ -25,6 +25,7 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   late TextEditingController _controllerBio;
   late TextEditingController _controllerEmail;
+  bool onChange = false;
 
   final _formKey = GlobalKey<FormState>();
   late File? _file;
@@ -47,18 +48,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return BlocListener<DoctorProfileCubit, DoctorProfileState>(
       listener: (context, state) {
-        if (state is DoctorProfileLoading) {
+        if (state is DoctorProfileUpdating) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is DoctorProfileSuccessfully) {
+        } else if (state is DoctorProfileUpdateSuccessfully) {
           if (!errEmail && !errBio && !errAvatar) {
             EasyLoading.showToast(
               translate(context, 'successfully'),
             );
           } else {
             EasyLoading.showToast(
-              '${translate(context, 'update')} ${translate(context, errEmail ? 'email' : '').toLowerCase()} ${translate(context, errBio ? 'biography' : '').toLowerCase()} ${translate(context, errAvatar ? 'avatar' : '').toLowerCase()} ${translate(context, 'failure').toLowerCase()}',
+              '${translate(context, 'update ')}${errEmail ? '${translate(context, 'email').toLowerCase()} ' : ''}${errBio ? '${translate(context, 'biography').toLowerCase()} ' : ''}${errAvatar ? '${translate(context, 'avatar').toLowerCase()} ' : ''}${translate(context, 'failure').toLowerCase()}',
             );
           }
+          onChange = true;
+          errEmail = false;
+          errAvatar = false;
+          errBio = false;
         } else if (state is DoctorEmailError) {
           errEmail = true;
         } else if (state is DoctorBiographyError) {
@@ -67,139 +72,145 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           errAvatar = true;
         }
       },
-      child: GestureDetector(
-        onTap: () => KeyboardUtil.hideKeyboard(context),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: white,
-          extendBody: true,
-          appBar: AppBar(
-            title: Text(
-              translate(context, 'update_biography'),
+      child: WillPopScope(
+        onWillPop: () {
+          Navigator.pop(context, onChange);
+              return true as Future<bool>;
+        },
+        child: GestureDetector(
+          onTap: () => KeyboardUtil.hideKeyboard(context),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: white,
+            extendBody: true,
+            appBar: AppBar(
+              title: Text(
+                translate(context, 'update_biography'),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
-          ),
-          body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-            builder: (context, state) {
-              _controllerEmail.text = _controllerEmail.text.isEmpty
-                  ? state.profile?.email ?? ''
-                  : _controllerEmail.text;
-              _controllerBio.text = _controllerBio.text.isEmpty
-                  ? state.profile?.biography ?? ''
-                  : _controllerBio.text;
-              _image = _image ??
-                  NetworkImage(
-                    CloudinaryContext.cloudinary
-                        .image(state.profile?.avatar ?? '')
-                        .toString(),
-                  );
-              return AbsorbPointer(
-                absorbing: state is DoctorProfileLoading,
-                child: ListView(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: dimensWidth() * 3,
-                      vertical: dimensHeight() * 2),
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          _file != null
-                              ? CircleAvatar(
-                                  radius: dimensWidth() * 10,
-                                  backgroundColor: primary,
-                                  backgroundImage: FileImage(_file!),
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) =>
-                                          AssetImage(DImages.placeholder),
-                                  child: InkWell(
-                                    splashColor: transparent,
-                                    highlightColor: transparent,
-                                    onTap: () async {
-                                      _file =
-                                          await FilePickerCustom().getImage();
-                                      setState(() {});
-                                    },
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  radius: dimensWidth() * 10,
-                                  backgroundImage: _image,
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) => setState(() {
-                                    _image = AssetImage(DImages.placeholder);
-                                  }),
-                                  child: InkWell(
-                                    splashColor: transparent,
-                                    highlightColor: transparent,
-                                    onTap: () async {
-                                      _file =
-                                          await FilePickerCustom().getImage();
-                                      setState(() {});
-                                    },
-                                    child: FaIcon(
-                                      FontAwesomeIcons.circlePlus,
-                                      color: black26,
-                                      size: dimensIcon() * 2,
+            body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+              builder: (context, state) {
+                _controllerEmail.text = _controllerEmail.text.isEmpty
+                    ? state.profile?.email ?? ''
+                    : _controllerEmail.text;
+                _controllerBio.text = _controllerBio.text.isEmpty
+                    ? state.profile?.biography ?? ''
+                    : _controllerBio.text;
+                _image = _image ??
+                    NetworkImage(
+                      CloudinaryContext.cloudinary
+                          .image(state.profile?.avatar ?? '')
+                          .toString(),
+                    );
+                return AbsorbPointer(
+                  absorbing: state is DoctorProfileLoading,
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: dimensWidth() * 3,
+                        vertical: dimensHeight() * 2),
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _file != null
+                                ? CircleAvatar(
+                                    radius: dimensWidth() * 10,
+                                    backgroundColor: primary,
+                                    backgroundImage: FileImage(_file!),
+                                    onBackgroundImageError:
+                                        (exception, stackTrace) =>
+                                            AssetImage(DImages.placeholder),
+                                    child: InkWell(
+                                      splashColor: transparent,
+                                      highlightColor: transparent,
+                                      onTap: () async {
+                                        _file =
+                                            await FilePickerCustom().getImage();
+                                        setState(() {});
+                                      },
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: dimensWidth() * 10,
+                                    backgroundImage: _image,
+                                    onBackgroundImageError:
+                                        (exception, stackTrace) => setState(() {
+                                      _image = AssetImage(DImages.placeholder);
+                                    }),
+                                    child: InkWell(
+                                      splashColor: transparent,
+                                      highlightColor: transparent,
+                                      onTap: () async {
+                                        _file =
+                                            await FilePickerCustom().getImage();
+                                        setState(() {});
+                                      },
+                                      child: FaIcon(
+                                        FontAwesomeIcons.circlePlus,
+                                        color: black26,
+                                        size: dimensIcon() * 2,
+                                      ),
                                     ),
                                   ),
-                                ),
-                          Padding(
-                            padding: EdgeInsets.only(top: dimensHeight() * 3),
-                            child: TextFieldWidget(
-                                label: translate(context, 'email'),
-                                hint: translate(context, 'ex_email'),
-                                controller: _controllerEmail,
-                                validate: (value) =>
-                                    Validate().validateEmail(context, value)),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: dimensHeight() * 3),
-                            child: TextFieldWidget(
-                              label: translate(context, 'biography'),
-                              controller: _controllerBio,
-                              validate: (value) {
-                                if (value!.split(' ').length < 100) {
-                                  return translate(context,
-                                      'biography_must_be_at_least_100_words');
-                                }
-                                return null;
-                              },
-                              maxLine: 10,
+                            Padding(
+                              padding: EdgeInsets.only(top: dimensHeight() * 3),
+                              child: TextFieldWidget(
+                                  label: translate(context, 'email'),
+                                  hint: translate(context, 'ex_email'),
+                                  controller: _controllerEmail,
+                                  validate: (value) =>
+                                      Validate().validateEmail(context, value)),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: dimensHeight() * 3),
-                            width: double.infinity,
-                            child: ElevatedButtonWidget(
-                              text: translate(context, 'update'),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  String? email;
-                                  String? bio;
-                                  if (state.profile?.email !=
-                                      _controllerEmail.text) {
-                                    email = _controllerEmail.text;
+                            Padding(
+                              padding: EdgeInsets.only(top: dimensHeight() * 3),
+                              child: TextFieldWidget(
+                                label: translate(context, 'biography'),
+                                controller: _controllerBio,
+                                validate: (value) {
+                                  if (value!.split(' ').length < 100) {
+                                    return translate(context,
+                                        'biography_must_be_at_least_100_words');
                                   }
-                                  if (state.profile?.biography !=
-                                      _controllerBio.text) {
-                                    bio = _controllerBio.text;
-                                  }
-                                  context
-                                      .read<DoctorProfileCubit>()
-                                      .updateProfile(bio, _file?.path, email);
-                                }
-                              },
+                                  return null;
+                                },
+                                maxLine: 10,
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              padding: EdgeInsets.only(top: dimensHeight() * 3),
+                              width: double.infinity,
+                              child: ElevatedButtonWidget(
+                                text: translate(context, 'update'),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    String? email;
+                                    String? bio;
+                                    if (state.profile?.email !=
+                                        _controllerEmail.text) {
+                                      email = _controllerEmail.text;
+                                    }
+                                    if (state.profile?.biography !=
+                                        _controllerBio.text) {
+                                      bio = _controllerBio.text;
+                                    }
+                                    context
+                                        .read<DoctorProfileCubit>()
+                                        .updateProfile(bio, _file?.path, email);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
