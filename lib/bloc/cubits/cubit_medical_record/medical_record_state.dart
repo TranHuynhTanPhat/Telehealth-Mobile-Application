@@ -38,6 +38,7 @@ final class MedicalRecordInitial extends MedicalRecordState {
       required super.subUsers,
       required super.currentId});
 }
+
 final class NoChange extends MedicalRecordState {
   NoChange(
       {required super.stats,
@@ -62,16 +63,16 @@ abstract class HealthStatState extends MedicalRecordState {
 }
 
 /// Update health stat
-abstract class UpdateStat extends HealthStatState {
-  UpdateStat(
+abstract class UpdateStatState extends HealthStatState {
+  UpdateStatState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
 /// Fetch health stat
-abstract class FetchStat extends HealthStatState {
-  FetchStat(
+abstract class FetchStatState extends HealthStatState {
+  FetchStatState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
@@ -84,14 +85,14 @@ final class HealthStatLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class HealthStatLoaded extends FetchStat {
+final class HealthStatLoaded extends FetchStatState {
   HealthStatLoaded(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
-final class HealthStatError extends FetchStat {
+final class HealthStatError extends UpdateStatState {
   HealthStatError(
       {required super.stats,
       required this.message,
@@ -107,14 +108,14 @@ final class UpdateStatLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class UpdateStatSuccessfully extends UpdateStat {
+final class UpdateStatSuccessfully extends UpdateStatState {
   UpdateStatSuccessfully(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
-final class UpdateStatError extends UpdateStat {
+final class UpdateStatError extends UpdateStatState {
   UpdateStatError(
       {required super.stats,
       required this.message,
@@ -132,32 +133,32 @@ abstract class SubUserState extends MedicalRecordState {
 }
 
 /// Add subUser
-abstract class AddSubUser extends SubUserState {
-  AddSubUser(
+abstract class AddSubUserState extends SubUserState {
+  AddSubUserState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
 /// Update subuser
-abstract class UpdateSubUser extends SubUserState {
-  UpdateSubUser(
+abstract class UpdateSubUserState extends SubUserState {
+  UpdateSubUserState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
 /// Fetch subUser
-abstract class FetchSubUser extends SubUserState {
-  FetchSubUser(
+abstract class FetchSubUserState extends SubUserState {
+  FetchSubUserState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
 /// Delete subUser
-abstract class DeleteSubUser extends SubUserState {
-  DeleteSubUser(
+abstract class DeleteSubUserState extends SubUserState {
+  DeleteSubUserState(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
@@ -177,14 +178,14 @@ final class FetchSubUserLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class FetchSubUserError extends FetchSubUser {
+final class FetchSubUserError extends FetchSubUserState {
   FetchSubUserError(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
-final class FetchSubUserLoaded extends FetchSubUser {
+final class FetchSubUserLoaded extends FetchSubUserState {
   FetchSubUserLoaded(
       {required super.stats,
       required super.subUsers,
@@ -198,17 +199,14 @@ final class AddSubUserLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class AddSubUserSuccessfully extends AddSubUser {
-  final String message;
-
+final class AddSubUserSuccessfully extends AddSubUserState {
   AddSubUserSuccessfully(
       {required super.stats,
       required super.subUsers,
-      required super.currentId,
-      required this.message});
+      required super.currentId});
 }
 
-final class AddSubUserFailure extends AddSubUser {
+final class AddSubUserFailure extends AddSubUserState {
   final String message;
 
   AddSubUserFailure(
@@ -225,17 +223,15 @@ final class UpdateSubUserLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class UpdateSubUserSuccessfully extends UpdateSubUser {
-  final String message;
-
-  UpdateSubUserSuccessfully(
-      {required super.stats,
-      required super.subUsers,
-      required super.currentId,
-      required this.message});
+final class UpdateSubUserSuccessfully extends UpdateSubUserState {
+  UpdateSubUserSuccessfully({
+    required super.stats,
+    required super.subUsers,
+    required super.currentId,
+  });
 }
 
-final class UpdateSubUserFailure extends UpdateSubUser {
+final class UpdateSubUserFailure extends UpdateSubUserState {
   final String message;
 
   UpdateSubUserFailure(
@@ -252,17 +248,18 @@ final class DeleteSubUserLoading extends MedicalRecordLoadingState {
       required super.currentId});
 }
 
-final class DeleteSubUserSuccessfully extends DeleteSubUser {
+final class DeleteSubUserSuccessfully extends DeleteSubUserState {
   DeleteSubUserSuccessfully(
       {required super.stats,
       required super.subUsers,
       required super.currentId});
 }
 
-final class DeleteSubUserFailure extends DeleteSubUser {
+final class DeleteSubUserFailure extends DeleteSubUserState {
   DeleteSubUserFailure(
       {required super.stats,
       required super.subUsers,
-      required super.currentId, required this.message});
-      final String message;
+      required super.currentId,
+      required this.message});
+  final String message;
 }

@@ -1206,5 +1206,17 @@
     "update_health_stat": {
         "vi": "Cập nhật chỉ sức khoẻ",
         "en": "Update health stat"
+    },
+    "login_to_doctor_account_failed": {
+        "vi": "Đăng nhập vào tài khoản bác sĩ thất bại",
+        "en": "Login to doctor account failed"
+    },
+    "login_to_patient_account_failed": {
+        "vi": "Đăng nhập vào tài khoản người dùng thất bại",
+        "en": "Login to patient account failed"
+    },
+    "cant_open": {
+        "vi": "Không thể mở",
+        "en": "Can't open"
     }
 }

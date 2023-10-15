@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_doctor/main/overview/components/export.dart';
+import 'package:healthline/screen/widgets/file_doc_widget.dart';
+import 'package:healthline/screen/widgets/file_excel_widget.dart';
+import 'package:healthline/screen/widgets/file_pdf_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
 class OverviewScreen extends StatelessWidget {
@@ -216,73 +218,19 @@ class OverviewScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
                 left: dimensWidth() * 3, right: dimensWidth() * 3),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListTile(
-                  onTap: () {},
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      dimensWidth(),
-                    ),
-                  ),
-                  dense: true,
-                  visualDensity: const VisualDensity(vertical: 0),
-                  leading: FaIcon(
-                    FontAwesomeIcons.fileWord,
-                    size: dimensIcon(),
-                    color: const Color.fromARGB(255, 13, 105, 181),
-                  ),
-                  title: Text(
-                    'Cảm',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  trailing: FaIcon(FontAwesomeIcons.chevronRight,
-                      size: dimensIcon() * .5),
+                FileDocWidget(
+                  title: 'cam',
                 ),
-                const Divider(),
-                ListTile(
-                  onTap: () {},
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      dimensWidth(),
-                    ),
-                  ),
-                  dense: true,
-                  visualDensity: const VisualDensity(vertical: 0),
-                  leading: FaIcon(
-                    FontAwesomeIcons.fileExcel,
-                    size: dimensIcon(),
-                    color: Colors.green,
-                  ),
-                  title: Text(
-                    'Cảm',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  trailing: FaIcon(FontAwesomeIcons.chevronRight,
-                      size: dimensIcon() * .5),
+                Divider(),
+                FileExcelWidget(
+                  title: 'cam',
                 ),
-                const Divider(),
-                ListTile(
-                  onTap: () {},
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      dimensWidth(),
-                    ),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.filePdf,
-                    size: dimensIcon(),
-                    color: Colors.redAccent,
-                  ),
-                  dense: true,
-                  visualDensity: const VisualDensity(vertical: 0),
-                  title: Text(
-                    'Cảm',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  trailing: FaIcon(FontAwesomeIcons.chevronRight,
-                      size: dimensIcon() * .5),
+                Divider(),
+                FilePdfWidget(
+                  title: 'cam',
                 ),
               ],
             ),

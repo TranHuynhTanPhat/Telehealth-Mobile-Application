@@ -12,7 +12,7 @@ class FileExcelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           dimensWidth(),

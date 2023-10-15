@@ -14,7 +14,6 @@ class ListRecord extends StatelessWidget {
       scrollDirection: Axis.vertical,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        
         RecordCard(
           name: 'vaccination',
           color: color9D4B6C,
@@ -28,10 +27,11 @@ class ListRecord extends StatelessWidget {
           name: 'medical_record',
           color: color009DC7,
           iconData: FontAwesomeIcons.solidFolder,
-          press: () {},
+          press: () {
+            Navigator.pushNamed(context, patientRecordName);
+          },
         ),
         const Divider(),
-
         RecordCard(
           name: 'prescription',
           color: color1C6AA3,

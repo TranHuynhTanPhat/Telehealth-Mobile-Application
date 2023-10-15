@@ -72,6 +72,9 @@ dependencies:
   shorebird_code_push: ^1.1.2
   restart_app: ^1.2.1
   badges: ^3.1.2
+  open_document: ^1.0.7
+  url_launcher: ^6.1.14
+
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

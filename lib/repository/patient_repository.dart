@@ -1,6 +1,7 @@
 import 'package:healthline/data/api/models/requests/health_stat_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
+import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/services/patient_service.dart';
 import 'package:healthline/repository/base_repository.dart';
 import 'package:healthline/res/style.dart';
@@ -43,15 +44,26 @@ class PatientRepository extends BaseRepository {
           value: headCircumference,
           unit: 'cm'));
     }
-    if(temperature!=null) {
+    if (temperature != null) {
       request.stats!.add(HealthStatResponse(
-        type: TypeHealthStat.Temperature, value: temperature, unit: 'Celsius'));
+          type: TypeHealthStat.Temperature,
+          value: temperature,
+          unit: 'Celsius'));
     }
-    if(request.stats!.isNotEmpty) {
+    if (request.stats!.isNotEmpty) {
       return await _patientService.updateStats(request);
-    }
-    else {
+    } else {
       return DataResponse(data: null, message: null);
     }
+  }
+
+  Future<DataResponse> addPatientRecord(String medicalId, String record) async {
+    return await _patientService.addPatientRecord(medicalId, record);
+  }
+  Future<List<PatientRecordResponse>> fetchPatientRecord(String medicalId) async {
+    return await _patientService.getPatientRecord(medicalId);
+  }
+  Future<DataResponse> deletePatientRecord(String medicalId) async {
+    return await _patientService.deletePatientRecord(medicalId);
   }
 }

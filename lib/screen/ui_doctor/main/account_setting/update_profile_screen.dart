@@ -94,7 +94,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         .toString(),
                   );
               return AbsorbPointer(
-                absorbing: state is DoctorBiographyUpdating,
+                absorbing: state is DoctorProfileLoading,
                 child: ListView(
                   padding: EdgeInsets.symmetric(
                       horizontal: dimensWidth() * 3,

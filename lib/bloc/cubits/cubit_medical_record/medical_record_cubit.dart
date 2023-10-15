@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:healthline/data/api/models/responses/base/data_response.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
-import 'package:healthline/data/api/models/responses/image_response.dart';
+import 'package:healthline/data/api/models/responses/file_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repository/file_repository.dart';
 import 'package:healthline/repository/patient_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'medical_record_state.dart';
 
@@ -196,24 +195,16 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       String? mainUserId =
           state.subUsers.firstWhere((element) => element.isMainProfile!).id;
       if (mainUserId != null) {
-        ImageResponse imageResponse = await _fileRepository.uploadImage(
+        FileResponse fileResponse = await _fileRepository.uploadFile (
             path: avatar,
-            uploadPreset: dotenv.get('UPLOAD_PRESETS'),
-            publicId: mainUserId + state.subUsers.length.toString(),
-            folder: 'healthline/avatar/subusers');
-        DataResponse response = await _userRepository.addMedicalRecord(
-            imageResponse.publicId!,
-            fullName,
-            birthday,
-            gender,
-            relationship,
-            address);
+            publicId: mainUserId + state.subUsers.length.toString());
+        await _userRepository.addMedicalRecord(fileResponse.publicId!, fullName,
+            birthday, gender, relationship, address);
 
         emit(AddSubUserSuccessfully(
           stats: state.stats,
           subUsers: state.subUsers,
           currentId: state.currentId,
-          message: response.message,
         ));
       } else {
         emit(AddSubUserFailure(
@@ -258,16 +249,14 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       if (id != null) {
         if (path != null) {
           if (avt != null) {
-            ImageResponse imageResponse = await _fileRepository.uploadImage(
+            FileResponse fileResponse = await _fileRepository.uploadFile (
                 path: path,
-                uploadPreset: dotenv.get('UPLOAD_PRESETS'),
                 publicId:
-                    avt == 'default' ? id + state.currentId.toString() : avt,
-                folder: '');
-            avt = imageResponse.publicId;
+                   id);
+            avt = fileResponse.publicId;
           }
         }
-        DataResponse response = await _userRepository.updateMedicalRecord(
+        await _userRepository.updateMedicalRecord(
             id, avt!, fullName, birthday, gender, relationship, address);
         // List<UserResponse> newLists = state.subUsers;
         // int index = newLists.indexWhere(
@@ -284,7 +273,6 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         //     address: address);
         emit(UpdateSubUserSuccessfully(
           stats: state.stats,
-          message: response.message,
           subUsers: state.subUsers,
           currentId: state.currentId,
         ));

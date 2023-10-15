@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ImageResponse {
+class FileResponse {
   String? assetId;
   String? publicId;
   int? version;
@@ -23,7 +23,7 @@ class ImageResponse {
   bool? existing;
   String? originalFilename;
 
-  ImageResponse(
+  FileResponse(
       {this.assetId,
       this.publicId,
       this.version,
@@ -115,8 +115,8 @@ class ImageResponse {
     return result;
   }
 
-  factory ImageResponse.fromMap(Map<String, dynamic> map) {
-    return ImageResponse(
+  factory FileResponse.fromMap(Map<String, dynamic> map) {
+    return FileResponse(
       assetId : map['asset_id'],
     publicId : map['public_id'],
     version : map['version'],
@@ -143,5 +143,5 @@ class ImageResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory ImageResponse.fromJson(String source) => ImageResponse.fromMap(json.decode(source));
+  factory FileResponse.fromJson(String source) => FileResponse.fromMap(json.decode(source));
 }

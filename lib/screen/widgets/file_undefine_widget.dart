@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/translate.dart';
 
-import '../../res/style.dart';
-
-class FilePdfWidget extends StatelessWidget {
-  const FilePdfWidget({
-    super.key, required this.title,
+class FileUndefineWidget extends StatelessWidget {
+  const FileUndefineWidget({
+    super.key,
+    required this.title,
   });
   final String title;
 
@@ -19,19 +19,18 @@ class FilePdfWidget extends StatelessWidget {
           dimensWidth(),
         ),
       ),
-      leading: FaIcon(
-        FontAwesomeIcons.filePdf,
-        size: dimensIcon(),
-        color: Colors.redAccent,
-      ),
       dense: true,
       visualDensity: const VisualDensity(vertical: 0),
+      leading: FaIcon(
+        FontAwesomeIcons.file,
+        size: dimensIcon(),
+        color: black26,
+      ),
       title: Text(
-        title,
+        translate(context, title),
         style: Theme.of(context).textTheme.titleSmall,
       ),
-      trailing: FaIcon(FontAwesomeIcons.chevronRight,
-          size: dimensIcon() * .5),
+      trailing: FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .5),
     );
   }
 }

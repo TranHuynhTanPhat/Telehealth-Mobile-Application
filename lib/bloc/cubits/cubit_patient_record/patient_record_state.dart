@@ -58,3 +58,24 @@ final class AddPatientRecordLoaded extends AddPatientRecordState {
 final class AddPatientRecordError extends AddPatientRecordState {
   AddPatientRecordError({required super.records});
 }
+
+
+// OPEN FILE
+abstract class OpenFileState extends PatientRecordState{
+  OpenFileState({required super.records});
+}
+
+final class OpenFileLoading extends OpenFileState {
+  OpenFileLoading({required super.records});
+}
+
+final class OpenFileLoaded extends OpenFileState {
+  OpenFileLoaded( {required super.records, required this.filePath});
+  final String filePath;
+}
+
+final class OpenFileError extends OpenFileState {
+  OpenFileError({required super.records, required this.message, required this.url});
+  final String message;
+  final String url;
+}

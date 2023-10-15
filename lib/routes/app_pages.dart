@@ -21,4 +21,4 @@ const mainScreenDoctorName = '/main_screen_doctor';
 const shiftDoctorName = '/shift_doctor';
 const updateProfileDoctorName = '/update_profile_doctor';
 const updateHealthStatName = '/update_health_stat';
-
+const patientRecordName = '/patient_record';

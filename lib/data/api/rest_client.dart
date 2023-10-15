@@ -90,7 +90,7 @@ class RestClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          if (!isUpload) {
+          // if (!isUpload) {
             /// check path
             if (!options.path.contains('http')) {
               options.path =
@@ -164,18 +164,18 @@ class RestClient {
               options.headers[ACCESS_TOKEN_HEADER] = "Bearer ${user.jwtToken}";
               return handler.next(options);
             }
-          } else {
-            logPrint('CALL_CLOUDINARY_API');
+          // } else {
+          //   logPrint('CALL_CLOUDINARY_API');
 
-            options.headers.remove('ACCESS_TOKEN_HEADER');
+          //   // options.headers.remove('ACCESS_TOKEN_HEADER');
 
-            /// check path
-            if (!options.path.contains('http')) {
-              options.path =
-                  dotenv.get('CLOUDINARY_API', fallback: '') + options.path;
-            }
-            return handler.next(options);
-          }
+          //   /// check path
+          //   if (!options.path.contains('http')) {
+          //     options.path =
+          //         dotenv.get('CLOUDINARY_API', fallback: '') + options.path;
+          //   }
+          //   return handler.next(options);
+          // }
         },
         onResponse: (Response response, handler) async {
           logPrint("RESPONSE");

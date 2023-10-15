@@ -67,6 +67,8 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
             Navigator.pushReplacementNamed(context, logInName);
           } else if (state is ErrorActionState) {
             EasyLoading.dismiss();
+          } else if (state is DoctorAvatarSuccessfully) {
+            _image = null;
           }
         },
         child: Scaffold(
@@ -125,6 +127,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                               .image(state.profile!.avatar ?? '')
                               .toString(),
                         );
+
                     return SizedBox(
                       width: double.maxFinite,
                       child: DrawerHeader(

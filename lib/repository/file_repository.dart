@@ -1,19 +1,21 @@
 // ignore_for_file: unused_field
 
-import 'package:healthline/data/api/models/requests/image_request.dart';
-import 'package:healthline/data/api/models/responses/image_response.dart';
+import 'package:healthline/data/api/models/requests/file_request.dart';
+import 'package:healthline/data/api/models/responses/file_response.dart';
 import 'package:healthline/repository/base_repository.dart';
 import 'package:healthline/data/api/services/file_service.dart';
 
 class FileRepository extends BaseRepository {
   final FileService _fileService = FileService();
 
-  Future<ImageResponse> uploadImage(
+  Future<FileResponse> uploadFile(
       {required String path,
-      required String uploadPreset,
-      required String publicId, required String folder}) async {
-    ImageRequest request = ImageRequest(
-        imagePath: path, uploadPreset: uploadPreset, publicId: publicId, folder: folder);
-    return await _fileService.uploadImage(request);
+      required String publicId,}) async {
+    FileRequest request = FileRequest(
+        imagePath: path, publicId: publicId);
+    return await _fileService.updateFile(request);
+  }
+  Future<String> downloadFile({required String url, required String filePath}) async{
+    return await _fileService.downloadFile(filePath: filePath, url: url);
   }
 }

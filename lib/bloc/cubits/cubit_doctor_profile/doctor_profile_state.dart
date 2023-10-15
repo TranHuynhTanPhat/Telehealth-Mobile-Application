@@ -51,7 +51,7 @@ final class DoctorProfileError extends DoctorProfileState {
   DoctorProfileError(super.profile);
 }
 
-final class DoctorBiographyUpdating extends DoctorBiographyState {
+final class DoctorBiographyUpdating extends DoctorProfileLoading {
   DoctorBiographyUpdating(super.profile);
 }
 
@@ -65,7 +65,7 @@ final class DoctorBiographyError extends DoctorBiographyState {
   DoctorBiographyError(super.profile, {required this.message});
 }
 
-final class DoctorAvatarUpdating extends DoctorAvatarState {
+final class DoctorAvatarUpdating extends DoctorProfileLoading {
   DoctorAvatarUpdating(super.profile);
 }
 
@@ -79,7 +79,7 @@ final class DoctorAvatarError extends DoctorAvatarState {
   DoctorAvatarError(super.profile, {required this.message});
 }
 
-final class DoctorEmailUpdating extends DoctorEmailState {
+final class DoctorEmailUpdating extends DoctorProfileLoading {
   DoctorEmailUpdating(super.profile);
 }
 

@@ -41,4 +41,9 @@ class ApiConstants {
   static const _VACCINATION = '/vaccination';
   static const VACCINATION_RECORD = '$_VACCINATION/record';
   static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
+
+
+  // file-upload
+  static const _FILE_UPLOAD = '/file-upload';
+  static const FILE_UPLOAD = '$_FILE_UPLOAD/cloudinary';
 }

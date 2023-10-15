@@ -13,7 +13,6 @@ class FilePickerCustom {
     // In Android we need to request the storage permission,
     // while in iOS is the photos permission
     if (Platform.isAndroid) {
-      logPrint("AHJDK");
       return Permission.storage.isGranted;
     } else {
       return Permission.photos.isGranted;
@@ -25,10 +24,7 @@ class FilePickerCustom {
     // In Android we need to request the storage permission,
     // while in iOS is the photos permission
     if (Platform.isAndroid) {
-      logPrint("fdsjflskdjflds");
       result = await Permission.storage.request();
-      logPrint(result);
-
     } else {
       result = await Permission.photos.request();
     }

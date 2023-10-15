@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -12,10 +13,11 @@ import 'package:healthline/screen/ui_doctor/main/schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
 import 'package:healthline/screen/application_setting/application_setting_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
@@ -39,6 +41,7 @@ class AppRoute {
   final _signUpCubit = SignUpCubit();
   final _scheduleCubit = ScheduleCubit();
   final _doctorProfileCubit = DoctorProfileCubit();
+  final _patientRecordCubit = PatientRecordCubit();
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
@@ -52,6 +55,7 @@ class AppRoute {
     _signUpCubit.close();
     _scheduleCubit.close();
     _doctorProfileCubit.close();
+    _patientRecordCubit.close();
     // _applicationUpdateBloc.close();
   }
 
@@ -181,13 +185,22 @@ class AppRoute {
                 ));
       case updateHealthStatName:
         return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: _medicalRecordCubit,
+                  child: const HealthStatUpdateScreen(),
+                ));
+      case patientRecordName:
+        return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
                   providers: [
                     BlocProvider.value(
                       value: _medicalRecordCubit,
                     ),
+                    BlocProvider.value(
+                      value: _patientRecordCubit,
+                    ),
                   ],
-                  child: const HealthStatUpdateScreen(),
+                  child: const PatientRecordScreen(),
                 ));
       default:
         return null;

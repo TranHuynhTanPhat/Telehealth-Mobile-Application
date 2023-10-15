@@ -52,8 +52,6 @@ class _ListSubUserState extends State<ListSubUser> {
     if (result == true) {
       medicalRecordCubit.fetchMedicalRecord();
     }
-    // .whenComplete(
-    //     () => context.read<HealthInfoCubit>().fetchMedicalRecord());
   }
 
   @override

@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../data/api/models/responses/base/data_response.dart';
-import '../../../data/api/models/responses/image_response.dart';
+import '../../../data/api/models/responses/file_response.dart';
 import '../../../repository/doctor_repository.dart';
 import '../../../repository/file_repository.dart';
 
@@ -85,14 +84,12 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
       String? id = state.profile?.id;
       String? avatar = state.profile?.avatar;
       if (id != null) {
-        ImageResponse imageResponse = await _fileRepository.uploadImage(
+        FileResponse fileResponse = await _fileRepository.uploadFile (
             path: path,
-            uploadPreset: dotenv.get('UPLOAD_PRESETS'),
-            publicId: id,
-            folder: 'healthline/avatar/doctors');
-        String? publicId = imageResponse.publicId;
+            publicId: id,);
+        String? publicId = fileResponse.publicId;
         if (publicId != null) {
-          if (avatar == null) {
+          if (avatar != publicId) {
             await _doctorRepository.updateAvatar(publicId);
             emit(
               DoctorAvatarSuccessfully(
