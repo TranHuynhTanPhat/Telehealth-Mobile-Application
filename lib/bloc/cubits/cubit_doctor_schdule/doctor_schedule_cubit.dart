@@ -3,6 +3,7 @@ import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/repository/doctor_repository.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intl/intl.dart';
 
 part 'doctor_schedule_state.dart';
 
@@ -27,8 +28,20 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
       List<ScheduleResponse> schedules =
           await _doctorRepository.fetchSchedule();
       await updateScheduleId(schedules.first.id);
+
       emit(FetchScheduleSuccessfully(
-          schedules: schedules, scheduleId: state.scheduleId));
+          schedules: schedules,
+          scheduleId: schedules.firstWhere((element) {
+            DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
+            DateTime currentDate = DateTime.now();
+            if (dateTime.day == currentDate.day &&
+                dateTime.month == currentDate.month &&
+                dateTime.year == currentDate.year) {
+              return true;
+            } else {
+              return false;
+            }
+          }).id));
     } on DioException catch (e) {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(
@@ -91,6 +104,36 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(
         FixedScheduleUpdateError(
+          schedules: state.schedules,
+          message: e.response!.data['message'].toString(),
+          scheduleId: state.scheduleId,
+        ),
+      );
+    } catch (e) {
+      logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
+      emit(
+        FixedScheduleUpdateError(
+          schedules: state.schedules,
+          message: e.toString(),
+          scheduleId: state.scheduleId,
+        ),
+      );
+    }
+  }
+
+  Future<void> updateScheduleByDay(List<int> workingTimes) async {
+    try {
+      emit(ScheduleByDayUpdating(
+          schedules: state.schedules, scheduleId: state.scheduleId));
+
+      await _doctorRepository.updateScheduleByDay(
+          workingTimes, state.scheduleId!);
+      emit(ScheduleByDayUpdateSuccessfully(
+          schedules: state.schedules, scheduleId: state.scheduleId));
+    } on DioException catch (e) {
+      logPrint("ERROR DIO: ${e.message.toString()}");
+      emit(
+        ScheduleByDayUpdateError(
           schedules: state.schedules,
           message: e.response!.data['message'].toString(),
           scheduleId: state.scheduleId,

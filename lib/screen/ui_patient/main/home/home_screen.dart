@@ -84,14 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state.subUsers.isNotEmpty) {
                   int index = state.subUsers
                       .indexWhere((element) => element.isMainProfile!);
-                      
+
                   if (index != -1) {
-                    _image = _image ??
-                        NetworkImage(
-                          CloudinaryContext.cloudinary
-                              .image(state.subUsers[index].avatar ?? '')
-                              .toString(),
-                        );
+                    String url = CloudinaryContext.cloudinary
+                        .image(state.subUsers[index].avatar ?? '')
+                        .toString();
+                    NetworkImage provider = NetworkImage(url);
+                    provider.evict().then<void>((bool success) {
+                      if (success) debugPrint('removed image!');
+                    });
+
+                    _image = _image ?? provider;
                   } else {
                     _image = AssetImage(DImages.placeholder);
                   }

@@ -42,11 +42,15 @@ final class FetchScheduleLoading extends FetchScheduleState {
 }
 
 final class FetchScheduleSuccessfully extends FetchScheduleState {
-  FetchScheduleSuccessfully({required super.schedules, required super.scheduleId});
+  FetchScheduleSuccessfully(
+      {required super.schedules, required super.scheduleId});
 }
 
 final class FetchScheduleError extends FetchScheduleState {
-  FetchScheduleError({required super.schedules, required this.message, required super.scheduleId});
+  FetchScheduleError(
+      {required super.schedules,
+      required this.message,
+      required super.scheduleId});
   final String message;
 }
 
@@ -55,20 +59,38 @@ final class CronScheduleLoading extends CronScheduleState {
 }
 
 final class CronScheduleSuccessfully extends CronScheduleState {
-  CronScheduleSuccessfully({required super.schedules, required super.scheduleId});
+  CronScheduleSuccessfully(
+      {required super.schedules, required super.scheduleId});
 }
 
 final class CronScheduleError extends CronScheduleState {
-  CronScheduleError({required super.schedules, required this.message, required super.scheduleId});
+  CronScheduleError(
+      {required super.schedules,
+      required this.message,
+      required super.scheduleId});
   final String message;
 }
 
 abstract class ScheduleByDayUpdateState extends DoctorScheduleState {
-  ScheduleByDayUpdateState({required super.schedules, required super.scheduleId});
+  ScheduleByDayUpdateState(
+      {required super.schedules, required super.scheduleId});
 }
 
 final class ScheduleByDayUpdating extends ScheduleByDayUpdateState {
   ScheduleByDayUpdating({required super.schedules, required super.scheduleId});
+}
+
+final class ScheduleByDayUpdateSuccessfully extends ScheduleByDayUpdateState {
+  ScheduleByDayUpdateSuccessfully(
+      {required super.schedules, required super.scheduleId});
+}
+
+final class ScheduleByDayUpdateError extends ScheduleByDayUpdateState {
+  ScheduleByDayUpdateError(
+      {required super.schedules,
+      required super.scheduleId,
+      required this.message});
+  final String message;
 }
 
 /// Fixed schedule
@@ -77,7 +99,8 @@ abstract class FixedScheduleState extends DoctorScheduleState {
 }
 
 abstract class FixedScheduleUpdateState extends FixedScheduleState {
-  FixedScheduleUpdateState({required super.schedules, required super.scheduleId});
+  FixedScheduleUpdateState(
+      {required super.schedules, required super.scheduleId});
 }
 
 final class FixedScheduleUpdating extends FixedScheduleUpdateState {
@@ -85,10 +108,14 @@ final class FixedScheduleUpdating extends FixedScheduleUpdateState {
 }
 
 final class FixedScheduleUpdateSuccessfully extends FixedScheduleUpdateState {
-  FixedScheduleUpdateSuccessfully({required super.schedules, required super.scheduleId});
+  FixedScheduleUpdateSuccessfully(
+      {required super.schedules, required super.scheduleId});
 }
 
 final class FixedScheduleUpdateError extends FixedScheduleUpdateState {
-  FixedScheduleUpdateError({required super.schedules, required this.message, required super.scheduleId});
+  FixedScheduleUpdateError(
+      {required super.schedules,
+      required this.message,
+      required super.scheduleId});
   final String message;
 }

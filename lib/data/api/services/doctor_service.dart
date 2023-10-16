@@ -80,7 +80,7 @@ class DoctorService extends BaseService {
       List<int> workingTimes, String scheduleId) async {
     var jsonRequest =
         json.encode({"schedule_id": scheduleId, "working_times": workingTimes});
-    final response = await patch(ApiConstants.DOCTOR_CHANGE_FIXED_TIMES,
+    final response = await post(ApiConstants.DOCTOR_SCHEDULE,
         data: jsonRequest, isDoctor: true);
 
     return response;

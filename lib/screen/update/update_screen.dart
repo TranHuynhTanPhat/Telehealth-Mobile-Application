@@ -18,8 +18,8 @@ class UpdateScreen extends StatefulWidget {
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
   void initState() {
-    if(!mounted)return;
-    context.read<ApplicationUpdateCubit>().checkForUpdate();
+    // if(!mounted)return;
+    // context.read<ApplicationUpdateCubit>().checkForUpdate();
     super.initState();
   }
 

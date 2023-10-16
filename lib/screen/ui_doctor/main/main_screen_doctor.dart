@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/drawer_menu.dart';
+import 'package:healthline/screen/ui_doctor/main/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/patient/patient_screen.dart';
-import 'package:healthline/screen/ui_doctor/main/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/schedule_screen.dart';
 import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
+
 
 class MainScreenDoctor extends StatefulWidget {
   const MainScreenDoctor({super.key});
@@ -72,13 +74,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               }
             },
           ),
-          BlocListener<DoctorProfileCubit, DoctorProfileState>(
-            listener: (context, state) {
-              // if (state is DoctorProfileUpdateSuccessfully) {
-              //   print(state);
-              // }
-            },
-          ),
+          // BlocListener<DoctorProfileCubit, DoctorProfileState>(
+          //   listener: (context, state) {
+          //     if (state is DoctorProfileUpdateSuccessfully) {
+          //       setState(() {
+          //         _image = null;
+          //       });
+          //     }
+          //   },
+          // ),
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -130,15 +134,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
                     builder: (context, state) {
                   if (state.profile != null) {
-                    _image = _image ??
-                        NetworkImage(
-                          CloudinaryContext.cloudinary
-                              .image(state.profile!.avatar ?? '')
-                              .toString(),
-                        );
-                    if (state is DoctorProfileUpdating) {
-                      _image = AssetImage(DImages.placeholder);
-                    }
+                    String url = CloudinaryContext.cloudinary
+                        .image(state.profile!.avatar ?? '')
+                        .toString();
+                    NetworkImage provider = NetworkImage(url);
+                    provider.evict().then<void>((bool success) {
+                      if (success) debugPrint('removed image!');
+                    });
+
+                    _image = _image ?? provider;
 
                     return SizedBox(
                       width: double.maxFinite,
@@ -158,6 +162,10 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 _image = AssetImage(DImages.placeholder);
                               }),
                             ),
+                            // CldImageWidget(
+                            //   publicId: state.profile!.avatar!,
+                            //   height: dimensHeight() * 15,
+                            // ),
                             const SizedBox(
                               height: 15,
                             ),

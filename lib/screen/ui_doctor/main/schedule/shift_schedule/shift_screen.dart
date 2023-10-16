@@ -51,7 +51,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
         }
       },
       child: BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
-        buildWhen: (previous, current) => current is FetchScheduleState,
         builder: (context, state) {
           return Scaffold(
             resizeToAvoidBottomInset: true,
@@ -75,10 +74,14 @@ class _ShiftScreenState extends State<ShiftScreen> {
                       ),
                     ),
                     PopupMenuItem(
+                      enabled: state.scheduleId != null,
                       onTap: () {
                         if (state.scheduleId != null) {
                           Navigator.pushNamed(
-                              context, updateScheduleByDayDoctorName);
+                                  context, updateScheduleByDayDoctorName)
+                              .then((value) => context
+                                  .read<DoctorScheduleCubit>()
+                                  .fetchSchedule());
                         }
                       },
                       child: Text(
