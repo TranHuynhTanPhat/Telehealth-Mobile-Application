@@ -9,16 +9,20 @@ class BaseGridview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
+    return GridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: dimensWidth()*2,
+      crossAxisSpacing: dimensHeight()*2,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        childAspectRatio: radio,
-        mainAxisSpacing: dimensWidth() * 2,
-        crossAxisSpacing: dimensHeight() * 2,
-      ),
+      childAspectRatio: radio,
+      // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      //   maxCrossAxisExtent: 200,
+      //   childAspectRatio: radio,
+      //   mainAxisSpacing: dimensWidth() * 2,
+      //   crossAxisSpacing: dimensHeight() * 2,
+      // ),
       children: children,
     );
   }

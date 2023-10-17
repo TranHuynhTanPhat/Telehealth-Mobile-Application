@@ -47,9 +47,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return BlocListener<DoctorProfileCubit, DoctorProfileState>(
       listener: (context, state) {
-        if (state is DoctorProfileUpdating) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is DoctorProfileUpdateSuccessfully) {
+         if (state is DoctorProfileUpdateSuccessfully) {
           if (!errEmail && !errBio && !errAvatar) {
             EasyLoading.showToast(
               translate(context, 'successfully'),

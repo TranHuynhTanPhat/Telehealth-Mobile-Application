@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_doctor/main/overview/components/export.dart';
+import 'package:healthline/screen/ui_doctor/overview/components/export.dart';
 import 'package:healthline/screen/widgets/file_doc_widget.dart';
 import 'package:healthline/screen/widgets/file_excel_widget.dart';
 import 'package:healthline/screen/widgets/file_pdf_widget.dart';

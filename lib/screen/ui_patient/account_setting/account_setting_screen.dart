@@ -104,6 +104,7 @@ class AccountSettingScreen extends StatelessWidget {
             trailing:
                 FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .7),
           ),
+          
         ],
       ),
     );

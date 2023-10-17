@@ -12,13 +12,13 @@ class ValidShift extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      height: dimensWidth() * 3,
+      height: dimensWidth() * 2,
       padding: EdgeInsets.all(
         dimensWidth(),
       ),
       decoration: BoxDecoration(
           color: colorCDDEFF,
-          borderRadius: BorderRadius.circular(dimensWidth())),
+          borderRadius: BorderRadius.circular(dimensWidth()*2)),
       alignment: Alignment.center,
       child: Text(
         time,

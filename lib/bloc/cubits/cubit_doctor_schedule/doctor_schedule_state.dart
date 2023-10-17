@@ -33,9 +33,9 @@ abstract class FetchScheduleState extends DoctorScheduleState {
   FetchScheduleState({required super.schedules, required super.scheduleId});
 }
 
-abstract class CronScheduleState extends DoctorScheduleState {
-  CronScheduleState({required super.schedules, required super.scheduleId});
-}
+// abstract class CronScheduleState extends DoctorScheduleState {
+//   CronScheduleState({required super.schedules, required super.scheduleId});
+// }
 
 final class FetchScheduleLoading extends FetchScheduleState {
   FetchScheduleLoading({required super.schedules, required super.scheduleId});
@@ -54,22 +54,22 @@ final class FetchScheduleError extends FetchScheduleState {
   final String message;
 }
 
-final class CronScheduleLoading extends CronScheduleState {
-  CronScheduleLoading({required super.schedules, required super.scheduleId});
-}
+// final class CronScheduleLoading extends CronScheduleState {
+//   CronScheduleLoading({required super.schedules, required super.scheduleId});
+// }
 
-final class CronScheduleSuccessfully extends CronScheduleState {
-  CronScheduleSuccessfully(
-      {required super.schedules, required super.scheduleId});
-}
+// final class CronScheduleSuccessfully extends CronScheduleState {
+//   CronScheduleSuccessfully(
+//       {required super.schedules, required super.scheduleId});
+// }
 
-final class CronScheduleError extends CronScheduleState {
-  CronScheduleError(
-      {required super.schedules,
-      required this.message,
-      required super.scheduleId});
-  final String message;
-}
+// final class CronScheduleError extends CronScheduleState {
+//   CronScheduleError(
+//       {required super.schedules,
+//       required this.message,
+//       required super.scheduleId});
+//   final String message;
+// }
 
 abstract class ScheduleByDayUpdateState extends DoctorScheduleState {
   ScheduleByDayUpdateState(

@@ -54,7 +54,7 @@ class ApplicationSettingScreen extends StatelessWidget {
                     0),
                 leading: FaIcon(
                   FontAwesomeIcons.circleArrowDown,
-                  size: dimensIcon(),
+                  size: dimensIcon()*.7,
                   color: Colors.green,
                 ),
               ),

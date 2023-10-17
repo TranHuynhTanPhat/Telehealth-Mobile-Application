@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/widgets/date_slide.dart';
 import 'package:healthline/utils/date_util.dart';
 
 class SlideDaysInMonth extends StatefulWidget {
@@ -30,9 +31,9 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
         .inDays;
   }
 
-  void dayPressed(value) {
+  void dayPressed(int index, DateTime dateTime) {
     setState(() {
-      _daySelected = value;
+      _daySelected = index;
     });
   }
 
@@ -71,8 +72,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                             }),
                             child: FaIcon(
                               FontAwesomeIcons.chevronLeft,
-                              size: dimensIcon() * .8,
-                              color: secondary,
+                              size: dimensIcon() * .6,
+                              color: color1F1F1F,
                             ),
                           ),
                   ),
@@ -89,7 +90,7 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                     label: Text(
                       formatDateToMonthYear(context, _current),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w900, color: secondary),
+                          fontWeight: FontWeight.w900, color: color1F1F1F),
                     ),
                   ),
                 ),
@@ -107,8 +108,8 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
                     }),
                     child: FaIcon(
                       FontAwesomeIcons.chevronRight,
-                      size: dimensIcon() * .8,
-                      color: secondary,
+                      size: dimensIcon() * .6,
+                      color: color1F1F1F,
                     ),
                   ),
                 ),
@@ -116,75 +117,11 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
             ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(top: dimensHeight(), bottom: dimensHeight()),
-          height: dimensWidth() * 14,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: daysLeft(),
-            itemBuilder: (context, index) {
-              String date = formatToDate(
-                  context,
-                  DateTime(
-                      _current.year, _current.month, _current.day + index));
-              String day = formatDay(
-                  context,
-                  DateTime(
-                      _current.year, _current.month, _current.day + index));
-              return InkWell(
-                splashColor: transparent,
-                highlightColor: transparent,
-                onTap: () => dayPressed(index),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: dimensWidth() * 3,
-                      horizontal: dimensWidth() * 3.5),
-                  margin: EdgeInsets.only(
-                      left:
-                          index == 0 ? dimensWidth() * 3 : dimensWidth() * .75,
-                      right: index == daysLeft() - 1
-                          ? dimensWidth() * 3
-                          : dimensWidth() * .75),
-                  decoration: BoxDecoration(
-                    color: _daySelected == index ? colorCDDEFF : white,
-                    borderRadius: BorderRadius.circular(dimensWidth() * 2.5),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          day,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                                  color: _daySelected == index
-                                      ? secondary
-                                      : primary,
-                                  fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          date,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                  color: _daySelected == index
-                                      ? secondary
-                                      : primary),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        DateSlide(
+            daysLeft: daysLeft(),
+            dayPressed: dayPressed,
+            daySelected: _daySelected,
+            dateStart: _current),
         const Divider(
           thickness: 3,
         ),
@@ -192,3 +129,4 @@ class _SlideDaysInMonthState extends State<SlideDaysInMonth> {
     );
   }
 }
+

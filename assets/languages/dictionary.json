@@ -1212,12 +1212,12 @@
         "en": "Update health stat"
     },
     "update_fixed_schedule": {
-        "vi": "Cập nhật lịch cố đinh",
+        "vi": "Cập nhật lịch cố định",
         "en": "Update fixed schedule"
     },
-    "update_schedule_by_day": {
-        "vi": "Cập nhật lịch theo ngày",
-        "en": "Update schedule by day"
+    "update_schedule_on": {
+        "vi": "Cập nhật lịch ngày",
+        "en": "Update schedule on"
     },
     "login_to_doctor_account_failed": {
         "vi": "Đăng nhập vào tài khoản bác sĩ thất bại",

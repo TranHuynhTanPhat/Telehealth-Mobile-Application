@@ -12,6 +12,7 @@ enum AppTheme { LightTheme, DartTheme }
 enum DrawerMenus {
   Overview,
   Schedule,
+  YourShift,
   Patient,
   AccountSetting,
   ApplicationSetting,

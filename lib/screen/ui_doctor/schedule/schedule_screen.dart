@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:healthline/res/style.dart';
-import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/translate.dart';
 
 import './canceled_frame.dart';
@@ -34,42 +32,9 @@ class _ScheduleDoctorScreenState extends State<ScheduleDoctorScreen>
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                title: InkWell(
-                  splashColor: transparent,
-                  highlightColor: transparent,
-                  onTap: () {
-                    Navigator.pushNamed(context, shiftDoctorName);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: dimensWidth()),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            translate(context, 'your_shift'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: color1F1F1F),
-                          ),
-                        ),
-                        Container(
-                          // padding: EdgeInsets.only(right: dimensWidth() * 3),
-                          alignment: Alignment.centerRight,
-                          child: FaIcon(
-                            FontAwesomeIcons.chevronRight,
-                            size: dimensIcon() * .6,
-                            color: color1F1F1F,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                centerTitle: false,
                 pinned: true,
                 floating: true,
-                bottom: TabBar(
+                title: TabBar(
                   isScrollable: false,
                   splashBorderRadius: BorderRadius.circular(dimensWidth() * 3),
                   splashFactory: InkRipple.splashFactory,

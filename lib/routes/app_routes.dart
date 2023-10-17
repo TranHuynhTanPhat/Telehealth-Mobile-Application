@@ -10,10 +10,11 @@ import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
-import 'package:healthline/screen/ui_doctor/main/main_screen_doctor.dart';
-import 'package:healthline/screen/ui_doctor/main/schedule/shift_schedule/shift_screen.dart';
-import 'package:healthline/screen/ui_doctor/main/schedule/shift_schedule/update_default_schedule.dart';
-import 'package:healthline/screen/ui_doctor/main/schedule/shift_schedule/update_schedule_by_day_screen.dart';
+import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
+import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
+import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
+import 'package:healthline/screen/ui_doctor/shift_schedule/update_default_schedule.dart';
+import 'package:healthline/screen/ui_doctor/shift_schedule/update_schedule_by_day_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
@@ -29,7 +30,6 @@ import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/ref_vacci
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 
-import '../screen/ui_doctor/main/account_setting/update_profile_screen.dart';
 
 class AppRoute {
   final _homeCubit = HomeCubit();

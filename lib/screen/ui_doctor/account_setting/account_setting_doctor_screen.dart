@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/translate.dart';
@@ -97,7 +99,33 @@ class SettingScreen extends StatelessWidget {
             trailing:
                 FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .5),
           ),
+          const Divider(),
+          ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
+            onTap: () {
+              context.read<SideMenuCubit>().logout();
+            },
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 0),
+            leading: FaIcon(
+              FontAwesomeIcons.arrowRightFromBracket,
+              size: dimensIcon() * .7,
+              color: color9D4B6C,
+            ),
+            title: Text(
+              translate(context, 'log_out'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: color9D4B6C),
+            ),
+          ),
         ],
+        
       ),
     );
   }

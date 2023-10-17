@@ -240,10 +240,8 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
 
       if (path != null) {
         if (id != null) {
-          print(id);
           FileResponse fileResponse =
               await _fileRepository.uploadAvatarUser(path: path, publicId: id);
-              print(fileResponse.publicId);
           if (avatar != fileResponse.publicId) {
             await _userRepository.updateMedicalRecord(
                 id,
