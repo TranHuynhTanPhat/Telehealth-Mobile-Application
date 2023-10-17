@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubit_doctor_schdule/doctor_schedule_cubit.dart';
+
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/utils/translate.dart';
+
 import './canceled_frame.dart';
 import './completed_frame.dart';
 import './upcoming_frame.dart';
-import 'package:healthline/utils/translate.dart';
 
-class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+class ScheduleDoctorScreen extends StatefulWidget {
+  const ScheduleDoctorScreen({super.key});
 
   @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
+  State<ScheduleDoctorScreen> createState() => _ScheduleDoctorScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen>
+class _ScheduleDoctorScreenState extends State<ScheduleDoctorScreen>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    if(!mounted)return;
-    context.read<DoctorScheduleCubit>().getCron();
   }
 
   @override

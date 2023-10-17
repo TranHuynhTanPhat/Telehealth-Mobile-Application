@@ -42,6 +42,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
           EasyLoading.show();
         } else if (state is FetchScheduleSuccessfully ||
             state is CronScheduleSuccessfully) {
+          
           EasyLoading.dismiss();
         } else if (state is FetchScheduleError) {
           EasyLoading.showToast(state.message);
@@ -215,37 +216,60 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             horizontal: dimensWidth() * 3,
                             vertical: dimensHeight()),
                         child: BaseGridview(radio: 3.2, children: [
-                          ...time.map(
-                            (e) => state.schedules
-                                    .firstWhere(
-                                      (element) {
-                                        DateTime dateTime =
-                                            DateFormat('dd/MM/yyyy')
-                                                .parse(element.date!);
-                                        if (dateTime.day == _currentDate.day &&
-                                            dateTime.month ==
-                                                _currentDate.month &&
-                                            dateTime.year ==
-                                                _currentDate.year) {
-                                          return true;
-                                        } else {
-                                          return false;
-                                        }
-                                      },
-                                      orElse: () => ScheduleResponse(
-                                        date: _currentDate.toString(),
-                                        workingTimes: [],
-                                      ),
-                                    )
-                                    .workingTimes!
-                                    .contains(e)
-                                ? ValidShift(
-                                    time: convertIntToTime(e),
-                                  )
-                                : InvalidShift(
-                                    time: convertIntToTime(e),
-                                  ),
-                          )
+                          ...state.schedules
+                              .firstWhere(
+                                (element) {
+                                  DateTime dateTime = DateFormat('dd/MM/yyyy')
+                                      .parse(element.date!);
+                                  if (dateTime.day == _currentDate.day &&
+                                      dateTime.month == _currentDate.month &&
+                                      dateTime.year == _currentDate.year) {
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                },
+                                orElse: () => ScheduleResponse(
+                                    date: _currentDate.toString(),
+                                    workingTimes: []),
+                              )
+                              .workingTimes!
+                              .map(
+                                (e) => ValidShift(
+                                  time: convertIntToTime(e ?? 0),
+                                ),
+                              ),
+                          // ...time.map(
+                          //   (e) => state.schedules
+                          // a.firstWhere(
+                          //   (element) {
+                          // DateTime dateTime =
+                          //     DateFormat('dd/MM/yyyy')
+                          //         .parse(element.date!);
+                          // if (dateTime.day == _currentDate.day &&
+                          //     dateTime.month ==
+                          //         _currentDate.month &&
+                          //     dateTime.year ==
+                          //         _currentDate.year) {
+                          //   return true;
+                          // } else {
+                          //   return false;
+                          // }
+                          //   },
+                          //   orElse: () => ScheduleResponse(
+                          //     date: _currentDate.toString(),
+                          //     workingTimes: [],
+                          //   ),
+                          // )
+                          //           .workingTimes!
+                          //           .contains(e)
+                          //       ? ValidShift(
+                          //           time: convertIntToTime(e),
+                          //         )
+                          //       : InvalidShift(
+                          //           time: convertIntToTime(e),
+                          //         ),
+                          // )
                         ]),
                       )
                     ],
@@ -260,6 +284,8 @@ class _ShiftScreenState extends State<ShiftScreen> {
                       pinned: true,
                       floating: false,
                       leading: const SizedBox(),
+                      // expandedHeight: dimensHeight()*10,
+                      collapsedHeight: dimensHeight() * 10,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

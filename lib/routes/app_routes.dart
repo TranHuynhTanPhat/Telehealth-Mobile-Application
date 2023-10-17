@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/auth/license/faqs_screen.dart';
 import 'package:healthline/screen/auth/license/privacy_policy_screen.dart';
 import 'package:healthline/screen/auth/license/terms_and_conditions_screen.dart';
@@ -20,6 +19,7 @@ import 'package:healthline/screen/ui_patient/account_setting/account_setting_scr
 import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/wallet/wallet_screen.dart';
+import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_vaccination_screen.dart';

@@ -135,12 +135,16 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
               resizeToAvoidBottomInset: true,
               backgroundColor: white,
               appBar: AppBar(
-                title: Text(
-                  translate(context, 'patient_records'),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: color1F1F1F, fontWeight: FontWeight.w900),
+                centerTitle: false,
+                title: Padding(
+                  padding: EdgeInsets.only(left: dimensWidth()),
+                  child: Text(
+                    translate(context, 'patient_records'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: color1F1F1F, fontWeight: FontWeight.w900),
+                  ),
                 ),
                 actions: [
                   Padding(
@@ -197,7 +201,8 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                       border: Border.all(color: color1F1F1F.withOpacity(.1)),
                       borderRadius: BorderRadius.circular(dimensWidth() * 1.8),
                     ),
-                    child: state is! HealthStatLoading && state is! FetchSubUserLoading
+                    child: state is! HealthStatLoading &&
+                            state is! FetchSubUserLoading
                         ? Stack(
                             children: [
                               Column(

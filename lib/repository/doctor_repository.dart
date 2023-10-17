@@ -17,9 +17,9 @@ class DoctorRepository extends BaseRepository {
     return await _doctorService.getSchedule();
   }
 
-  Future<DataResponse> getScheduleCron() async {
-    return await _doctorService.getScheduleCron();
-  }
+  // Future<DataResponse> getScheduleCron() async {
+  //   return await _doctorService.getScheduleCron();
+  // }
 
   Future<DataResponse> updateBio(String bio) async {
     return await _doctorService.updateBio(bio);

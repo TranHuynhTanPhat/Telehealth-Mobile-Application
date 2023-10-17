@@ -90,9 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         .image(state.subUsers[index].avatar ?? '')
                         .toString();
                     NetworkImage provider = NetworkImage(url);
-                    provider.evict().then<void>((bool success) {
-                      if (success) debugPrint('removed image!');
-                    });
+                    // provider.evict().then<void>((bool success) {
+                    //   if (success) debugPrint('removed image!');
+                    // });
 
                     _image = _image ?? provider;
                   } else {
@@ -152,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             state is UpdateAvailable,
                             Theme.of(context).colorScheme.error,
-                            7,
-                            7);
+                            3,
+                            3);
                       }),
                     ),
                   ),

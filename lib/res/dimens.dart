@@ -29,11 +29,12 @@ class SizeConfig {
   }
 }
 
+double maxWidth() => SizeConfig.widthMultiplier * 50.5854791898;
 double dimensWidth() => SizeConfig.widthMultiplier;
 double dimensHeight() => SizeConfig.heightMultiplier;
 double dimensText() => SizeConfig.textMultiplier;
 double dimensImage() => SizeConfig.imageSizeMultiplier;
-double dimensIcon() => SizeConfig.widthMultiplier*4;
+double dimensIcon() => SizeConfig.widthMultiplier * 4;
 
 class Converts {
   static double c8 = 1 * SizeConfig.textMultiplier;

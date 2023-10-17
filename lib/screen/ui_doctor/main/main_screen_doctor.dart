@@ -10,14 +10,14 @@ import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/drawer_menu.dart';
-import 'package:healthline/screen/ui_doctor/main/account_setting/account_setting_screen.dart';
+import 'package:healthline/screen/ui_doctor/main/account_setting/account_setting_doctor_screen.dart';
+import 'package:healthline/screen/ui_doctor/main/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/patient/patient_screen.dart';
 import 'package:healthline/screen/ui_doctor/main/schedule/schedule_screen.dart';
 import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
-
 
 class MainScreenDoctor extends StatefulWidget {
   const MainScreenDoctor({super.key});
@@ -54,6 +54,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  void closeDrawer() {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -162,10 +168,6 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 _image = AssetImage(DImages.placeholder);
                               }),
                             ),
-                            // CldImageWidget(
-                            //   publicId: state.profile!.avatar!,
-                            //   height: dimensHeight() * 15,
-                            // ),
                             const SizedBox(
                               height: 15,
                             ),
@@ -238,6 +240,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   active: _currentPage == DrawerMenus.Overview,
                   press: () {
                     setState(() {
+                      closeDrawer();
                       _currentPage = DrawerMenus.Overview;
                     });
                   },
@@ -250,6 +253,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   icon: FontAwesomeIcons.solidCalendar,
                   press: () {
                     setState(() {
+                      closeDrawer();
                       _currentPage = DrawerMenus.Schedule;
                     });
                   },
@@ -260,6 +264,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   icon: FontAwesomeIcons.hospitalUser,
                   press: () {
                     setState(() {
+                      closeDrawer();
                       _currentPage = DrawerMenus.Patient;
                     });
                   },
@@ -270,6 +275,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   icon: FontAwesomeIcons.userGear,
                   press: () {
                     setState(() {
+                      closeDrawer();
                       _currentPage = DrawerMenus.AccountSetting;
                     });
                   },
@@ -282,7 +288,10 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                       icon: FontAwesomeIcons.gear,
                       isShowBadge: state is UpdateAvailable,
                       press: () {
-                        Navigator.pushNamed(context, applicationSettingName);
+                        setState(() {
+                          closeDrawer();
+                          _currentPage = DrawerMenus.ApplicationSetting;
+                        });
                       },
                     );
                   },
@@ -294,6 +303,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   icon: FontAwesomeIcons.solidCircleQuestion,
                   press: () {
                     setState(() {
+                      closeDrawer();
                       _currentPage = DrawerMenus.Helps;
                     });
                   },
@@ -359,12 +369,14 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           body: _currentPage == DrawerMenus.AccountSetting
               ? const SettingScreen()
               : _currentPage == DrawerMenus.Schedule
-                  ? const ScheduleScreen()
+                  ? const ScheduleDoctorScreen()
                   : _currentPage == DrawerMenus.Patient
                       ? const PatientScreen()
                       : _currentPage == DrawerMenus.Helps
                           ? const HelpsScreen()
-                          : const OverviewScreen(),
+                          : _currentPage == DrawerMenus.ApplicationSetting
+                              ? const ApplicationSettingScreen()
+                              : const OverviewScreen(),
         ),
       ),
     );

@@ -63,34 +63,34 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
     }
   }
 
-  Future<void> getCron() async {
-    try {
-      emit(CronScheduleLoading(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+  // Future<void> getCron() async {
+  //   try {
+  //     emit(CronScheduleLoading(
+  //         schedules: state.schedules, scheduleId: state.scheduleId));
 
-      await _doctorRepository.getScheduleCron();
-      emit(CronScheduleSuccessfully(
-          schedules: state.schedules, scheduleId: state.scheduleId));
-    } on DioException catch (e) {
-      logPrint("ERROR DIO: ${e.message.toString()}");
-      emit(
-        CronScheduleError(
-          schedules: state.schedules,
-          message: e.response!.data['message'].toString(),
-          scheduleId: state.scheduleId,
-        ),
-      );
-    } catch (e) {
-      logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
-      emit(
-        CronScheduleError(
-          schedules: state.schedules,
-          message: e.toString(),
-          scheduleId: state.scheduleId,
-        ),
-      );
-    }
-  }
+  //     await _doctorRepository.getScheduleCron();
+  //     emit(CronScheduleSuccessfully(
+  //         schedules: state.schedules, scheduleId: state.scheduleId));
+  //   } on DioException catch (e) {
+  //     logPrint("ERROR DIO: ${e.message.toString()}");
+  //     emit(
+  //       CronScheduleError(
+  //         schedules: state.schedules,
+  //         message: e.response!.data['message'].toString(),
+  //         scheduleId: state.scheduleId,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
+  //     emit(
+  //       CronScheduleError(
+  //         schedules: state.schedules,
+  //         message: e.toString(),
+  //         scheduleId: state.scheduleId,
+  //       ),
+  //     );
+  //   }
+  // }
 
   Future<void> updateFixedSchedule(List<List<int>> schedules) async {
     try {
@@ -110,7 +110,7 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
         ),
       );
     } catch (e) {
-      logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
+      logPrint("ERROR UPDATE FIXED SCHEDULE: ${e.toString()}");
       emit(
         FixedScheduleUpdateError(
           schedules: state.schedules,
@@ -140,7 +140,7 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
         ),
       );
     } catch (e) {
-      logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
+      logPrint("ERROR UPDATE SCHEDULE BY DAY: ${e.toString()}");
       emit(
         FixedScheduleUpdateError(
           schedules: state.schedules,

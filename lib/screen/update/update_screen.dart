@@ -18,8 +18,6 @@ class UpdateScreen extends StatefulWidget {
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
   void initState() {
-    // if(!mounted)return;
-    // context.read<ApplicationUpdateCubit>().checkForUpdate();
     super.initState();
   }
 
@@ -27,9 +25,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
         content: Text(translate(context, 'downloading')),
-        actions: const [
-          LoadingIndicator()
-        ],
+        actions: const [LoadingIndicator()],
       ),
     );
   }
@@ -48,7 +44,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     _showRestartBanner();
   }
-
 
   void _showRestartBanner() {
     ScaffoldMessenger.of(context).showMaterialBanner(
@@ -72,12 +67,14 @@ class _UpdateScreenState extends State<UpdateScreen> {
     return BlocListener<ApplicationUpdateCubit, ApplicationUpdateState>(
       listener: (context, state) {
         if (state is UpdateAvailable) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(translate(context, 'update_available')),
             ),
           );
         } else if (state is UpdateUnavailable) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(translate(context, 'no_update_available')),
@@ -117,12 +114,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            translate(context, 'cant_connect_to_current_version'),
+                            translate(
+                                context, 'cant_connect_to_current_version'),
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.error,
                             ),
                             textAlign: TextAlign.center,
-
                           ),
                         ),
                       ],
@@ -142,7 +139,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       ElevatedButton(
                         onPressed: state.isCheckingForUpdate
                             ? null
-                            : () => context.read<ApplicationUpdateCubit>().checkForUpdate(),
+                            : () => context
+                                .read<ApplicationUpdateCubit>()
+                                .checkForUpdate(),
                         child: state.isCheckingForUpdate
                             ? const LoadingIndicator()
                             : Text(translate(context, 'check_for_update')),
@@ -156,4 +155,3 @@ class _UpdateScreenState extends State<UpdateScreen> {
     );
   }
 }
-

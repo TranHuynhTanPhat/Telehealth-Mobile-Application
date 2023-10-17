@@ -1234,5 +1234,9 @@
     "day": {
         "vi": "Ngày",
         "en": "Day"
+    },
+    "continue": {
+        "vi": "Tiếp tục",
+        "en": "Continue"
     }
 }

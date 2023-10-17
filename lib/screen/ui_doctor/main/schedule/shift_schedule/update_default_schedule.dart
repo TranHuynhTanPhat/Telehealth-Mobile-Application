@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/bases/base_gridview.dart';
-import 'package:healthline/screen/ui_doctor/main/schedule/shift_schedule/components/export.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
+import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -23,8 +23,56 @@ class _UpdateDefaultScheduleScreenState
   List<int> time = List<int>.generate(48, (i) => i + 1);
   int _currentStep = 0;
 
+  List<int> countInputTimes = List.generate(14, (index) => 1);
+  List<List<TextEditingController>> controllerBegin =
+      List.generate(14, (index) => [TextEditingController()]);
+  List<List<TextEditingController>> controllerEnd =
+      List.generate(14, (index) => [TextEditingController()]);
+  List<List<int>> begin = List.generate(14, (index) => [-1]);
+  List<List<int>> end = List.generate(14, (index) => [-1]);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void addInputTimes() {
+    setState(() {
+      if (begin[_currentStep].last != -1 && end[_currentStep].last != -1) {
+        countInputTimes[_currentStep]++;
+        controllerBegin[_currentStep].add(TextEditingController());
+        controllerEnd[_currentStep].add(TextEditingController());
+        begin[_currentStep].add(-1);
+        end[_currentStep].add(-1);
+      } else {
+        EasyLoading.showToast(translate(context, 'please_choose'));
+      }
+    });
+  }
+
+  void removeInputTimes() {
+    setState(() {
+      countInputTimes[_currentStep]--;
+      controllerBegin[_currentStep].removeLast();
+      controllerEnd[_currentStep].removeLast();
+      begin[_currentStep].removeLast();
+      end[_currentStep].removeLast();
+    });
+  }
+
   void updateFixedSchedule() {
     context.read<DoctorScheduleCubit>().updateFixedSchedule(schedules);
+  }
+
+  void updateWorkingTime() {
+    schedules[_currentStep] = [];
+    for (int i = 0; i < countInputTimes[_currentStep]; i++) {
+      if (begin[_currentStep][i] != -1 && end[_currentStep][i] != -1) {
+        for (int b = begin[_currentStep][i]; b < end[_currentStep][i]; b++) {
+          schedules[_currentStep].add(b);
+        }
+      }
+    }
   }
 
   @override
@@ -73,9 +121,11 @@ class _UpdateDefaultScheduleScreenState
                     physics: const NeverScrollableScrollPhysics(),
                     connectorColor: const MaterialStatePropertyAll(secondary),
                     onStepTapped: (value) => setState(() {
+                      updateWorkingTime();
                       _currentStep = value;
                     }),
                     onStepContinue: () => setState(() {
+                      updateWorkingTime();
                       if (_currentStep < 13) {
                         _currentStep++;
                       } else {
@@ -106,29 +156,347 @@ class _UpdateDefaultScheduleScreenState
                             title: Text(
                                 '${translate(context, 'day')}: ${index + 1}'),
                             content: _currentStep == index
-                                ? BaseGridview(radio: 3.2, children: [
-                                    ...time.map(
-                                      (e) => InkWell(
-                                        splashColor: transparent,
-                                        highlightColor: transparent,
-                                        onTap: () {
-                                          setState(() {
-                                            if (schedules[index].contains(e)) {
-                                              schedules[index].remove(e);
-                                            } else {
-                                              schedules[index].add(e);
-                                            }
-                                          });
-                                        },
-                                        child: schedules[index].contains(e)
-                                            ? ValidShift(
-                                                time: convertIntToTime(e))
-                                            : InvalidShift(
-                                                time: convertIntToTime(e),
+                                ? Form(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ...List.generate(
+                                          countInputTimes[_currentStep],
+                                          (index) => Padding(
+                                            padding: EdgeInsets.only(
+                                                top: dimensHeight() * 2),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: MenuAnchor(
+                                                    style: MenuStyle(
+                                                      elevation:
+                                                          const MaterialStatePropertyAll(
+                                                              10),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  dimensWidth() *
+                                                                      3),
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          const MaterialStatePropertyAll(
+                                                              white),
+                                                      surfaceTintColor:
+                                                          const MaterialStatePropertyAll(
+                                                              white),
+                                                      padding: MaterialStatePropertyAll(
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  dimensWidth() *
+                                                                      2,
+                                                              vertical:
+                                                                  dimensHeight())),
+                                                    ),
+                                                    builder:
+                                                        (BuildContext context,
+                                                            MenuController
+                                                                controller,
+                                                            Widget? child) {
+                                                      return TextFieldWidget(
+                                                        enable: index ==
+                                                            countInputTimes[
+                                                                    _currentStep] -
+                                                                1,
+                                                        onTap: () {
+                                                          if (controller
+                                                              .isOpen) {
+                                                            controller.close();
+                                                          } else {
+                                                            controller.open();
+                                                          }
+                                                        },
+                                                        readOnly: true,
+                                                        label: translate(
+                                                            context, 'begin'),
+                                                        controller:
+                                                            controllerBegin[
+                                                                    _currentStep]
+                                                                [index],
+                                                        validate: (value) {
+                                                          if (value!.isEmpty) {
+                                                            return translate(
+                                                                context,
+                                                                'please_choose');
+                                                          }
+                                                          return null;
+                                                        },
+                                                        suffixIcon: const IconButton(
+                                                            onPressed: null,
+                                                            icon: FaIcon(
+                                                                FontAwesomeIcons
+                                                                    .caretDown)),
+                                                      );
+                                                    },
+                                                    menuChildren: time
+                                                        .where((element) {
+                                                          if (index > 0) {
+                                                            if (end[_currentStep]
+                                                                    [
+                                                                    index - 1] <
+                                                                element) {
+                                                              return true;
+                                                            } else {
+                                                              return false;
+                                                            }
+                                                          }
+                                                          return true;
+                                                        })
+                                                        .map(
+                                                          (e) => MenuItemButton(
+                                                            style:
+                                                                const ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStatePropertyAll(
+                                                                      white),
+                                                            ),
+                                                            onPressed: () =>
+                                                                setState(() {
+                                                              controllerBegin[_currentStep]
+                                                                          [index]
+                                                                      .text =
+                                                                  convertIntToTime(
+                                                                      e);
+
+                                                              begin[_currentStep]
+                                                                  [index] = e;
+                                                            }),
+                                                            child: Text(
+                                                              convertIntToTime(
+                                                                  e),
+                                                            ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  child: FaIcon(
+                                                    FontAwesomeIcons.arrowRight,
+                                                    color: black26,
+                                                    size: dimensIcon() * .7,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: MenuAnchor(
+                                                    style: MenuStyle(
+                                                      elevation:
+                                                          const MaterialStatePropertyAll(
+                                                              10),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  dimensWidth() *
+                                                                      3),
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                          const MaterialStatePropertyAll(
+                                                              white),
+                                                      surfaceTintColor:
+                                                          const MaterialStatePropertyAll(
+                                                              white),
+                                                      padding:
+                                                          MaterialStatePropertyAll(
+                                                        EdgeInsets.symmetric(
+                                                          horizontal:
+                                                              dimensWidth() * 2,
+                                                          vertical:
+                                                              dimensHeight(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    builder:
+                                                        (BuildContext context,
+                                                            MenuController
+                                                                controller,
+                                                            Widget? child) {
+                                                      return TextFieldWidget(
+                                                        enable: index ==
+                                                                countInputTimes[
+                                                                        _currentStep] -
+                                                                    1 &&
+                                                            begin[_currentStep]
+                                                                    [index] !=
+                                                                -1,
+                                                        onTap: () {
+                                                          if (controller
+                                                              .isOpen) {
+                                                            controller.close();
+                                                          } else {
+                                                            controller.open();
+                                                          }
+                                                        },
+                                                        readOnly: true,
+                                                        label: translate(
+                                                            context, 'end'),
+                                                        controller:
+                                                            controllerEnd[
+                                                                    _currentStep]
+                                                                [index],
+                                                        validate: (value) {
+                                                          if (value!.isEmpty) {
+                                                            return translate(
+                                                                context,
+                                                                'please_choose');
+                                                          }
+                                                          return null;
+                                                        },
+                                                        suffixIcon: const IconButton(
+                                                            onPressed: null,
+                                                            icon: FaIcon(
+                                                                FontAwesomeIcons
+                                                                    .caretDown)),
+                                                      );
+                                                    },
+                                                    menuChildren: time
+                                                        .where((element) {
+                                                          if (begin[_currentStep]
+                                                                  [index] <
+                                                              element) {
+                                                            return true;
+                                                          }
+                                                          return false;
+                                                        })
+                                                        .map(
+                                                          (e) => MenuItemButton(
+                                                            style:
+                                                                const ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStatePropertyAll(
+                                                                      white),
+                                                            ),
+                                                            onPressed: () =>
+                                                                setState(() {
+                                                              controllerEnd[_currentStep]
+                                                                          [index]
+                                                                      .text =
+                                                                  convertIntToTime(
+                                                                      e);
+
+                                                              end[_currentStep]
+                                                                  [index] = e;
+                                                            }),
+                                                            child: Text(
+                                                              convertIntToTime(
+                                                                  e),
+                                                            ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // BaseGridview(radio: 3.2, children: [
+                                        //   ...time.map(
+                                        //     (e) => InkWell(
+                                        //       splashColor: transparent,
+                                        //       highlightColor: transparent,
+                                        //       onTap: () {
+                                        //         setState(() {
+                                        //           if (workingTimes.contains(e)) {
+                                        //             workingTimes.remove(e);
+                                        //           } else {
+                                        //             workingTimes.add(e);
+                                        //           }
+                                        //         });
+                                        //       },
+                                        //       child: workingTimes.contains(e)
+                                        //           ? ValidShift(time: convertIntToTime(e))
+                                        //           : InvalidShift(
+                                        //               time: convertIntToTime(e),
+                                        //             ),
+                                        //     ),
+                                        //   )
+                                        // ]),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: dimensHeight() * 2),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: IconButton(
+                                                  onPressed: countInputTimes[
+                                                              _currentStep] <=
+                                                          24
+                                                      ? () {
+                                                          addInputTimes();
+                                                        }
+                                                      : null,
+                                                  icon: FaIcon(
+                                                    FontAwesomeIcons.plus,
+                                                    // color: color1F1F1F,
+                                                    size: dimensIcon() * .5,
+                                                  ),
+                                                  disabledColor: black26,
+                                                ),
                                               ),
-                                      ),
-                                    )
-                                  ])
+                                              Expanded(
+                                                child: IconButton(
+                                                  // style: ButtonStyle(
+                                                  //     iconColor: MaterialStatePropertyAll(
+                                                  //         countInputTimes > 1 ? color1F1F1F : black26)),
+                                                  onPressed: countInputTimes[
+                                                              _currentStep] >
+                                                          1
+                                                      ? () {
+                                                          removeInputTimes();
+                                                        }
+                                                      : null,
+                                                  icon: FaIcon(
+                                                    FontAwesomeIcons.minus,
+                                                    // color: color1F1F1F,
+                                                    size: dimensIcon() * .5,
+                                                  ),
+                                                  disabledColor: black26,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                // BaseGridview(radio: 3.2, children: [
+                                //     ...time.map(
+                                //       (e) => InkWell(
+                                //         splashColor: transparent,
+                                //         highlightColor: transparent,
+                                //         onTap: () {
+                                //           setState(() {
+                                //             if (schedules[index].contains(e)) {
+                                //               schedules[index].remove(e);
+                                //             } else {
+                                //               schedules[index].add(e);
+                                //             }
+                                //           });
+                                //         },
+                                //         child: schedules[index].contains(e)
+                                //             ? ValidShift(
+                                //                 time: convertIntToTime(e))
+                                //             : InvalidShift(
+                                //                 time: convertIntToTime(e),
+                                //               ),
+                                //       ),
+                                //     )
+                                //   ])
                                 : const SizedBox(),
                             state: _currentStep == index
                                 ? StepState.editing

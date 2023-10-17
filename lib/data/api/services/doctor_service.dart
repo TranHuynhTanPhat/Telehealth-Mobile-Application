@@ -27,14 +27,14 @@ class DoctorService extends BaseService {
     return schedules;
   }
 
-  Future<DataResponse> getScheduleCron() async {
-    final response =
-        await get(ApiConstants.DOCTOR_SCHEDULE_CRON, isDoctor: true);
-    // List<ScheduleResponse> schedules = response.data
-    //     .map<ScheduleResponse>((e) => ScheduleResponse.fromMap(e))
-    //     .toList();
-    return response;
-  }
+  // Future<DataResponse> getScheduleCron() async {
+  //   final response =
+  //       await get(ApiConstants.DOCTOR_SCHEDULE_CRON, isDoctor: true);
+  //   // List<ScheduleResponse> schedules = response.data
+  //   //     .map<ScheduleResponse>((e) => ScheduleResponse.fromMap(e))
+  //   //     .toList();
+  //   return response;
+  // }
 
   Future<DataResponse> updateBio(String bio) async {
     var jsonRequest = json.encode({

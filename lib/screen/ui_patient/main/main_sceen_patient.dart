@@ -27,6 +27,7 @@ class MainScreenPatient extends StatefulWidget {
 class _MainScreenPatientState extends State<MainScreenPatient>
     with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
+  double animationValue = 0;
 
   bool isSideMenuClosed = true;
 
@@ -59,7 +60,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-    if(!mounted)return;
+    if (!mounted) return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
     super.initState();
   }
@@ -277,9 +278,35 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                           isSideMenuClosed = true;
                         });
                       },
-                      child: AbsorbPointer(
-                        child: _pageDetail[_currentIndex]['page'],
-                        absorbing: !isSideMenuClosed,
+                      child: GestureDetector(
+                        onHorizontalDragEnd: (details) {
+                          if (animationValue <= 0.3) {
+                            _animationController.reverse();
+                            isSideMenuClosed = true;
+                          } else {
+                            _animationController.forward();
+                            isSideMenuClosed = false;
+                          }
+                        },
+                        onHorizontalDragUpdate: (details) {
+                          if (!isSideMenuClosed) {
+                            animationValue =
+                                details.globalPosition.dx / maxWidth();
+                            _animationController.value = animationValue;
+                          } else if (isSideMenuClosed &&
+                              details.delta.dx > 0 &&
+                              details.localPosition.dx < 100) {
+                            isSideMenuClosed = false;
+                            animationValue =
+                                details.globalPosition.dx / maxWidth();
+                            _animationController.value = animationValue;
+                          }
+                          // print(details.localPosition.dx);
+                        },
+                        child: AbsorbPointer(
+                          child: _pageDetail[_currentIndex]['page'],
+                          absorbing: !isSideMenuClosed,
+                        ),
                       ),
                     ),
                   ),
