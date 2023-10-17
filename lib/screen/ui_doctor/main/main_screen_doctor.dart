@@ -80,15 +80,21 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               }
             },
           ),
-          // BlocListener<DoctorProfileCubit, DoctorProfileState>(
-          //   listener: (context, state) {
-          //     if (state is DoctorProfileUpdateSuccessfully) {
-          //       setState(() {
-          //         _image = null;
-          //       });
-          //     }
-          //   },
-          // ),
+          BlocListener<DoctorProfileCubit, DoctorProfileState>(
+            listener: (context, state) {
+              if (state is DoctorAvatarSuccessfully) {
+                if (state.profile != null) {
+                  String url = CloudinaryContext.cloudinary
+                      .image(state.profile!.avatar ?? '')
+                      .toString();
+                  NetworkImage provider = NetworkImage(url);
+                  provider.evict().then<void>((bool success) {
+                    if (success) debugPrint('removed image!');
+                  });
+                }
+              }
+            },
+          ),
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -144,9 +150,11 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                         .image(state.profile!.avatar ?? '')
                         .toString();
                     NetworkImage provider = NetworkImage(url);
-                    provider.evict().then<void>((bool success) {
-                      if (success) debugPrint('removed image!');
-                    });
+                    if (state is DoctorAvatarSuccessfully) {
+                      provider.evict().then<void>((bool success) {
+                        if (success) debugPrint('removed image!');
+                      });
+                    }
 
                     _image = _image ?? provider;
 

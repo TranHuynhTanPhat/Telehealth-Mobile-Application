@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
@@ -184,7 +185,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     }
   }
 
-  Future<void> addSubUser(String avatar, String fullName, String birthday,
+  Future<void> addSubUser(String? avatar, String fullName, String birthday,
       String gender, String relationship, String address) async {
     emit(AddSubUserLoading(
       stats: state.stats,
@@ -192,13 +193,13 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       currentId: state.currentId,
     ));
     try {
-      String? avt =
-          state.subUsers.firstWhere((element) => element.isMainProfile!).avatar;
-
-      FileResponse fileResponse =
-          await _fileRepository.uploadAvatarUser(path: avatar, publicId: avt!);
-      await _userRepository.addMedicalRecord(fileResponse.publicId!, fullName,
-          birthday, gender, relationship, address);
+      DataResponse response = await _userRepository.addMedicalRecord(
+          'default', fullName, birthday, gender, relationship, address);
+      String? recordId = response.data['record_id'];
+      if (recordId != null && avatar != null) {
+        await _fileRepository.uploadAvatarUser(
+            path: avatar, publicId: recordId);
+      }
 
       emit(AddSubUserSuccessfully(
         stats: state.stats,
@@ -230,15 +231,29 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       currentId: state.currentId,
     ));
     try {
-      String? avt = state.subUsers
+      String? id = state.subUsers
+          .firstWhere((element) => element.id == state.currentId)
+          .id;
+      String? avatar = state.subUsers
           .firstWhere((element) => element.id == state.currentId)
           .avatar;
 
       if (path != null) {
-        if (avt != null) {
+        if (id != null) {
+          print(id);
           FileResponse fileResponse =
-              await _fileRepository.uploadAvatarUser(path: path, publicId: avt);
-          avt = fileResponse.publicId;
+              await _fileRepository.uploadAvatarUser(path: path, publicId: id);
+              print(fileResponse.publicId);
+          if (avatar != fileResponse.publicId) {
+            await _userRepository.updateMedicalRecord(
+                id,
+                fileResponse.publicId!,
+                fullName,
+                birthday,
+                gender,
+                relationship,
+                address);
+          }
         }
       }
       // await _userRepository.updateMedicalRecord(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/license/faqs_screen.dart';

@@ -2,6 +2,8 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
@@ -30,13 +32,22 @@ class _SubUserCardState extends State<SubUserCard> {
 
   @override
   Widget build(BuildContext context) {
-    _image = _image ??
-        NetworkImage(
-          CloudinaryContext.cloudinary
-              .image(widget.subUser.avatar ?? '')
-              .toString(),
-        );
-    return Padding(
+    String url = CloudinaryContext.cloudinary
+        .image(widget.subUser.avatar ?? '')
+        .toString();
+    NetworkImage provider = NetworkImage(url);
+
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
+      listener: (context, state) {
+        if (state is UpdateSubUserSuccessfully) {
+          provider.evict().then<void>((bool success) {
+            if (success) debugPrint('removed image!');
+          });
+        }
+      },
+      child: Builder(builder: (context) {
+        _image = _image ?? provider;
+        return Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -83,7 +94,8 @@ class _SubUserCardState extends State<SubUserCard> {
               ),
             ),
           ),
-
+        );
+      }),
     );
   }
 }

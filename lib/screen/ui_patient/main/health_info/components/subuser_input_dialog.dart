@@ -383,23 +383,23 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                   text: translate(context, 'add_member'),
                                   onPressed: () {
                                     if (widget._formKey.currentState!
-                                            .validate() &&
-                                        _file != null) {
+                                            .validate()) {
                                       KeyboardUtil.hideKeyboard(context);
                                       widget._formKey.currentState!.save();
                                       context
                                           .read<MedicalRecordCubit>()
                                           .addSubUser(
-                                              _file!.path.trim(),
+                                              _file?.path.trim(),
                                               _controllerFullName.text.trim(),
                                               _controllerBirthday.text.trim(),
                                               gender.trim(),
                                               relationship.trim(),
                                               _controllerAddress.text.trim());
-                                    } else if (_file == null) {
-                                      EasyLoading.showToast(
-                                          'please_choose_image');
-                                    }
+                                    } 
+                                    // else if (_file == null) {
+                                    //   EasyLoading.showToast(
+                                    //       'please_choose_image');
+                                    // }
                                   },
                                 ),
                               )

@@ -63,13 +63,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
           if (state.subUsers.isNotEmpty && checkCurrentId) {
             context.read<MedicalRecordCubit>().fetchStats();
           }
-          // else if (!checkCurrentId && state.subUsers.isNotEmpty) {
-          //   context
-          //       .read<MedicalRecordCubit>()
-          //       .updateCurrentId(state.subUsers.first.id!);
-          // }
-          // } else if (state is HealthStatLoading) {
-          //   EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state is HealthStatLoaded) {
           EasyLoading.dismiss();
         } else if (state is HealthStatError) {
