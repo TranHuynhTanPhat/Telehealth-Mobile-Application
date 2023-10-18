@@ -32,7 +32,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerRelationship;
-  late TextEditingController _controllerFullname;
+  late TextEditingController _controllerFullName;
   late TextEditingController _controllerBirthday;
   late TextEditingController _controllerGender;
   late TextEditingController _controllerAddress;
@@ -42,11 +42,12 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
   String gender = '';
   String relationship = '';
 
+
   @override
   void initState() {
     _controllerGender = TextEditingController();
     _controllerRelationship = TextEditingController();
-    _controllerFullname = TextEditingController();
+    _controllerFullName = TextEditingController();
     _controllerBirthday = TextEditingController();
     _controllerAddress = TextEditingController();
 
@@ -56,27 +57,26 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SubUserCubit, SubUserState>(
-      listenWhen: (previous, current) => current is AddUser,
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
-        if (state is AddUserLoading) {
-          EasyLoading.show();
-        } else if (state is AddUserSuccessfully) {
-          EasyLoading.showToast(translate(context, state.message));
+        if (state is AddSubUserLoading) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state is AddSubUserSuccessfully) {
+          EasyLoading.showToast(translate(context, 'successfully'));
           Navigator.pop(context, true);
-        } else if (state is AddUserFailure) {
+        } else if (state is AddSubUserFailure) {
           EasyLoading.showToast(translate(context, state.message));
         }
       },
-      child: BlocBuilder<SubUserCubit, SubUserState>(
-        buildWhen: (previous, current) => current is AddUser,
+      child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
+        // buildWhen: (previous, current) => current is AddSubUserState,
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
               KeyboardUtil.hideKeyboard(context);
             },
             child: AbsorbPointer(
-              absorbing: state is AddUserLoading,
+              absorbing: state is AddSubUserLoading,
               child: Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(dimensWidth() * 3),
@@ -164,7 +164,7 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                           context, 'please_enter_full_name');
                                     }
                                   },
-                                  controller: _controllerFullname,
+                                  controller: _controllerFullName,
                                   label: translate(context, 'full_name'),
                                   textInputType: TextInputType.text,
                                 ),
@@ -383,20 +383,23 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                   text: translate(context, 'add_member'),
                                   onPressed: () {
                                     if (widget._formKey.currentState!
-                                            .validate() &&
-                                        _file != null) {
+                                            .validate()) {
+                                      KeyboardUtil.hideKeyboard(context);
                                       widget._formKey.currentState!.save();
-                                      context.read<SubUserCubit>().addSubUser(
-                                          _file!.path,
-                                          _controllerFullname.text,
-                                          _controllerBirthday.text,
-                                          gender,
-                                          relationship,
-                                          _controllerAddress.text);
-                                    } else if (_file == null) {
-                                      EasyLoading.showToast(
-                                          'please_choose_image');
-                                    }
+                                      context
+                                          .read<MedicalRecordCubit>()
+                                          .addSubUser(
+                                              _file?.path.trim(),
+                                              _controllerFullName.text.trim(),
+                                              _controllerBirthday.text.trim(),
+                                              gender.trim(),
+                                              relationship.trim(),
+                                              _controllerAddress.text.trim());
+                                    } 
+                                    // else if (_file == null) {
+                                    //   EasyLoading.showToast(
+                                    //       'please_choose_image');
+                                    // }
                                   },
                                 ),
                               )

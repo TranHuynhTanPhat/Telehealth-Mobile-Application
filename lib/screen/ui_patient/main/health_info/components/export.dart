@@ -2,7 +2,6 @@ export 'package:healthline/screen/ui_patient/main/health_info/components/heart_r
 export 'package:healthline/screen/ui_patient/main/health_info/components/blood_group_card.dart';
 export 'package:healthline/screen/ui_patient/main/health_info/components/bmi_card.dart';
 export 'package:healthline/screen/ui_patient/main/health_info/components/record_card.dart';
-export 'package:healthline/screen/ui_patient/main/health_info/components/health_infor_input_dialog.dart';
 export 'package:healthline/screen/ui_patient/main/health_info/components/list_subusers.dart';
 export 'package:healthline/screen/ui_patient/main/health_info/components/subuser_card.dart';
 

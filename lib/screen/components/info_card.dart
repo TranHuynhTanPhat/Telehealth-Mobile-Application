@@ -12,24 +12,24 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: BlocBuilder<SubUserCubit, SubUserState>(
+      title: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
         builder: (context, state) {
-          return Row(
-            children: [
-              Text(
-                state.subUsers.isNotEmpty
-                    ? state.subUsers
-                            .firstWhere((element) => element.isMainProfile!)
-                            .fullName ??
-                        translate(context, 'undefine')
-                    : translate(context, 'undefine'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: white),
-              ),
-            ],
-          );
+          return state.subUsers.isNotEmpty
+              ? Row(
+                  children: [
+                    Text(
+                      state.subUsers
+                              .firstWhere((element) => element.isMainProfile!)
+                              .fullName ??
+                          translate(context, 'undefine'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: white),
+                    ),
+                  ],
+                )
+              : const SizedBox();
         },
       ),
       subtitle: Text(

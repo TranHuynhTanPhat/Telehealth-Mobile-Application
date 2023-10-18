@@ -24,6 +24,7 @@ class TextFieldWidget extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.maxLine = 1,
+    this.enable=true,
   });
   final TextEditingController controller;
   final String? label;
@@ -45,10 +46,12 @@ class TextFieldWidget extends StatelessWidget {
   final bool readOnly;
   final Function()? onTap;
   final int maxLine;
+  final bool enable;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enable,
       maxLines: maxLine,
       textAlign: TextAlign.start,
       onTap: onTap,

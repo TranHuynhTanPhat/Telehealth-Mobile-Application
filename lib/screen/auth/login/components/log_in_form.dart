@@ -21,7 +21,7 @@ class _LogInFormState extends State<LogInForm> {
   late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
   final _formKey = GlobalKey<FormState>();
-  bool? errorCheckTermsAndConditons;
+  bool? errorCheckTermsAndConditions;
   bool agreeTermsAndConditions = false;
   bool isDoctor = false;
   bool isPatient = true;
@@ -242,8 +242,8 @@ class _LogInFormState extends State<LogInForm> {
                   height: 24,
                   width: 24,
                   child: Checkbox(
-                    side: errorCheckTermsAndConditons == true ||
-                            errorCheckTermsAndConditons == null
+                    side: errorCheckTermsAndConditions == true ||
+                            errorCheckTermsAndConditions == null
                         ? const BorderSide(width: .5)
                         : BorderSide(
                             width: 1,
@@ -283,10 +283,10 @@ class _LogInFormState extends State<LogInForm> {
               text: translate(context, 'log_in'),
               onPressed: () {
                 setState(() {
-                  errorCheckTermsAndConditons = agreeTermsAndConditions;
+                  errorCheckTermsAndConditions = agreeTermsAndConditions;
                 });
                 if (_formKey.currentState!.validate() &&
-                    errorCheckTermsAndConditons == true) {
+                    errorCheckTermsAndConditions == true) {
                   _formKey.currentState!.save();
                   KeyboardUtil.hideKeyboard(context);
                   context.read<LogInCubit>().logIn(

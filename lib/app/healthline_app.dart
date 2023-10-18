@@ -32,13 +32,21 @@ class _MyAppState extends State<MyApp> {
     return LayoutBuilder(
       builder: (context, constraints) {
         SizeConfig().init(constraints);
-        return BlocProvider(
-          create: (context) => ResCubit(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => ResCubit(),
+            ),
+            BlocProvider(
+              create: (context) => ApplicationUpdateCubit(),
+            ),
+          ],
           child: BlocBuilder<ResCubit, ResState>(
             builder: (context, state) {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: "healthline",
+                
                 home: MediaQuery(
                   data: MediaQuery.of(context).copyWith(
                     textScaleFactor: 1.0,

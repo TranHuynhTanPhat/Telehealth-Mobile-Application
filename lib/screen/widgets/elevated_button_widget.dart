@@ -19,7 +19,6 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      
       onPressed: widget.onPressed,
       style: ButtonStyle(
         padding: MaterialStatePropertyAll(

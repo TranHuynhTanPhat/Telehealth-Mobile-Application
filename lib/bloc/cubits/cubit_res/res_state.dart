@@ -32,3 +32,7 @@ class ResState extends Equatable {
 final class ResInit extends ResState {
   const ResInit({required super.locale, required super.switchTheme});
 }
+
+final class LanguageChanging extends ResState {
+  const LanguageChanging({required super.locale, required super.switchTheme});
+}

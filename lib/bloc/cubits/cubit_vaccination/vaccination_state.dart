@@ -14,21 +14,21 @@ class VaccinationState {
 
   
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
+  // Map<String, dynamic> toMap() {
+  //   final result = <String, dynamic>{};
   
-    result.addAll({'diseaseAdult': diseaseAdult.map((x) => x.toMap()).toList()});
-    result.addAll({'diseaseChild': diseaseChild.map((x) => x.toMap()).toList()});
+  //   result.addAll({'diseaseAdult': diseaseAdult.map((x) => x.toMap()).toList()});
+  //   result.addAll({'diseaseChild': diseaseChild.map((x) => x.toMap()).toList()});
   
-    return result;
-  }
+  //   return result;
+  // }
 
-  factory VaccinationState.fromMap(Map<String, dynamic> map) {
-    return VaccinationState(
-      diseaseAdult: List<Disease>.from(map['diseaseAdult']?.map((x) => Disease.fromMap(x))),
-      diseaseChild: List<Disease>.from(map['diseaseChild']?.map((x) => Disease.fromMap(x))),
-    );
-  }
+  // factory VaccinationState.fromMap(Map<String, dynamic> map) {
+  //   return VaccinationState(
+  //     diseaseAdult: List<Disease>.from(map['diseaseAdult']?.map((x) => Disease.fromMap(x))),
+  //     diseaseChild: List<Disease>.from(map['diseaseChild']?.map((x) => Disease.fromMap(x))),
+  //   );
+  // }
 
  }
 

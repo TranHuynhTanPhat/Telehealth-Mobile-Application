@@ -17,10 +17,24 @@ class ResCubit extends HydratedCubit<ResState> {
     logPrint(change);
   }
 
-  void toVietnamese() => emit(
-      ResState(locale: const Locale('vi'), switchTheme: state.switchTheme));
-  void toEnglish() => emit(
-      ResState(locale: const Locale('en'), switchTheme: state.switchTheme));
+  Future<void> toVietnamese() async {
+    emit(
+        LanguageChanging(locale: state.locale, switchTheme: state.switchTheme));
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      emit(
+          ResState(locale: const Locale('vi'), switchTheme: state.switchTheme));
+    });
+  }
+
+  Future<void> toEnglish() async {
+    emit(
+        LanguageChanging(locale: state.locale, switchTheme: state.switchTheme));
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      emit(
+          ResState(locale: const Locale('en'), switchTheme: state.switchTheme));
+    });
+  }
+
   void toLightTheme() =>
       emit(ResState(locale: state.locale, switchTheme: false));
   void toDartTheme() => emit(ResState(locale: state.locale, switchTheme: true));

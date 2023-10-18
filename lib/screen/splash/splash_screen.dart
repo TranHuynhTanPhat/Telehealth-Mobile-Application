@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,6 +9,8 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/linear_progress_indicator.dart';
+
+import '../../bloc/cubits/cubits_export.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,6 +22,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    if (!mounted) return;
+    context.read<ApplicationUpdateCubit>().requestCurrentPatchNumber();
+    context.read<ApplicationUpdateCubit>().checkForUpdate();
+
     super.initState();
     startTimer();
   }

@@ -16,5 +16,8 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
-Release Android internal
-shorebird release android --flavor internal --artifact apk  ./lib/flavors/main_development.dart 
+Release Android development
+shorebird release android --flavor dev --artifact apk  ./lib/flavors/main_development.dart 
+
+Patch Android development
+shorebird patch android --flavor dev ./lib/flavors/main_development.dart
