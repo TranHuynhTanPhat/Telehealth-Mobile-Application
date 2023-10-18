@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  patch:
+  patch_android:
     defaults:
       run:
         shell: bash
@@ -14,7 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Use the setup-shorebird action to configure Shorebird
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
       - name: 🐦 Setup Shorebird
         uses: shorebirdtech/setup-shorebird@v0
 
