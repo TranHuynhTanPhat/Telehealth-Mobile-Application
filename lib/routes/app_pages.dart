@@ -17,6 +17,7 @@ const vaccinationName = '/vaccination';
 const addVaccinationName = '/add_vaccination';
 const updateHealthStatName = '/update_health_stat';
 const patientRecordName = '/patient_record';
+const addPatientRecordName = '/add_patient_record';
 
 const doctorName = '/doctor';
 const detailDoctorName = '/detail_doctor';

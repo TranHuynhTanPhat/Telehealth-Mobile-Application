@@ -46,9 +46,9 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   }
 
   @override
-  void deactivate() {
+  void dispose() {
     _animationController.dispose();
-    super.deactivate();
+    super.dispose();
   }
 
   @override

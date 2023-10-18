@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/res/style.dart';
@@ -11,7 +12,6 @@ import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:intl/intl.dart';
 
 class UpdateVaccinationScreen extends StatefulWidget {
   const UpdateVaccinationScreen({super.key, required this.vaccineRecord});
@@ -56,13 +56,8 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
         // listenWhen: (previous, current) => current is UpdateInjectedVaccination,
         listener: (context, state) {
-          if (state is UpdateInjectedVaccinationLoading) {
-            EasyLoading.show(maskType: EasyLoadingMaskType.black);
-          } else if (state is UpdateInjectedVaccinationLoaded) {
-            EasyLoading.showToast(translate(context, 'successfully'));
+          if (state is UpdateInjectedVaccinationLoaded) {
             Navigator.pop(context, true);
-          } else if (state is UpdateInjectedVaccinationError) {
-            EasyLoading.showToast(state.message);
           }
         },
         child: GestureDetector(
@@ -114,7 +109,6 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
                         label: translate(context, 'vaccination'),
                         controller: _controllerDisease,
                         validate: (value) => null,
-
                       ),
                       //     },
                       //     menuChildren: state.vaccinations

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/update_vaccination.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/translate.dart';
-
-import '../../../../../../routes/app_pages.dart';
 
 class ListInjectedVaccination extends StatelessWidget {
   const ListInjectedVaccination({
@@ -18,16 +16,7 @@ class ListInjectedVaccination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<VaccineRecordCubit, VaccineRecordState>(
-        listener: (context, state) {
-      if (state is DeleteInjectedVaccinationLoading) {
-        EasyLoading.show(maskType: EasyLoadingMaskType.black);
-      } else if (state is DeleteInjectedVaccinationLoaded) {
-        EasyLoading.showToast(translate(context, 'delete_successfully'));
-      } else if (state is DeleteInjectedVaccinationError) {
-        EasyLoading.showToast(translate(context, state.message.toLowerCase()));
-      }
-    }, child: BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
+    return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
       builder: (context, state) {
         if (state is! FetchInjectedVaccinationLoading &&
             state.injectedVaccinations.isEmpty) {
@@ -41,8 +30,8 @@ class ListInjectedVaccination extends StatelessWidget {
                   color: color1F1F1F.withOpacity(.05),
                   size: dimensWidth() * 30,
                 ),
-                SizedBox(
-                  width: dimensWidth() * 25,
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: dimensWidth() * 10),
                   child: TextButton(
                     style: ButtonStyle(
                       iconColor: const MaterialStatePropertyAll(white),
@@ -273,7 +262,7 @@ class ListInjectedVaccination extends StatelessWidget {
           );
         }
       },
-    ));
+    );
   }
 }
 

@@ -66,9 +66,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   }
 
   @override
-  void deactivate() {
+  void dispose() {
     _animationController.dispose();
-    super.deactivate();
+    super.dispose();
   }
 
   @override
@@ -121,199 +121,248 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       return Future.value(true);
     }
 
-    return WillPopScope(
-      onWillPop: onWillPop,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        extendBody: true,
-        backgroundColor: secondary,
-        bottomNavigationBar: Transform.translate(
-          offset: Offset(0, dimensWidth() * 12 * animation.value),
-          child: Container(
-            margin: EdgeInsets.all(dimensWidth() * 2.5),
-            height: dimensWidth() * 7.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.1),
-                  blurRadius: 30,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(dimensImage() * 6),
-            ),
-            child: ListView.builder(
-              itemCount: _pageDetail.length,
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
-              itemBuilder: (context, index) => InkWell(
-                onTap: () => setState(() {
-                  _currentIndex = index;
-                }),
-                splashColor: transparent,
-                highlightColor: transparent,
-                child: Stack(children: [
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                    width: index == _currentIndex ? dimensWidth() * 16.5 : 9,
-                    alignment: Alignment.center,
-                    child: AnimatedContainer(
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<VaccineRecordCubit, VaccineRecordState>(
+          listener: (context, state) {
+            if (state is DeleteInjectedVaccinationLoading ||
+                state is FetchVaccinationLoading ||
+                state is CreateInjectedVaccinationLoading ||
+                state is UpdateInjectedVaccinationLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is FetchVaccinationLoaded) {
+              EasyLoading.dismiss();
+            } else if (state is DeleteInjectedVaccinationLoaded) {
+              EasyLoading.showToast(translate(context, 'delete_successfully'));
+            } else if (state is CreateInjectedVaccinationLoaded ||
+                state is UpdateInjectedVaccinationLoaded) {
+              EasyLoading.showToast(translate(context, 'successfully'));
+            } else if (state is DeleteInjectedVaccinationError) {
+              EasyLoading.showToast(
+                  translate(context, translate(context, state.message)));
+            } else if (state is FetchVaccinationError) {
+              EasyLoading.showToast(translate(context, state.message));
+            } else if (state is CreateInjectedVaccinationError) {
+              EasyLoading.showToast(translate(context, state.message));
+            } else if (state is UpdateInjectedVaccinationError) {
+              EasyLoading.showToast(translate(context, state.message));
+            }
+          },
+        ),
+        BlocListener<MedicalRecordCubit, MedicalRecordState>(
+          listener: (context, state) {
+            if (state is UpdateSubUserLoading ||
+                state is DeleteSubUserLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is UpdateSubUserSuccessfully ||
+                state is DeleteSubUserSuccessfully ||
+                state is NoChange) {
+              EasyLoading.showToast(translate(context, 'successfully'));
+            } else if (state is UpdateSubUserFailure) {
+              EasyLoading.showToast(translate(context, state.message));
+            } else if (state is DeleteSubUserFailure) {
+              EasyLoading.showToast(translate(context, state.message));
+            }
+          },
+        ),
+      ],
+      child: WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          extendBody: true,
+          backgroundColor: secondary,
+          bottomNavigationBar: Transform.translate(
+            offset: Offset(0, dimensWidth() * 12 * animation.value),
+            child: Container(
+              margin: EdgeInsets.all(dimensWidth() * 2.5),
+              height: dimensWidth() * 7.8,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(.1),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(dimensImage() * 6),
+              ),
+              child: ListView.builder(
+                itemCount: _pageDetail.length,
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () => setState(() {
+                    _currentIndex = index;
+                  }),
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  child: Stack(children: [
+                    AnimatedContainer(
                       duration: const Duration(seconds: 1),
-                      decoration: BoxDecoration(
-                          color: index == _currentIndex
-                              ? primary.withOpacity(.2)
-                              : transparent,
-                          borderRadius:
-                              BorderRadius.circular(dimensWidth() * 6)),
                       curve: Curves.fastLinearToSlowEaseIn,
-                      height: index == _currentIndex ? dimensWidth() * 6 : 0,
-                      width: index == _currentIndex ? dimensWidth() * 16.5 : 0,
+                      width: index == _currentIndex ? dimensWidth() * 16.5 : 9,
+                      alignment: Alignment.center,
+                      child: AnimatedContainer(
+                        duration: const Duration(seconds: 1),
+                        decoration: BoxDecoration(
+                            color: index == _currentIndex
+                                ? primary.withOpacity(.2)
+                                : transparent,
+                            borderRadius:
+                                BorderRadius.circular(dimensWidth() * 6)),
+                        curve: Curves.fastLinearToSlowEaseIn,
+                        height: index == _currentIndex ? dimensWidth() * 6 : 0,
+                        width:
+                            index == _currentIndex ? dimensWidth() * 16.5 : 0,
+                      ),
                     ),
-                  ),
-                  AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.fastLinearToSlowEaseIn,
-                    width: index == _currentIndex
-                        ? dimensWidth() * 15.5
-                        : dimensWidth() * 9,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == _currentIndex
-                                  ? dimensWidth() * 6.5
-                                  : 0,
-                            ),
-                            AnimatedOpacity(
-                              opacity: index == _currentIndex ? 1 : 0,
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              child: Text(
-                                index == _currentIndex
-                                    ? translate(
-                                        context, _pageDetail[index]['title'])
-                                    : '',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: primary),
+                    AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      width: index == _currentIndex
+                          ? dimensWidth() * 15.5
+                          : dimensWidth() * 9,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                width: index == _currentIndex
+                                    ? dimensWidth() * 6.5
+                                    : 0,
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == _currentIndex
-                                  ? dimensWidth() * 1.5
-                                  : 20,
-                            ),
-                            FaIcon(
-                              _pageDetail[index]['icon'],
-                              size: dimensWidth() * 3.8,
-                              color: index == _currentIndex ? primary : black26,
-                            )
-                          ],
-                        ),
-                      ],
+                              AnimatedOpacity(
+                                opacity: index == _currentIndex ? 1 : 0,
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                child: Text(
+                                  index == _currentIndex
+                                      ? translate(
+                                          context, _pageDetail[index]['title'])
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(color: primary),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                width: index == _currentIndex
+                                    ? dimensWidth() * 1.5
+                                    : 20,
+                              ),
+                              FaIcon(
+                                _pageDetail[index]['icon'],
+                                size: dimensWidth() * 3.8,
+                                color:
+                                    index == _currentIndex ? primary : black26,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
             ),
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: Container(
-          margin: EdgeInsets.only(right: dimensWidth() * 40),
-          child: IconButton(
-            onPressed: () => RestClient().runHttpInspector(),
-            padding: EdgeInsets.all(dimensWidth() * 2),
-            icon: const FaIcon(FontAwesomeIcons.bug),
-            color: white,
-            style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(secondary)),
-          ),
-        ),
-        body: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn,
-              left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
-              width: double.maxFinite,
-              height: MediaQuery.of(context).size.height,
-              child: const SideMenu(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Container(
+            margin: EdgeInsets.only(right: dimensWidth() * 40),
+            child: IconButton(
+              onPressed: () => RestClient().runHttpInspector(),
+              padding: EdgeInsets.all(dimensWidth() * 2),
+              icon: const FaIcon(FontAwesomeIcons.bug),
+              color: white,
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(secondary)),
             ),
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(animation.value - 30 * animation.value * pi / 180),
-              child: Transform.translate(
-                offset: Offset(animation.value * dimensWidth() * 35, 0),
-                child: Transform.scale(
-                  scale: scalAnimation.value,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(isSideMenuClosed ? 0 : dimensWidth() * 3),
-                    ),
-                    child: InkWell(
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      onTap: () {
-                        if (!isSideMenuClosed) {
-                          _animationController.reverse();
-                        }
-                        KeyboardUtil.hideKeyboard(context);
-                        setState(() {
-                          isSideMenuClosed = true;
-                        });
-                      },
-                      child: GestureDetector(
-                        onHorizontalDragEnd: (details) {
-                          if (animationValue <= 0.3) {
-                            _animationController.reverse();
-                            isSideMenuClosed = true;
-                          } else {
-                            _animationController.forward();
-                            isSideMenuClosed = false;
-                          }
-                        },
-                        onHorizontalDragUpdate: (details) {
+          ),
+          body: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.fastOutSlowIn,
+                left: isSideMenuClosed ? -dimensWidth() * 35 : 0,
+                width: double.maxFinite,
+                height: MediaQuery.of(context).size.height,
+                child: const SideMenu(),
+              ),
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..rotateY(animation.value - 30 * animation.value * pi / 180),
+                child: Transform.translate(
+                  offset: Offset(animation.value * dimensWidth() * 35, 0),
+                  child: Transform.scale(
+                    scale: scalAnimation.value,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                            isSideMenuClosed ? 0 : dimensWidth() * 3),
+                      ),
+                      child: InkWell(
+                        splashColor: transparent,
+                        highlightColor: transparent,
+                        onTap: () {
                           if (!isSideMenuClosed) {
-                            animationValue =
-                                details.globalPosition.dx / maxWidth();
-                            _animationController.value = animationValue;
-                          } else if (isSideMenuClosed &&
-                              details.delta.dx > 0 &&
-                              details.localPosition.dx < 100) {
-                            isSideMenuClosed = false;
-                            animationValue =
-                                details.globalPosition.dx / maxWidth();
-                            _animationController.value = animationValue;
+                            _animationController.reverse();
                           }
-                          // print(details.localPosition.dx);
+                          KeyboardUtil.hideKeyboard(context);
+                          setState(() {
+                            isSideMenuClosed = true;
+                          });
                         },
-                        child: AbsorbPointer(
-                          child: _pageDetail[_currentIndex]['page'],
-                          absorbing: !isSideMenuClosed,
+                        child: GestureDetector(
+                          onHorizontalDragEnd: (details) {
+                            if (animationValue <= 0.3) {
+                              _animationController.reverse();
+                              isSideMenuClosed = true;
+                            } else {
+                              _animationController.forward();
+                              isSideMenuClosed = false;
+                            }
+                          },
+                          onHorizontalDragUpdate: (details) {
+                            if (!isSideMenuClosed) {
+                              animationValue =
+                                  details.globalPosition.dx / maxWidth();
+                              _animationController.value = animationValue;
+                            } else if (isSideMenuClosed &&
+                                details.delta.dx > 0 &&
+                                details.localPosition.dx < 100) {
+                              isSideMenuClosed = false;
+                              animationValue =
+                                  details.globalPosition.dx / maxWidth();
+                              _animationController.value = animationValue;
+                            }
+                            // print(details.localPosition.dx);
+                          },
+                          child: AbsorbPointer(
+                            child: _pageDetail[_currentIndex]['page'],
+                            absorbing: !isSideMenuClosed,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

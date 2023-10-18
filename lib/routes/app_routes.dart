@@ -20,6 +20,7 @@ import 'package:healthline/screen/ui_patient/account_setting/change_password/cha
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/wallet/wallet_screen.dart';
 import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/add_patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_vaccination_screen.dart';
@@ -29,7 +30,6 @@ import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_d
 import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/ref_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/update/update_screen.dart';
-
 
 class AppRoute {
   final _homeCubit = HomeCubit();
@@ -249,6 +249,17 @@ class AppRoute {
           builder: (_) => BlocProvider.value(
             value: _doctorScheduleCubit,
             child: const UpdateScheduleByDayScreen(),
+          ),
+        );
+      case addPatientRecordName:
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: _patientRecordCubit,
+              ),
+            ],
+            child: const AddPatientRecordScreen(),
           ),
         );
       default:

@@ -23,14 +23,47 @@ class LabelDrawer extends StatefulWidget {
   State<LabelDrawer> createState() => _LabelDrawerState();
 }
 
-class _LabelDrawerState extends State<LabelDrawer> {
+class _LabelDrawerState extends State<LabelDrawer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300))
+      ..addListener(() {
+        setState(() {});
+      });
+    animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.fastEaseInToSlowEaseOut,
+    ));
+    super.initState();
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
+    if (widget.active) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.fastEaseInToSlowEaseOut,
+        Container(
           margin: EdgeInsets.only(
             right: dimensWidth(),
           ),
@@ -44,7 +77,7 @@ class _LabelDrawerState extends State<LabelDrawer> {
                   dimensWidth() * 2,
                 )),
           ),
-          width: widget.active == true ? dimensWidth() * 40 : 0,
+          width: animation.value * dimensWidth() * 40,
           height: dimensHeight() * 7,
         ),
         Container(

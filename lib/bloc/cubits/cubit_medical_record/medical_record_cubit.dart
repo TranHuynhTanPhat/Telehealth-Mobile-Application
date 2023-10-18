@@ -10,6 +10,7 @@ import 'package:healthline/repository/patient_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:intl/intl.dart';
 
 part 'medical_record_state.dart';
 
@@ -197,7 +198,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
           'default', fullName, birthday, gender, relationship, address);
       String? recordId = response.data['record_id'];
       if (recordId != null && avatar != null) {
-        await _fileRepository.uploadAvatarUser(
+        await _fileRepository.uploadAvatarPatient(
             path: avatar, publicId: recordId);
       }
 
@@ -231,18 +232,30 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       currentId: state.currentId,
     ));
     try {
-      String? id = state.subUsers
-          .firstWhere((element) => element.id == state.currentId)
-          .id;
-      String? avatar = state.subUsers
-          .firstWhere((element) => element.id == state.currentId)
-          .avatar;
+      UserResponse? user = state.subUsers.firstWhere(
+          (element) => element.id == state.currentId,
+          orElse: () => UserResponse());
+      String? id = user.id;
+      String? avatar = user.avatar;
+
+      DateTime oldBD =
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(user.dateOfBirth!);
+
+      bool bdChanged = oldBD.day != int.parse(birthday.split('/')[0]) ||
+          oldBD.month != int.parse(birthday.split('/')[1]) ||
+          oldBD.year != int.parse(birthday.split('/')[2]);
 
       if (path != null) {
         if (id != null) {
-          FileResponse fileResponse =
-              await _fileRepository.uploadAvatarUser(path: path, publicId: id);
-          if (avatar != fileResponse.publicId) {
+          FileResponse fileResponse = await _fileRepository.uploadAvatarPatient(
+              path: path, publicId: id);
+          if (avatar != fileResponse.publicId ||
+              fullName != user.fullName ||
+              birthday != user.dateOfBirth ||
+              gender != user.gender ||
+              relationship != user.relationship!.name ||
+              address != user.address ||
+              bdChanged) {
             await _userRepository.updateMedicalRecord(
                 id,
                 fileResponse.publicId!,
@@ -274,12 +287,17 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));
-    } catch (e) {
-      DioException er = e as DioException;
-
+    } on DioException catch (e) {
       emit(UpdateSubUserFailure(
         stats: state.stats,
-        message: er.message.toString(),
+        message: e.message.toString(),
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+      ));
+    } catch (e) {
+      emit(UpdateSubUserFailure(
+        stats: state.stats,
+        message: e.toString(),
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));

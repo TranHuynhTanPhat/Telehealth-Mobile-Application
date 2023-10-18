@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 class FileRequest {
-  String? imagePath;
+  String? path;
   String? uploadPreset;
   String? publicId;
   String? folder;
   FileRequest({
-     this.imagePath,
+     this.path,
      this.uploadPreset,
      this.publicId,
      this.folder,
@@ -15,8 +15,8 @@ class FileRequest {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
   
-    if(imagePath != null){
-      result.addAll({'imagePath': imagePath});
+    if(path != null){
+      result.addAll({'path': path});
     }
     if(uploadPreset != null){
       result.addAll({'upload_preset': uploadPreset});
@@ -33,7 +33,7 @@ class FileRequest {
 
   factory FileRequest.fromMap(Map<String, dynamic> map) {
     return FileRequest(
-      imagePath: map['imagePath'],
+      path: map['path'],
       uploadPreset: map['upload_preset'],
       publicId: map['public_id'],
       folder: map['folder'],

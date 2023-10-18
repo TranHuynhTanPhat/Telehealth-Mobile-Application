@@ -11,7 +11,7 @@ class FileResponse {
   String? format;
   String? resourceType;
   String? createdAt;
-  List<String>? tags;
+  // List<String?>? tags;
   int? bytes;
   String? type;
   String? etag;
@@ -22,6 +22,7 @@ class FileResponse {
   String? accessMode;
   bool? existing;
   String? originalFilename;
+  String? size;
 
   FileResponse(
       {this.assetId,
@@ -34,7 +35,7 @@ class FileResponse {
       this.format,
       this.resourceType,
       this.createdAt,
-      this.tags,
+      // this.tags,
       this.bytes,
       this.type,
       this.etag,
@@ -44,104 +45,110 @@ class FileResponse {
       this.folder,
       this.accessMode,
       this.existing,
-      this.originalFilename});
+      this.originalFilename,
+      this.size});
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
-    if(assetId != null){
+
+    if (assetId != null) {
       result.addAll({'asset_id': assetId});
     }
-    if(publicId != null){
+    if (publicId != null) {
       result.addAll({'public_id': publicId});
     }
-    if(version != null){
+    if (version != null) {
       result.addAll({'version': version});
     }
-    if(versionId != null){
+    if (versionId != null) {
       result.addAll({'version_id': versionId});
     }
-    if(signature != null){
+    if (signature != null) {
       result.addAll({'signature': signature});
     }
-    if(width != null){
+    if (width != null) {
       result.addAll({'width': width});
     }
-    if(height != null){
+    if (height != null) {
       result.addAll({'height': height});
     }
-    if(format != null){
+    if (format != null) {
       result.addAll({'format': format});
     }
-    if(resourceType != null){
+    if (resourceType != null) {
       result.addAll({'resource_type': resourceType});
     }
-    if(createdAt != null){
+    if (createdAt != null) {
       result.addAll({'created_at': createdAt});
     }
-    if(tags != null){
-      result.addAll({'tags': tags});
-    }
-    if(bytes != null){
+    // if(tags != null){
+    //   result.addAll({'tags': tags});
+    // }
+    if (bytes != null) {
       result.addAll({'bytes': bytes});
     }
-    if(type != null){
+    if (type != null) {
       result.addAll({'type': type});
     }
-    if(etag != null){
+    if (etag != null) {
       result.addAll({'etag': etag});
     }
-    if(placeholder != null){
+    if (placeholder != null) {
       result.addAll({'placeholder': placeholder});
     }
-    if(url != null){
+    if (url != null) {
       result.addAll({'url': url});
     }
-    if(secureUrl != null){
+    if (secureUrl != null) {
       result.addAll({'secure_url': secureUrl});
     }
-    if(folder != null){
+    if (folder != null) {
       result.addAll({'folder': folder});
     }
-    if(accessMode != null){
+    if (accessMode != null) {
       result.addAll({'access_mode': accessMode});
     }
-    if(existing != null){
+    if (existing != null) {
       result.addAll({'existing': existing});
     }
-    if(originalFilename != null){
+    if (originalFilename != null) {
       result.addAll({'original_filename': originalFilename});
     }
-  
+    if (size != null) {
+      result.addAll({'soze': size});
+    }
+
     return result;
   }
 
   factory FileResponse.fromMap(Map<String, dynamic> map) {
     return FileResponse(
-      assetId : map['asset_id'],
-    publicId : map['public_id'],
-    version : map['version'],
-    versionId : map['version_id'],
-    signature : map['signature'],
-    width : map['width'],
-    height : map['height'],
-    format : map['format'],
-    resourceType : map['resource_type'],
-    createdAt : map['created_at'],
-    tags : map['tags'].cast<String>(),
-    bytes : map['bytes'],
-    type : map['type'],
-    etag : map['etag'],
-    placeholder : map['placeholder'],
-    url : map['url'],
-    secureUrl : map['secure_url'],
-    folder : map['folder'],
-    accessMode : map['access_mode'],
-    existing : map['existing'],
-    originalFilename : map['original_filename'],
+      assetId: map['asset_id'],
+      publicId: map['public_id'],
+      version: map['version'],
+      versionId: map['version_id'],
+      signature: map['signature'],
+      width: map['width'],
+      height: map['height'],
+      format: map['format'],
+      resourceType: map['resource_type'],
+      createdAt: map['created_at'],
+      // tags : map['tags'].cast<String>(),
+      bytes: map['bytes'],
+      type: map['type'],
+      etag: map['etag'],
+      placeholder: map['placeholder'],
+      url: map['url'],
+      secureUrl: map['secure_url'],
+      folder: map['folder'],
+      accessMode: map['access_mode'],
+      existing: map['existing'],
+      originalFilename: map['original_filename'],
+      size: map['size'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory FileResponse.fromJson(String source) => FileResponse.fromMap(json.decode(source));
+  factory FileResponse.fromJson(String source) =>
+      FileResponse.fromMap(json.decode(source));
 }

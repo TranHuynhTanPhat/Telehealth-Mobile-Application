@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
@@ -49,20 +48,10 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   Widget build(BuildContext context) {
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
       listener: (context, state) {
-        if (state is FetchVaccinationError) {
-          EasyLoading.showToast(translate(context, state.message));
-          Navigator.pop(context);
-        } else if (state is FetchInjectedVaccinationLoading ||
-            state is FetchVaccinationLoading ||
-            state is CreateInjectedVaccinationLoading) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is FetchVaccinationLoaded) {
-          EasyLoading.dismiss();
-        } else if (state is CreateInjectedVaccinationLoaded) {
-          EasyLoading.showToast(translate(context, 'successfully'));
+        if (state is CreateInjectedVaccinationLoaded) {
           Navigator.pop(context, true);
-        } else if (state is CreateInjectedVaccinationError) {
-          EasyLoading.showToast(state.message);
+        } else if (state is FetchVaccinationError) {
+          Navigator.pop(context);
         }
       },
       child: BlocBuilder<VaccineRecordCubit, VaccineRecordState>(

@@ -347,6 +347,10 @@
         "vi": "Thêm hồ sơ vắc xin",
         "en": "Add vaccination record"
     },
+    "add_patient_record": {
+        "vi": "Thêm hồ sơ bệnh nhân",
+        "en": "Add patient record"
+    },
     "update": {
         "vi": "Cập nhật",
         "en": "Update"
@@ -1238,5 +1242,33 @@
     "continue": {
         "vi": "Tiếp tục",
         "en": "Continue"
+    },
+    "upload_your_file": {
+        "vi": "Tải tập tin của bạn lên",
+        "en": "Upload your file"
+    },
+    "browse_and_choose_the_file_you_want_to_upload": {
+        "vi": "Duyệt và chọn tập tin bạn muốn tải lên",
+        "en": "Browse and choose the file you want to upload"
+    },
+    "max_file_size": {
+        "vi": "Kích thước tệp tối đa",
+        "en": "Max file size"
+    },
+    "choose_file": {
+        "vi": "Chọn tệp",
+        "en": "Choose file"
+    },
+    "folder": {
+        "vi": "Thư mục",
+        "en": "Folder"
+    },
+    "choose_folder_or_enter_new_folder": {
+        "vi": "Chọn thư mục hoặc nhập thư mục mới",
+        "en": "Choose folder or enter new folder"
+    },
+    "upload_file": {
+        "vi": "Tải tệp lên",
+        "en": "Upload file"
     }
 }

@@ -2,9 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_doctor/overview/components/export.dart';
-import 'package:healthline/screen/widgets/file_doc_widget.dart';
-import 'package:healthline/screen/widgets/file_excel_widget.dart';
-import 'package:healthline/screen/widgets/file_pdf_widget.dart';
+import 'package:healthline/screen/widgets/file_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
 class OverviewScreen extends StatelessWidget {
@@ -218,19 +216,22 @@ class OverviewScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
                 left: dimensWidth() * 3, right: dimensWidth() * 3),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FileDocWidget(
+                const FileWidget(
                   title: 'cam',
+                  extension: 'doc',
                 ),
-                Divider(),
-                FileExcelWidget(
-                  title: 'cam',
+                const Divider(),
+                FileWidget(
+                  title: translate(context, 'cam'),
+                  extension: 'xls',
                 ),
-                Divider(),
-                FilePdfWidget(
+                const Divider(),
+                const FileWidget(
                   title: 'cam',
+                  extension: 'jpg',
                 ),
               ],
             ),

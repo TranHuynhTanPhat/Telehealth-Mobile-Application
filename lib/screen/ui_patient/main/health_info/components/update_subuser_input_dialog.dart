@@ -5,13 +5,11 @@ import 'dart:io';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubits_export.dart';
-
-import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:intl/intl.dart';
 
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -100,21 +98,9 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
     }
     return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
-        if (state is UpdateSubUserLoading || state is DeleteSubUserLoading) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is UpdateSubUserSuccessfully) {
-          EasyLoading.showToast(translate(context, 'successfully'));
+        if (state is UpdateSubUserSuccessfully ||
+            state is DeleteSubUserSuccessfully) {
           Navigator.pop(context, true);
-        } else if (state is UpdateSubUserFailure) {
-          EasyLoading.showToast(translate(context, state.message));
-        } else if (state is DeleteSubUserSuccessfully) {
-          EasyLoading.showToast(translate(context, 'successfully'));
-          EasyLoading.dismiss();
-          Navigator.pop(context, true);
-        } else if (state is DeleteSubUserFailure) {
-          EasyLoading.showToast(translate(context, state.message));
-        } else if (state is NoChange) {
-          EasyLoading.showToast(translate(context, 'successfully'));
         }
       },
       child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
@@ -135,8 +121,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                 backgroundColor: white,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: dimensHeight() * 3,
-                      horizontal: dimensWidth() * 3),
+                      // vertical: dimensHeight() * 3,
+                      horizontal: dimensWidth() * 2),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +323,12 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: dimensWidth() * 1.5,
+                                      width: !state.subUsers
+                                              .firstWhere((element) =>
+                                                  element.id == state.currentId)
+                                              .isMainProfile!
+                                          ? dimensWidth() * 1.5
+                                          : 0,
                                     ),
                                     !state.subUsers
                                             .firstWhere((element) =>

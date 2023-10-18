@@ -48,4 +48,5 @@ class ApiConstants {
   static const _FILE_UPLOAD = '/file-upload';
   static const UPLOAD_AVATAR_DOCTOR = '$_FILE_UPLOAD/doctor/avatar';
   static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
+  static const UPLOAD_RECORD = '$_FILE_UPLOAD/user/record';
 }

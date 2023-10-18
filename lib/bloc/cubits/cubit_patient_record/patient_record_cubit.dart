@@ -13,7 +13,11 @@ import 'package:open_document/open_document_exception.dart';
 part 'patient_record_state.dart';
 
 class PatientRecordCubit extends Cubit<PatientRecordState> {
-  PatientRecordCubit() : super(PatientRecordInitial(records: []));
+  PatientRecordCubit()
+      : super(PatientRecordInitial(
+          records: [],
+          medicalId: null,
+        ));
   final PatientRepository _patientRepository = PatientRepository();
   final FileRepository _fileRepository = FileRepository();
 
@@ -24,7 +28,8 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
   }
 
   Future<void> fetchPatientRecord(String medicalId) async {
-    emit(FetchPatientRecordLoading(records: state.records));
+    emit(FetchPatientRecordLoading(
+        records: state.records, medicalId: medicalId));
 
     try {
       List<PatientRecordResponse> records =
@@ -33,34 +38,42 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       );
       emit(FetchPatientRecordLoaded(
         records: records,
+        medicalId: state.medicalId,
       ));
     } catch (e) {
-      emit(FetchPatientRecordError(records: state.records));
+      emit(FetchPatientRecordError(
+          records: state.records, medicalId: state.medicalId));
     }
   }
 
   Future<void> addPatientRecord(File file) async {
-    emit(AddPatientRecordLoading(records: state.records));
+    emit(AddPatientRecordLoading(
+        records: state.records, medicalId: state.medicalId));
     try {
       // await _patientRepository.addPatientRecord(state.currentId!, file.path);
-      emit(AddPatientRecordLoaded(records: state.records));
+      emit(AddPatientRecordLoaded(
+          records: state.records, medicalId: state.medicalId));
     } catch (e) {
-      emit(AddPatientRecordError(records: state.records));
+      emit(AddPatientRecordError(
+          records: state.records, medicalId: state.medicalId));
     }
   }
 
   Future<void> deletePatientRecord(File file) async {
-    emit(DeletePatientRecordLoading(records: state.records));
+    emit(DeletePatientRecordLoading(
+        records: state.records, medicalId: state.medicalId));
     try {
       // await _patientRepository.addPatientRecord(state.currentId!, file.path);
-      emit(DeletePatientRecordLoaded(records: state.records));
+      emit(DeletePatientRecordLoaded(
+          records: state.records, medicalId: state.medicalId));
     } catch (e) {
-      emit(DeletePatientRecordError(records: state.records));
+      emit(DeletePatientRecordError(
+          records: state.records, medicalId: state.medicalId));
     }
   }
 
   Future<void> openFile({required String url, required String fileName}) async {
-    emit(OpenFileLoading(records: state.records));
+    emit(OpenFileLoading(records: state.records, medicalId: state.medicalId));
     try {
       final path = await OpenDocument.getPathDocument();
 
@@ -72,23 +85,34 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
             await _fileRepository.downloadFile(filePath: filePath, url: url);
       }
 
-      emit(OpenFileLoaded(records: state.records, filePath: filePath));
+      emit(OpenFileLoaded(
+          records: state.records,
+          filePath: filePath,
+          medicalId: state.medicalId));
     } on DioException catch (e) {
       logPrint("ERROR DIO: ${e.message.toString()}");
-      emit(
-        OpenFileError(
-            records: state.records, message: e.message.toString(), url: url),
-      );
+      emit(OpenFileError(
+          records: state.records,
+          message: e.message.toString(),
+          url: url,
+          medicalId: state.medicalId));
     } on OpenDocumentException catch (e) {
       logPrint("ERROR OPEN DOCUMENT: ${e.errorMessage}");
       emit(
         OpenFileError(
-            records: state.records, message: e.errorMessage, url: url),
+            records: state.records,
+            message: e.errorMessage,
+            url: url,
+            medicalId: state.medicalId),
       );
     } catch (e) {
       logPrint("ERROR OPEN FILE CUBIT: ${e.toString()}");
       emit(
-        OpenFileError(records: state.records, message: e.toString(), url: url),
+        OpenFileError(
+            records: state.records,
+            message: e.toString(),
+            url: url,
+            medicalId: state.medicalId),
       );
     }
   }
