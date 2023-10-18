@@ -9,35 +9,31 @@ class ListRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return ListView(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         RecordCard(
-          name: 'head_circumference',
-
-          color: colorDF9F1E,
-          iconData: FontAwesomeIcons.ruler,
-          press: () {},
-        ),
-        RecordCard(
           name: 'vaccination',
-
           color: color9D4B6C,
           iconData: FontAwesomeIcons.syringe,
           press: () {
             Navigator.pushNamed(context, vaccinationName);
           },
         ),
+        const Divider(),
         RecordCard(
           name: 'medical_record',
-
           color: color009DC7,
           iconData: FontAwesomeIcons.solidFolder,
-          press: () {},
+          press: () {
+            Navigator.pushNamed(context, patientRecordName);
+          },
         ),
+        const Divider(),
         RecordCard(
           name: 'prescription',
-
           color: color1C6AA3,
           iconData: FontAwesomeIcons.prescription,
           press: () {},

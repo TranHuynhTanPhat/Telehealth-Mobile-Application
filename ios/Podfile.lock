@@ -43,6 +43,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - open_document (0.0.1):
+    - Flutter
   - open_filex (0.0.2):
     - Flutter
   - package_info_plus (0.4.5):
@@ -51,6 +53,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
+    - Flutter
+  - restart_app (0.0.1):
     - Flutter
   - SDWebImage (5.18.2):
     - SDWebImage/Core (= 5.18.2)
@@ -82,10 +86,12 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
+  - open_document (from `.symlinks/plugins/open_document/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - restart_app (from `.symlinks/plugins/restart_app/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -114,6 +120,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_localization:
     :path: ".symlinks/plugins/flutter_localization/ios"
+  open_document:
+    :path: ".symlinks/plugins/open_document/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
   package_info_plus:
@@ -122,6 +130,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  restart_app:
+    :path: ".symlinks/plugins/restart_app/ios"
   sensors_plus:
     :path: ".symlinks/plugins/sensors_plus/ios"
   sentry_flutter:
@@ -144,10 +154,12 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  open_document: 63eea128860263e68b67ef3b31f74a5ae22e4c71
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
   sensors_plus: bda64198ccc7d3ccbb49e6ae17d92f67687bee20
   Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d

@@ -9,6 +9,7 @@ import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/components/info_card.dart';
+import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
 
 class SideMenu extends StatefulWidget {
@@ -48,8 +49,7 @@ class _SideMenuState extends State<SideMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const InfoCard(),
-                AppController.instance.authState == AuthState.AllAuthorized
-                    ? ListTile(
+                if (AppController.instance.authState == AuthState.AllAuthorized) ListTile(
                         onTap: () {
                           EasyLoading.show();
                           Future.delayed(const Duration(seconds: 1), () {
@@ -69,8 +69,7 @@ class _SideMenuState extends State<SideMenu> {
                           size: dimensIcon() * .5,
                           color: white,
                         ),
-                      )
-                    : const SizedBox(),
+                      ) else const SizedBox(),
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 2,
@@ -86,10 +85,10 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, contactName);
+                    Navigator.pushNamed(context, accountSettingName);
                   },
                   title: Text(
-                    translate(context, 'edit_contact_info'),
+                    translate(context, 'account_setting'),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -101,40 +100,28 @@ class _SideMenuState extends State<SideMenu> {
                     color: white,
                   ),
                 ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, changePasswordName);
-                  },
-                  title: Text(
-                    translate(context, 'change_password'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.lock,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
+                BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
+                  builder: (context, state) {
+                    return ListTile(
+                      onTap: () {
+                        Navigator.pushNamed(context, applicationSettingName);
+                      },
+                      title:Text(
+                        translate(context, 'application_setting'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: white),
+                      ),
+                      leading: badgeNotification(FaIcon(
+                        FontAwesomeIcons.gear,
+                        size: dimensIcon() * .5,
+                        color: white,
+                      ), state is UpdateAvailable, Theme.of(context).colorScheme.error, -10, -10),
+                    );
+                  }
                 ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, walletName);
-                  },
-                  title: Text(
-                    translate(context, 'wallet'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.wallet,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
-                ),
+
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 3,

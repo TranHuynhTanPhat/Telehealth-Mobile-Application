@@ -171,6 +171,14 @@
         "vi": "Vui lòng nhập mật khẩu",
         "en": "Please enter password"
     },
+    "please_enter_head_circumference": {
+        "vi": "Vui lòng nhập số đo vòng đầu",
+        "en": "Please enter head circumference"
+    },
+    "please_enter_temperature": {
+        "vi": "Vui lòng nhập nhiệt độ",
+        "en": "Please enter temperature"
+    },
     "least_8_characters_long": {
         "vi": "Ít nhất 8 kí tự",
         "en": "Least 8 characters long"
@@ -255,9 +263,69 @@
         "vi": "Cài đặt",
         "en": "Setting"
     },
+    "account_setting": {
+        "vi": "Cài đặt tài khoản",
+        "en": "Account setting"
+    },
+    "application_setting": {
+        "vi": "Cài đặt ứng dụng",
+        "en": "Application setting"
+    },
+    "update_application": {
+        "vi": "Cập nhật ứng dụng",
+        "en": "Update application"
+    },
+    "downloading": {
+        "vi": "Đang tải ...",
+        "en": "Downloading..."
+    },
+    "a_new_patch_is_ready": {
+        "vi": "Bản vá mới đã sẵn sằng",
+        "en": "A new patch is ready"
+    },
+    "restart_app": {
+        "vi": "Khởi động ứng dụng",
+        "en": "Restart app"
+    },
+    "update_available": {
+        "vi": "Bản cập nhật sẵn sàng",
+        "en": "Update available"
+    },
+    "no_update_available": {
+        "vi": "Không có bản cập nhật",
+        "en": "No update available"
+    },
+    "no_patch_installed": {
+        "vi": "Không có bản vá được cài đặt",
+        "en": "No patch installed"
+    },
+    "current_patch_version": {
+        "vi": "Phiên bản hiện tại",
+        "en": "Current patch version"
+    },
+    "cant_connect_to_current_version": {
+        "vi": "Không thể kết nối đến phiên bản hiện tại",
+        "en": "Can't connect to current version"
+    },
     "edit_contact_info": {
         "vi": "Chỉnh sửa thông tin liên hệ",
         "en": "Edit contact info"
+    },
+    "edit": {
+        "vi": "Sửa",
+        "en": "Edit"
+    },
+    "update_now": {
+        "vi": "Cập nhật ngay",
+        "en": "Update now"
+    },
+    "check_for_update": {
+        "vi": "Kiểm tra cập nhật",
+        "en": "Check for update"
+    },
+    "update_profile": {
+        "vi": "Cập nhật hồ sơ",
+        "en": "Update profile"
     },
     "update_biography": {
         "vi": "Cập nhật tiểu sử",
@@ -275,13 +343,37 @@
         "vi": "Thêm vắc xin",
         "en": "Add vaccination"
     },
+    "add_vaccination_record": {
+        "vi": "Thêm hồ sơ vắc xin",
+        "en": "Add vaccination record"
+    },
+    "add_patient_record": {
+        "vi": "Thêm hồ sơ bệnh nhân",
+        "en": "Add patient record"
+    },
     "update": {
         "vi": "Cập nhật",
         "en": "Update"
     },
+    "delete": {
+        "vi": "Xoá",
+        "en": "Delete"
+    },
     "delete_record": {
         "vi": "Xoá hồ sơ",
         "en": "Delete record"
+    },
+    "delete_successfully": {
+        "vi": "Xoá thành công",
+        "en": "Delete successfully"
+    },
+    "record_not_found": {
+        "vi": "Không tìm thấy hồ sơ",
+        "en": "Record not found"
+    },
+    "successfully": {
+        "vi": "Thành công",
+        "en": "Successfully"
     },
     "cant_load_data": {
         "vi": "Không thể tải dữ liệu",
@@ -290,6 +382,10 @@
     "failure": {
         "vi": "Thất bại",
         "en": "Failure"
+    },
+    "i_am_healthline": {
+        "vi": "Tôi là HealthLine",
+        "en": "I'm HealthLine"
     },
     "click_again_to_exit": {
         "vi": "Chạm lại để thoát",
@@ -723,6 +819,10 @@
         "vi": "Cân nặng",
         "en": "Weight"
     },
+    "temperature": {
+        "vi": "Nhiệt độ",
+        "en": "Temperature"
+    },
     "invalid_age": {
         "vi": "Tuổi không hợp lệ",
         "en": "Invalid age"
@@ -742,6 +842,14 @@
     "invalid_heart_rate": {
         "vi": "Nhịp tim không hợp lệ",
         "en": "Invalid heart rate"
+    },
+    "invalid_head_circumference": {
+        "vi": "Số đo vòng đầu không hợp lệ",
+        "en": "Invalid head circumference"
+    },
+    "invalid_temperature": {
+        "vi": "Nhiệt độ không hợp lệ",
+        "en": "Invalid temperature"
     },
     "update_information": {
         "vi": "Cập nhật thông tin",
@@ -1095,8 +1203,72 @@
         "vi": "Tiểu sử",
         "en": "Biography"
     },
+    "avatar": {
+        "vi": "Ảnh đại diện",
+        "en": "Avatar"
+    },
     "vaccination_record": {
         "vi": "Hồ sơ vắc xin",
         "en": "Vaccination record"
+    },
+    "update_health_stat": {
+        "vi": "Cập nhật chỉ sức khoẻ",
+        "en": "Update health stat"
+    },
+    "update_fixed_schedule": {
+        "vi": "Cập nhật lịch cố định",
+        "en": "Update fixed schedule"
+    },
+    "update_schedule_on": {
+        "vi": "Cập nhật lịch ngày",
+        "en": "Update schedule on"
+    },
+    "login_to_doctor_account_failed": {
+        "vi": "Đăng nhập vào tài khoản bác sĩ thất bại",
+        "en": "Login to doctor account failed"
+    },
+    "login_to_patient_account_failed": {
+        "vi": "Đăng nhập vào tài khoản người dùng thất bại",
+        "en": "Login to patient account failed"
+    },
+    "cant_open": {
+        "vi": "Không thể mở",
+        "en": "Can't open"
+    },
+    "day": {
+        "vi": "Ngày",
+        "en": "Day"
+    },
+    "continue": {
+        "vi": "Tiếp tục",
+        "en": "Continue"
+    },
+    "upload_your_file": {
+        "vi": "Tải tập tin của bạn lên",
+        "en": "Upload your file"
+    },
+    "browse_and_choose_the_file_you_want_to_upload": {
+        "vi": "Duyệt và chọn tập tin bạn muốn tải lên",
+        "en": "Browse and choose the file you want to upload"
+    },
+    "max_file_size": {
+        "vi": "Kích thước tệp tối đa",
+        "en": "Max file size"
+    },
+    "choose_file": {
+        "vi": "Chọn tệp",
+        "en": "Choose file"
+    },
+    "folder": {
+        "vi": "Thư mục",
+        "en": "Folder"
+    },
+    "choose_folder_or_enter_new_folder": {
+        "vi": "Chọn thư mục hoặc nhập thư mục mới",
+        "en": "Choose folder or enter new folder"
+    },
+    "upload_file": {
+        "vi": "Tải tệp lên",
+        "en": "Upload file"
     }
 }

@@ -16,11 +16,18 @@ import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class AppController {
   late PackageInfo packageInfo;
   late String deviceId;
   AuthState authState = AuthState.Unauthorized;
+
+
+  // Create an instance of ShorebirdCodePush. Because this example only contains
+  // a single widget, we create it here, but you will likely only need to create
+  // a single instance of ShorebirdCodePush in your app.
+  late final shorebirdCodePush=ShorebirdCodePush() ;
 
   // singleton
   static final AppController instance = AppController._internal();
@@ -61,7 +68,6 @@ class AppController {
 
     // Lấy các token được lưu tạm từ local storage
     try {
-
       LoginResponse? patient = await AppStorage().getPatient();
       LoginResponse? doctor = await AppStorage().getDoctor();
       String? accessTokenPatient = patient?.jwtToken;

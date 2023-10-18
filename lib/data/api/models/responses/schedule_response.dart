@@ -3,7 +3,7 @@ import 'dart:convert';
 class ScheduleResponse {
   String? id;
   String? date;
-  List<int>? workingTimes;
+  List<int?>? workingTimes;
   ScheduleResponse({
     this.id,
     this.date,
@@ -32,12 +32,13 @@ class ScheduleResponse {
     return ScheduleResponse(
       id: map['id'],
       date: map['date'],
-      workingTimes: map['working_times'] != null
-          ? map['working_times'].toString().split('-').map<int>((e) {
-              return int.parse(
-                  e); 
-            }).toList()
-          : [],
+      workingTimes: map['working_times'].isEmpty
+          ? []
+          : map['working_times'] != null
+              ? map['working_times'].toString().split('-').map<int?>((e) {
+                  return int.tryParse(e);
+                }).toList()
+              : [],
     );
   }
 

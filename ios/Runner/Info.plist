@@ -55,5 +55,14 @@
 		</array>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Explain why your app uses photo library</string>
+		<!-- Open document -->
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+		<true/>
+		<!-- Url launch -->
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>sms</string>
+			<string>tel</string>
+		</array>
 	</dict>
 </plist>

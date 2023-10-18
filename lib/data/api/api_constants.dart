@@ -28,8 +28,10 @@ class ApiConstants {
   static const DOCTOR = '$_DOCTOR/doctor';
   static const DOCTOR_CHANGE_AVATAR = '$DOCTOR/avatar';
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
+  static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
   static const DOCTOR_CHANGE_FIXED_TIMES = '$DOCTOR/fixed-times';
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
+  static const DOCTOR_SCHEDULE_CRON = '$DOCTOR_SCHEDULE/cron';
 
 // patient-record
   static const _PATIENT = '/patient-record';
@@ -40,4 +42,11 @@ class ApiConstants {
   static const _VACCINATION = '/vaccination';
   static const VACCINATION_RECORD = '$_VACCINATION/record';
   static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
+
+
+  // file-upload
+  static const _FILE_UPLOAD = '/file-upload';
+  static const UPLOAD_AVATAR_DOCTOR = '$_FILE_UPLOAD/doctor/avatar';
+  static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
+  static const UPLOAD_RECORD = '$_FILE_UPLOAD/user/record';
 }

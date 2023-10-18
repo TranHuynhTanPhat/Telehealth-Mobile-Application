@@ -9,7 +9,15 @@ enum AuthState {
 
 enum AppTheme { LightTheme, DartTheme }
 
-enum DrawerMenus { Overview, Schedule, Patient, Setting, Helps }
+enum DrawerMenus {
+  Overview,
+  Schedule,
+  YourShift,
+  Patient,
+  AccountSetting,
+  ApplicationSetting,
+  Helps
+}
 
 enum Gender { Male, Female }
 
@@ -34,6 +42,6 @@ enum TypeHealthStat {
   Weight,
   Heart_rate,
   Temperature,
-  Blood_pressure,
-  Waist_cricumference,
+  Blood_group,
+  Head_cricumference,
 }

@@ -90,4 +90,32 @@ class UserResponse {
 
   factory UserResponse.fromJson(String source) =>
       UserResponse.fromMap(json.decode(source));
+
+  UserResponse copyWith({
+    String? id,
+    String? fullName,
+    String? dateOfBirth,
+    String? gender,
+    Relationship? relationship,
+    String? avatar,
+    String? address,
+    bool? isMainProfile,
+    String? phone,
+    String? email,
+    int? accountBalance,
+  }) {
+    return UserResponse(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      gender: gender ?? this.gender,
+      relationship: relationship ?? this.relationship,
+      avatar: avatar ?? this.avatar,
+      address: address ?? this.address,
+      isMainProfile: isMainProfile ?? this.isMainProfile,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      accountBalance: accountBalance ?? this.accountBalance,
+    );
+  }
 }

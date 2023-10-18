@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/exceptions/api_exception.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
+import 'package:healthline/utils/log_data.dart';
 
 /// Request require Cookie => baseUrl + path
 abstract class BaseService {
@@ -18,7 +19,6 @@ abstract class BaseService {
     } else {
       response =
           await RestClient().getDio(isDoctor: isDoctor).get(path, data: data);
-      // print(response.toString());
     }
     return await _handleResponse(response);
   }
@@ -43,14 +43,29 @@ abstract class BaseService {
   }
 
   Future<DataResponse> patch(String path, {data, bool isDoctor = false}) async {
-    final response = await RestClient().getDio().patch(path, data: data);
+    final response =
+        await RestClient().getDio(isDoctor: isDoctor).patch(path, data: data);
     return await _handleResponse(response);
   }
 
-  Future<DataResponse> postUpload(String path, {formData}) async {
-    final response =
-        await RestClient().getDio(isUpload: true).post(path, data: formData);
+  Future<DataResponse> putUpload(String path,
+      {formData, bool isDoctor = false}) async {
+    final response = await RestClient()
+        .getDio(isUpload: true, isDoctor: isDoctor)
+        .put(path, data: formData);
     return await _handleResponse(response, isUpload: true);
+  }
+
+  Future<String> download(
+      {required String filePath, required String url}) async {
+    await RestClient().getDio().download(
+      url,
+      filePath,
+      onReceiveProgress: (count, total) {
+        logPrint('---Download----Rec: $count, Total: $total');
+      },
+    );
+    return filePath;
   }
 
   Future<DataResponse> _handleResponse(Response response,

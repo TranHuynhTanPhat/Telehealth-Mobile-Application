@@ -5,13 +5,11 @@ import 'dart:io';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubits_export.dart';
-
-import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:intl/intl.dart';
 
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -40,7 +38,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
   List<String> relationships = Relationship.values.map((e) => e.name).toList();
 
   late TextEditingController _controllerRelationship;
-  late TextEditingController _controllerFullname;
+  late TextEditingController _controllerFullName;
   late TextEditingController _controllerBirthday;
   late TextEditingController _controllerGender;
   late TextEditingController _controllerAddress;
@@ -51,11 +49,13 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
   String? gender;
   String? relationship;
 
+  bool onChange = false;
+
   @override
   void initState() {
     _controllerGender = TextEditingController();
     _controllerRelationship = TextEditingController();
-    _controllerFullname = TextEditingController();
+    _controllerFullName = TextEditingController();
     _controllerBirthday = TextEditingController();
     _controllerAddress = TextEditingController();
 
@@ -74,9 +74,9 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                   .toString(),
             )
         : AssetImage(DImages.placeholder);
-    _controllerFullname.text = _controllerFullname.text == ''
+    _controllerFullName.text = _controllerFullName.text == ''
         ? translate(context, widget._subUser.fullName!)
-        : _controllerFullname.text;
+        : _controllerFullName.text;
     _controllerRelationship.text = _controllerRelationship.text == '' &&
             widget._subUser.relationship != null
         ? translate(context, widget._subUser.relationship!.name.toLowerCase())
@@ -96,35 +96,23 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
     if (widget._subUser.relationship != null) {
       relationship = relationship ?? widget._subUser.relationship!.name;
     }
-    return BlocListener<SubUserCubit, SubUserState>(
-      listenWhen: (previous, current) => current is UpdateUser,
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
-        if (state is UpdateUserLoading) {
-          EasyLoading.show();
-        } else if (state is UpdateUserSuccessfully) {
-          EasyLoading.showToast(translate(context, state.message));
+        if (state is UpdateSubUserSuccessfully ||
+            state is DeleteSubUserSuccessfully) {
           Navigator.pop(context, true);
-        } else if (state is UpdateUserFailure) {
-          EasyLoading.showToast(translate(context, state.message));
-        } else if (state is DeleteUserLoading) {
-          EasyLoading.show();
-        } else if (state is DeleteUserSuccessfully) {
-          EasyLoading.showToast(translate(context, state.message));
-          Navigator.pop(context, true);
-        } else if (state is DeleteUserFailure) {
-          EasyLoading.showToast(translate(context, state.message));
         }
       },
-      child: BlocBuilder<SubUserCubit, SubUserState>(
-        buildWhen: (previous, current) => current is UpdateUser,
+      child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
+        // buildWhen: (previous, current) => current is UpdateSubUser,
         builder: (context, state) {
           return GestureDetector(
             onTap: () {
               KeyboardUtil.hideKeyboard(context);
             },
             child: AbsorbPointer(
-              absorbing:
-                  state is UpdateUserLoading || state is DeleteUserLoading,
+              absorbing: state is UpdateSubUserLoading ||
+                  state is DeleteSubUserLoading,
               child: Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(dimensWidth() * 3),
@@ -133,8 +121,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                 backgroundColor: white,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: dimensHeight() * 3,
-                      horizontal: dimensWidth() * 3),
+                      // vertical: dimensHeight() * 3,
+                      horizontal: dimensWidth() * 2),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +201,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                           context, 'please_enter_full_name');
                                     }
                                   },
-                                  controller: _controllerFullname,
+                                  controller: _controllerFullName,
                                   label: translate(context, 'full_name'),
                                   textInputType: TextInputType.text,
                                 ),
@@ -335,84 +323,104 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: dimensWidth() * 1.5,
+                                      width: !state.subUsers
+                                              .firstWhere((element) =>
+                                                  element.id == state.currentId)
+                                              .isMainProfile!
+                                          ? dimensWidth() * 1.5
+                                          : 0,
                                     ),
-                                    Expanded(
-                                      child: MenuAnchor(
-                                        style: MenuStyle(
-                                          elevation:
-                                              const MaterialStatePropertyAll(
-                                                  10),
-                                          // shadowColor: MaterialStatePropertyAll(black26),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      dimensWidth() * 3),
-                                            ),
-                                          ),
-                                          backgroundColor:
-                                              const MaterialStatePropertyAll(
-                                                  white),
-                                          surfaceTintColor:
-                                              const MaterialStatePropertyAll(
-                                                  white),
-                                          padding: MaterialStatePropertyAll(
-                                              EdgeInsets.symmetric(
-                                                  horizontal: dimensWidth() * 2,
-                                                  vertical: dimensHeight())),
-                                        ),
-                                        builder: (BuildContext context,
-                                            MenuController controller,
-                                            Widget? child) {
-                                          return TextFieldWidget(
-                                            onTap: () {
-                                              if (controller.isOpen) {
-                                                controller.close();
-                                              } else {
-                                                controller.open();
-                                              }
-                                            },
-                                            readOnly: true,
-                                            label: translate(
-                                                context, 'relationship'),
-                                            // hint: translate(context, 'ex_full_name'),
-                                            controller: _controllerRelationship,
-                                            validate: (value) => value!.isEmpty
-                                                ? translate(
-                                                    context, 'please_choose')
-                                                : null,
-                                            suffixIcon: const IconButton(
-                                                onPressed: null,
-                                                icon: FaIcon(FontAwesomeIcons
-                                                    .caretDown)),
-                                          );
-                                        },
-                                        menuChildren: relationships
-                                            .map(
-                                              (e) => MenuItemButton(
-                                                style: const ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStatePropertyAll(
-                                                            white)),
-                                                onPressed: () => setState(() {
-                                                  _controllerRelationship.text =
-                                                      translate(context,
-                                                          e.toLowerCase());
-                                                  relationship = e;
-                                                }),
-                                                child: Text(
-                                                  translate(
-                                                      context,
-                                                      translate(context,
-                                                          e.toLowerCase())),
+                                    !state.subUsers
+                                            .firstWhere((element) =>
+                                                element.id == state.currentId)
+                                            .isMainProfile!
+                                        ? Expanded(
+                                            child: MenuAnchor(
+                                              style: MenuStyle(
+                                                elevation:
+                                                    const MaterialStatePropertyAll(
+                                                        10),
+                                                // shadowColor: MaterialStatePropertyAll(black26),
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            dimensWidth() * 3),
+                                                  ),
                                                 ),
+                                                backgroundColor:
+                                                    const MaterialStatePropertyAll(
+                                                        white),
+                                                surfaceTintColor:
+                                                    const MaterialStatePropertyAll(
+                                                        white),
+                                                padding:
+                                                    MaterialStatePropertyAll(
+                                                        EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                dimensWidth() *
+                                                                    2,
+                                                            vertical:
+                                                                dimensHeight())),
                                               ),
-                                            )
-                                            .toList(),
-                                      ),
-                                    ),
+                                              builder: (BuildContext context,
+                                                  MenuController controller,
+                                                  Widget? child) {
+                                                return TextFieldWidget(
+                                                  onTap: () {
+                                                    if (controller.isOpen) {
+                                                      controller.close();
+                                                    } else {
+                                                      controller.open();
+                                                    }
+                                                  },
+                                                  readOnly: true,
+                                                  label: translate(
+                                                      context, 'relationship'),
+                                                  // hint: translate(context, 'ex_full_name'),
+                                                  controller:
+                                                      _controllerRelationship,
+                                                  validate: (value) =>
+                                                      value!.isEmpty
+                                                          ? translate(context,
+                                                              'please_choose')
+                                                          : null,
+                                                  suffixIcon: const IconButton(
+                                                      onPressed: null,
+                                                      icon: FaIcon(
+                                                          FontAwesomeIcons
+                                                              .caretDown)),
+                                                );
+                                              },
+                                              menuChildren: relationships
+                                                  .map(
+                                                    (e) => MenuItemButton(
+                                                      style: const ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStatePropertyAll(
+                                                                  white)),
+                                                      onPressed: () =>
+                                                          setState(() {
+                                                        _controllerRelationship
+                                                                .text =
+                                                            translate(context,
+                                                                e.toLowerCase());
+                                                        relationship = e;
+                                                      }),
+                                                      child: Text(
+                                                        translate(
+                                                            context,
+                                                            translate(context,
+                                                                e.toLowerCase())),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          )
+                                        : const SizedBox(),
                                   ],
                                 ),
                               ),
@@ -451,8 +459,9 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                                     .validate()) {
                                                   _formKey.currentState!.save();
                                                   context
-                                                      .read<SubUserCubit>()
-                                                      .deleteUser(
+                                                      .read<
+                                                          MedicalRecordCubit>()
+                                                      .deleteSubUser(
                                                           widget._subUser.id!);
                                                 }
                                               },
@@ -468,16 +477,18 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {
+                                            KeyboardUtil.hideKeyboard(context);
                                             _formKey.currentState!.save();
                                             context
-                                                .read<SubUserCubit>()
-                                                .updateUser(
-                                                    _file,
-                                                    _controllerFullname.text,
-                                                    _controllerBirthday.text,
-                                                    gender!,
-                                                    relationship!,
-                                                    _controllerAddress.text);
+                                                .read<MedicalRecordCubit>()
+                                                .updateSubUser(
+                                                  _file?.path,
+                                                  _controllerFullName.text,
+                                                  _controllerBirthday.text,
+                                                  gender!,
+                                                  relationship,
+                                                  _controllerAddress.text,
+                                                );
                                           }
                                         },
                                       ),

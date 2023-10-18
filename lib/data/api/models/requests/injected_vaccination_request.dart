@@ -1,20 +1,23 @@
 import 'dart:convert';
 
 class InjectedVaccinationRequest {
-  String medicalRecord;
-  String vaccineId;
-  int doseNumber;
-  String date;
+  String? medicalRecord;
+  String? recorId;
+  String? vaccineId;
+  int? doseNumber;
+  String? date;
   InjectedVaccinationRequest({
-    required this.medicalRecord,
-    required this.vaccineId,
-    required this.doseNumber,
-    required this.date,
+    this.medicalRecord,
+     this.vaccineId,
+     this.doseNumber,
+     this.date,
+    this.recorId
   });
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'record_id':recorId});
     result.addAll({'medical_record': medicalRecord});
     result.addAll({'vaccine_id': vaccineId});
     result.addAll({'dose_number': doseNumber});
@@ -25,9 +28,10 @@ class InjectedVaccinationRequest {
 
   factory InjectedVaccinationRequest.fromMap(Map<String, dynamic> map) {
     return InjectedVaccinationRequest(
-      medicalRecord: map['medical_record'] ?? '',
-      vaccineId: map['vaccine_id'] ?? '',
-      doseNumber: map['dose_number'].toInt() ?? '',
+      recorId: map['record_id'],
+      medicalRecord: map['medical_record'],
+      vaccineId: map['vaccine_id'] ,
+      doseNumber: map['dose_number'].toInt() ,
       date: map['date'] ?? '',
     );
   }
