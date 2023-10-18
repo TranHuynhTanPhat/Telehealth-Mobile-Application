@@ -1,9 +1,9 @@
 name: Shorebird patch
 
 on:
-    push:
-      tags:
-        - v*
+  push:
+    branches:
+      - develop
 
 jobs:
   release:
@@ -21,7 +21,6 @@ jobs:
       # Now we're able to use Shorebird CLI in our workflow
       - name: 🚀 Use Shorebird
         run: shorebird --version
-
 
       - name: Patch android
         run: shorebird patch android --flavor dev --artifact apk ./lib/flavors/main_development.dart
