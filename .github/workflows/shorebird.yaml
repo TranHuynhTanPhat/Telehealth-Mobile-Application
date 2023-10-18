@@ -3,10 +3,10 @@ name: Shorebird patch
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
-  patch:
+  patch_android:
     defaults:
       run:
         shell: bash
@@ -14,7 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Use the setup-shorebird action to configure Shorebird
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+        
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+          CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
+          EOF
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
       - name: 🐦 Setup Shorebird
         uses: shorebirdtech/setup-shorebird@v0
 
@@ -23,6 +40,6 @@ jobs:
         run: shorebird --version
 
       - name: 🚀 Shorebird Patch
-        run: shorebird patch android --flavor dev ./lib/flavors/main_development.dart    
+        run: shorebird patch android --flavor dev ./lib/flavors/main_development.dart
         env:
           SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
