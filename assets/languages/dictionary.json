@@ -1235,6 +1235,10 @@
         "vi": "Không thể mở",
         "en": "Can't open"
     },
+    "cant_download": {
+        "vi": "Không thể tải",
+        "en": "Can't download"
+    },
     "day": {
         "vi": "Ngày",
         "en": "Day"
@@ -1263,12 +1267,16 @@
         "vi": "Thư mục",
         "en": "Folder"
     },
-    "choose_folder_or_enter_new_folder": {
-        "vi": "Chọn thư mục hoặc nhập thư mục mới",
-        "en": "Choose folder or enter new folder"
+    "enter_folder_name_or_default": {
+        "vi": "Nhập tên thư mục hoặc để mặc định",
+        "en": "Enter folder name or default"
     },
     "upload_file": {
         "vi": "Tải tệp lên",
         "en": "Upload file"
+    },
+    "open": {
+        "vi": "Mở",
+        "en": "Open"
     }
 }

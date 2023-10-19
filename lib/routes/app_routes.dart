@@ -82,6 +82,9 @@ class AppRoute {
               BlocProvider.value(
                 value: _medicalRecordCubit,
               ),
+              BlocProvider.value(
+                value: _patientRecordCubit,
+              ),
             ],
             child: const MainScreenPatient(),
           ),
@@ -195,7 +198,7 @@ class AppRoute {
               ),
               BlocProvider.value(
                 value: _doctorScheduleCubit,
-              )
+              ),
             ],
             child: const MainScreenDoctor(),
           ),

@@ -16,6 +16,8 @@ import 'package:healthline/screen/ui_patient/main/notification/notification_scre
 import 'package:healthline/screen/ui_patient/main/schedule/schedule_screen.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:open_document/open_document.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreenPatient extends StatefulWidget {
   const MainScreenPatient({super.key});
@@ -161,6 +163,31 @@ class _MainScreenPatientState extends State<MainScreenPatient>
             } else if (state is UpdateSubUserFailure) {
               EasyLoading.showToast(translate(context, state.message));
             } else if (state is DeleteSubUserFailure) {
+              EasyLoading.showToast(translate(context, state.message));
+            }
+          },
+        ),
+        BlocListener<PatientRecordCubit, PatientRecordState>(
+          listener: (context, state) async {
+            if (state is OpenFileLoading ||
+                state is AddPatientRecordLoading ||
+                state is DeletePatientRecordLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is OpenFileLoaded) {
+              EasyLoading.dismiss();
+              await OpenDocument.openDocument(filePath: state.filePath);
+            } else if (state is AddPatientRecordLoaded ||
+                state is DeletePatientRecordLoaded) {
+              EasyLoading.showToast(translate(context, 'successfully'));
+            } else if (state is OpenFileError) {
+              EasyLoading.showToast(translate(context, 'cant_download'));
+              if (!await launchUrl(Uri.parse(state.url))) {
+                if (!mounted) return;
+                EasyLoading.showToast(translate(context, 'cant_open'));
+              }
+            } else if (state is AddPatientRecordError) {
+              EasyLoading.showToast(translate(context, state.message));
+            } else if (state is DeletePatientRecordError) {
               EasyLoading.showToast(translate(context, state.message));
             }
           },

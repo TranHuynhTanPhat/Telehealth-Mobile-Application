@@ -80,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
             preferredSize: Size.fromHeight(dimensHeight() * 8),
             child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
               builder: (context, state) {
-                _image = null;
                 if (state.subUsers.isNotEmpty) {
                   int index = state.subUsers
                       .indexWhere((element) => element.isMainProfile!);

@@ -4,10 +4,17 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
 class FileWidget extends StatelessWidget {
-  const FileWidget({super.key, required this.title, required this.extension});
+  const FileWidget(
+      {super.key,
+      required this.title,
+      required this.extension,
+      this.updateAt,
+      this.size});
   final String title;
   // final FaIcon icon;
   final String extension;
+  final String? updateAt;
+  final String? size;
 
   @override
   Widget build(BuildContext context) {
@@ -17,71 +24,71 @@ class FileWidget extends StatelessWidget {
       'docx',
     ].contains(extension)) {
       icon = FaIcon(
-            FontAwesomeIcons.fileWord,
-            size: dimensIcon(),
-            color: const Color.fromARGB(255, 13, 105, 181),
-          );
+        FontAwesomeIcons.fileWord,
+        size: dimensIcon(),
+        color: const Color.fromARGB(255, 13, 105, 181),
+      );
     } else {
       icon = [
-            'xls',
-            'xlsx',
-            'csv',
-          ].contains(extension)
-            ? FaIcon(
-                FontAwesomeIcons.fileExcel,
-                size: dimensIcon(),
-                color: Colors.green,
-              )
-            : extension == 'pdf'
-                ? FaIcon(
-                    FontAwesomeIcons.filePdf,
-                    size: dimensIcon(),
-                    color: Colors.redAccent,
-                  )
-                : [
-                    'gif',
-                    'jpeg',
-                    'jpg',
-                    'png',
-                  ].contains(extension)
-                    ? FaIcon(
-                        FontAwesomeIcons.fileImage,
-                        size: dimensIcon(),
-                        color: colorDF9F1E,
-                      )
-                    : [
-                        '3gp',
-                        'asf',
-                        'avi',
-                        'm4u',
-                        'm4v',
-                        'mov',
-                        'mp4',
-                        'mpe',
-                        'mpeg',
-                        'mpg',
-                        'mpg4',
-                      ].contains(extension)
-                        ? FaIcon(
-                            FontAwesomeIcons.fileVideo,
-                            size: dimensIcon(),
-                            color: color009DC7,
-                          )
-                        : [
-                            'pps',
-                            'ppt',
-                            'pptx',
-                          ].contains(extension)
-                            ? FaIcon(
-                                FontAwesomeIcons.filePowerpoint,
-                                size: dimensIcon(),
-                                color: color9D4B6C,
-                              )
-                            : FaIcon(
-                                FontAwesomeIcons.file,
-                                size: dimensIcon(),
-                                color: black26,
-                              );
+        'xls',
+        'xlsx',
+        'csv',
+      ].contains(extension)
+          ? FaIcon(
+              FontAwesomeIcons.fileExcel,
+              size: dimensIcon(),
+              color: Colors.green,
+            )
+          : extension == 'pdf'
+              ? FaIcon(
+                  FontAwesomeIcons.filePdf,
+                  size: dimensIcon(),
+                  color: Colors.redAccent,
+                )
+              : [
+                  'gif',
+                  'jpeg',
+                  'jpg',
+                  'png',
+                ].contains(extension)
+                  ? FaIcon(
+                      FontAwesomeIcons.fileImage,
+                      size: dimensIcon(),
+                      color: colorDF9F1E,
+                    )
+                  : [
+                      '3gp',
+                      'asf',
+                      'avi',
+                      'm4u',
+                      'm4v',
+                      'mov',
+                      'mp4',
+                      'mpe',
+                      'mpeg',
+                      'mpg',
+                      'mpg4',
+                    ].contains(extension)
+                      ? FaIcon(
+                          FontAwesomeIcons.fileVideo,
+                          size: dimensIcon(),
+                          color: color009DC7,
+                        )
+                      : [
+                          'pps',
+                          'ppt',
+                          'pptx',
+                        ].contains(extension)
+                          ? FaIcon(
+                              FontAwesomeIcons.filePowerpoint,
+                              size: dimensIcon(),
+                              color: color9D4B6C,
+                            )
+                          : FaIcon(
+                              FontAwesomeIcons.file,
+                              size: dimensIcon(),
+                              color: black26,
+                            );
     }
     return ListTile(
       onTap: null,
@@ -99,12 +106,35 @@ class FileWidget extends StatelessWidget {
           Expanded(
             child: Text(
               translate(context, title),
-              overflow: TextOverflow.visible,
-              style: Theme.of(context).textTheme.titleSmall,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
           ),
         ],
       ),
+      subtitle: updateAt != null || size != null
+          ? Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    updateAt ?? '',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: black26, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  size ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: black26, fontWeight: FontWeight.bold),
+                )
+              ],
+            )
+          : null,
       // trailing: FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .5),
     );
   }

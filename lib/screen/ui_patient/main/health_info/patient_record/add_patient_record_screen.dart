@@ -27,9 +27,9 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
   late String extension;
   late String fileName;
 
-  late TextEditingController _controllerGender;
+  late TextEditingController _controllerFolderName;
 
-  List<String> folderName = ['default'];
+  List<String> folderName = [];
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
     extension = '';
     fileName = '';
 
-    _controllerGender = TextEditingController();
+    _controllerFolderName = TextEditingController();
     super.initState();
   }
 
@@ -71,77 +71,103 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
       extension = _file?.extension ?? '';
       fileName = _file?.name ?? '';
     }
-    return BlocBuilder<PatientRecordCubit, PatientRecordState>(
-      builder: (context, state) {
-        getFolderName(state.records);
-        return GestureDetector(
-          onTap: () {
-            KeyboardUtil.hideKeyboard(context);
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(
-                translate(context, 'add_patient_record'),
+    return BlocListener<PatientRecordCubit, PatientRecordState>(
+      listener: (context, state) {
+        if (state is AddPatientRecordLoaded) {
+          EasyLoading.showToast(translate(context, 'successfully'));
+          Navigator.pop(context, true);
+        }
+      },
+      child: BlocBuilder<PatientRecordCubit, PatientRecordState>(
+        builder: (context, state) {
+          getFolderName(state.records);
+          return GestureDetector(
+            onTap: () {
+              KeyboardUtil.hideKeyboard(context);
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text(
+                  translate(context, 'add_patient_record'),
+                ),
               ),
-            ),
-            body: AbsorbPointer(
-              absorbing: false,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 3,
-                    horizontal: dimensWidth() * 3),
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (_file == null)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: FaIcon(
-                                  FontAwesomeIcons.cloudArrowUp,
-                                  size: dimensWidth() * 20,
-                                  color: primary.withOpacity(.6),
+              body: AbsorbPointer(
+                absorbing: state is AddPatientRecordLoading,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensHeight() * 3,
+                      horizontal: dimensWidth() * 3),
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_file == null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight()),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.cloudArrowUp,
+                                    size: dimensWidth() * 20,
+                                    color: primary.withOpacity(.6),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        translate(context, 'upload_your_file'),
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.visible,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w900,
-                                                color: secondary),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight()),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          translate(
+                                              context, 'upload_your_file'),
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: secondary),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: Row(
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight()),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          translate(context,
+                                              'browse_and_choose_the_file_you_want_to_upload'),
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: secondary),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        translate(context,
-                                            'browse_and_choose_the_file_you_want_to_upload'),
+                                        '${translate(context, 'max_file_size')}: 10MB',
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.visible,
                                         style: Theme.of(context)
@@ -149,160 +175,224 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                             .titleLarge
                                             ?.copyWith(
                                                 fontWeight: FontWeight.w600,
-                                                color: secondary),
+                                                color:
+                                                    secondary.withOpacity(.5)),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      '${translate(context, 'max_file_size')}: 10MB',
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.visible,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: secondary.withOpacity(.5)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight() * 3),
-                                child: ElevatedButtonWidget(
-                                  text: translate(context, 'choose_file'),
-                                  onPressed: () async {
-                                    await chooseFile(context);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (_file != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                  child: FileWidget(
-                                extension: extension,
-                                title: fileName,
-                              )),
-                              IconButton(
-                                onPressed: () async {
-                                  _file = await FilePickerCustom().chooseFile();
-                                  setState(() {});
-                                },
-                                icon: FaIcon(
-                                  FontAwesomeIcons.arrowsRotate,
-                                  size: dimensIcon() * .7,
-                                  color: primary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (_file != null)
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: dimensHeight() * 2),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: MenuAnchor(
-                                    style: MenuStyle(
-                                      elevation:
-                                          const MaterialStatePropertyAll(10),
-                                      // shadowColor: MaterialStatePropertyAll(black26),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              dimensWidth() * 3),
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          const MaterialStatePropertyAll(white),
-                                      surfaceTintColor:
-                                          const MaterialStatePropertyAll(white),
-                                      padding: MaterialStatePropertyAll(
-                                        EdgeInsets.symmetric(
-                                          horizontal: dimensWidth() * 2,
-                                          vertical: dimensHeight(),
-                                        ),
-                                      ),
-                                    ),
-                                    builder: (BuildContext context,
-                                        MenuController controller,
-                                        Widget? child) {
-                                      return TextFieldWidget(
-                                        onTap: () {
-                                          if (folderName.isNotEmpty) {
-                                            if (controller.isOpen) {
-                                              controller.close();
-                                            } else {
-                                              controller.open();
-                                            }
-                                          }
-                                        },
-                                        readOnly: false,
-                                        label: translate(context, 'folder'),
-                                        hint: translate(context,
-                                            'choose_folder_or_enter_new_folder'),
-                                        controller: _controllerGender,
-                                        validate: (value) => value!.isEmpty
-                                            ? translate(
-                                                context, 'please_choose')
-                                            : null,
-                                        prefixIcon: IconButton(
-                                          onPressed: null,
-                                          icon: FaIcon(
-                                            FontAwesomeIcons.folder,
-                                            color: colorDF9F1E.withOpacity(.5),
-                                          ),
-                                        ),
-                                      );
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight() * 3),
+                                  child: ElevatedButtonWidget(
+                                    text: translate(context, 'choose_file'),
+                                    onPressed: () async {
+                                      await chooseFile(context);
                                     },
-                                    menuChildren: folderName
-                                        .map(
-                                          (e) => MenuItemButton(
-                                            style: const ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStatePropertyAll(
-                                                        white)),
-                                            onPressed: () => setState(() {
-                                              _controllerGender.text =
-                                                  translate(
-                                                      context, e.toLowerCase());
-                                            }),
-                                            child: Text(e),
-                                          ),
-                                        )
-                                        .toList(),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        if (_file != null && _controllerGender.text.isNotEmpty)
-                          ElevatedButtonWidget(
-                            text: translate(context, 'upload_file'),
-                            onPressed: () {},
-                          )
-                      ],
-                    ),
-                  )
-                ],
+                          if (_file != null)
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        translate(context, 'file'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                        child: FileWidget(
+                                      extension: extension,
+                                      title: fileName,
+                                    )),
+                                    IconButton(
+                                      onPressed: () async {
+                                        _file = await FilePickerCustom()
+                                            .chooseFile();
+                                        setState(() {});
+                                      },
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.arrowsRotate,
+                                        size: dimensIcon() * .7,
+                                        color: primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(top: dimensHeight() * 3),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          translate(context,
+                                              'enter_folder_name_or_default'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (_file != null)
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: MenuAnchor(
+                                          style: MenuStyle(
+                                            fixedSize: MaterialStatePropertyAll(
+                                                Size.fromHeight(
+                                                    dimensHeight() * 30)),
+                                            elevation:
+                                                const MaterialStatePropertyAll(
+                                                    10),
+                                            // shadowColor: MaterialStatePropertyAll(black26),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        dimensWidth() * 3),
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                const MaterialStatePropertyAll(
+                                                    white),
+                                            surfaceTintColor:
+                                                const MaterialStatePropertyAll(
+                                                    white),
+                                            padding: MaterialStatePropertyAll(
+                                              EdgeInsets.symmetric(
+                                                horizontal: dimensWidth() * 2,
+                                                vertical: dimensHeight(),
+                                              ),
+                                            ),
+                                          ),
+                                          builder: (BuildContext context,
+                                              MenuController controller,
+                                              Widget? child) {
+                                            return TextFieldWidget(
+                                              onChanged: (value) =>
+                                                  _controllerFolderName.text =
+                                                      _controllerFolderName.text
+                                                          .replaceAll('/', ''),
+                                              onTap: () {
+                                                if (folderName.isNotEmpty) {
+                                                  if (controller.isOpen) {
+                                                    controller.close();
+                                                  } else {
+                                                    controller.open();
+                                                  }
+                                                }
+                                              },
+                                              enabledBorderColor: transparent,
+                                              focusedBorderColor: transparent,
+                                              readOnly: false,
+                                              // label: translate(context, 'folder'),
+                                              hint:
+                                                  translate(context, 'folder'),
+                                              controller: _controllerFolderName,
+                                              validate: (value) => value!
+                                                      .isEmpty
+                                                  ? translate(
+                                                      context, 'please_choose')
+                                                  : null,
+                                              prefixIcon: IconButton(
+                                                onPressed: null,
+                                                icon: FaIcon(
+                                                  controller.isOpen
+                                                      ? FontAwesomeIcons
+                                                          .folderOpen
+                                                      : FontAwesomeIcons
+                                                          .solidFolder,
+                                                  color: colorDF9F1E,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          menuChildren: folderName
+                                              .map(
+                                                (e) => MenuItemButton(
+                                                  style: const ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStatePropertyAll(
+                                                              white)),
+                                                  onPressed: () => setState(() {
+                                                    _controllerFolderName.text =
+                                                        translate(context,
+                                                            e.toLowerCase());
+                                                  }),
+                                                  child: Row(
+                                                    children: [
+                                                      FaIcon(
+                                                        FontAwesomeIcons
+                                                            .solidFolder,
+                                                        color: colorDF9F1E,
+                                                        size: dimensIcon() * .5,
+                                                      ),
+                                                      SizedBox(
+                                                        width: dimensWidth(),
+                                                      ),
+                                                      Text(
+                                                        e,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(top: dimensHeight() * 3),
+                                  child: ElevatedButtonWidget(
+                                    text: translate(context, 'upload_file'),
+                                    onPressed: () {
+                                      context
+                                          .read<PatientRecordCubit>()
+                                          .addPatientRecord(
+                                              _file!.path!,
+                                              _controllerFolderName
+                                                      .text.isNotEmpty
+                                                  ? _controllerFolderName.text
+                                                  : null,
+                                              size);
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

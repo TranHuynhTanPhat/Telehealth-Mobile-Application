@@ -1,4 +1,5 @@
 import 'package:healthline/data/api/models/requests/health_stat_request.dart';
+import 'package:healthline/data/api/models/requests/patient_record_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
@@ -57,13 +58,14 @@ class PatientRepository extends BaseRepository {
     }
   }
 
-  Future<DataResponse> addPatientRecord(String medicalId, String record) async {
-    return await _patientService.addPatientRecord(medicalId, record);
+  Future<DataResponse> addPatientRecord(String medicalId, String record, String folder, String size) async {
+
+    return await _patientService.addPatientRecord( PatientRecordRequest(medicalId: medicalId, record: record, folder: folder, size: size));
   }
   Future<List<PatientRecordResponse>> fetchPatientRecord(String medicalId) async {
     return await _patientService.getPatientRecord(medicalId);
   }
-  Future<DataResponse> deletePatientRecord(String medicalId) async {
-    return await _patientService.deletePatientRecord(medicalId);
+  Future<DataResponse> deletePatientRecord(String recordId) async {
+    return await _patientService.deletePatientRecord(recordId);
   }
 }

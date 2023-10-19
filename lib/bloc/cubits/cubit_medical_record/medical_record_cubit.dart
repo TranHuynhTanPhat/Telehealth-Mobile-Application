@@ -267,21 +267,6 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
           }
         }
       }
-      // await _userRepository.updateMedicalRecord(
-      //     id, avt!, fullName, birthday, gender, relationship, address);
-      // List<UserResponse> newLists = state.subUsers;
-      // int index = newLists.indexWhere(
-      //   (element) => element.id == id,
-      // );
-      // newLists[index] = newLists[index].copyWith(
-      //     avatar: avt,
-      //     fullName: fullName,
-      //     dateOfBirth: birthday,
-      //     gender: gender,
-      //     relationship: relationship != null
-      //         ? Relationship.values.firstWhere((e) => e.name == relationship)
-      //         : null,
-      //     address: address);
       emit(UpdateSubUserSuccessfully(
         stats: state.stats,
         subUsers: state.subUsers,

@@ -10,6 +10,7 @@ class PatientRecordResponse {
     this.name,
     this.updateAt,
     this.folderName,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +37,7 @@ class PatientRecordResponse {
       id: map['id'],
       name: map['name'],
       folderName: map['folder_name'],
+
       updateAt: map['update_at'],
     );
   }
