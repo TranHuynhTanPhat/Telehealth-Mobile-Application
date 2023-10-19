@@ -1,12 +1,12 @@
-name: Shorebird patch
+name: Shorebird release
 
 on:
   push:
-    branches:
-      - develop
+    tags:
+      - v*
 
 jobs:
-  patch_android:
+  release:
     defaults:
       run:
         shell: bash
@@ -39,7 +39,7 @@ jobs:
       - name: 🚀 Use Shorebird
         run: shorebird --version
 
-      - name: 🚀 Shorebird Patch
-        run: shorebird patch android --flavor dev ./lib/flavors/main_development.dart
+      - name: 🚀 Shorebird Release
+        run: shorebird release android --flavor dev ./lib/flavors/main_development.dart
         env:
           SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
