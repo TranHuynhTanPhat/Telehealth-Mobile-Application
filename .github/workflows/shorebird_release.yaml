@@ -1,0 +1,45 @@
+name: Shorebird release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+        
+      - name: Create .env file
+        run: |
+          cat > .env <<EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+          CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
+          EOF
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - name: 🐦 Setup Shorebird
+        uses: shorebirdtech/setup-shorebird@v0
+
+      # Now we're able to use Shorebird CLI in our workflow
+      - name: 🚀 Use Shorebird
+        run: shorebird --version
+
+      - name: 🚀 Shorebird Release
+        run: shorebird release android --flavor dev ./lib/flavors/main_development.dart
+        env:
+          SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}

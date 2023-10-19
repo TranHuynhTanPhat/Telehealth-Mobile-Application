@@ -9,7 +9,7 @@ jobs:
     name: Run flutter analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create .env file
         run: |
           cat > .env <<EOF
@@ -30,7 +30,7 @@ jobs:
     needs: [flutter_test]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create .env file
         run: |
           cat > .env <<EOF
@@ -54,7 +54,7 @@ jobs:
     needs: [flutter_test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create .env file
         run: |
           cat > .env <<EOF
@@ -69,4 +69,4 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter clean
-      - run: flutter build appbundle ./lib/flavors/main_development.dart
+      - run: flutter build appbundle --flavor dev ./lib/flavors/main_development.dart
