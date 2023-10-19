@@ -1,19 +1,16 @@
-import 'dart:io';
-
-import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:healthline/utils/translate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/file_widget.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/components/export.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/translate.dart';
 
 class ListPatientRecordScreen extends StatefulWidget {
   const ListPatientRecordScreen({super.key});
@@ -24,71 +21,6 @@ class ListPatientRecordScreen extends StatefulWidget {
 }
 
 class _ListPatientRecordScreenState extends State<ListPatientRecordScreen> {
-  Offset _tapPosition = Offset.zero;
-  void _storePosition(TapDownDetails details) {
-    _tapPosition = details.globalPosition;
-  }
-
-  void _showMenu(String? url, String fileName, String? patientRecordId) {
-    var overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-
-    showMenu(
-      context: context,
-      shadowColor: black26,
-      color: white,
-      surfaceTintColor: white,
-      items: [
-        PopupMenuItem(
-          onTap: url != null
-              ? () async => _openFile(url, fileName)
-              : () =>
-                  EasyLoading.showToast(translate(context, 'cant_download')),
-          child: Text(
-            translate(context, 'open'),
-          ),
-        ),
-        PopupMenuItem(
-          onTap: patientRecordId != null
-              ? () => context
-                  .read<PatientRecordCubit>()
-                  .deletePatientRecord(patientRecordId)
-              : null,
-          child: Text(
-            translate(context, 'delete'),
-          ),
-        ),
-      ],
-      position: RelativeRect.fromRect(
-          _tapPosition & const Size(40, 40), // smaller rect, the touch area
-          Offset.zero & overlay.size // Bigger rect, the entire screen
-          ),
-    );
-  }
-
-  Future<void> _openFile(String url, String fileName) async {
-    if (Platform.isAndroid) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        await Permission.storage.request();
-      } else {
-        if (!mounted) return;
-        context
-            .read<PatientRecordCubit>()
-            .openFile(url: url, fileName: fileName);
-      }
-    } else if (Platform.isIOS) {
-      var status = await Permission.photos.status;
-      if (!status.isGranted) {
-        await Permission.photos.request();
-      } else {
-        if (!mounted) return;
-        context
-            .read<PatientRecordCubit>()
-            .openFile(url: url, fileName: fileName);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientRecordCubit, PatientRecordState>(
@@ -96,76 +28,132 @@ class _ListPatientRecordScreenState extends State<ListPatientRecordScreen> {
         if (state is! FetchPatientRecordLoading) {
           List<PatientRecordResponse> fileRecords = state.records
               .where((element) =>
-                  element.folderName == null || element.folderName == 'default')
+                  element.folder == null || element.folder == 'default')
               .toList();
           fileRecords.sort((a, b) => a.updateAt!.compareTo(b.updateAt!));
+          List<PatientRecordResponse> folderRecords = state.records
+              .where((element) =>
+                  element.folder != null && element.folder != 'default')
+              .toList();
+
+          Map<String, Map<String, dynamic>> fileByFolders = {};
+          for (var element in folderRecords) {
+            if (fileByFolders.containsKey(element.folder)) {
+              DateTime newDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                  .parse(element.updateAt!);
+              DateTime oldDate = fileByFolders[element.folder!]!['update_at'];
+              fileByFolders[element.folder!]!['length'] += 1;
+              fileByFolders[element.folder!]!['update_at'] =
+                  newDate.isAfter(oldDate) ? newDate : oldDate;
+              // fileByFolders[element.folder!]!.add(element);
+            } else if (element.folder != null && element.folder != 'default') {
+              DateTime newDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                  .parse(element.updateAt!);
+              fileByFolders.addAll({
+                element.folder!: {'length': 1, 'update_at': newDate}
+              });
+            }
+          }
+
+          Map<String, int> folderNames = {'default': 5};
+          for (var element in folderRecords) {
+            if (folderNames.containsKey(element.folder)) {
+              folderNames[element.folder!] = folderNames[element.folder!]! + 1;
+            } else if (element.folder != null && element.folder != 'default') {
+              folderNames.addAll({element.folder!: 1});
+            }
+          }
           return ListView(
             scrollDirection: Axis.vertical,
             padding: EdgeInsets.symmetric(
                 vertical: dimensHeight(), horizontal: dimensWidth() * 3),
             children: [
-              ...fileRecords.map(
-                (e) {
-                  String fileName = e.name?.split('/').last ?? 'undefine';
-                  String type = fileName.split('.').last;
-                  DateTime updateAt = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                      .parse(e.updateAt!);
-                  String? url;
-                  if (['pdf', 'gif', 'jpeg', 'jpg', 'png'].contains(type)) {
-                    url = CloudinaryContext.cloudinary
-                        .image('${Uri.encodeFull(e.name!)}.$type')
-                        .toString();
-                  } else if ([
-                    'doc',
-                    'docx',
-                    'xls',
-                    'xlsx',
-                    'csv',
-                    'pps',
-                    'ppt',
-                    'pptx'
-                  ].contains(type)) {
-                    url = e.name != null
-                        ? CloudinaryContext.cloudinary
-                            .raw(Uri.encodeFull(e.name!))
-                            .toString()
-                        : null;
-                  } else if ([
-                    '3gp',
-                    'asf',
-                    'avi',
-                    'm4u',
-                    'm4v',
-                    'mov',
-                    'mp4',
-                    'mpe',
-                    'mpeg',
-                    'mpg',
-                    'mpg4',
-                  ].contains(type)) {
-                    url = e.name != null
-                        ? CloudinaryContext.cloudinary
-                            .video(Uri.encodeFull(e.name!))
-                            .toString()
-                        : null;
-                  }
-
-                  return GestureDetector(
-                    onTapDown: _storePosition,
-                    onLongPress: () async => _showMenu(url, fileName, e.id),
-                    onTap: url != null
-                        ? () async => _openFile(url!, fileName)
-                        : () => EasyLoading.showToast(
-                            translate(context, 'cant_download')),
-                    child: FileWidget(
-                      extension: type,
-                      title: fileName,
-                      updateAt: formatFileDate(context, updateAt),
-                      size: null,
+              ...fileByFolders.entries
+                  .map(
+                    (mapEntry) => Column(
+                      children: [
+                        ListTile(
+                            onTap: () {
+                              PatientRecordCubit patientRecordCubit =
+                                  context.read<PatientRecordCubit>();
+                              MedicalRecordCubit medicalRecordCubit =
+                                  context.read<MedicalRecordCubit>();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(
+                                        value: patientRecordCubit,
+                                      ),
+                                      BlocProvider.value(
+                                        value: medicalRecordCubit,
+                                      ),
+                                    ],
+                                    child: FolderPatientRecordScreen(
+                                      folderName: mapEntry.key,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                dimensWidth(),
+                              ),
+                            ),
+                            dense: true,
+                            visualDensity: const VisualDensity(vertical: 0),
+                            leading: FaIcon(
+                              FontAwesomeIcons.solidFolderClosed,
+                              color: colorDF9F1E,
+                              size: dimensIcon(),
+                            ),
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    mapEntry.key,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    formatFileDate(
+                                        context, mapEntry.value['update_at']),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                            color: black26,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Text(
+                                  '${mapEntry.value['length']} ${translate(context, 'items')}',
+                                  textAlign: TextAlign.right,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                          color: black26,
+                                          fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                        const Divider(),
+                      ],
                     ),
-                  );
-                },
-              ).toList(),
+                  )
+                  .toList(),
+              ListFile(fileRecords: fileRecords),
             ],
           );
         } else {

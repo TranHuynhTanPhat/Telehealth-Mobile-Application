@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/utils/translate.dart';
 
 class FileWidget extends StatelessWidget {
   const FileWidget(
@@ -104,8 +103,7 @@ class FileWidget extends StatelessWidget {
       title: Row(
         children: [
           Expanded(
-            child: Text(
-              translate(context, title),
+            child: Text( title,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style: Theme.of(context).textTheme.labelLarge,

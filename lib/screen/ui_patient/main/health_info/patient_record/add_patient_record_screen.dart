@@ -27,9 +27,9 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
   late String extension;
   late String fileName;
 
-  late TextEditingController _controllerFolderName;
+  late TextEditingController _controllerfolderNames;
 
-  List<String> folderName = [];
+  List<String> folderNames = [];
 
   @override
   void initState() {
@@ -38,15 +38,16 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
     extension = '';
     fileName = '';
 
-    _controllerFolderName = TextEditingController();
+    _controllerfolderNames = TextEditingController();
     super.initState();
   }
 
-  void getFolderName(List<PatientRecordResponse> records) {
+  void getfolderNames(List<PatientRecordResponse> records) {
     for (var element in records) {
-      if (element.folderName != null &&
-          !folderName.contains(element.folderName)) {
-        folderName.add(element.folderName!);
+      if (element.folder != null &&
+          !folderNames.contains(element.folder) &&
+          element.folder != 'default') {
+        folderNames.add(element.folder!);
       }
     }
   }
@@ -80,7 +81,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
       },
       child: BlocBuilder<PatientRecordCubit, PatientRecordState>(
         builder: (context, state) {
-          getFolderName(state.records);
+          getfolderNames(state.records);
           return GestureDetector(
             onTap: () {
               KeyboardUtil.hideKeyboard(context);
@@ -288,11 +289,12 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                               Widget? child) {
                                             return TextFieldWidget(
                                               onChanged: (value) =>
-                                                  _controllerFolderName.text =
-                                                      _controllerFolderName.text
+                                                  _controllerfolderNames.text =
+                                                      _controllerfolderNames
+                                                          .text
                                                           .replaceAll('/', ''),
                                               onTap: () {
-                                                if (folderName.isNotEmpty) {
+                                                if (folderNames.isNotEmpty) {
                                                   if (controller.isOpen) {
                                                     controller.close();
                                                   } else {
@@ -305,8 +307,9 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                               readOnly: false,
                                               // label: translate(context, 'folder'),
                                               hint:
-                                                  translate(context, 'folder'),
-                                              controller: _controllerFolderName,
+                                                  translate(context, 'default'),
+                                              controller:
+                                                  _controllerfolderNames,
                                               validate: (value) => value!
                                                       .isEmpty
                                                   ? translate(
@@ -325,7 +328,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                               ),
                                             );
                                           },
-                                          menuChildren: folderName
+                                          menuChildren: folderNames
                                               .map(
                                                 (e) => MenuItemButton(
                                                   style: const ButtonStyle(
@@ -333,7 +336,8 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                                           MaterialStatePropertyAll(
                                                               white)),
                                                   onPressed: () => setState(() {
-                                                    _controllerFolderName.text =
+                                                    _controllerfolderNames
+                                                            .text =
                                                         translate(context,
                                                             e.toLowerCase());
                                                   }),
@@ -348,11 +352,18 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                                       SizedBox(
                                                         width: dimensWidth(),
                                                       ),
-                                                      Text(
-                                                        e,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge,
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            right:
+                                                                dimensWidth() *
+                                                                    2),
+                                                        child: Text(
+                                                          e,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -369,13 +380,14 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                   child: ElevatedButtonWidget(
                                     text: translate(context, 'upload_file'),
                                     onPressed: () {
+                                      KeyboardUtil.hideKeyboard(context);
                                       context
                                           .read<PatientRecordCubit>()
                                           .addPatientRecord(
                                               _file!.path!,
-                                              _controllerFolderName
+                                              _controllerfolderNames
                                                       .text.isNotEmpty
-                                                  ? _controllerFolderName.text
+                                                  ? _controllerfolderNames.text
                                                   : null,
                                               size);
                                     },

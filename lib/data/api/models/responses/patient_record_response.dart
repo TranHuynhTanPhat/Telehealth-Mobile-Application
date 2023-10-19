@@ -2,15 +2,16 @@ import 'dart:convert';
 
 class PatientRecordResponse {
   String? id;
-  String? name;
-  String? folderName;
+  String? record;
+  String? folder;
+  String? size;
   String? updateAt;
   PatientRecordResponse({
     this.id,
-    this.name,
+    this.record,
     this.updateAt,
-    this.folderName,
-
+    this.folder,
+    this.size,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,11 +20,14 @@ class PatientRecordResponse {
     if (id != null) {
       result.addAll({'id': id});
     }
-    if (name != null) {
-      result.addAll({'name': name});
+    if (record != null) {
+      result.addAll({'record': record});
     }
-    if (folderName != null) {
-      result.addAll({'folder_name': folderName});
+    if (folder != null) {
+      result.addAll({'folder': folder});
+    }
+    if (size != null) {
+      result.addAll({'size': size});
     }
     if (updateAt != null) {
       result.addAll({'update_at': updateAt});
@@ -35,9 +39,9 @@ class PatientRecordResponse {
   factory PatientRecordResponse.fromMap(Map<String, dynamic> map) {
     return PatientRecordResponse(
       id: map['id'],
-      name: map['name'],
-      folderName: map['folder_name'],
-
+      record: map['record'],
+      folder: map['folder'],
+      size: map['size'],
       updateAt: map['update_at'],
     );
   }

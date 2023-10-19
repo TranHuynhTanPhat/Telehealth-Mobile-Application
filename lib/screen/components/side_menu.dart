@@ -113,11 +113,11 @@ class _SideMenuState extends State<SideMenu> {
                             .titleMedium
                             ?.copyWith(color: white),
                       ),
-                      leading: badgeNotification(FaIcon(
+                      leading: badgeNotification(child:FaIcon(
                         FontAwesomeIcons.gear,
                         size: dimensIcon() * .5,
                         color: white,
-                      ), state is UpdateAvailable, Theme.of(context).colorScheme.error, -10, -10),
+                      ), isShow:state is UpdateAvailable, color:Theme.of(context).colorScheme.error, top:-10, end:-10),
                     );
                   }
                 ),

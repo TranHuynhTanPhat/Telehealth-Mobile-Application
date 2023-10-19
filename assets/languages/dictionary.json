@@ -1267,6 +1267,10 @@
         "vi": "Thư mục",
         "en": "Folder"
     },
+    "default": {
+        "vi": "Mặc định",
+        "en": "Default"
+    },
     "enter_folder_name_or_default": {
         "vi": "Nhập tên thư mục hoặc để mặc định",
         "en": "Enter folder name or default"
@@ -1278,5 +1282,13 @@
     "open": {
         "vi": "Mở",
         "en": "Open"
+    },
+    "new_update": {
+        "vi": "Bản cập nhật mới",
+        "en": "New update"
+    },
+    "items": {
+        "vi": "mục",
+        "en": "items"
     }
 }

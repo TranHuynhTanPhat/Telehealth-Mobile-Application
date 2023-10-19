@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: BlocBuilder<ApplicationUpdateCubit,
                           ApplicationUpdateState>(builder: (context, state) {
                         return badgeNotification(
-                            CircleAvatar(
+                            child: CircleAvatar(
                               radius: dimensWidth() * 5,
                               backgroundImage: _image,
                               onBackgroundImageError: (exception, stackTrace) =>
@@ -151,10 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 _image = AssetImage(DImages.placeholder);
                               }),
                             ),
-                            state is UpdateAvailable,
-                            Theme.of(context).colorScheme.error,
-                            3,
-                            3);
+                            isShow: state is UpdateAvailable,
+                            color: Theme.of(context).colorScheme.error,
+                            top: 3,
+                            end: 3);
                       }),
                     ),
                   ),

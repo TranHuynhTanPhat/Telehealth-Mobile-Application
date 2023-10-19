@@ -163,16 +163,16 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
                 builder: (context, state) {
                   return badgeNotification(
-                      IconButton(
+                      child:IconButton(
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
                         icon: const FaIcon(FontAwesomeIcons.bars),
                       ),
-                      state is UpdateAvailable,
-                      Theme.of(context).colorScheme.error,
-                      7,
-                      7);
+                      isShow:state is UpdateAvailable,
+                     color: Theme.of(context).colorScheme.error,
+                     top: 7,
+                     end: 7);
                 },
               ),
             ),

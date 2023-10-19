@@ -78,8 +78,8 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
     try {
       PatientRecordResponse record =
           state.records.firstWhere((element) => element.id == patientRecordId);
-      String publicId = record.name!.split('/').last;
-      String folderName = record.name!
+      String publicId = record.record!.split('/').last;
+      String folderName = record.record!
           .replaceAll('healthline/users/${state.medicalId}/records/', '').split('/').first;
       await _fileRepository.deleteRecordPatient(
           publicId: publicId, folder: folderName);
