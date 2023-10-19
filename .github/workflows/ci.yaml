@@ -6,7 +6,7 @@ on:
 
 jobs:
   flutter_test:
-    name: Run flutter analyze
+    name: Run flutter analyze\
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,49 +24,53 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter analyze
-
-  build_ios:
-    name: Build Flutter (iOS)
-    needs: [flutter_test]
-    runs-on: macos-latest
-    steps:
-      # - uses: actions/checkout@v3
-      # - name: Create .env file
-      #   run: |
-      #     cat > .env <<EOF
-      #     BASE_URL=${{ secrets.BASE_URL }}
-      #     SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-      #     CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
-      #     CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
-      #     EOF
-      # - uses: actions/setup-java@v1
-      #   with:
-      #     java-version: "12.x"
-      # - uses: subosito/flutter-action@v1
-      #   with:
-      #     channel: "stable"
-      - run: flutter pub get
       - run: flutter clean
       - run: flutter build ios --release --no-codesign ./lib/flavors/main_development.dart
-
-  build_appbundle:
-    name: Build Flutter (Android)
-    needs: [flutter_test]
-    runs-on: ubuntu-latest
-    steps:
-      # - uses: actions/checkout@v3
-      # - name: Create .env file
-      #   run: |
-      #     cat > .env <<EOF
-      #     BASE_URL=${{ secrets.BASE_URL }}
-      #     SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-      #     EOF
-      # - uses: actions/setup-java@v1
-      #   with:
-      #     java-version: "12.x"
-      # - uses: subosito/flutter-action@v1
-      #   with:
-      #     channel: "stable"
-      - run: flutter pub get
-      - run: flutter clean
       - run: flutter build appbundle --flavor dev ./lib/flavors/main_development.dart
+
+  # build_ios:
+  #   name: Build Flutter (iOS)
+  #   needs: [flutter_test]
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Create .env file
+  #       run: |
+  #         cat > .env <<EOF
+  #         BASE_URL=${{ secrets.BASE_URL }}
+  #         SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+  #         CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+  #         CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
+  #         EOF
+  #     - uses: actions/setup-java@v1
+  #       with:
+  #         java-version: "12.x"
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "stable"
+  #     - run: flutter pub get
+  #     - run: flutter clean
+  #     - run: flutter build ios --release --no-codesign ./lib/flavors/main_development.dart
+      
+
+  # build_appbundle:
+  #   name: Build Flutter (Android)
+  #   needs: [flutter_test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Create .env file
+  #       run: |
+  #         cat > .env <<EOF
+  #         BASE_URL=${{ secrets.BASE_URL }}
+  #         SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+  #         EOF
+  #     - uses: actions/setup-java@v1
+  #       with:
+  #         java-version: "12.x"
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: "stable"
+  #     - run: flutter pub get
+  #     - run: flutter clean
+  #     - run: flutter build appbundle --flavor dev ./lib/flavors/main_development.dart
