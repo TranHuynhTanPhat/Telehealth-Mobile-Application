@@ -71,251 +71,267 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     ];
 
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: white,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(dimensHeight() * 8),
-            child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
-              builder: (context, state) {
-                if (state.subUsers.isNotEmpty) {
-                  int index = state.subUsers
-                      .indexWhere((element) => element.isMainProfile!);
+    return BlocListener<MedicalRecordCubit, MedicalRecordState>(
+      listener: (context, state) {
+        if (state is FetchSubUserLoaded) {
+          _image = null;
+        }
+      },
+      child: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: white,
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(dimensHeight() * 8),
+              child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
+                builder: (context, state) {
+                  if (state.subUsers.isNotEmpty) {
+                    int index = state.subUsers
+                        .indexWhere((element) => element.isMainProfile!);
 
-                  if (index != -1) {
-                    String url = CloudinaryContext.cloudinary
-                        .image(state.subUsers[index].avatar ?? '')
-                        .toString();
-                    NetworkImage provider = NetworkImage(url);
-                    if (state is UpdateSubUserSuccessfully) {
-                      provider.evict().then<void>((bool success) {
-                        if (success) debugPrint('removed image!');
-                      });
+                    if (index != -1) {
+                      String url = CloudinaryContext.cloudinary
+                          .image(state.subUsers[index].avatar ?? '')
+                          .toString();
+                      NetworkImage provider = NetworkImage(url);
+                      if (state is UpdateSubUserSuccessfully) {
+                        provider.evict().then<void>((bool success) {
+                          if (success) debugPrint('removed image!');
+                        });
+                      }
+
+                      _image = _image ?? provider;
+                    } else {
+                      _image = AssetImage(DImages.placeholder);
                     }
-
-                    _image = _image ?? provider;
                   } else {
                     _image = AssetImage(DImages.placeholder);
                   }
-                } else {
-                  _image = AssetImage(DImages.placeholder);
-                }
 
-                return AppBar(
-                  leadingWidth: dimensWidth() * 10,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  return AppBar(
+                    leadingWidth: dimensWidth() * 10,
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          translate(context, 'greeting'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: color6A6E83),
+                        ),
+                        Text(
+                          state.subUsers.isNotEmpty
+                              ? state.subUsers
+                                      .firstWhere(
+                                          (element) => element.isMainProfile!)
+                                      .fullName ??
+                                  translate(context, 'i_am_healthline')
+                              : translate(context, 'i_am_healthline'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(color: color1F1F1F),
+                        )
+                      ],
+                    ),
+                    centerTitle: false,
+                    leading: Padding(
+                      padding: EdgeInsets.only(
+                        left: dimensWidth() * 3,
+                      ),
+                      child: InkWell(
+                        splashColor: transparent,
+                        highlightColor: transparent,
+                        onTap: widget.press,
+                        child: BlocBuilder<ApplicationUpdateCubit,
+                            ApplicationUpdateState>(builder: (context, state) {
+                          return badgeNotification(
+                              child: CircleAvatar(
+                                radius: dimensWidth() * 5,
+                                backgroundImage: _image,
+                                onBackgroundImageError:
+                                    (exception, stackTrace) => setState(() {
+                                  _image = AssetImage(DImages.placeholder);
+                                }),
+                              ),
+                              isShow: state is UpdateAvailable,
+                              color: Theme.of(context).colorScheme.error,
+                              top: 3,
+                              end: 3);
+                        }),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            body: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 3,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: TextFieldWidget(
+                    validate: (p0) => null,
+                    hint: translate(context, 'search_drugs_categories'),
+                    fillColor: colorF2F5FF,
+                    filled: true,
+                    focusedBorderColor: colorF2F5FF,
+                    enabledBorderColor: colorF2F5FF,
+                    controller: _searchController,
+                    prefixIcon: IconButton(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
+                      onPressed: () {},
+                      icon: InkWell(
+                        splashColor: transparent,
+                        highlightColor: transparent,
+                        onTap: () => CommonRepository().refreshTokenDoctor(),
+                        child: FaIcon(
+                          FontAwesomeIcons.magnifyingGlass,
+                          color: color6A6E83,
+                          size: dimensIcon() * .8,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 4,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: Text(
+                    translate(context, 'services'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: color1F1F1F),
+                  ),
+                ),
+                const ListServices(),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 3,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: InkWell(
+                    splashColor: transparent,
+                    highlightColor: transparent,
+                    onTap: () => Navigator.pushNamed(context, forumName),
+                    child: const ForumCard(),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 4,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        translate(context, 'greeting'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: color6A6E83),
-                      ),
-                      Text(
-                        state.subUsers.isNotEmpty
-                            ? state.subUsers
-                                    .firstWhere(
-                                        (element) => element.isMainProfile!)
-                                    .fullName ??
-                                translate(context, 'i_am_healthline')
-                            : translate(context, 'i_am_healthline'),
+                        translate(context, 'upcoming_appointments'),
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge
                             ?.copyWith(color: color1F1F1F),
-                      )
+                      ),
+                      InkWell(
+                        child: Text(
+                          translate(context, 'see_all'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color: primary, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
-                  centerTitle: false,
-                  leading: Padding(
-                    padding: EdgeInsets.only(
-                      left: dimensWidth() * 3,
-                    ),
-                    child: InkWell(
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      onTap: widget.press,
-                      child: BlocBuilder<ApplicationUpdateCubit,
-                          ApplicationUpdateState>(builder: (context, state) {
-                        return badgeNotification(
-                            child: CircleAvatar(
-                              radius: dimensWidth() * 5,
-                              backgroundImage: _image,
-                              onBackgroundImageError: (exception, stackTrace) =>
-                                  setState(() {
-                                _image = AssetImage(DImages.placeholder);
-                              }),
-                            ),
-                            isShow: state is UpdateAvailable,
-                            color: Theme.of(context).colorScheme.error,
-                            top: 3,
-                            end: 3);
-                      }),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          body: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 3,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: TextFieldWidget(
-                  validate: (p0) => null,
-                  hint: translate(context, 'search_drugs_categories'),
-                  fillColor: colorF2F5FF,
-                  filled: true,
-                  focusedBorderColor: colorF2F5FF,
-                  enabledBorderColor: colorF2F5FF,
-                  controller: _searchController,
-                  prefixIcon: IconButton(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
-                    onPressed: () {},
-                    icon: InkWell(
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      onTap: () => CommonRepository().refreshTokenDoctor(),
-                      child: FaIcon(
-                        FontAwesomeIcons.magnifyingGlass,
-                        color: color6A6E83,
-                        size: dimensIcon() * .8,
-                      ),
-                    ),
-                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 4,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: Text(
-                  translate(context, 'services'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: color1F1F1F),
-                ),
-              ),
-              const ListServices(),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 3,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: const EventCard(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 4,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      translate(context, 'upcoming_appointments'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: color1F1F1F),
-                    ),
-                    InkWell(
-                      child: Text(
-                        translate(context, 'see_all'),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: primary, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: dimensWidth()),
-                child: UpcomingApointment(
-                  appointments: appointments,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 4,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      translate(context, 'top_doctors'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: color1F1F1F),
-                    ),
-                    InkWell(
-                      onTap: () => Navigator.pushNamed(context, doctorName),
-                      child: Text(
-                        translate(context, 'see_all'),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (state is HomeLoading)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: dimensWidth() * 3),
-                      child: const LinearProgressIndicator(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: dimensWidth() * 2,
-                          horizontal: dimensWidth() * 3),
-                      child: BaseGridview(
-                        radio: 0.8,
-                        children: [buildShimmer(), buildShimmer()],
-                      ),
-                    )
-                  ],
-                )
-              else
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: dimensWidth() * 2,
-                      horizontal: dimensWidth() * 3),
-                  child: BaseGridview(radio: 0.8, children: [
-                    ...state.doctors
-                        .map(
-                          (e) => DoctorCard(
-                            doctor: e,
-                          ),
-                        )
-                        .toList(),
-                  ]),
-                )
-            ],
-          ),
-        );
-      },
+                  padding: EdgeInsets.only(top: dimensWidth()),
+                  child: UpcomingApointment(
+                    appointments: appointments,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 4,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        translate(context, 'top_doctors'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: color1F1F1F),
+                      ),
+                      InkWell(
+                        onTap: () => Navigator.pushNamed(context, doctorName),
+                        child: Text(
+                          translate(context, 'see_all'),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (state is HomeLoading)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(top: dimensWidth() * 3),
+                        child: const LinearProgressIndicator(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: dimensWidth() * 2,
+                            horizontal: dimensWidth() * 3),
+                        child: BaseGridview(
+                          radio: 0.8,
+                          children: [buildShimmer(), buildShimmer()],
+                        ),
+                      )
+                    ],
+                  )
+                else
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: dimensWidth() * 2,
+                        horizontal: dimensWidth() * 3),
+                    child: BaseGridview(radio: 0.8, children: [
+                      ...state.doctors
+                          .map(
+                            (e) => DoctorCard(
+                              doctor: e,
+                            ),
+                          )
+                          .toList(),
+                    ]),
+                  )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

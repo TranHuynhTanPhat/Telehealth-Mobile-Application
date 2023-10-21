@@ -22,8 +22,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     _controller = PreloadPageController(initialPage: 0);
-    // _controller.animateToPage(currentIndex,
-    //     duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
     slides = getSlides();
   }
 
@@ -66,7 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PreloadPageView.builder(
                   controller: _controller,
-                  preloadPagesCount: 6,
+                  preloadPagesCount: slides.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   onPageChanged: (value) {

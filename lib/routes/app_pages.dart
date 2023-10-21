@@ -19,6 +19,8 @@ const updateHealthStatName = '/update_health_stat';
 const patientRecordName = '/patient_record';
 const addPatientRecordName = '/add_patient_record';
 
+const forumName = '/forum';
+
 const doctorName = '/doctor';
 const detailDoctorName = '/detail_doctor';
 const updateDefaultScheduleDoctorName = '/update_default_schedule_doctor';

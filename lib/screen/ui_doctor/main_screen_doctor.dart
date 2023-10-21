@@ -163,16 +163,16 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
                 builder: (context, state) {
                   return badgeNotification(
-                      child:IconButton(
+                      child: IconButton(
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
                         icon: const FaIcon(FontAwesomeIcons.bars),
                       ),
-                      isShow:state is UpdateAvailable,
-                     color: Theme.of(context).colorScheme.error,
-                     top: 7,
-                     end: 7);
+                      isShow: state is UpdateAvailable,
+                      color: Theme.of(context).colorScheme.error,
+                      top: 7,
+                      end: 7);
                 },
               ),
             ),
@@ -287,9 +287,34 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 size: dimensIcon() * .5,
                                 color: color1F1F1F,
                               ),
-                            )
-                          else
-                            const SizedBox(),
+                            ),
+                          ListTile(
+                            onTap: () {
+                              // EasyLoading.show(
+                              //     maskType: EasyLoadingMaskType.black);
+                              // setState(() {
+                              //   onChangeToPatient = true;
+                              // Future.delayed(const Duration(seconds: 1),
+                              //     () {
+                              Navigator.pushNamed(
+                                  context, forumName);
+                              // });
+                              // });
+                            },
+                            title: Text(
+                              translate(context, 'forum'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(color: color1F1F1F),
+                            ),
+                            leading: FaIcon(
+                              FontAwesomeIcons.solidComments,
+                              size: dimensIcon() * .5,
+                              color: color1F1F1F,
+                            ),
+                          ),
+
                           Padding(
                             padding: EdgeInsets.only(
                                 top: dimensHeight() * 2,

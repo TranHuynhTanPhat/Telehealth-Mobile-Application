@@ -90,8 +90,7 @@ class _UpdateDefaultScheduleScreenState
           Padding(
             padding: EdgeInsets.only(right: dimensWidth() * 2),
             child: InkWell(
-              splashColor: transparent,
-              highlightColor: transparent,
+              borderRadius: BorderRadius.circular(180),
               onTap: () {
                 updateFixedSchedule();
               },

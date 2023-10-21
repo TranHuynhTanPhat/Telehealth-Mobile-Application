@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:intl/intl.dart';
 
-import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/components/export.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/components/list_folder.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
-import 'package:healthline/utils/date_util.dart';
-import 'package:healthline/utils/translate.dart';
 
 class ListPatientRecordScreen extends StatefulWidget {
   const ListPatientRecordScreen({super.key});
@@ -21,6 +18,7 @@ class ListPatientRecordScreen extends StatefulWidget {
 }
 
 class _ListPatientRecordScreenState extends State<ListPatientRecordScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientRecordCubit, PatientRecordState>(
@@ -68,91 +66,7 @@ class _ListPatientRecordScreenState extends State<ListPatientRecordScreen> {
             padding: EdgeInsets.symmetric(
                 vertical: dimensHeight(), horizontal: dimensWidth() * 3),
             children: [
-              ...fileByFolders.entries
-                  .map(
-                    (mapEntry) => Column(
-                      children: [
-                        ListTile(
-                            onTap: () {
-                              PatientRecordCubit patientRecordCubit =
-                                  context.read<PatientRecordCubit>();
-                              MedicalRecordCubit medicalRecordCubit =
-                                  context.read<MedicalRecordCubit>();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                        value: patientRecordCubit,
-                                      ),
-                                      BlocProvider.value(
-                                        value: medicalRecordCubit,
-                                      ),
-                                    ],
-                                    child: FolderPatientRecordScreen(
-                                      folderName: mapEntry.key,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                dimensWidth(),
-                              ),
-                            ),
-                            dense: true,
-                            visualDensity: const VisualDensity(vertical: 0),
-                            leading: FaIcon(
-                              FontAwesomeIcons.solidFolderClosed,
-                              color: colorDF9F1E,
-                              size: dimensIcon(),
-                            ),
-                            title: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    mapEntry.key,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    formatFileDate(
-                                        context, mapEntry.value['update_at']),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(
-                                            color: black26,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Text(
-                                  '${mapEntry.value['length']} ${translate(context, 'items')}',
-                                  textAlign: TextAlign.right,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                          color: black26,
-                                          fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )),
-                        const Divider(),
-                      ],
-                    ),
-                  )
-                  .toList(),
+              ListFolder(fileByFolders: fileByFolders),
               ListFile(fileRecords: fileRecords),
             ],
           );

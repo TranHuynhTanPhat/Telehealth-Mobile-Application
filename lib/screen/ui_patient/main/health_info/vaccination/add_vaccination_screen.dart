@@ -82,8 +82,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                       ? Padding(
                           padding: EdgeInsets.only(right: dimensWidth() * 2),
                           child: InkWell(
-                            splashColor: transparent,
-                            highlightColor: transparent,
+                            borderRadius: BorderRadius.circular(180),
                             onTap: () => context
                                 .read<VaccineRecordCubit>()
                                 .createInjectedVaccination(

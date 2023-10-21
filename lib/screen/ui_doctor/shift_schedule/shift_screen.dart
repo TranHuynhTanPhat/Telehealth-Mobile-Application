@@ -47,6 +47,21 @@ class _ShiftScreenState extends State<ShiftScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
       builder: (context, state) {
+        String? currentMedicalId = state.schedules.firstWhere((element) {
+          DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
+          if (dateTime.day == _currentDate.day &&
+              dateTime.month == _currentDate.month &&
+              dateTime.year == _currentDate.year) {
+            return true;
+          } else {
+            return false;
+          }
+        }).id;
+        if (currentMedicalId != null) {
+          context
+              .read<DoctorScheduleCubit>()
+              .updateScheduleId(currentMedicalId);
+        }
         return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: white,

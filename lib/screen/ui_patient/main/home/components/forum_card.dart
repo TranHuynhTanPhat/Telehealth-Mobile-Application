@@ -3,8 +3,8 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:lottie/lottie.dart';
 
-class EventCard extends StatelessWidget {
-  const EventCard({
+class ForumCard extends StatelessWidget {
+  const ForumCard({
     super.key,
   });
 

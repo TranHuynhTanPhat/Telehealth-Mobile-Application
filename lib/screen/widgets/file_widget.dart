@@ -113,6 +113,7 @@ class FileWidget extends StatelessWidget {
       ),
       subtitle: updateAt != null || size != null
           ? Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: Text(

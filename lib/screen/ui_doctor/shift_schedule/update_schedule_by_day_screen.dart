@@ -70,18 +70,13 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              translate(context, 'update_schedule_on') +
-                  state.schedules
-                      .firstWhere((element) => element.id == state.scheduleId)
-                      .date
-                      .toString(),
+              '${translate(context, 'update_schedule_on')} ${state.schedules.firstWhere((element) => element.id == state.scheduleId).date}',
             ),
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: dimensWidth() * 2),
                 child: InkWell(
-                  splashColor: transparent,
-                  highlightColor: transparent,
+                  borderRadius: BorderRadius.circular(180),
                   onTap: () {
                     workingTimes = [];
 

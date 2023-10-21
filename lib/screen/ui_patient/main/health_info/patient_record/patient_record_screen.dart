@@ -47,7 +47,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                 actions: [
                   if (state is! FetchPatientRecordLoading)
                     Padding(
-                      padding: EdgeInsets.only(right: dimensWidth() * 3),
+                      padding: EdgeInsets.only(right: dimensWidth() * 2),
                       child: AbsorbPointer(
                         absorbing: false,
                         child: InkWell(
@@ -61,12 +61,15 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                             });
                             // showAddPatientRecordDialog(context);
                           },
-                          splashColor: transparent,
-                          highlightColor: transparent,
-                          child: FaIcon(
-                            FontAwesomeIcons.plus,
-                            color: color1F1F1F,
-                            size: dimensIcon() * .7,
+                                               borderRadius: BorderRadius.circular(180),
+
+                          child: Padding(
+                            padding: EdgeInsets.all(dimensWidth()),
+                            child: FaIcon(
+                              FontAwesomeIcons.plus,
+                              color: color1F1F1F,
+                              size: dimensIcon() * .7,
+                            ),
                           ),
                         ),
                       ),

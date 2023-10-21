@@ -1290,5 +1290,53 @@
     "items": {
         "vi": "mục",
         "en": "items"
+    },
+    "cant_delete": {
+        "vi": "Không thể xoá",
+        "en": "Can't delete"
+    },
+    "your_question": {
+        "vi": "Câu hỏi của bạn",
+        "en": "Your question"
+    },
+    "whats_the_problem_with_you": {
+        "vi": "Có vấn đề gì với bạn vậy?",
+        "en": "What's the problem with you?"
+    },
+    "attach": {
+        "vi": "Đính kèm",
+        "en": "Attach"
+    },
+    "Post": {
+        "vi": "Đăng",
+        "en": "Post"
+    },
+    "forum": {
+        "vi": "Diễn đàn",
+        "en": "Forum"
+    },
+    "like": {
+        "vi": "Thích",
+        "en": "Like"
+    },
+    "comment": {
+        "vi": "Bình luận",
+        "en": "Comment"
+    },
+    "write_a_comment": {
+        "vi": "Viết bình luận...",
+        "en": "Write a comment..."
+    },
+    "reply": {
+        "vi": "Trả lời",
+        "en": "Reply"
+    },
+    "search": {
+        "vi": "Tìm kiếm",
+        "en": "Search"
+    },
+    "post": {
+        "vi": "Đăng",
+        "en": "Post"
     }
 }

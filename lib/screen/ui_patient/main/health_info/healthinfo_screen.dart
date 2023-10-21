@@ -143,13 +143,15 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   Padding(
                     padding: EdgeInsets.only(right: dimensWidth() * 2),
                     child: InkWell(
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      child: AnimatedIcon(
-                        icon: AnimatedIcons.menu_close,
-                        progress: _animationIC,
-                        color: color1F1F1F,
-                        size: dimensIcon(),
+                      borderRadius: BorderRadius.circular(180),
+                      child: Padding(
+                        padding: EdgeInsets.all(dimensWidth()),
+                        child: AnimatedIcon(
+                          icon: AnimatedIcons.menu_close,
+                          progress: _animationIC,
+                          color: color1F1F1F,
+                          size: dimensIcon(),
+                        ),
                       ),
                       onTap: () {
                         if (_showUsers) {

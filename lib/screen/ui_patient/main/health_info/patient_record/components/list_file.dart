@@ -123,23 +123,26 @@ class _ListFileState extends State<ListFile> {
         ].contains(type)) {
           url = e.record != null
               ? CloudinaryContext.cloudinary
-                  .video(Uri.encodeFull(e.record!))
+                  .video(Uri.encodeFull('${e.record!}.$type'))
                   .toString()
               : null;
         }
 
-        return GestureDetector(
-          onTapDown: _storePosition,
+        return InkWell(
           onLongPress: () async => _showMenu(url, fileName, e.id),
-          onTap: url != null
-              ? () async => _openFile(url!, fileName)
-              : () =>
-                  EasyLoading.showToast(translate(context, 'cant_download')),
-          child: FileWidget(
-            extension: type,
-            title: fileName,
-            updateAt: formatFileDate(context, updateAt),
-            size: null,
+          borderRadius: BorderRadius.circular(dimensWidth()),
+          child: GestureDetector(
+            onTapDown: _storePosition,
+            onTap: url != null
+                ? () async => _openFile(url!, fileName)
+                : () =>
+                    EasyLoading.showToast(translate(context, 'cant_download')),
+            child: FileWidget(
+              extension: type,
+              title: fileName,
+              updateAt: formatFileDate(context, updateAt),
+              size: e.size,
+            ),
           ),
         );
       },

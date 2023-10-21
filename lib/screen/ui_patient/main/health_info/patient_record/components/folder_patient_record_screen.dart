@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 
@@ -46,7 +45,7 @@ class _FolderPatientRecordScreenState extends State<FolderPatientRecordScreen> {
                 actions: [
                   if (state is! FetchPatientRecordLoading)
                     Padding(
-                      padding: EdgeInsets.only(right: dimensWidth() * 3),
+                      padding: EdgeInsets.only(right: dimensWidth() * 2),
                       child: AbsorbPointer(
                         absorbing: false,
                         child:
@@ -72,12 +71,14 @@ class _FolderPatientRecordScreenState extends State<FolderPatientRecordScreen> {
                                 });
                                 // showAddPatientRecordDialog(context);
                               },
-                              splashColor: transparent,
-                              highlightColor: transparent,
-                              child: FaIcon(
-                                FontAwesomeIcons.plus,
-                                color: color1F1F1F,
-                                size: dimensIcon() * .7,
+                              borderRadius: BorderRadius.circular(180),
+                              child: Padding(
+                                padding: EdgeInsets.all(dimensWidth()),
+                                child: FaIcon(
+                                  FontAwesomeIcons.plus,
+                                  color: color1F1F1F,
+                                  size: dimensIcon() * .7,
+                                ),
                               ),
                             );
                           },

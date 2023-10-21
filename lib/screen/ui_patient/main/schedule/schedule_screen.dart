@@ -65,12 +65,15 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 actions: [
                   Container(
-                    padding: EdgeInsets.only(right: dimensWidth() * 3),
+                    padding: EdgeInsets.only(right: dimensWidth() * 2),
                     alignment: Alignment.center,
-                    child: FaIcon(
-                      FontAwesomeIcons.plus,
-                      size: dimensIcon()*.8,
-                      color: color1F1F1F,
+                    child: Padding(
+                      padding: EdgeInsets.all(dimensWidth()),
+                      child: FaIcon(
+                        FontAwesomeIcons.plus,
+                        size: dimensIcon()*.8,
+                        color: color1F1F1F,
+                      ),
                     ),
                   )
                 ],
