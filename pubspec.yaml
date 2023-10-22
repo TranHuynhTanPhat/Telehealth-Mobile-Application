@@ -74,6 +74,7 @@ dependencies:
   badges: ^3.1.2
   open_document: ^1.0.7
   url_launcher: ^6.1.14
+  web_socket_channel: ^2.4.0
 
 
 dev_dependencies:

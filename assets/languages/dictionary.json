@@ -1338,5 +1338,10 @@
     "post": {
         "vi": "Đăng",
         "en": "Post"
+    },
+    "my_clinic": {
+        "vi": "Phòng khám của tôi",
+        "en": "My clinic"
     }
+    
 }

@@ -4,6 +4,9 @@ class ApiConstants {
   // CLOUDINARY
   static const UPLOAD = '/upload';
 
+  // SOCKET
+  static const SOCKET_URL = 'ws://';
+
 // common
   static const _COMMON_USER = '/common/user';
   static const _COMMON_DOCTOR = '/common/doctor';

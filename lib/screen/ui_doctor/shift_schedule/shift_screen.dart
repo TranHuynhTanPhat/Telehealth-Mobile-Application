@@ -57,7 +57,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
             return false;
           }
         }).id;
-        if (currentMedicalId != null) {
+        if (state.scheduleId != currentMedicalId) {
           context
               .read<DoctorScheduleCubit>()
               .updateScheduleId(currentMedicalId);

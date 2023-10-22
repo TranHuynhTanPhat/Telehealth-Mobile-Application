@@ -49,27 +49,51 @@ class _SideMenuState extends State<SideMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const InfoCard(),
-                if (AppController.instance.authState == AuthState.AllAuthorized) ListTile(
-                        onTap: () {
-                          EasyLoading.show();
-                          Future.delayed(const Duration(seconds: 1), () {
-                            Navigator.pushReplacementNamed(
-                                context, mainScreenDoctorName);
-                          });
-                        },
-                        title: Text(
-                          translate(context, 'Phòng khám của tôi'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(color: white),
-                        ),
-                        leading: FaIcon(
-                          FontAwesomeIcons.houseMedical,
-                          size: dimensIcon() * .5,
-                          color: white,
-                        ),
-                      ) else const SizedBox(),
+                if (AppController.instance.authState == AuthState.AllAuthorized)
+                  ListTile(
+                    onTap: () {
+                      EasyLoading.show();
+                      Future.delayed(const Duration(seconds: 1), () {
+                        Navigator.pushReplacementNamed(
+                            context, mainScreenDoctorName);
+                      });
+                    },
+                    title: Text(
+                      translate(context, 'my_clinic'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: white),
+                    ),
+                    leading: FaIcon(
+                      FontAwesomeIcons.houseMedical,
+                      size: dimensIcon() * .5,
+                      color: white,
+                    ),
+                  )
+                else
+                  const SizedBox(),
+                ListTile(
+                  onTap: () {
+                    EasyLoading.show();
+                    Future.delayed(const Duration(seconds: 1), () {
+                      Navigator.pushReplacementNamed(
+                          context, mainScreenDoctorName);
+                    });
+                  },
+                  title: Text(
+                    translate(context, 'forum'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: white),
+                  ),
+                  leading: FaIcon(
+                    FontAwesomeIcons.solidComments,
+                    size: dimensIcon() * .5,
+                    color: white,
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 2,
@@ -101,27 +125,30 @@ class _SideMenuState extends State<SideMenu> {
                   ),
                 ),
                 BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
-                  builder: (context, state) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.pushNamed(context, applicationSettingName);
-                      },
-                      title:Text(
-                        translate(context, 'application_setting'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: white),
-                      ),
-                      leading: badgeNotification(child:FaIcon(
-                        FontAwesomeIcons.gear,
-                        size: dimensIcon() * .5,
-                        color: white,
-                      ), isShow:state is UpdateAvailable, color:Theme.of(context).colorScheme.error, top:-10, end:-10),
-                    );
-                  }
-                ),
-
+                    builder: (context, state) {
+                  return ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, applicationSettingName);
+                    },
+                    title: Text(
+                      translate(context, 'application_setting'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: white),
+                    ),
+                    leading: badgeNotification(
+                        child: FaIcon(
+                          FontAwesomeIcons.gear,
+                          size: dimensIcon() * .5,
+                          color: white,
+                        ),
+                        isShow: state is UpdateAvailable,
+                        color: Theme.of(context).colorScheme.error,
+                        top: -10,
+                        end: -10),
+                  );
+                }),
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 3,
