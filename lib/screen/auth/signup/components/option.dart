@@ -10,15 +10,15 @@ class OptionSignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-              right: dimensWidth() * 3,
-              left: dimensWidth() * 3),
-          child: const Divider(),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(
+        //       right: dimensWidth() * 3,
+        //       left: dimensWidth() * 3),
+        //   child: const Divider(),
+        // ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               " ${translate(context, 'already_have_an_account')} ",

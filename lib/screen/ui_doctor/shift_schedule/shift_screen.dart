@@ -47,20 +47,22 @@ class _ShiftScreenState extends State<ShiftScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
       builder: (context, state) {
-        String? currentMedicalId = state.schedules.firstWhere((element) {
-          DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
-          if (dateTime.day == _currentDate.day &&
-              dateTime.month == _currentDate.month &&
-              dateTime.year == _currentDate.year) {
-            return true;
-          } else {
-            return false;
+        if (state.schedules.isNotEmpty) {
+          String? currentMedicalId = state.schedules.firstWhere((element) {
+            DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
+            if (dateTime.day == _currentDate.day &&
+                dateTime.month == _currentDate.month &&
+                dateTime.year == _currentDate.year) {
+              return true;
+            } else {
+              return false;
+            }
+          }).id;
+          if (state.scheduleId != currentMedicalId) {
+            context
+                .read<DoctorScheduleCubit>()
+                .updateScheduleId(currentMedicalId);
           }
-        }).id;
-        if (state.scheduleId != currentMedicalId) {
-          context
-              .read<DoctorScheduleCubit>()
-              .updateScheduleId(currentMedicalId);
         }
         return Scaffold(
           resizeToAvoidBottomInset: true,
@@ -83,8 +85,76 @@ class _ShiftScreenState extends State<ShiftScreen> {
                 }),
           ),
           body: AbsorbPointer(
-            absorbing: state is FetchScheduleLoading,
+            absorbing: state is FetchScheduleLoading && state.schedules.isEmpty,
             child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    centerTitle: false,
+                    snap: false,
+                    pinned: true,
+                    floating: false,
+                    leading: const SizedBox(),
+                    // expandedHeight: dimensHeight()*10,
+                    collapsedHeight: dimensHeight() * 10,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: dimensWidth() * 3),
+                                child: Text(
+                                  translate(context, 'schedule'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: dimensWidth() * 3),
+                                child: Text(
+                                  formatyMMMMd(context, _currentDate),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: color1F1F1F.withOpacity(.3),
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: dimensWidth() * 3),
+                            child: TextButton(
+                                onPressed: () {
+                                  if (state.scheduleId != null) {
+                                    Navigator.pushNamed(context,
+                                            updateScheduleByDayDoctorName)
+                                        .then((value) => context
+                                            .read<DoctorScheduleCubit>()
+                                            .fetchSchedule());
+                                  }
+                                },
+                                child: Text(translate(context, 'update'))),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ];
+              },
               body: ListView(
                 padding: EdgeInsets.only(bottom: dimensHeight() * 15),
                 children: [
@@ -154,109 +224,42 @@ class _ShiftScreenState extends State<ShiftScreen> {
                   //     ],
                   //   ),
                   // ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: dimensWidth() * 3,
-                        vertical: dimensHeight()),
-                    child: BaseGridview(
-                      radio: 3.2,
-                      children: [
-                        ...state.schedules
-                            .firstWhere(
-                              (element) {
-                                DateTime dateTime = DateFormat('dd/MM/yyyy')
-                                    .parse(element.date!);
-                                if (dateTime.day == _currentDate.day &&
-                                    dateTime.month == _currentDate.month &&
-                                    dateTime.year == _currentDate.year) {
-                                  return true;
-                                } else {
-                                  return false;
-                                }
-                              },
-                              orElse: () => ScheduleResponse(
-                                  date: _currentDate.toString(),
-                                  workingTimes: []),
-                            )
-                            .workingTimes!
-                            .map(
-                              (e) => ValidShift(
-                                time: convertIntToTime(e ?? 0),
-                              ),
-                            ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverAppBar(
-                    centerTitle: false,
-                    snap: false,
-                    pinned: true,
-                    floating: false,
-                    leading: const SizedBox(),
-                    // expandedHeight: dimensHeight()*10,
-                    collapsedHeight: dimensHeight() * 10,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  if (state.schedules.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight()),
+                      child: BaseGridview(
+                        radio: 3.2,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: dimensWidth() * 3),
-                                child: Text(
-                                  translate(context, 'schedule'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: dimensWidth() * 3),
-                                child: Text(
-                                  formatyMMMMd(context, _currentDate),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: color1F1F1F.withOpacity(.3),
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: dimensWidth() * 3),
-                            child: TextButton(
-                                onPressed: () {
-                                  if (state.scheduleId != null) {
-                                    Navigator.pushNamed(context,
-                                            updateScheduleByDayDoctorName)
-                                        .then((value) => context
-                                            .read<DoctorScheduleCubit>()
-                                            .fetchSchedule());
+                          ...state.schedules
+                              .firstWhere(
+                                (element) {
+                                  DateTime dateTime = DateFormat('dd/MM/yyyy')
+                                      .parse(element.date!);
+                                  if (dateTime.day == _currentDate.day &&
+                                      dateTime.month == _currentDate.month &&
+                                      dateTime.year == _currentDate.year) {
+                                    return true;
+                                  } else {
+                                    return false;
                                   }
                                 },
-                                child: Text(translate(context, 'update'))),
-                          )
+                                orElse: () => ScheduleResponse(
+                                    date: _currentDate.toString(),
+                                    workingTimes: []),
+                              )
+                              .workingTimes!
+                              .map(
+                                (e) => ValidShift(
+                                  time: convertIntToTime(e ?? 0),
+                                ),
+                              ),
                         ],
                       ),
                     ),
-                  ),
-                ];
-              },
+                ],
+              ),
             ),
           ),
         );

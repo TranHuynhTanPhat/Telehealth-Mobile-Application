@@ -6,6 +6,7 @@ import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/data/api/rpc_manager.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,11 +24,10 @@ class AppController {
   late String deviceId;
   AuthState authState = AuthState.Unauthorized;
 
-
   // Create an instance of ShorebirdCodePush. Because this example only contains
   // a single widget, we create it here, but you will likely only need to create
   // a single instance of ShorebirdCodePush in your app.
-  late final shorebirdCodePush=ShorebirdCodePush() ;
+  late final shorebirdCodePush = ShorebirdCodePush();
 
   // singleton
   static final AppController instance = AppController._internal();
@@ -39,7 +39,7 @@ class AppController {
   AppController._internal();
 
   init() async {
-    await Future.wait([setupSystem(), setupLocator()]);
+    await Future.wait([setupSystem(), setupLocator(), RpcManager().init()]);
     await initAuth();
     setupCloudinary();
   }
@@ -125,5 +125,9 @@ class AppController {
       logPrint('Failed to get platform version');
     }
     return "";
+  }
+
+  void close(){
+    RpcManager().close();
   }
 }

@@ -252,7 +252,7 @@ class _UpdateDefaultScheduleScreenState
                                                       },
                                                       readOnly: true,
                                                       label: translate(
-                                                          context, 'begin'),
+                                                          context, 'start'),
                                                       controller:
                                                           controllerBegin[
                                                                   _currentStep]

@@ -87,19 +87,14 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Form(
         key: _formKey,
         child: SizedBox(
-          height: dimensHeight() *
-              (_currentStep == 0
-                  ? 65
-                  : _currentStep == 1
-                      ? 45
-                      : 55),
+          height: dimensHeight()*70,
           child: Stepper(
             elevation: 0,
             margin: const EdgeInsets.all(0),
             controlsBuilder: (context, details) {
               return const SizedBox();
             },
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             type: StepperType.horizontal,
             currentStep: _currentStep,
             connectorColor: const MaterialStatePropertyAll(secondary),
@@ -112,9 +107,7 @@ class _SignUpFormState extends State<SignUpForm> {
               });
             },
             // _currentStep < 2 ? () => setState(() => _currentStep += 1) : null,
-            onStepCancel: _currentStep > 0
-                ? () => setState(() => _currentStep -= 1)
-                : null,
+            
             steps: [
               Step(
                 label: _currentStep == 0
@@ -248,7 +241,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               })
                           : null,
                       child: Text(
-                        translate(context, 'next'),
+                        translate(context, 'continue'),
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium
@@ -314,7 +307,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               })
                           : null,
                       child: Text(
-                        translate(context, 'next'),
+                        translate(context, 'continue'),
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium

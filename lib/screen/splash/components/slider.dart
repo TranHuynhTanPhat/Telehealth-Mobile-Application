@@ -27,7 +27,8 @@ class _SliderWidgetState extends State<SliderWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CldImageWidget(
             publicId: "healthline/onboarding/images/${widget.fileName}",

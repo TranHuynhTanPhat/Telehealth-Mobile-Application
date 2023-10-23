@@ -6,12 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:open_document/open_document.dart';
 import 'package:open_document/open_document_exception.dart';
 
-import 'package:healthline/data/api/models/responses/file_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/repository/file_repository.dart';
 import 'package:healthline/repository/patient_repository.dart';
 import 'package:healthline/utils/log_data.dart';
-import 'package:healthline/utils/size_util.dart';
 
 part 'patient_record_state.dart';
 
@@ -54,12 +52,12 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
     emit(AddPatientRecordLoading(
         records: state.records, medicalId: state.medicalId));
     try {
-      FileResponse response = await _fileRepository.uploadRecordPatient(
+      await _fileRepository.uploadRecordPatient(
           path: path, folder: folderName ?? '');
-      String publicId = response.publicId!;
+      // String publicId = response.publicId!;
 
-      await _patientRepository.addPatientRecord(state.medicalId!, publicId,
-          folderName ?? 'default', getFileSizeString(bytes: size));
+      // await _patientRepository.addPatientRecord(state.medicalId!, publicId,
+      //     folderName ?? 'default', getFileSizeString(bytes: size));
       emit(AddPatientRecordLoaded(
           records: state.records, medicalId: state.medicalId));
     } on DioException catch (e) {

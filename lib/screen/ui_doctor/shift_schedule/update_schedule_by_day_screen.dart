@@ -182,7 +182,7 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                                       }
                                     },
                                     readOnly: true,
-                                    label: translate(context, 'begin'),
+                                    label: translate(context, 'start'),
                                     controller: controllerBegin[index],
                                     validate: (value) {
                                       if (value!.isEmpty) {

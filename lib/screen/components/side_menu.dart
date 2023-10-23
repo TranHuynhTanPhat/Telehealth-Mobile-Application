@@ -75,11 +75,7 @@ class _SideMenuState extends State<SideMenu> {
                   const SizedBox(),
                 ListTile(
                   onTap: () {
-                    EasyLoading.show();
-                    Future.delayed(const Duration(seconds: 1), () {
-                      Navigator.pushReplacementNamed(
-                          context, mainScreenDoctorName);
-                    });
+                    Navigator.pushNamed(context, forumName);
                   },
                   title: Text(
                     translate(context, 'forum'),

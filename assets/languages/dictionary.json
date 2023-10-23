@@ -1342,6 +1342,61 @@
     "my_clinic": {
         "vi": "Phòng khám của tôi",
         "en": "My clinic"
+    },
+    "start": {
+        "vi": "Bắt đầu",
+        "en": "Start"
+    },
+    "end": {
+        "vi": "Kết thúc",
+        "en": "End"
+    },
+    "ob_title_1": {
+        "vi": "Các chuyên gia và phòng khám tốt nhất",
+        "en": "Best specialists and clinics"
+    },
+    "ob_title_2": {
+        "vi": "Giải đáp mọi thắc mắc về sức khỏe",
+        "en": "Answer all health questions"
+    },
+    "ob_title_3": {
+        "vi": "Đặt lịch hẹn khám bệnh trực tuyến dễ dàng",
+        "en": "Book your medical appointment online easily"
+    },
+    "ob_title_4": {
+        "vi": "Cung cấp các dịch vụ sức khoẻ",
+        "en": "Provide health services"
+    },
+    "ob_title_5": {
+        "vi": "Hạn chế tiếp xúc trực tiếp",
+        "en": "Limit direct contact"
+    },
+    "ob_title_6": {
+        "vi": "Bảo mật thông tin",
+        "en": "Information security"
+    },
+    "ob_description_1": {
+        "vi": "Các bác sĩ trên khắp Việt Nam luôn sẵn sàng tư vấn y tế cho bạn.",
+        "en": "Doctors from all over Vietnam are always ready to provide medical advice for you."
+    },
+    "ob_description_2": {
+        "vi": "Bạn có thể nhận được câu trả lời cho tất cả các câu hỏi liên quan đến sức khỏe của mình thông qua các diễn đàn hoặc tư vấn trực tiếp với bác sĩ.",
+        "en": "You can get answers to all your health-related questions through forums or by directly consulting with a doctor."
+    },
+    "ob_description_3": {
+        "vi": "Chọn bác sĩ và đặt lịch hẹn thông qua ứng dụng của chúng tôi.",
+        "en": "Select the doctor and make appointment through our app."
+    },
+    "ob_description_4": {
+        "vi": "Chúng tôi cung cấp một loạt các dịch vụ liên quan đến sức khỏe với sự cộng tác của các bác sĩ.",
+        "en": "We provide a wide range of health-related services with the collaboration of doctors."
+    },
+    "ob_description_5": {
+        "vi": "Điều này giúp giảm nguy cơ lây truyền bệnh ở những nơi đông người như bệnh viện.",
+        "en": "This helps reduce the risk of disease transmission in crowded places like hospitals."
+    },
+    "ob_description_6": {
+        "vi": "Thông tin cá nhân và sức khỏe của bạn sẽ được giữ bí mật cao.",
+        "en": "Your personal and health information will be kept highly confidential."
     }
-    
 }

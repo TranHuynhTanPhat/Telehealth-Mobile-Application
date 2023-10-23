@@ -9,22 +9,24 @@ class SocketManager {
   late bool isConnected;
   final List<Function(dynamic)> _messageListeners = [];
 
-  // SocketManager._internal() {
-  //   isConnected = true;
-  //   channel.stream.listen((data) {
-  //     _handleMessage(data);
-  //     // addMessageListener(_handleCreateGroup);
-  //     // log(data);
-  //   });
-  //   channel.sink.done.then((_) {
-  //     isConnected = false;
-  //     logPrint("WebSocket connection closed.");
-  //   });
-  // }
+  SocketManager._internal() {
+    isConnected = true;
+    channel.stream.listen((data) {
+      _handleMessage(data);
+      // addMessageListener(_handleCreateGroup);
+      // log(data);
+    });
+    channel.sink.done.then((_) {
+      isConnected = false;
+      logPrint("WebSocket connection closed.");
+    });
+  }
 
-  // static final SocketManager _instance = SocketManager._internal();
+  static final SocketManager instance = SocketManager._internal();
 
-  // static SocketManager get instance => _instance;
+  factory SocketManager() {
+    return instance;
+  }
 
   Stream<dynamic> get onMessage => channel.stream;
 
