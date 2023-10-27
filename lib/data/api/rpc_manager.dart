@@ -8,7 +8,7 @@ class RpcManager {
   late ConnectionSettings _settings;
   final Map<String, Completer> _pendingOperations = <String, Completer>{};
   late Queue _serverQueue;
-  late String _replyQueueName;
+  // late String _replyQueueName;
 
   RpcManager._internal();
 
@@ -31,25 +31,25 @@ class RpcManager {
     // Allocate a private queue for server responses
     Queue queue = await _serverQueue.channel.privateQueue();
     Consumer consumer = await queue.consume();
-    _replyQueueName = consumer.queue.name;
+    // _replyQueueName = consumer.queue.name;
     consumer.listen(handleResponse);
     connected.complete();
   }
 
   void handleResponse(AmqpMessage message) {
-    // Ignore if the correlation id is unknown
-    // Get the payload as a string
-    print(" [x] Received string: ${message.payloadAsString}");
+    // // Ignore if the correlation id is unknown
+    // // Get the payload as a string
+    // print(" [x] Received string: ${message.payloadAsString}");
 
-    // Or unserialize to json
-    print(" [x] Received json: ${message.payloadAsJson}");
+    // // Or unserialize to json
+    // print(" [x] Received json: ${message.payloadAsJson}");
 
-    // Or just get the raw data as a Uint8List
-    print(" [x] Received raw: ${message.payload}");
+    // // Or just get the raw data as a Uint8List
+    // print(" [x] Received raw: ${message.payload}");
 
-    // The message object contains helper methods for
-    // replying, ack-ing and rejecting
-    // message.reply("world");
+    // // The message object contains helper methods for
+    // // replying, ack-ing and rejecting
+    // // message.reply("world");
     if (!_pendingOperations.containsKey(message.properties?.corellationId)) {
       return;
     }

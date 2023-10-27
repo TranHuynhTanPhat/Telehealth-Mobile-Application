@@ -16,8 +16,8 @@ class UpcomingCard extends StatelessWidget {
           horizontal: dimensWidth() * 2, vertical: dimensWidth() * 2),
       decoration: BoxDecoration(
         color: object['status'] == 'pending'
-            ? colorDF9F1E.withOpacity(.2)
-            : colorCDDEFF,
+            ? colorDF9F1E.withOpacity(.1)
+            : primary.withOpacity(.1),
         borderRadius: BorderRadius.all(
           Radius.circular(dimensWidth() * 3),
         ),
@@ -29,71 +29,82 @@ class UpcomingCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: dimensImage() * 5,
-                    height: dimensImage() * 5,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          100,
-                        ),
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(object['image']),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: dimensWidth() * 2),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          translate(context, object['dr']),
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(
-                                  color: object['status'] == 'pending'
-                                      ? colorDF9F1E
-                                      : secondary,
-                                  fontWeight: FontWeight.w900),
-                        ),
-                        SizedBox(
-                          width: dimensWidth() * 30,
-                          child: Text(
-                            translate(context, object['specialist']),
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                    color: object['status'] == 'pending'
-                                        ? colorDF9F1E
-                                        : secondary),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: dimensImage() * 7,
+                      height: dimensImage() * 7,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(
+                            100,
                           ),
                         ),
-                      ],
+                        image: DecorationImage(
+                          image: AssetImage(object['image']),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: dimensWidth() * 2),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              translate(context, object['dr']),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+
+                                      // color: object['status'] == 'pending'
+                                      //     ? colorDF9F1E
+                                      //     : secondary,
+                                      fontWeight: FontWeight.w700),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    width: dimensWidth() * 30,
+                                    child: Text(
+                                      translate(context, object['specialist']),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: black26,
+                                            // object['status'] == 'pending'
+                                            //     ? colorDF9F1E
+                                            //     : secondary
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               InkWell(
                 splashColor: transparent,
-                      highlightColor: transparent,
+                highlightColor: transparent,
                 onTap: () {},
-                child: FaIcon(
-                  FontAwesomeIcons.ellipsis,
-                  size: dimensWidth() * 2.5,
-                  color:
-                      object['status'] == 'Pending' ? colorDF9F1E : secondary,
-                ),
+                child: FaIcon(FontAwesomeIcons.ellipsis,
+                    size: dimensWidth() * 2.5, color: color1F1F1F
+                    // object['status'] == 'Pending' ? colorDF9F1E : secondary,
+                    ),
               ),
             ],
           ),
@@ -104,67 +115,102 @@ class UpcomingCard extends StatelessWidget {
               child: Text(
                 "${translate(context, 'patient')}: ${object['patient']}",
                 overflow: TextOverflow.visible,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: object['status'] == 'pending'
-                          ? colorDF9F1E
-                          : secondary,
-                    ),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: black26
+                        // object['status'] == 'pending'
+                        //     ? colorDF9F1E
+                        //     : secondary,
+                        ),
               ),
             ),
           ),
-          Text(
-            formatFullDate(context, object['date']),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color:
-                      object['status'] == 'pending' ? colorDF9F1E : secondary,
-                ),
+          Container(
+            margin: EdgeInsets.only(
+              top: dimensHeight(),
+            ),
+            padding: EdgeInsets.symmetric(
+                horizontal: dimensWidth() * 1.5, vertical: dimensHeight()*.5),
+            decoration: BoxDecoration(
+              color: object['status'] == 'pending' ? colorDF9F1E : primary,
+              borderRadius: BorderRadius.circular(
+                dimensWidth() * 2,
+              ),
+            ),
+            child: Text(
+              formatFullDate(context, object['date']),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: white,
+                    // object['status'] == 'pending' ? colorDF9F1E : secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.clock,
-                    color:
-                        object['status'] == 'pending' ? colorDF9F1E : secondary,
-                    size: dimensWidth() * 2,
+              Container(
+                margin: EdgeInsets.only(
+                  top: dimensHeight()*.5,
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: dimensWidth() * 1.5, vertical: dimensHeight()*.5),
+                decoration: BoxDecoration(
+                  color: object['status'] == 'pending' ? colorDF9F1E : primary,
+                  borderRadius: BorderRadius.circular(
+                    dimensWidth() * 2,
                   ),
-                  SizedBox(
-                    width: dimensWidth(),
-                  ),
-                  Text(
-                    object['begin'].format(context).toString(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * .3,
-                  ),
-                  Text(
-                    "-",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * .3,
-                  ),
-                  Text(
-                    object['end'].format(context).toString(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: object['status'] == 'pending'
-                            ? colorDF9F1E
-                            : secondary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+                ),
+                child: Row(
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.clock,
+                      color: white,
+                      // object['status'] == 'pending'
+                      //     ? colorDF9F1E
+                      //     : secondary,
+                      size: dimensWidth() * 2,
+                    ),
+                    SizedBox(
+                      width: dimensWidth(),
+                    ),
+                    Text(
+                      object['begin'].format(context).toString(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: white,
+                          // object['status'] == 'pending'
+                          //     ? colorDF9F1E
+                          //     : secondary,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: dimensWidth() * .3,
+                    ),
+                    Text(
+                      "-",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: white,
+                          // object['status'] == 'pending'
+                          //     ? colorDF9F1E
+                          //     : secondary,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: dimensWidth() * .3,
+                    ),
+                    Text(
+                      object['end'].format(context).toString(),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: white,
+                          // object['status'] == 'pending'
+                          //     ? colorDF9F1E
+                          //     : secondary,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +220,7 @@ class UpcomingCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: object['status'] == 'pending'
                             ? colorDF9F1E
-                            : secondary,
+                            : black26,
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -183,7 +229,7 @@ class UpcomingCard extends StatelessWidget {
                   object['status'] == 'confirmed'
                       ? FaIcon(
                           FontAwesomeIcons.check,
-                          color: secondary,
+                          color: black26,
                           size: dimensWidth() * 2,
                         )
                       : FaIcon(

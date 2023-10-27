@@ -108,7 +108,7 @@ class _ForumScreenState extends State<ForumScreen> {
                         setState(() {
                           openSearch = true;
                         });
-                        Future.delayed(Duration(seconds: 1), () {
+                        Future.delayed(const Duration(seconds: 1), () {
                           _checkFocus();
                         });
                       },

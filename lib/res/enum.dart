@@ -19,6 +19,8 @@ enum DrawerMenus {
   Helps
 }
 
+enum ScheduleTabBar { UpComing, Completed, Canceled }
+
 enum Gender { Male, Female }
 
 enum Role { Patient, Doctor }

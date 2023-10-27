@@ -113,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             }
                           },
                         ),
-                  Spacer(),
+                  const Spacer(),
                   ...List.generate(
                     6,
                     (index) => buildDot(index, context),

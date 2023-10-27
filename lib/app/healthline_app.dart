@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     configLoading(context);
-    Locale locale = Platform.localeName != 'vi' ? Locale('en') : Locale('vi');
+    Locale locale = Platform.localeName != 'vi' ? const Locale('en') : const Locale('vi');
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -48,7 +48,6 @@ class _MyAppState extends State<MyApp> {
           ],
           child: BlocBuilder<ResCubit, ResState>(
             builder: (context, state) {
-              print(state.locale);
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: "healthline",
