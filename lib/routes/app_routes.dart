@@ -10,6 +10,7 @@ import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/forum/forum_screen.dart';
+import 'package:healthline/screen/news/news_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
 import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
@@ -269,6 +270,10 @@ class AppRoute {
       case forumName:
         return MaterialPageRoute(
           builder: (_) => const ForumScreen(),
+        );
+      case newsName:
+        return MaterialPageRoute(
+          builder: (_) => const NewsScreen(),
         );
       default:
         return null;

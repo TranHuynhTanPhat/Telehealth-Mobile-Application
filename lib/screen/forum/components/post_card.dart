@@ -154,6 +154,7 @@ class _PostCardState extends State<PostCard> {
                     onPressed: () {},
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
+                      overlayColor: MaterialStatePropertyAll(Colors.pink.shade50),
                       backgroundColor:
                           const MaterialStatePropertyAll(colorF4F4F4),
                       shape: MaterialStatePropertyAll(

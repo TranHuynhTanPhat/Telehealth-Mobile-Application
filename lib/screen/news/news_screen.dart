@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/forum/components/exports.dart';
+import 'package:healthline/screen/news/components/export.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
-class ForumScreen extends StatefulWidget {
-  const ForumScreen({super.key});
+class NewsScreen extends StatefulWidget {
+  const NewsScreen({super.key});
 
   @override
-  State<ForumScreen> createState() => _ForumScreenState();
+  State<NewsScreen> createState() => _NewsScreenState();
 }
 
-class _ForumScreenState extends State<ForumScreen> {
-  late TextEditingController _textEdittingController;
+class _NewsScreenState extends State<NewsScreen> {
   late TextEditingController _searchController;
 
   final FocusNode _focus = FocusNode();
@@ -24,7 +22,6 @@ class _ForumScreenState extends State<ForumScreen> {
 
   @override
   void initState() {
-    _textEdittingController = TextEditingController();
     _searchController = TextEditingController();
     _focus.addListener(_checkFocus);
     super.initState();
@@ -47,17 +44,13 @@ class _ForumScreenState extends State<ForumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        KeyboardUtil.hideKeyboard(context);
-        _checkFocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        extendBody: true,
-        backgroundColor: white,
-        body: CustomScrollView(
-          slivers: [
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      extendBody: true,
+      backgroundColor: white,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
             SliverAppBar(
               centerTitle: false,
               pinned: true,
@@ -78,6 +71,30 @@ class _ForumScreenState extends State<ForumScreen> {
                         focusedBorderColor: colorF2F5FF,
                         enabledBorderColor: colorF2F5FF,
                         controller: _searchController,
+                        suffixIcon: IconButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: dimensWidth() * 2),
+                          onPressed: () {},
+                          icon: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            onTap: () {
+                              if (_searchController.text.isNotEmpty) {
+                                _searchController.text = '';
+                              } else {
+                                setState(() {
+                                  _focus.unfocus();
+                                  _checkFocus();
+                                });
+                              }
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.solidCircleXmark,
+                              color: color6A6E83,
+                              size: dimensIcon() * .5,
+                            ),
+                          ),
+                        ),
                         prefixIcon: IconButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: dimensWidth() * 2),
@@ -96,7 +113,7 @@ class _ForumScreenState extends State<ForumScreen> {
                       ),
                     )
                   : Text(
-                      translate(context, 'forum'),
+                      translate(context, 'news'),
                     ),
               actions: [
                 if (openSearch == false)
@@ -107,9 +124,7 @@ class _ForumScreenState extends State<ForumScreen> {
                       onTap: () {
                         setState(() {
                           openSearch = true;
-                        });
-                        Future.delayed(const Duration(seconds: 1), () {
-                          _checkFocus();
+                          _focus.requestFocus();
                         });
                       },
                       child: Padding(
@@ -124,25 +139,35 @@ class _ForumScreenState extends State<ForumScreen> {
                     ),
                   )
               ],
-              expandedHeight: dimensHeight() * 35,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                background: Container(
-                  color: white,
-                  padding: EdgeInsets.fromLTRB(dimensWidth() * 3,
-                      dimensHeight() * 13, dimensWidth() * 3, 0),
-                  child: CreatePost(
-                      textEdittingController: _textEdittingController),
-                ),
-              ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => const PostCard(),
-                childCount: 5,
-              ),
+          ];
+        },
+        body: GestureDetector(
+          onTap: () {
+            KeyboardUtil.hideKeyboard(context);
+            _checkFocus();
+          },
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.symmetric(
+              horizontal: dimensWidth() * 3,
+              vertical: dimensHeight(),
             ),
-          ],
+            children: const [
+              MainNewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+              NewsPost(),
+            ],
+          ),
         ),
       ),
     );

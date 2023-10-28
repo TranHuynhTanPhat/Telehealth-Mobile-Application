@@ -640,7 +640,7 @@
         "en": "Rheumatologist"
     },
     "traumatologist": {
-        "vi": "Bác  sĩ chuyên khoa chấn thương",
+        "vi": "Bác sĩ chuyên khoa chấn thương",
         "en": "Traumatologist"
     },
     "obstetrician": {
@@ -1398,5 +1398,9 @@
     "ob_description_6": {
         "vi": "Thông tin cá nhân và sức khỏe của bạn sẽ được giữ bí mật cao.",
         "en": "Your personal and health information will be kept highly confidential."
+    },
+    "tags": {
+        "vi": "Thẻ",
+        "en": "Tags"
     }
 }

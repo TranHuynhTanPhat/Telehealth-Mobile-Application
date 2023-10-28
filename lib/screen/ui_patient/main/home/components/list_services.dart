@@ -72,7 +72,7 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 3,
               press: () {
-                EasyLoading.showToast(translate(context, 'coming_soon'));
+                Navigator.pushNamed(context, newsName);
               },
             ),
           ]),
