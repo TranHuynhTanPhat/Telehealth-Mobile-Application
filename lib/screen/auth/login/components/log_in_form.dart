@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
-import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -21,8 +20,8 @@ class _LogInFormState extends State<LogInForm> {
   late TextEditingController _controllerPhone;
   late TextEditingController _controllerPassword;
   final _formKey = GlobalKey<FormState>();
-  bool? errorCheckTermsAndConditions;
-  bool agreeTermsAndConditions = false;
+  // bool? errorCheckTermsAndConditions;
+  bool remember = false;
   bool isDoctor = false;
   bool isPatient = true;
 
@@ -242,38 +241,34 @@ class _LogInFormState extends State<LogInForm> {
                   height: 24,
                   width: 24,
                   child: Checkbox(
-                    side: errorCheckTermsAndConditions == true ||
-                            errorCheckTermsAndConditions == null
-                        ? const BorderSide(width: .5)
-                        : BorderSide(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.error),
-                    value: agreeTermsAndConditions,
+                    side: const BorderSide(width: .5)
+                        ,
+                    value: remember,
                     onChanged: (value) => setState(
                       () {
-                        agreeTermsAndConditions = value!;
+                        remember = value!;
                       },
                     ),
                   ),
                 ),
                 Text(
-                  " ${translate(context, 'i_agree_with')} ",
+                  " ${translate(context, 'remember')} ",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                TextButton(
-                  style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(
-                      EdgeInsets.all(0),
-                    ),
-                  ),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, termsAndConditionsName),
-                  child: Text(
-                    translate(context, 'terms_and_conditions'),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: secondary, fontWeight: FontWeight.w600),
-                  ),
-                ),
+                // TextButton(
+                //   style: const ButtonStyle(
+                //     padding: MaterialStatePropertyAll(
+                //       EdgeInsets.all(0),
+                //     ),
+                //   ),
+                //   onPressed: () =>
+                //       Navigator.pushNamed(context, termsAndConditionsName),
+                //   child: Text(
+                //     translate(context, 'terms_and_conditions'),
+                //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                //         color: secondary, fontWeight: FontWeight.w600),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -282,18 +277,17 @@ class _LogInFormState extends State<LogInForm> {
             child: ElevatedButtonWidget(
               text: translate(context, 'log_in'),
               onPressed: () {
-                setState(() {
-                  errorCheckTermsAndConditions = agreeTermsAndConditions;
-                });
-                if (_formKey.currentState!.validate() &&
-                    errorCheckTermsAndConditions == true) {
+                // setState(() {
+                //   errorCheckTermsAndConditions = agreeTermsAndConditions;
+                // });
+                if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   KeyboardUtil.hideKeyboard(context);
                   context.read<LogInCubit>().logIn(
                       Validate().changePhoneFormat(_controllerPhone.text),
                       _controllerPassword.text,
                       isDoctor: isDoctor,
-                      isPatient: isPatient);
+                      isPatient: isPatient, remember: remember);
                 }
               },
             ),

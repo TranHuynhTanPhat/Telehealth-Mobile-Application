@@ -18,6 +18,7 @@ const addVaccinationName = '/add-vaccination';
 const updateHealthStatName = '/update-health-stat';
 const patientRecordName = '/patient-record';
 const addPatientRecordName = '/add-patient-record';
+const helpsScreen = '/helps';
 
 const forumName = '/forum';
 const newsName = '/news';

@@ -1402,5 +1402,9 @@
     "tags": {
         "vi": "Thẻ",
         "en": "Tags"
+    },
+    "remember": {
+        "vi": "Ghi nhớ đăng nhập",
+        "en": "Remember"
     }
 }

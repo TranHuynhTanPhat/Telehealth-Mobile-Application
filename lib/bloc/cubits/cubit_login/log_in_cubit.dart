@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/repository/common_repository.dart';
 import 'package:healthline/repository/doctor_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
@@ -26,7 +27,9 @@ class LogInCubit extends Cubit<LogInState> {
   }
 
   Future<void> logIn(String phone, String password,
-      {required bool isDoctor, required bool isPatient}) async {
+      {required bool isDoctor,
+      required bool isPatient,
+      bool remember = false}) async {
     emit(LogInLoading(isDoctor: state.isDoctor, isPatient: state.isPatient));
     bool doctor = false;
     bool patient = false;
@@ -36,7 +39,8 @@ class LogInCubit extends Cubit<LogInState> {
       try {
         LoginResponse response =
             await _commonRepository.loginPatient(phone.trim(), password.trim());
-        AppStorage().savePatient(user: response);
+        AppStorage()
+            .setString(key: DataConstants.PATIENT, value: response.toJson());
         patient = true;
       } catch (e) {
         DioException er = e as DioException;
@@ -47,7 +51,8 @@ class LogInCubit extends Cubit<LogInState> {
       try {
         LoginResponse response =
             await _commonRepository.loginDoctor(phone.trim(), password.trim());
-        AppStorage().saveDoctor(user: response);
+        AppStorage()
+            .setString(key: DataConstants.DOCTOR, value: response.toJson());
         doctor = true;
       } catch (e) {
         DioException er = e as DioException;
@@ -62,6 +67,7 @@ class LogInCubit extends Cubit<LogInState> {
       } else {
         AppController.instance.authState = AuthState.PatientAuthorized;
       }
+      AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
       emit(LogInSuccessed(
           isDoctor: doctor,
           isPatient: patient,

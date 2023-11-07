@@ -3,11 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/linear_progress_indicator.dart';
 
 import '../../bloc/cubits/cubits_export.dart';
@@ -32,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void startTimer() {
     Future.delayed(const Duration(milliseconds: 1000), () async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool? firstTime = prefs.getBool('first_time');
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool? firstTime = AppStorage().getBool(key: DataConstants.FIRST_TIME);
 
       // // prefs.setBool('first_time', true);
 
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacementNamed(context, mainScreenPatientName);
         }
       } else {
-        prefs.setBool('first_time', false);
+        AppStorage().setBool(key: DataConstants.FIRST_TIME, value: false);
         Navigator.pushReplacementNamed(context, onboardingName);
       }
       // Navigator.pushReplacementNamed(context, mainScreenPatientName);
