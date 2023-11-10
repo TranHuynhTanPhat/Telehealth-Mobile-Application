@@ -1,17 +1,29 @@
-
-
-
 // import 'dart:io';
+
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:healthline/data/api/api_constants.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/healthline_app.dart';
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // // Dart client
+  // IO.Socket socket = IO.io(ApiConstants.SOCKET_URL);
+  // print("CHECKKKK");
+  // print(socket.connected);
+  // socket.onConnect((_) {
+  //   print('connect');
+  //   socket.emit('msg', 'message');
+  // });
+  // socket.on('hello', (data) => print("CHEKKKKK"));
+  // socket.onDisconnect((_) => print('jdisconnect'));
+  // socket.on('fromServer', (_) => print(_));
 
   await dotenv.load();
   await AppController.instance.init();
@@ -27,8 +39,8 @@ void main() async {
       options.tracesSampleRate = 1.0;
     },
     appRunner: () => runApp(const MyApp(
-      // appRoute: AppRoute(),
-    )),
+        // appRoute: AppRoute(),
+        )),
   );
 }
 

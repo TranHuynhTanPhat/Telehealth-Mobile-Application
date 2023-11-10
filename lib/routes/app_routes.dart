@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/app/app_controller.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/license/faqs_screen.dart';
 import 'package:healthline/screen/license/privacy_policy_screen.dart';
@@ -64,6 +66,14 @@ class AppRoute {
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
+    if(AppController.instance.authState==AuthState.Unauthorized){
+      return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: _logInCubit,
+            child: const LogInScreen(),
+          ),
+        );
+    }
     switch (settings.name) {
       // case splashName:
       //   return MaterialPageRoute(

@@ -32,8 +32,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     configLoading(context);
-    Locale locale =
-        Platform.localeName != 'vi_VN' ? const Locale('en') : const Locale('vi');
+    Locale locale = Platform.localeName != 'vi_VN'
+        ? const Locale('en')
+        : const Locale('vi');
 
     return LayoutBuilder(
       builder: (context, constraints) {

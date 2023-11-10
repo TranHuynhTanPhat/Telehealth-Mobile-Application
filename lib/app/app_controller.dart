@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/rpc_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
+import 'package:healthline/utils/local_notification_service.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,6 +45,7 @@ class AppController {
   init() async {
     await Future.wait([setupSystem(), RpcManager().init()]);
     await initAuth();
+    await LocalNotificationService.instance.init();
     setupCloudinary();
   }
 

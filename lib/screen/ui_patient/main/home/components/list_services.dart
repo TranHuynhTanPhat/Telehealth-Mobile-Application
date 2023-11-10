@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/routes/app_pages.dart';
+
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
-import 'package:healthline/utils/translate.dart';
+import 'package:healthline/utils/local_notification_service.dart';
 
 class ListServices extends StatefulWidget {
   const ListServices({
@@ -51,7 +51,19 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 0,
               press: () {
-                EasyLoading.showToast(translate(context, 'coming_soon'));
+                // EasyLoading.showToast(translate(context, 'coming_soon'));
+                LocalNotificationService().display(
+                  context,
+                  RemoteMessage(
+                    channelId: 'channelId',
+                    channelName: 'channelName',
+                    channelDescription: 'channelDescription',
+                    notification: ReceivedNotification(
+                        title: 'title',
+                        body: 'body',
+                        payload: walletName),
+                  ),
+                );
               },
             ),
             ServiceCard(

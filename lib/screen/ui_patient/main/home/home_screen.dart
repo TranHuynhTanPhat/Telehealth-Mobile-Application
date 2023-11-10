@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _searchController = TextEditingController();
     _image = null;
-
+    if(!mounted) return;
     super.initState();
   }
 

@@ -40,6 +40,8 @@ PODS:
     - Flutter
   - flutter_localization (0.0.1):
     - Flutter
+  - flutter_timezone (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -86,6 +88,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
+  - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - open_document (from `.symlinks/plugins/open_document/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -120,6 +123,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_localization:
     :path: ".symlinks/plugins/flutter_localization/ios"
+  flutter_timezone:
+    :path: ".symlinks/plugins/flutter_timezone/ios"
   open_document:
     :path: ".symlinks/plugins/open_document/ios"
   open_filex:
@@ -153,6 +158,7 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
+  flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   open_document: 63eea128860263e68b67ef3b31f74a5ae22e4c71
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
@@ -161,7 +167,7 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
-  sensors_plus: bda64198ccc7d3ccbb49e6ae17d92f67687bee20
+  sensors_plus: 4ee32bc7d61a055f27f88d3215ad6b6fb96a2b8e
   Sentry: 39d57e691e311bdb73bc1ab5bbebbd6bc890050d
   sentry_flutter: b2feefdad5b0f06602347172bc7257e8e9da5562
   SentryPrivate: 48712023cdfd523735c2edb6b06bedf26c4730a3

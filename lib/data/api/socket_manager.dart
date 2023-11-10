@@ -10,9 +10,12 @@ class SocketManager {
   final List<Function(dynamic)> _messageListeners = [];
 
   SocketManager._internal() {
+    // print(channel.ready);
     isConnected = true;
     channel.stream.listen((data) {
       _handleMessage(data);
+      logPrint("CHEKKKKK");
+      logPrint(data);
       // addMessageListener(_handleCreateGroup);
       // log(data);
     });
@@ -31,6 +34,7 @@ class SocketManager {
   Stream<dynamic> get onMessage => channel.stream;
 
   void sendData(String data) {
+    // print(data);
     channel.sink.add(data);
   }
 
