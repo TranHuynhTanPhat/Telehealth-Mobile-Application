@@ -61,7 +61,9 @@ class _LogInFormState extends State<LogInForm> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        isPatient = isDoctor == false ? true : !isPatient;
+                        // isPatient = isDoctor == false ? true : !isPatient;
+                        isPatient = true;
+                        isDoctor = !isPatient;
                       });
                     },
                     splashColor: transparent,
@@ -120,7 +122,9 @@ class _LogInFormState extends State<LogInForm> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        isDoctor = isPatient == false ? true : !isDoctor;
+                        // isDoctor = isPatient == false ? true : !isDoctor;
+                        isDoctor = true;
+                        isPatient = !isDoctor;
                       });
                     },
                     splashColor: transparent,
@@ -241,8 +245,7 @@ class _LogInFormState extends State<LogInForm> {
                   height: 24,
                   width: 24,
                   child: Checkbox(
-                    side: const BorderSide(width: .5)
-                        ,
+                    side: const BorderSide(width: .5),
                     value: remember,
                     onChanged: (value) => setState(
                       () {
@@ -251,9 +254,16 @@ class _LogInFormState extends State<LogInForm> {
                     ),
                   ),
                 ),
-                Text(
-                  " ${translate(context, 'remember')} ",
-                  style: Theme.of(context).textTheme.bodySmall,
+                InkWell(
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  onTap: () => setState(() {
+                    remember = !remember;
+                  }),
+                  child: Text(
+                    " ${translate(context, 'remember')} ",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
                 // TextButton(
                 //   style: const ButtonStyle(
@@ -287,22 +297,30 @@ class _LogInFormState extends State<LogInForm> {
                       Validate().changePhoneFormat(_controllerPhone.text),
                       _controllerPassword.text,
                       isDoctor: isDoctor,
-                      isPatient: isPatient, remember: remember);
+                      isPatient: isPatient,
+                      remember: remember);
                 }
               },
             ),
           ),
-          TextButton(
-            onPressed: () {
-              KeyboardUtil.hideKeyboard(context);
-            },
-            style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
-            child: Text(
-              translate(context, 'forgot_your_password'),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: color6A6E83,
-                  ),
+          Container(
+            margin: EdgeInsets.only(
+              top: dimensHeight() * 2,
+            ),
+            child: InkWell(
+              splashColor: transparent,
+              highlightColor: transparent,
+              onTap: () {
+                KeyboardUtil.hideKeyboard(context);
+              },
+              // style: const ButtonStyle(
+              //     padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
+              child: Text(
+                translate(context, 'forgot_your_password'),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: color6A6E83,
+                    ),
+              ),
             ),
           ),
         ],

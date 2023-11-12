@@ -66,13 +66,26 @@ class AppRoute {
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
-    if(AppController.instance.authState==AuthState.Unauthorized){
-      return MaterialPageRoute(
+    if (AppController.instance.authState == AuthState.Unauthorized) {
+      if (settings.name == signUpName) {
+        return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
-            value: _logInCubit,
-            child: const LogInScreen(),
+            value: _signUpCubit,
+            child: const SignUpScreen(),
           ),
         );
+      }
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: _logInCubit,
+          child: const LogInScreen(),
+        ),
+      );
+    }
+    else if(AppController.instance.authState == AuthState.DoctorAuthorized){
+      switch (settings.name) {
+        
+      }
     }
     switch (settings.name) {
       // case splashName:
@@ -126,7 +139,7 @@ class AppRoute {
         );
       case accountSettingName:
         return MaterialPageRoute(
-          builder: (_) =>  BlocProvider.value(
+          builder: (_) => BlocProvider.value(
             value: _sideMenuCubit,
             child: const AccountSettingScreen(),
           ),

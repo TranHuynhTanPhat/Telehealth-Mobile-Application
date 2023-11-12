@@ -4,7 +4,7 @@ enum AuthState {
   Unauthorized,
   PatientAuthorized,
   DoctorAuthorized,
-  AllAuthorized
+  // AllAuthorized
 }
 
 enum AppTheme { LightTheme, DartTheme }

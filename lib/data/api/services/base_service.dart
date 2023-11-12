@@ -77,10 +77,14 @@ abstract class BaseService {
           return DataResponse(
               data: response.data, message: response.statusMessage);
         }
-        return DataResponse(
-            data: response.data['data'],
-            message: response.data['message'],
-            code: response.statusCode);
+        try {
+          return DataResponse(
+              data: response.data['data'],
+              message: response.statusMessage,
+              code: response.statusCode);
+        } catch (e) {
+          throw 'error base service';
+        }
       default:
         var apiResponse = ApiException.fromJson(response.data);
         throw ApiException(

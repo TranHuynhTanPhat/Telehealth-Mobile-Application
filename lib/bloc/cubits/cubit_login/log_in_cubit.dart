@@ -15,7 +15,7 @@ import 'package:healthline/utils/log_data.dart';
 part 'log_in_state.dart';
 
 class LogInCubit extends Cubit<LogInState> {
-  LogInCubit() : super(LogInInitial(isDoctor: false, isPatient: false));
+  LogInCubit() : super(LogInInitial());
   final UserRepository _userRepository = UserRepository();
   final CommonRepository _commonRepository = CommonRepository();
   final DoctorRepository _doctorRepository = DoctorRepository();
@@ -30,58 +30,88 @@ class LogInCubit extends Cubit<LogInState> {
       {required bool isDoctor,
       required bool isPatient,
       bool remember = false}) async {
-    emit(LogInLoading(isDoctor: state.isDoctor, isPatient: state.isPatient));
-    bool doctor = false;
-    bool patient = false;
-    String? errorDoctor;
-    String? errorPatient;
-    if (isPatient == true) {
-      try {
+    emit(LogInLoading());
+    // bool doctor = false;
+    // bool patient = false;
+    // String? errorDoctor;
+    // String? errorPatient;
+    String? error;
+
+    try {
+      if (isPatient) {
         LoginResponse response =
             await _commonRepository.loginPatient(phone.trim(), password.trim());
         AppStorage()
             .setString(key: DataConstants.PATIENT, value: response.toJson());
-        patient = true;
-      } catch (e) {
-        DioException er = e as DioException;
-        errorPatient = er.response!.data['message'].toString();
-      }
-    }
-    if (isDoctor == true) {
-      try {
+        // patient = true;
+        AppController.instance.authState = AuthState.PatientAuthorized;
+      } else if (isDoctor) {
         LoginResponse response =
             await _commonRepository.loginDoctor(phone.trim(), password.trim());
         AppStorage()
             .setString(key: DataConstants.DOCTOR, value: response.toJson());
-        doctor = true;
-      } catch (e) {
-        DioException er = e as DioException;
-        errorDoctor = er.response!.data['message'].toString();
-      }
-    }
-    if (doctor == true || patient == true) {
-      if (doctor == true && patient == true) {
-        AppController.instance.authState = AuthState.AllAuthorized;
-      } else if (doctor == true) {
+        // doctor = true;
         AppController.instance.authState = AuthState.DoctorAuthorized;
-      } else {
-        AppController.instance.authState = AuthState.PatientAuthorized;
       }
       AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
-      emit(LogInSuccessed(
-          isDoctor: doctor,
-          isPatient: patient,
-          errorPatient: errorPatient,
-          errorDoctor: errorDoctor));
-    } else {
+      emit(LogInSuccessed());
+    } on DioException catch (e) {
       AppController.instance.authState = AuthState.Unauthorized;
-      emit(
-        LogInError(
-            isDoctor: false,
-            isPatient: false,
-            errorDoctor: errorDoctor,
-            errorPatient: errorPatient),
-      );
+      error = e.response!.data['message'].toString();
+    } catch (e) {
+      AppController.instance.authState = AuthState.Unauthorized;
+      error = e.toString();
     }
+    emit(LogInError(error: error.toString()));
+
+    // if (isPatient == true) {
+    //   try {
+    //     LoginResponse response =
+    //         await _commonRepository.loginPatient(phone.trim(), password.trim());
+    //     AppStorage()
+    //         .setString(key: DataConstants.PATIENT, value: response.toJson());
+    //     patient = true;
+    //   } catch (e) {
+    // DioException er = e as DioException;
+    // // errorPatient = er.response!.data['message'].toString();
+    //   }
+    // }
+    // if (isDoctor == true) {
+    //   try {
+    //     LoginResponse response =
+    //         await _commonRepository.loginDoctor(phone.trim(), password.trim());
+    //     AppStorage()
+    //         .setString(key: DataConstants.DOCTOR, value: response.toJson());
+    //     doctor = true;
+    //   } catch (e) {
+    //     DioException er = e as DioException;
+    //     errorDoctor = er.response!.data['message'].toString();
+    //   }
+    // }
+    // if (doctor == true || patient == true) {
+    //   if (doctor == true && patient == true) {
+    //     AppController.instance.authState = AuthState.AllAuthorized;
+    //   } else if (doctor == true) {
+    //     AppController.instance.authState = AuthState.DoctorAuthorized;
+    //   } else {
+    //     AppController.instance.authState = AuthState.PatientAuthorized;
+    //   }
+    // AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
+    // emit(LogInSuccessed(
+    //     isDoctor: doctor,
+    //     isPatient: patient,
+    //     errorPatient: errorPatient,
+    //     errorDoctor: errorDoctor));
+    // }
+    // else {
+    //   AppController.instance.authState = AuthState.Unauthorized;
+    //   emit(
+    //     LogInError(
+    //         isDoctor: false,
+    //         isPatient: false,
+    //         errorDoctor: errorDoctor,
+    //         errorPatient: errorPatient),
+    //   );
+    // }
   }
 }

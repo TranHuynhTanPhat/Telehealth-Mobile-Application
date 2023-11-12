@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
@@ -260,34 +259,34 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                         scrollDirection: Axis.vertical,
                         padding: EdgeInsets.zero,
                         children: [
-                          if (AppController.instance.authState ==
-                              AuthState.AllAuthorized)
-                            ListTile(
-                              onTap: () {
-                                EasyLoading.show(
-                                    maskType: EasyLoadingMaskType.black);
-                                setState(() {
-                                  onChangeToPatient = true;
-                                  Future.delayed(const Duration(seconds: 1),
-                                      () {
-                                    Navigator.pushReplacementNamed(
-                                        context, mainScreenPatientName);
-                                  });
-                                });
-                              },
-                              title: Text(
-                                translate(context, 'use_patient_account'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(color: color1F1F1F),
-                              ),
-                              leading: FaIcon(
-                                FontAwesomeIcons.solidUser,
-                                size: dimensIcon() * .5,
-                                color: color1F1F1F,
-                              ),
-                            ),
+                          // if (AppController.instance.authState ==
+                          //     AuthState.AllAuthorized)
+                          //   ListTile(
+                          //     onTap: () {
+                          //       EasyLoading.show(
+                          //           maskType: EasyLoadingMaskType.black);
+                          //       setState(() {
+                          //         onChangeToPatient = true;
+                          //         Future.delayed(const Duration(seconds: 1),
+                          //             () {
+                          //           Navigator.pushReplacementNamed(
+                          //               context, mainScreenPatientName);
+                          //         });
+                          //       });
+                          //     },
+                          //     title: Text(
+                          //       translate(context, 'use_patient_account'),
+                          //       style: Theme.of(context)
+                          //           .textTheme
+                          //           .titleMedium
+                          //           ?.copyWith(color: color1F1F1F),
+                          //     ),
+                          //     leading: FaIcon(
+                          //       FontAwesomeIcons.solidUser,
+                          //       size: dimensIcon() * .5,
+                          //       color: color1F1F1F,
+                          //     ),
+                          //   ),
                           ListTile(
                             onTap: () {
                               // EasyLoading.show(

@@ -86,7 +86,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
           .first;
       await _fileRepository.deleteRecordPatient(
           publicId: publicId, folder: folderName);
-      await _patientRepository.deletePatientRecord(patientRecordId);
+      // await _patientRepository.deletePatientRecord(patientRecordId);
 
       final path = await OpenDocument.getPathDocument();
 

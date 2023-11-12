@@ -1406,5 +1406,13 @@
     "remember": {
         "vi": "Ghi nhớ đăng nhập",
         "en": "Remember"
+    },
+    "share_experiences_and_get_advice_from_healthLines_community": {
+        "vi": "Chia sẻ kinh nghiệm và nhận lời khuyên từ cộng đồng HealthLine",
+        "en": "Share experiences and get advice from HealthLine's community"
+    },
+    "search_doctors": {
+        "vi": "Tìm kiếm bác sĩ",
+        "en": "Search doctors"
     }
 }

@@ -54,7 +54,7 @@ android {
         applicationId "com.example.healthline"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
@@ -74,7 +74,8 @@ android {
         }
         prod {
             dimension "track"
-            manifestPlaceholders = [applicationLabel: "HealthLine"]
+            applicationIdSuffix ".prod"
+            manifestPlaceholders = [applicationLabel: "[prod] HealthLine"]
         }
     }
 

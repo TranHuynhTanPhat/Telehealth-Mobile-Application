@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/routes/app_pages.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/info_card.dart';
 import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
@@ -49,30 +49,30 @@ class _SideMenuState extends State<SideMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const InfoCard(),
-                if (AppController.instance.authState == AuthState.AllAuthorized)
-                  ListTile(
-                    onTap: () {
-                      EasyLoading.show();
-                      Future.delayed(const Duration(seconds: 1), () {
-                        Navigator.pushReplacementNamed(
-                            context, mainScreenDoctorName);
-                      });
-                    },
-                    title: Text(
-                      translate(context, 'my_clinic'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: white),
-                    ),
-                    leading: FaIcon(
-                      FontAwesomeIcons.houseMedical,
-                      size: dimensIcon() * .5,
-                      color: white,
-                    ),
-                  )
-                else
-                  const SizedBox(),
+                // if (AppController.instance.authState == AuthState.AllAuthorized)
+                //   ListTile(
+                //     onTap: () {
+                //       EasyLoading.show();
+                //       Future.delayed(const Duration(seconds: 1), () {
+                //         Navigator.pushReplacementNamed(
+                //             context, mainScreenDoctorName);
+                //       });
+                //     },
+                //     title: Text(
+                //       translate(context, 'my_clinic'),
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .titleMedium
+                //           ?.copyWith(color: white),
+                //     ),
+                //     leading: FaIcon(
+                //       FontAwesomeIcons.houseMedical,
+                //       size: dimensIcon() * .5,
+                //       color: white,
+                //     ),
+                //   )
+                // else
+                //   const SizedBox(),
                 ListTile(
                   onTap: () {
                     Navigator.pushNamed(context, forumName);

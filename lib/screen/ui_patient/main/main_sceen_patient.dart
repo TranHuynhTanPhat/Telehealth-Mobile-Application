@@ -15,6 +15,7 @@ import 'package:healthline/screen/ui_patient/main/home/home_screen.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
 import 'package:healthline/screen/ui_patient/main/schedule/schedule_screen.dart';
 import 'package:healthline/screen/widgets/badge_notification.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:open_document/open_document.dart';
@@ -329,19 +330,23 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: Container(
-            margin: EdgeInsets.only(right: dimensWidth() * 40),
-            child: IconButton(
-              onPressed: () => RestClient().runHttpInspector(),
-              padding: EdgeInsets.all(dimensWidth() * 2),
-              icon: const FaIcon(FontAwesomeIcons.bug),
-              color: white,
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(secondary),
-              ),
-            ),
-          ),
+          floatingActionButtonLocation: AliceInspector().dev
+              ? FloatingActionButtonLocation.endFloat
+              : null,
+          floatingActionButton: AliceInspector().dev
+              ? Container(
+                  margin: EdgeInsets.only(right: dimensWidth() * 40),
+                  child: IconButton(
+                    onPressed: () => RestClient().runHttpInspector(),
+                    padding: EdgeInsets.all(dimensWidth() * 2),
+                    icon: const FaIcon(FontAwesomeIcons.bug),
+                    color: white,
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(secondary),
+                    ),
+                  ),
+                )
+              : null,
           body: Stack(
             children: [
               AnimatedPositioned(

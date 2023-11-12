@@ -26,7 +26,7 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter analyze
-      - run: flutter build apk --debug --split-per-abi --flavor dev ./lib/flavors/main_development.dart
+      - run: flutter build apk --debug --split-per-abi --flavor prod ./lib/flavors/main_production.dart
       - name: Create a Release APK
         uses: ncipollo/release-action@v1
         with:

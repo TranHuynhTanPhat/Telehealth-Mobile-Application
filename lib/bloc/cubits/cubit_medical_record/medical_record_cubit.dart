@@ -207,12 +207,18 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));
-    } catch (e) {
-      DioException er = e as DioException;
-
+    } on DioException catch (e) {
       emit(AddSubUserFailure(
         stats: state.stats,
-        message: er.message.toString(),
+        message: e.message.toString(),
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+      ));
+    } catch (e) {
+      logPrint(e);
+      emit(AddSubUserFailure(
+        stats: state.stats,
+        message: e.toString(),
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));

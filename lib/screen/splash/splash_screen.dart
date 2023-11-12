@@ -6,12 +6,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/linear_progress_indicator.dart';
-import 'package:healthline/utils/local_notification_service.dart';
 import 'package:healthline/utils/log_data.dart';
 
 import '../../bloc/cubits/cubits_export.dart';
@@ -29,9 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     context.read<ApplicationUpdateCubit>().requestCurrentPatchNumber();
     context.read<ApplicationUpdateCubit>().checkForUpdate();
-    // LocalNotificationService()
+    // PushNotificationManager()
     //     .configureDidReceiveLocalNotificationSubject(context);
-    // LocalNotificationService().configureSelectNotificationSubject(context);
+    // PushNotificationManager().configureSelectNotificationSubject(context);
 
     super.initState();
     startTimer();
@@ -45,21 +45,22 @@ class _SplashScreenState extends State<SplashScreen> {
       // // prefs.setBool('first_time', true);
       try {
         final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-            await LocalNotificationService().getNotificationAppLaunchDetails();
+            await PushNotificationManager().getNotificationAppLaunchDetails();
         final didNotificationLaunchApp =
             notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
 
         if (didNotificationLaunchApp) {
           Navigator.pushReplacementNamed(context,
               notificationAppLaunchDetails!.notificationResponse!.payload!);
-          LocalNotificationService().cancelNotification(
+          PushNotificationManager().cancelNotification(
               notificationAppLaunchDetails.notificationResponse?.id);
         } else {
           if (firstTime != null && !firstTime) {
             if (AppController.instance.authState == AuthState.Unauthorized) {
               Navigator.pushReplacementNamed(context, logInName);
-            } else if (AppController.instance.authState ==
-                    AuthState.AllAuthorized ||
+            } else if (
+              // AppController.instance.authState ==
+              //       AuthState.AllAuthorized ||
                 AppController.instance.authState ==
                     AuthState.DoctorAuthorized) {
               Navigator.pushReplacementNamed(context, mainScreenDoctorName);

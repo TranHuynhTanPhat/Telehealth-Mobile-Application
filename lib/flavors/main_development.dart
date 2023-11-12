@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 // import 'package:healthline/data/api/api_constants.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -27,6 +28,7 @@ void main() async {
 
   await dotenv.load();
   await AppController.instance.init();
+  AliceInspector().init();
 
   // HttpOverrides.global = MyHttpOverrides();
   // Sentry
@@ -38,9 +40,7 @@ void main() async {
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 1.0;
     },
-    appRunner: () => runApp(const MyApp(
-        // appRoute: AppRoute(),
-        )),
+    appRunner: () => runApp(const MyApp()),
   );
 }
 

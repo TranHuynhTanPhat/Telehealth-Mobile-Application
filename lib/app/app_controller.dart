@@ -6,9 +6,10 @@ import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/api/rpc_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
-import 'package:healthline/utils/local_notification_service.dart';
+
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -45,7 +46,7 @@ class AppController {
   init() async {
     await Future.wait([setupSystem(), RpcManager().init()]);
     await initAuth();
-    await LocalNotificationService.instance.init();
+    await PushNotificationManager.instance.init();
     setupCloudinary();
   }
 
@@ -85,17 +86,19 @@ class AppController {
             AppStorage().getString(key: DataConstants.DOCTOR)!);
       } catch (e) {
         // await initRestClient();
+        logPrint(e);
         authState = AuthState.Unauthorized;
       }
       String? accessTokenPatient = patient?.jwtToken;
       String? accessTokenDoctor = doctor?.jwtToken;
-      if (accessTokenDoctor != null &&
-          accessTokenPatient != null &&
-          accessTokenDoctor.isNotEmpty &&
-          accessTokenPatient.isNotEmpty) {
-        // await initRestClient();
-        authState = AuthState.AllAuthorized;
-      } else if (accessTokenPatient != null && accessTokenPatient.isNotEmpty) {
+      // if (accessTokenDoctor != null &&
+      //     accessTokenPatient != null &&
+      //     accessTokenDoctor.isNotEmpty &&
+      //     accessTokenPatient.isNotEmpty) {
+      //   // await initRestClient();
+      //   authState = AuthState.AllAuthorized;
+      // } else
+      if (accessTokenPatient != null && accessTokenPatient.isNotEmpty) {
         // await initRestClient();
         authState = AuthState.PatientAuthorized;
       } else if (accessTokenDoctor != null && accessTokenDoctor.isNotEmpty) {

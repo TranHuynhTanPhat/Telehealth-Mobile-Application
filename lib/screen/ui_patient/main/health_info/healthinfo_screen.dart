@@ -34,7 +34,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
     )..addListener(() {
         setState(() {});
       });
@@ -175,7 +175,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                 children: [
                   _animation.value > 0
                       ? AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 300),
                           color: white,
                           height: 130 * _animation.value,
                           width: double.maxFinite,

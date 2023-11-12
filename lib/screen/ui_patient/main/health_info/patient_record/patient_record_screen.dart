@@ -61,8 +61,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                             });
                             // showAddPatientRecordDialog(context);
                           },
-                                               borderRadius: BorderRadius.circular(180),
-
+                          borderRadius: BorderRadius.circular(180),
                           child: Padding(
                             padding: EdgeInsets.all(dimensWidth()),
                             child: FaIcon(
@@ -77,7 +76,10 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                 ],
               ),
               body: AbsorbPointer(
-                absorbing: state is FetchPatientRecordLoading || state is DeletePatientRecordLoading || state is AddPatientRecordLoading,
+                absorbing: state is FetchPatientRecordLoading ||
+                    state is DeletePatientRecordLoading ||
+                    state is AddPatientRecordLoading ||
+                    state is OpenFileLoading,
                 child: Builder(builder: (context) {
                   if (state.records.isNotEmpty ||
                       state is FetchPatientRecordLoading) {

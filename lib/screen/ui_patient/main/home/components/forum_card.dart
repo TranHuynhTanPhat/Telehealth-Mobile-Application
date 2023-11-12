@@ -18,7 +18,7 @@ class ForumCard extends StatelessWidget {
           padding: EdgeInsets.only(
               top: dimensWidth() * 4,
               left: dimensWidth() * 2,
-              right: dimensWidth() * 20),
+              right: dimensWidth() * 22),
           decoration: BoxDecoration(
               color: colorCDDEFF,
               borderRadius: BorderRadius.circular(dimensWidth() * 3)),
@@ -26,19 +26,19 @@ class ForumCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                translate(context,'consult_doctors'),
+                translate(context,'forum'),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall
                     ?.copyWith(color: secondary, fontWeight: FontWeight.bold),
               ),
               Text(
-                translate(context,'get_expert_advice_form_specialist_doctors'),
+                translate(context,'share_experiences_and_get_advice_from_healthLines_community'),
 
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: color6A6E83),
+                    ?.copyWith(color: color6A6E83, fontWeight: FontWeight.w600),
               )
             ],
           ),
