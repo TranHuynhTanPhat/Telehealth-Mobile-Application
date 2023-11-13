@@ -14,8 +14,9 @@ class ChangePassword extends StatelessWidget {
       onTap: () => KeyboardUtil.hideKeyboard(context),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
+        extendBody: true,
+        backgroundColor: white,
         appBar: AppBar(
-          elevation: 10,
           title: Text(
             translate(context, 'change_password'),
           ),

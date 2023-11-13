@@ -4,8 +4,8 @@ class DataResponse {
   bool success;
   int? code;
   DataResponse({
-    required this.data,
-    required this.message,
+    this.data,
+    this.message,
     this.code,
     this.success = true,
   });

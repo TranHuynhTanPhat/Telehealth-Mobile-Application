@@ -99,15 +99,15 @@ class _LabelDrawerState extends State<LabelDrawer>
                   ?.copyWith(color: color1F1F1F),
             ),
             leading: badgeNotification(
-                FaIcon(
+                child:FaIcon(
                   widget.icon,
                   size: dimensIcon() * .5,
                   color: color1F1F1F,
                 ),
-                widget.isShowBadge,
-                Theme.of(context).colorScheme.error,
-                -10,
-                -10),
+                isShow:widget.isShowBadge,
+                color:Theme.of(context).colorScheme.error,
+                top:-10,
+                end:-10),
           ),
         ),
       ],

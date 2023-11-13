@@ -9,18 +9,18 @@ class UpcomingApointment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-        items: appointments
-            .map((e) => ScheduleCard(
-                  object: e,
-                ))
-            .toList(),
-        options: CarouselOptions(
-            autoPlay: false,
-            aspectRatio: 3,
-            enlargeCenterPage: true,
-            viewportFraction: 0.8,
-            reverse: false,
-            enlargeStrategy: CenterPageEnlargeStrategy.scale));
+      items: appointments
+          .map((e) => ScheduleCard(
+                object: e,
+              ))
+          .toList(),
+      options: CarouselOptions(
+          autoPlay: false,
+          aspectRatio: 3,
+          enlargeCenterPage: true,
+          viewportFraction: 0.8,
+          reverse: false,
+          enlargeStrategy: CenterPageEnlargeStrategy.scale),
+    );
   }
 }
-

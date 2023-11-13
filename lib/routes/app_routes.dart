@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/app/app_controller.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/auth/license/faqs_screen.dart';
-import 'package:healthline/screen/auth/license/privacy_policy_screen.dart';
-import 'package:healthline/screen/auth/license/terms_and_conditions_screen.dart';
+import 'package:healthline/screen/license/faqs_screen.dart';
+import 'package:healthline/screen/license/privacy_policy_screen.dart';
+import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
+import 'package:healthline/screen/forum/forum_screen.dart';
+import 'package:healthline/screen/news/news_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
 import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
@@ -20,6 +24,7 @@ import 'package:healthline/screen/ui_patient/account_setting/change_password/cha
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/wallet/wallet_screen.dart';
 import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
+import 'package:healthline/screen/ui_patient/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/add_patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat_screen.dart';
@@ -61,6 +66,27 @@ class AppRoute {
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
+    if (AppController.instance.authState == AuthState.Unauthorized) {
+      if (settings.name == signUpName) {
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: _signUpCubit,
+            child: const SignUpScreen(),
+          ),
+        );
+      }
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: _logInCubit,
+          child: const LogInScreen(),
+        ),
+      );
+    }
+    else if(AppController.instance.authState == AuthState.DoctorAuthorized){
+      switch (settings.name) {
+        
+      }
+    }
     switch (settings.name) {
       // case splashName:
       //   return MaterialPageRoute(
@@ -81,6 +107,9 @@ class AppRoute {
               ),
               BlocProvider.value(
                 value: _medicalRecordCubit,
+              ),
+              BlocProvider.value(
+                value: _patientRecordCubit,
               ),
             ],
             child: const MainScreenPatient(),
@@ -110,7 +139,10 @@ class AppRoute {
         );
       case accountSettingName:
         return MaterialPageRoute(
-          builder: (_) => const AccountSettingScreen(),
+          builder: (_) => BlocProvider.value(
+            value: _sideMenuCubit,
+            child: const AccountSettingScreen(),
+          ),
         );
       case applicationSettingName:
         return MaterialPageRoute(
@@ -195,7 +227,7 @@ class AppRoute {
               ),
               BlocProvider.value(
                 value: _doctorScheduleCubit,
-              )
+              ),
             ],
             child: const MainScreenDoctor(),
           ),
@@ -261,6 +293,18 @@ class AppRoute {
             ],
             child: const AddPatientRecordScreen(),
           ),
+        );
+      case forumName:
+        return MaterialPageRoute(
+          builder: (_) => const ForumScreen(),
+        );
+      case newsName:
+        return MaterialPageRoute(
+          builder: (_) => const NewsScreen(),
+        );
+      case helpsScreen:
+        return MaterialPageRoute(
+          builder: (_) => const HelpsScreen(),
         );
       default:
         return null;

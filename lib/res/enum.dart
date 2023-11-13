@@ -4,7 +4,7 @@ enum AuthState {
   Unauthorized,
   PatientAuthorized,
   DoctorAuthorized,
-  AllAuthorized
+  // AllAuthorized
 }
 
 enum AppTheme { LightTheme, DartTheme }
@@ -18,6 +18,8 @@ enum DrawerMenus {
   ApplicationSetting,
   Helps
 }
+
+enum ScheduleTabBar { UpComing, Completed, Canceled }
 
 enum Gender { Male, Female }
 

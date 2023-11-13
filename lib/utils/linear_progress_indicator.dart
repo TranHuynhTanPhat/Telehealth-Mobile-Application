@@ -23,9 +23,7 @@ class _LinearProgressIndicatorLoadingState
       vsync: this,
       duration:
           widget.seconds != null ? Duration(seconds: widget.seconds!) : null,
-    )..addListener(() {
-        setState(() {});
-      });
+    );
     controller.repeat(reverse: true);
     super.initState();
   }

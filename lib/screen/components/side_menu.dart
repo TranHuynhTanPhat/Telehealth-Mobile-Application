@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/routes/app_pages.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/info_card.dart';
 import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
@@ -49,34 +49,54 @@ class _SideMenuState extends State<SideMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const InfoCard(),
-                if (AppController.instance.authState == AuthState.AllAuthorized) ListTile(
-                        onTap: () {
-                          EasyLoading.show();
-                          Future.delayed(const Duration(seconds: 1), () {
-                            Navigator.pushReplacementNamed(
-                                context, mainScreenDoctorName);
-                          });
-                        },
-                        title: Text(
-                          translate(context, 'Phòng khám của tôi'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(color: white),
-                        ),
-                        leading: FaIcon(
-                          FontAwesomeIcons.houseMedical,
-                          size: dimensIcon() * .5,
-                          color: white,
-                        ),
-                      ) else const SizedBox(),
+                // if (AppController.instance.authState == AuthState.AllAuthorized)
+                //   ListTile(
+                //     onTap: () {
+                //       EasyLoading.show();
+                //       Future.delayed(const Duration(seconds: 1), () {
+                //         Navigator.pushReplacementNamed(
+                //             context, mainScreenDoctorName);
+                //       });
+                //     },
+                //     title: Text(
+                //       translate(context, 'my_clinic'),
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .titleMedium
+                //           ?.copyWith(color: white),
+                //     ),
+                //     leading: FaIcon(
+                //       FontAwesomeIcons.houseMedical,
+                //       size: dimensIcon() * .5,
+                //       color: white,
+                //     ),
+                //   )
+                // else
+                //   const SizedBox(),
+                ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(context, forumName);
+                  },
+                  title: Text(
+                    translate(context, 'forum'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: white),
+                  ),
+                  leading: FaIcon(
+                    FontAwesomeIcons.solidComments,
+                    size: dimensIcon() * .5,
+                    color: white,
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: dimensHeight() * 2,
                       left: dimensWidth() * 2,
                       bottom: dimensHeight()),
                   child: Text(
-                    translate(context, 'general'),
+                    translate(context, 'setting'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -101,46 +121,49 @@ class _SideMenuState extends State<SideMenu> {
                   ),
                 ),
                 BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
-                  builder: (context, state) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.pushNamed(context, applicationSettingName);
-                      },
-                      title:Text(
-                        translate(context, 'application_setting'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(color: white),
-                      ),
-                      leading: badgeNotification(FaIcon(
-                        FontAwesomeIcons.gear,
-                        size: dimensIcon() * .5,
-                        color: white,
-                      ), state is UpdateAvailable, Theme.of(context).colorScheme.error, -10, -10),
-                    );
-                  }
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: dimensHeight() * 3,
-                      left: dimensWidth() * 2,
-                      bottom: dimensHeight()),
-                  child: Text(
-                    translate(context, 'supports'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: white),
-                  ),
-                ),
+                    builder: (context, state) {
+                  return ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, applicationSettingName);
+                    },
+                    title: Text(
+                      translate(context, 'application_setting'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: white),
+                    ),
+                    leading: badgeNotification(
+                        child: FaIcon(
+                          FontAwesomeIcons.gear,
+                          size: dimensIcon() * .5,
+                          color: white,
+                        ),
+                        isShow: state is UpdateAvailable,
+                        color: Theme.of(context).colorScheme.error,
+                        top: -10,
+                        end: -10),
+                  );
+                }),
+                // Padding(
+                //   padding: EdgeInsets.only(
+                //       top: dimensHeight() * 3,
+                //       left: dimensWidth() * 2,
+                //       bottom: dimensHeight()),
+                //   child: Text(
+                //     translate(context, 'supports'),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .titleLarge
+                //         ?.copyWith(color: white),
+                //   ),
+                // ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, faqsName);
+                    Navigator.pushNamed(context, helpsScreen);
                   },
                   title: Text(
-                    translate(context, 'FAQs'),
+                    translate(context, 'Trợ giúp'),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -152,83 +175,100 @@ class _SideMenuState extends State<SideMenu> {
                     color: white,
                   ),
                 ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, termsAndConditionsName);
-                  },
-                  title: Text(
-                    translate(context, 'terms_and_conditions'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.fileContract,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, privacyPolicyName);
-                  },
-                  title: Text(
-                    translate(context, 'privacy_policy'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.shieldHalved,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
-                ),
-                const Spacer(),
-                ListTile(
-                  onTap: () {
-                    AppLocalizations.of(context).isVnLocale
-                        ? context.read<ResCubit>().toEnglish()
-                        : context.read<ResCubit>().toVietnamese();
-                  },
-                  title: Text(
-                    AppLocalizations.of(context).isVnLocale
-                        ? translate(context, 'en')
-                        : translate(context, 'vi'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: white),
-                  ),
-                  leading: FaIcon(
-                    FontAwesomeIcons.language,
-                    size: dimensIcon() * .5,
-                    color: white,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: dimensHeight() * 5),
-                  child: ListTile(
-                    onTap: () {
-                      // RestClient().logout();
-                      context.read<SideMenuCubit>().logout();
-                    },
-                    leading: FaIcon(
-                      FontAwesomeIcons.arrowRightFromBracket,
-                      size: dimensIcon() * .7,
-                      color: Colors.yellow,
-                    ),
-                    title: Text(
-                      translate(context, 'log_out'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(color: Colors.yellow),
-                    ),
-                  ),
-                ),
+                // ListTile(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, faqsName);
+                //   },
+                //   title: Text(
+                //     translate(context, 'FAQs'),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .titleMedium
+                //         ?.copyWith(color: white),
+                //   ),
+                //   leading: FaIcon(
+                //     FontAwesomeIcons.circleQuestion,
+                //     size: dimensIcon() * .5,
+                //     color: white,
+                //   ),
+                // ),
+                // ListTile(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, termsAndConditionsName);
+                //   },
+                //   title: Text(
+                //     translate(context, 'terms_and_conditions'),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .titleMedium
+                //         ?.copyWith(color: white),
+                //   ),
+                //   leading: FaIcon(
+                //     FontAwesomeIcons.fileContract,
+                //     size: dimensIcon() * .5,
+                //     color: white,
+                //   ),
+                // ),
+                // ListTile(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, privacyPolicyName);
+                //   },
+                //   title: Text(
+                //     translate(context, 'privacy_policy'),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .titleMedium
+                //         ?.copyWith(color: white),
+                //   ),
+                //   leading: FaIcon(
+                //     FontAwesomeIcons.shieldHalved,
+                //     size: dimensIcon() * .5,
+                //     color: white,
+                //   ),
+                // ),
+                // const Spacer(),
+                // ListTile(
+                //   onTap: () {
+                //     AppLocalizations.of(context).isVnLocale
+                //         ? context.read<ResCubit>().toEnglish()
+                //         : context.read<ResCubit>().toVietnamese();
+                //   },
+                //   title: Text(
+                //     AppLocalizations.of(context).isVnLocale
+                //         ? translate(context, 'en')
+                //         : translate(context, 'vi'),
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .titleMedium
+                //         ?.copyWith(color: white),
+                //   ),
+                //   leading: FaIcon(
+                //     FontAwesomeIcons.language,
+                //     size: dimensIcon() * .5,
+                //     color: white,
+                //   ),
+                // ),
+                // Container(
+                //   margin: EdgeInsets.only(bottom: dimensHeight() * 5),
+                //   child: ListTile(
+                //     onTap: () {
+                //       // RestClient().logout();
+                //       context.read<SideMenuCubit>().logout();
+                //     },
+                //     leading: FaIcon(
+                //       FontAwesomeIcons.arrowRightFromBracket,
+                //       size: dimensIcon() * .7,
+                //       color: Colors.yellow,
+                //     ),
+                //     title: Text(
+                //       translate(context, 'log_out'),
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .labelMedium
+                //           ?.copyWith(color: Colors.yellow),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

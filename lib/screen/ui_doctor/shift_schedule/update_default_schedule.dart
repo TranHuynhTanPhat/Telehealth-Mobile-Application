@@ -75,6 +75,54 @@ class _UpdateDefaultScheduleScreenState
     }
   }
 
+  String changeDate(int num) {
+    String locale = Localizations.localeOf(context).languageCode;
+    switch (num) {
+      case 1:
+        if (locale == 'vi') {
+          return 'Thứ hai';
+        } else {
+          return 'Monday';
+        }
+      case 2:
+        if (locale == 'vi') {
+          return 'Thứ ba';
+        } else {
+          return 'Tuesday';
+        }
+      case 3:
+        if (locale == 'vi') {
+          return 'Thứ tư';
+        } else {
+          return 'Wednesday';
+        }
+      case 4:
+        if (locale == 'vi') {
+          return 'Thứ năm';
+        } else {
+          return 'Thursday';
+        }
+      case 5:
+        if (locale == 'vi') {
+          return 'Thứ sáu';
+        } else {
+          return 'Friday';
+        }
+      case 6:
+        if (locale == 'vi') {
+          return 'Thứ bảy';
+        } else {
+          return 'Saturday';
+        }
+      default:
+        if (locale == 'vi') {
+          return 'Chủ nhật';
+        } else {
+          return 'Sunday';
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,8 +138,7 @@ class _UpdateDefaultScheduleScreenState
           Padding(
             padding: EdgeInsets.only(right: dimensWidth() * 2),
             child: InkWell(
-              splashColor: transparent,
-              highlightColor: transparent,
+              borderRadius: BorderRadius.circular(180),
               onTap: () {
                 updateFixedSchedule();
               },
@@ -117,14 +164,14 @@ class _UpdateDefaultScheduleScreenState
                   }),
                   onStepContinue: () => setState(() {
                     updateWorkingTime();
-                    if (_currentStep < 13) {
+                    if (_currentStep < 7) {
                       _currentStep++;
                     } else {
                       updateFixedSchedule();
                     }
                   }),
                   controlsBuilder: (context, details) {
-                    if (details.currentStep < 13) {
+                    if (details.currentStep < 7) {
                       return TextButton(
                         onPressed: details.onStepContinue,
                         child: Text(
@@ -142,10 +189,9 @@ class _UpdateDefaultScheduleScreenState
                   },
                   steps: [
                     ...List.generate(
-                      14,
+                      7,
                       (index) => Step(
-                          title: Text(
-                              '${translate(context, 'day')}: ${index + 1}'),
+                          title: Text(changeDate(index)),
                           content: _currentStep == index
                               ? Form(
                                   child: Column(
@@ -206,7 +252,7 @@ class _UpdateDefaultScheduleScreenState
                                                       },
                                                       readOnly: true,
                                                       label: translate(
-                                                          context, 'begin'),
+                                                          context, 'start'),
                                                       controller:
                                                           controllerBegin[
                                                                   _currentStep]

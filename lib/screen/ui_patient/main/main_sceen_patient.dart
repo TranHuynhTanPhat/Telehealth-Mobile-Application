@@ -14,8 +14,12 @@ import 'package:healthline/screen/ui_patient/main/health_info/healthinfo_screen.
 import 'package:healthline/screen/ui_patient/main/home/home_screen.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
 import 'package:healthline/screen/ui_patient/main/schedule/schedule_screen.dart';
+import 'package:healthline/screen/widgets/badge_notification.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:open_document/open_document.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreenPatient extends StatefulWidget {
   const MainScreenPatient({super.key});
@@ -90,22 +94,26 @@ class _MainScreenPatientState extends State<MainScreenPatient>
           },
         ),
         "title": "home_page",
-        "icon": FontAwesomeIcons.heartPulse
+        "icon": FontAwesomeIcons.heartPulse,
+        "badge": false
       },
       {
         "page": const ScheduleScreen(),
         "title": "schedule",
-        "icon": FontAwesomeIcons.calendar
+        "icon": FontAwesomeIcons.calendar,
+        "badge": false
       },
       {
         "page": const NotificationScreen(),
         "title": "notification",
-        "icon": FontAwesomeIcons.solidBell
+        "icon": FontAwesomeIcons.solidBell,
+        "badge": false
       },
       {
         "page": const HealthInfoScreen(),
         "title": "health_info",
-        "icon": FontAwesomeIcons.bookMedical
+        "icon": FontAwesomeIcons.bookMedical,
+        "badge": false
       },
     ];
 
@@ -165,6 +173,31 @@ class _MainScreenPatientState extends State<MainScreenPatient>
             }
           },
         ),
+        BlocListener<PatientRecordCubit, PatientRecordState>(
+          listener: (context, state) async {
+            if (state is OpenFileLoading ||
+                state is AddPatientRecordLoading ||
+                state is DeletePatientRecordLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is OpenFileLoaded) {
+              EasyLoading.dismiss();
+              await OpenDocument.openDocument(filePath: state.filePath);
+            } else if (state is AddPatientRecordLoaded ||
+                state is DeletePatientRecordLoaded) {
+              EasyLoading.showToast(translate(context, 'successfully'));
+            } else if (state is OpenFileError) {
+              EasyLoading.showToast(translate(context, 'cant_download'));
+              if (!await launchUrl(Uri.parse(state.url))) {
+                if (!mounted) return;
+                EasyLoading.showToast(translate(context, 'cant_open'));
+              }
+            } else if (state is AddPatientRecordError) {
+              EasyLoading.showToast(translate(context, state.message));
+            } else if (state is DeletePatientRecordError) {
+              EasyLoading.showToast(translate(context, state.message));
+            }
+          },
+        ),
       ],
       child: WillPopScope(
         onWillPop: onWillPop,
@@ -188,108 +221,132 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                 ],
                 borderRadius: BorderRadius.circular(dimensImage() * 6),
               ),
-              child: ListView.builder(
-                itemCount: _pageDetail.length,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () => setState(() {
-                    _currentIndex = index;
-                  }),
-                  splashColor: transparent,
-                  highlightColor: transparent,
-                  child: Stack(children: [
-                    AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.fastLinearToSlowEaseIn,
-                      width: index == _currentIndex ? dimensWidth() * 16.5 : 9,
-                      alignment: Alignment.center,
-                      child: AnimatedContainer(
-                        duration: const Duration(seconds: 1),
-                        decoration: BoxDecoration(
-                            color: index == _currentIndex
-                                ? primary.withOpacity(.2)
-                                : transparent,
-                            borderRadius:
-                                BorderRadius.circular(dimensWidth() * 6)),
-                        curve: Curves.fastLinearToSlowEaseIn,
-                        height: index == _currentIndex ? dimensWidth() * 6 : 0,
-                        width:
-                            index == _currentIndex ? dimensWidth() * 16.5 : 0,
-                      ),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.fastLinearToSlowEaseIn,
-                      width: index == _currentIndex
-                          ? dimensWidth() * 15.5
-                          : dimensWidth() * 9,
-                      alignment: Alignment.center,
-                      child: Stack(
-                        children: [
-                          Row(
+              child:
+                  BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
+                builder: (context, state) {
+                  _pageDetail.firstWhere((element) =>
+                          element['title'] == 'notification')['badge'] =
+                      state is UpdateAvailable;
+                  return ListView.builder(
+                    itemCount: _pageDetail.length,
+                    scrollDirection: Axis.horizontal,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 1),
+                    itemBuilder: (context, index) => InkWell(
+                      onTap: () => setState(() {
+                        _currentIndex = index;
+                      }),
+                      splashColor: transparent,
+                      highlightColor: transparent,
+                      child: Stack(children: [
+                        AnimatedContainer(
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                          width:
+                              index == _currentIndex ? dimensWidth() * 16.5 : 9,
+                          alignment: Alignment.center,
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            decoration: BoxDecoration(
+                                color: index == _currentIndex
+                                    ? primary.withOpacity(.2)
+                                    : transparent,
+                                borderRadius:
+                                    BorderRadius.circular(dimensWidth() * 6)),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            height:
+                                index == _currentIndex ? dimensWidth() * 6 : 0,
+                            width: index == _currentIndex
+                                ? dimensWidth() * 16.5
+                                : 0,
+                          ),
+                        ),
+                        AnimatedContainer(
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                          width: index == _currentIndex
+                              ? dimensWidth() * 15.5
+                              : dimensWidth() * 9,
+                          alignment: Alignment.center,
+                          child: Stack(
                             children: [
-                              AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.fastLinearToSlowEaseIn,
-                                width: index == _currentIndex
-                                    ? dimensWidth() * 6.5
-                                    : 0,
+                              Row(
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    width: index == _currentIndex
+                                        ? dimensWidth() * 6.5
+                                        : 0,
+                                  ),
+                                  AnimatedOpacity(
+                                    opacity: index == _currentIndex ? 1 : 0,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    child: Text(
+                                      index == _currentIndex
+                                          ? translate(context,
+                                              _pageDetail[index]['title'])
+                                          : '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall
+                                          ?.copyWith(color: primary),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              AnimatedOpacity(
-                                opacity: index == _currentIndex ? 1 : 0,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.fastLinearToSlowEaseIn,
-                                child: Text(
-                                  index == _currentIndex
-                                      ? translate(
-                                          context, _pageDetail[index]['title'])
-                                      : '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(color: primary),
-                                ),
+                              Row(
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    width: index == _currentIndex
+                                        ? dimensWidth() * 1.5
+                                        : 20,
+                                  ),
+                                  badgeNotification(
+                                    child: FaIcon(
+                                      _pageDetail[index]['icon'],
+                                      size: dimensWidth() * 3.8,
+                                      color: index == _currentIndex
+                                          ? primary
+                                          : black26,
+                                    ),
+                                    isShow: _pageDetail[index]['badge'],
+                                    color: Theme.of(context).colorScheme.error,
+                                    top: 0,
+                                    end: 0,
+                                  )
+                                ],
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.fastLinearToSlowEaseIn,
-                                width: index == _currentIndex
-                                    ? dimensWidth() * 1.5
-                                    : 20,
-                              ),
-                              FaIcon(
-                                _pageDetail[index]['icon'],
-                                size: dimensWidth() * 3.8,
-                                color:
-                                    index == _currentIndex ? primary : black26,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ]),
                     ),
-                  ]),
-                ),
+                  );
+                },
               ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: Container(
-            margin: EdgeInsets.only(right: dimensWidth() * 40),
-            child: IconButton(
-              onPressed: () => RestClient().runHttpInspector(),
-              padding: EdgeInsets.all(dimensWidth() * 2),
-              icon: const FaIcon(FontAwesomeIcons.bug),
-              color: white,
-              style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(secondary)),
-            ),
-          ),
+          floatingActionButtonLocation: AliceInspector().dev
+              ? FloatingActionButtonLocation.endFloat
+              : null,
+          floatingActionButton: AliceInspector().dev
+              ? Container(
+                  margin: EdgeInsets.only(right: dimensWidth() * 40),
+                  child: IconButton(
+                    onPressed: () => RestClient().runHttpInspector(),
+                    padding: EdgeInsets.all(dimensWidth() * 2),
+                    icon: const FaIcon(FontAwesomeIcons.bug),
+                    color: white,
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(secondary),
+                    ),
+                  ),
+                )
+              : null,
           body: Stack(
             children: [
               AnimatedPositioned(

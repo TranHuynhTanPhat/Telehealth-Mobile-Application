@@ -72,17 +72,14 @@ class ApplicationSettingScreen extends StatelessWidget {
                         dense: true,
                         visualDensity: const VisualDensity(vertical: 0),
                         title: badgeNotification(
-                            Text(
+                            child: Text(
                               translate(context, 'update_application'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: color1F1F1F),
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            state is UpdateAvailable,
-                            Theme.of(context).colorScheme.error,
-                            0,
-                            0),
+                            isShow: state is UpdateAvailable,
+                            color: Theme.of(context).colorScheme.error,
+                            top: 0,
+                            end: 0),
                         leading: FaIcon(
                           FontAwesomeIcons.circleArrowDown,
                           size: dimensIcon() * .7,

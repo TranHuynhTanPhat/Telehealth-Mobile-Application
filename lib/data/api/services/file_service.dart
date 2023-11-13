@@ -15,7 +15,8 @@ class FileService extends BaseService {
     });
     final response =
         await putUpload(ApiConstants.UPLOAD_AVATAR_USER, formData: formData);
-    return FileResponse.fromMap(response.data);
+    FileResponse fileResponse = FileResponse.fromMap(response.data);
+    return fileResponse;
   }
 
   Future<FileResponse> uploadAvatarDoctor(FileRequest request) async {
@@ -36,22 +37,20 @@ class FileService extends BaseService {
       ),
       "folder": request.folder
     });
-    final response = await putUpload(ApiConstants.UPLOAD_RECORD,
-        formData: formData, isDoctor: true);
+    final response =
+        await putUpload(ApiConstants.UPLOAD_RECORD, formData: formData);
     return FileResponse.fromMap(response.data);
   }
 
   Future<DataResponse> deleteRecordPatient(FileRequest request) async {
     final response = await delete(
-        '${ApiConstants.UPLOAD_RECORD}/${request.folder}/${request.publicId}',
-        isDoctor: true);
+        '${ApiConstants.UPLOAD_RECORD}/${request.folder}/${request.publicId}');
     return response;
   }
 
   Future<DataResponse> deleteFolderPatient(FileRequest request) async {
-    final response = await delete(
-        '${ApiConstants.UPLOAD_RECORD}/${request.folder}',
-        isDoctor: true);
+    final response =
+        await delete('${ApiConstants.UPLOAD_RECORD}/${request.folder}');
     return response;
   }
 

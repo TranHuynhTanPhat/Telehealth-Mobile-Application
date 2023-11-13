@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/data/storage/models/slider_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:preload_page_view/preload_page_view.dart';
+
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/splash/components/exports.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,7 +15,6 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  List<SliderModel> slides = [];
   int currentIndex = 0;
   late PreloadPageController _controller;
 
@@ -22,9 +22,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     _controller = PreloadPageController(initialPage: 0);
-    // _controller.animateToPage(currentIndex,
-    //     duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    slides = getSlides();
   }
 
   @override
@@ -74,50 +71,72 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       currentIndex = value;
                     });
                   },
-                  itemCount: slides.length,
+                  itemCount: 6,
                   itemBuilder: (context, index) {
                     return SliderWidget(
-                      fileName: slides[index].getFileName(),
-                      title: slides[index].getTitle(),
-                      description: slides[index].getDescription(),
+                      fileName: 'img_onboarding_${index + 1}',
+                      title: translate(context, 'ob_title_${index + 1}'),
+                      description:
+                          translate(context, 'ob_description_${index + 1}'),
                     );
                   }),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: dimensWidth() * 2, vertical: dimensHeight() * 10),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
+              height: dimensHeight() * 20,
+              alignment: Alignment.center,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: dimensWidth() * 10,
+                  currentIndex == 0
+                      ? SizedBox(
+                          width: dimensIcon(),
+                        )
+                      : InkWell(
+                          borderRadius: BorderRadius.circular(180),
+                          child: Container(
+                            padding: EdgeInsets.all(dimensWidth()),
+                            child: const FaIcon(
+                              FontAwesomeIcons.chevronLeft,
+                              color: primary,
+                            ),
+                          ),
+                          onTap: () {
+                            if (currentIndex == 5) {
+                              Navigator.pushReplacementNamed(
+                                  context, signUpName);
+                            } else {
+                              _controller.previousPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.fastOutSlowIn);
+                            }
+                          },
+                        ),
+                  const Spacer(),
+                  ...List.generate(
+                    6,
+                    (index) => buildDot(index, context),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      slides.length,
-                      (index) => buildDot(index, context),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(180),
+                    child: Container(
+                      padding: EdgeInsets.all(dimensWidth()),
+                      child: const FaIcon(
+                              FontAwesomeIcons.chevronRight,
+                              color: primary,
+                            ),
                     ),
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * 10,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: primary,
-                      ),
-                      iconSize: dimensIcon(),
-                      onPressed: () {
-                        if (currentIndex == slides.length - 1) {
-                          Navigator.pushReplacementNamed(context, signUpName);
-                        } else {
-                          _controller.nextPage(
-                              duration: const Duration(milliseconds: 100),
-                              curve: Curves.linear);
-                        }
-                      },
-                    ),
+                    onTap: () {
+                      if (currentIndex == 5) {
+                        Navigator.pushReplacementNamed(context, signUpName);
+                      } else {
+                        _controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.fastOutSlowIn);
+                      }
+                    },
                   ),
                 ],
               ),

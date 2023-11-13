@@ -3,12 +3,13 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:open_document/open_document.dart';
+import 'package:open_document/open_document_exception.dart';
+
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/repository/file_repository.dart';
 import 'package:healthline/repository/patient_repository.dart';
 import 'package:healthline/utils/log_data.dart';
-import 'package:open_document/open_document.dart';
-import 'package:open_document/open_document_exception.dart';
 
 part 'patient_record_state.dart';
 
@@ -46,29 +47,112 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
     }
   }
 
-  Future<void> addPatientRecord(File file) async {
+  Future<void> addPatientRecord(
+      String path, String? folderName, int size) async {
     emit(AddPatientRecordLoading(
         records: state.records, medicalId: state.medicalId));
     try {
-      // await _patientRepository.addPatientRecord(state.currentId!, file.path);
+      await _fileRepository.uploadRecordPatient(
+          path: path, folder: folderName ?? '');
+      // String publicId = response.publicId!;
+
+      // await _patientRepository.addPatientRecord(state.medicalId!, publicId,
+      //     folderName ?? 'default', getFileSizeString(bytes: size));
       emit(AddPatientRecordLoaded(
           records: state.records, medicalId: state.medicalId));
+    } on DioException catch (e) {
+      emit(AddPatientRecordError(
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.message.toString()));
     } catch (e) {
       emit(AddPatientRecordError(
-          records: state.records, medicalId: state.medicalId));
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.toString()));
     }
   }
 
-  Future<void> deletePatientRecord(File file) async {
+  Future<void> deletePatientRecord(String patientRecordId) async {
     emit(DeletePatientRecordLoading(
         records: state.records, medicalId: state.medicalId));
     try {
-      // await _patientRepository.addPatientRecord(state.currentId!, file.path);
+      PatientRecordResponse record =
+          state.records.firstWhere((element) => element.id == patientRecordId);
+      String publicId = record.record!.split('/').last;
+      String folderName = record.record!
+          .replaceAll('healthline/users/${state.medicalId}/records/', '')
+          .split('/')
+          .first;
+      await _fileRepository.deleteRecordPatient(
+          publicId: publicId, folder: folderName);
+      // await _patientRepository.deletePatientRecord(patientRecordId);
+
+      final path = await OpenDocument.getPathDocument();
+
+      String filePath = "$path/$publicId";
+
+      final isCheck = await OpenDocument.checkDocument(filePath: filePath);
+
+      if (isCheck) {
+        File(filePath).deleteSync();
+      }
+
+      List<PatientRecordResponse> response = List.from(state.records);
+      response.removeWhere(
+        (element) => element.id == patientRecordId,
+      );
       emit(DeletePatientRecordLoaded(
-          records: state.records, medicalId: state.medicalId));
+          records: response, medicalId: state.medicalId));
+    } on DioException catch (e) {
+      emit(DeletePatientRecordError(
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.toString()));
     } catch (e) {
       emit(DeletePatientRecordError(
-          records: state.records, medicalId: state.medicalId));
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.toString()));
+    }
+  }
+
+  Future<void> deleteFolderPatient(String folderName) async {
+    emit(DeletePatientRecordLoading(
+        records: state.records, medicalId: state.medicalId));
+    try {
+      await _fileRepository.deleteFolderPatient(folder: folderName);
+
+      final path = await OpenDocument.getPathDocument();
+
+      List<PatientRecordResponse> response = List.from(state.records);
+      response
+          .where((element) => element.folder == folderName)
+          .forEach((element) async {
+        String publicId = element.record!.split('/').last;
+        String filePath = "$path/$publicId";
+        final isCheck = await OpenDocument.checkDocument(filePath: filePath);
+        _patientRepository.deletePatientRecord(element.id!);
+
+        if (isCheck) {
+          File(filePath).deleteSync();
+        }
+      });
+      response.removeWhere(
+        (element) => element.folder == folderName,
+      );
+      emit(DeletePatientRecordLoaded(
+          records: response, medicalId: state.medicalId));
+    } on DioException catch (e) {
+      emit(DeletePatientRecordError(
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.toString()));
+    } catch (e) {
+      emit(DeletePatientRecordError(
+          records: state.records,
+          medicalId: state.medicalId,
+          message: e.toString()));
     }
   }
 

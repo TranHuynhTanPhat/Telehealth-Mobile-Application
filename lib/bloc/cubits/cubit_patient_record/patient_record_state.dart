@@ -47,7 +47,8 @@ final class DeletePatientRecordLoaded extends DeletePatientRecordState {
 }
 
 final class DeletePatientRecordError extends DeletePatientRecordState {
-  DeletePatientRecordError({required super.records, required super.medicalId});
+  DeletePatientRecordError({required super.records, required super.medicalId, required this.message});
+  final String message;
 }
 
 final class AddPatientRecordLoading extends AddPatientRecordState {
@@ -59,7 +60,8 @@ final class AddPatientRecordLoaded extends AddPatientRecordState {
 }
 
 final class AddPatientRecordError extends AddPatientRecordState {
-  AddPatientRecordError({required super.records, required super.medicalId});
+  AddPatientRecordError({required super.records, required super.medicalId, required this.message});
+  final String message;
 }
 
 // OPEN FILE

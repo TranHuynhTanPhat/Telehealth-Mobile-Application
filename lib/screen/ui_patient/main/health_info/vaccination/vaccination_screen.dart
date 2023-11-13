@@ -23,14 +23,16 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
       builder: (context, state) {
-        UserResponse user = state.subUsers.firstWhere((element) => element.id == state.currentId);
+        UserResponse user = state.subUsers
+            .firstWhere((element) => element.id == state.currentId);
 
         int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .parse(user.dateOfBirth!));
         context.read<VaccineRecordCubit>().updateAge(age, user.id!);
-        context
-            .read<VaccineRecordCubit>()
-            .fetchInjectedVaccination(state.subUsers.firstWhere((element) => element.id == state.currentId).id!);
+        context.read<VaccineRecordCubit>().fetchInjectedVaccination(state
+            .subUsers
+            .firstWhere((element) => element.id == state.currentId)
+            .id!);
 
         return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
           builder: (context, state) {
@@ -49,14 +51,17 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                       absorbing: state is FetchInjectedVaccinationLoading,
                       child: InkWell(
                         onTap: () async {
-                          await Navigator.pushNamed(context, addVaccinationName);
+                          await Navigator.pushNamed(
+                              context, addVaccinationName);
                         },
-                        splashColor: transparent,
-                        highlightColor: transparent,
-                        child: FaIcon(
-                          FontAwesomeIcons.plus,
-                          color: color1F1F1F,
-                          size: dimensIcon() * .7,
+                        borderRadius: BorderRadius.circular(180),
+                        child: Padding(
+                          padding: EdgeInsets.all(dimensWidth()),
+                          child: FaIcon(
+                            FontAwesomeIcons.plus,
+                            color: color1F1F1F,
+                            size: dimensIcon() * .7,
+                          ),
                         ),
                       ),
                     ),

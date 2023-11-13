@@ -10,7 +10,7 @@ import 'package:healthline/utils/log_data.dart';
 part 'res_state.dart';
 
 class ResCubit extends HydratedCubit<ResState> {
-  ResCubit() : super(const ResInit(locale: Locale("vi"), switchTheme: false));
+  ResCubit(Locale locale) : super(ResInit(locale: locale, switchTheme: false));
   @override
   void onChange(Change<ResState> change) {
     super.onChange(change);

@@ -1,6 +1,7 @@
 import 'package:alice/alice.dart';
 
 class AliceInspector {
+  bool dev = false;
   final Alice _alice = Alice(
     showNotification: false,
     showInspectorOnShake: false,
@@ -17,4 +18,8 @@ class AliceInspector {
   }
 
   AliceInspector._internal();
+
+  init() {
+    dev = true;
+  }
 }

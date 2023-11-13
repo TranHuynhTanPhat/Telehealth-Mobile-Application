@@ -70,7 +70,7 @@ class _CanceledFrameState extends State<CanceledFrame> {
     return ListView(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
-      padding: EdgeInsets.symmetric(vertical: dimensWidth()),
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         const SlideMonthsInYear(),
         Padding(

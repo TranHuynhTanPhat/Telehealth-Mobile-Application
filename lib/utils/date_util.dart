@@ -11,6 +11,7 @@ const DAY_FORMAT = "d";
 const MONTH_FORMAT = "MMMM";
 const yMMMMd_en = "MMMM d, y";
 const yMMMMd_vn = "dd MMMM yyyy";
+const FILE_DATE = "dd MMM, yyyy H:mm";
 
 String formatFullDate(BuildContext context, DateTime date) {
   var formatter =
@@ -42,6 +43,10 @@ String formatDay(BuildContext context, DateTime date) {
 
 String formatMonth(BuildContext context, DateTime date) {
   return DateFormat(MONTH_FORMAT, Localizations.localeOf(context).toString())
+      .format(date);
+}
+String formatFileDate(BuildContext context, DateTime date) {
+  return DateFormat(FILE_DATE, Localizations.localeOf(context).toString())
       .format(date);
 }
 
