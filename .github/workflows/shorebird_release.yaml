@@ -40,6 +40,6 @@ jobs:
         run: shorebird --version
 
       - name: 🚀 Shorebird Release
-        run: shorebird release android --flavor dev ./lib/flavors/main_development.dart
+        run: shorebird release android --flavor prod ./lib/flavors/main_production.dart
         env:
           SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}

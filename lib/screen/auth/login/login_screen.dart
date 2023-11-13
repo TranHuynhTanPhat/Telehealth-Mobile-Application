@@ -26,24 +26,23 @@ class _LogInScreenState extends State<LogInScreen> {
           EasyLoading.show();
         } else if (state is LogInSuccessed) {
           EasyLoading.dismiss();
-          if (state.errorDoctor != null) {
-            EasyLoading.showToast(
-                translate(context, 'login_to_doctor_account_failed'));
-          }
-          if (state.errorPatient != null) {
-            EasyLoading.showToast(
-                translate(context, 'login_to_patient_account_failed'));
-          }
-          if (AppController.instance.authState == AuthState.AllAuthorized ||
-              AppController.instance.authState == AuthState.DoctorAuthorized) {
+          // if (state.errorDoctor != null) {
+          //   EasyLoading.showToast(
+          //       translate(context, 'login_to_doctor_account_failed'));
+          // }
+          // if (state.errorPatient != null) {
+          //   print(state.errorPatient);
+          //   EasyLoading.showToast(
+          //       translate(context, 'login_to_patient_account_failed'));
+          // }
+          if (AppController.instance.authState == AuthState.DoctorAuthorized) {
             Navigator.pushReplacementNamed(context, mainScreenDoctorName);
           } else {
             Navigator.pushReplacementNamed(context, mainScreenPatientName);
           }
         } else if (state is LogInError) {
           EasyLoading.dismiss();
-          EasyLoading.showToast(
-              translate(context, state.errorDoctor.toString()));
+          EasyLoading.showToast(translate(context, state.error));
         }
       },
       child: BlocBuilder<LogInCubit, LogInState>(

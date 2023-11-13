@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 
-Widget badgeNotification(Widget widget, bool isShow, Color color,double top, double end){
+Widget badgeNotification({required Widget child, required bool isShow, required Color color,required double top, required double end}){
   return badges.Badge(
     position: badges.BadgePosition.topEnd(top: top, end: end),
     showBadge: isShow,
@@ -12,6 +12,6 @@ Widget badgeNotification(Widget widget, bool isShow, Color color,double top, dou
       elevation: 0,
       badgeColor: color,
     ),
-    child: widget,
+    child: child,
   );
 }

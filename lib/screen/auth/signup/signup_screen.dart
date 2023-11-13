@@ -49,15 +49,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
                     child: const HeaderSignUp(),
                   ),
-                  // SizedBox(
-                  //   height: dimensHeight() * 3,
-                  // ),
-                  const SignUpForm(),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
                     child: const OptionSignUp(),
                   ),
+                  const SignUpForm(),
                 ],
               ),
             ),

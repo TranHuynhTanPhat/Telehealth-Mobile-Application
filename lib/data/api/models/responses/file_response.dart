@@ -22,31 +22,30 @@ class FileResponse {
   String? accessMode;
   bool? existing;
   String? originalFilename;
-  String? size;
 
-  FileResponse(
-      {this.assetId,
-      this.publicId,
-      this.version,
-      this.versionId,
-      this.signature,
-      this.width,
-      this.height,
-      this.format,
-      this.resourceType,
-      this.createdAt,
-      // this.tags,
-      this.bytes,
-      this.type,
-      this.etag,
-      this.placeholder,
-      this.url,
-      this.secureUrl,
-      this.folder,
-      this.accessMode,
-      this.existing,
-      this.originalFilename,
-      this.size});
+  FileResponse({
+    this.assetId,
+    this.publicId,
+    this.version,
+    this.versionId,
+    this.signature,
+    this.width,
+    this.height,
+    this.format,
+    this.resourceType,
+    this.createdAt,
+    // this.tags,
+    this.bytes,
+    this.type,
+    this.etag,
+    this.placeholder,
+    this.url,
+    this.secureUrl,
+    this.folder,
+    this.accessMode,
+    this.existing,
+    this.originalFilename,
+  });
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -113,9 +112,6 @@ class FileResponse {
     if (originalFilename != null) {
       result.addAll({'original_filename': originalFilename});
     }
-    if (size != null) {
-      result.addAll({'soze': size});
-    }
 
     return result;
   }
@@ -143,7 +139,6 @@ class FileResponse {
       accessMode: map['access_mode'],
       existing: map['existing'],
       originalFilename: map['original_filename'],
-      size: map['size'],
     );
   }
 

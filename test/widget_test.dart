@@ -24,7 +24,6 @@ Future<void> main() async {
 
   test('Check ENV', () {
     var baseUrl = dotenv.env['BASE_URL'];
-    var sentryDsn = dotenv.env['SENTRY_DSN'];
     var cloudinaryUrl = dotenv.env['CLOUDINARY_URL'];
     var cloudinaryApi = dotenv.env['CLOUDINARY_API'];
   });
@@ -38,7 +37,6 @@ Future<void> main() async {
     HydratedBloc.storage = storage;
   });
   testWidgets('My App', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp(
-    ));
-  }); 
+    await tester.pumpWidget(const MyApp());
+  });
 }

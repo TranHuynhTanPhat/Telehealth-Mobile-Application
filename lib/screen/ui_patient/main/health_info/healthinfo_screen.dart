@@ -34,7 +34,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
     )..addListener(() {
         setState(() {});
       });
@@ -143,13 +143,15 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   Padding(
                     padding: EdgeInsets.only(right: dimensWidth() * 2),
                     child: InkWell(
-                      splashColor: transparent,
-                      highlightColor: transparent,
-                      child: AnimatedIcon(
-                        icon: AnimatedIcons.menu_close,
-                        progress: _animationIC,
-                        color: color1F1F1F,
-                        size: dimensIcon(),
+                      borderRadius: BorderRadius.circular(180),
+                      child: Padding(
+                        padding: EdgeInsets.all(dimensWidth()),
+                        child: AnimatedIcon(
+                          icon: AnimatedIcons.menu_close,
+                          progress: _animationIC,
+                          color: color1F1F1F,
+                          size: dimensIcon(),
+                        ),
                       ),
                       onTap: () {
                         if (_showUsers) {
@@ -173,7 +175,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                 children: [
                   _animation.value > 0
                       ? AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 300),
                           color: white,
                           height: 130 * _animation.value,
                           width: double.maxFinite,

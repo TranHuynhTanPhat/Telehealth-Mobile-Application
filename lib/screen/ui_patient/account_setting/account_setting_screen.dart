@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/translate.dart';
 
+import '../../../bloc/cubits/cubits_export.dart';
 import '../../../res/style.dart';
 
 class AccountSettingScreen extends StatelessWidget {
@@ -104,7 +106,33 @@ class AccountSettingScreen extends StatelessWidget {
             trailing:
                 FaIcon(FontAwesomeIcons.chevronRight, size: dimensIcon() * .7),
           ),
-          
+          const Divider(),
+          ListTile(
+            onTap: () {
+              // RestClient().logout();
+              context.read<SideMenuCubit>().logout();
+              Navigator.pop(context);
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                dimensWidth(),
+              ),
+            ),
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 0),
+            leading: FaIcon(
+              FontAwesomeIcons.arrowRightFromBracket,
+              size: dimensIcon() * .7,
+              color: Colors.redAccent,
+            ),
+            title: Text(
+              translate(context, 'log_out'),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Colors.redAccent),
+            ),
+          ),
         ],
       ),
     );

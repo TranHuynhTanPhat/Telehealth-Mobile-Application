@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/health_stat_request.dart';
+import 'package:healthline/data/api/models/requests/patient_record_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
@@ -24,9 +23,9 @@ class PatientService extends BaseService {
     return response;
   }
 
-  Future<DataResponse> addPatientRecord(String medicalId, String record) async {
-    var request = json.encode({'medicalId': medicalId, 'record': record});
-    final response = await post(ApiConstants.PATIENT_RECORD, data: request);
+  Future<DataResponse> addPatientRecord(PatientRecordRequest request) async {
+    final response =
+        await post(ApiConstants.PATIENT_RECORD, data: request.toJson());
 
     return response;
   }
@@ -39,8 +38,8 @@ class PatientService extends BaseService {
     return records;
   }
 
-  Future<DataResponse> deletePatientRecord(String medicalId) async {
-    final response = await delete('${ApiConstants.PATIENT_RECORD}/$medicalId');
+  Future<DataResponse> deletePatientRecord(String recordId) async {
+    final response = await delete('${ApiConstants.PATIENT_RECORD}/$recordId');
 
     return response;
   }

@@ -1,13 +1,12 @@
-import 'dart:io';
-
-import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:intl/intl.dart';
 
-import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/file_widget.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/components/export.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/patient_record/components/list_folder.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 
 class ListPatientRecordScreen extends StatefulWidget {
@@ -19,61 +18,56 @@ class ListPatientRecordScreen extends StatefulWidget {
 }
 
 class _ListPatientRecordScreenState extends State<ListPatientRecordScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientRecordCubit, PatientRecordState>(
       builder: (context, state) {
         if (state is! FetchPatientRecordLoading) {
+          List<PatientRecordResponse> fileRecords = state.records
+              .where((element) =>
+                  element.folder == null || element.folder == 'default')
+              .toList();
+          fileRecords.sort((a, b) => a.updateAt!.compareTo(b.updateAt!));
+          List<PatientRecordResponse> folderRecords = state.records
+              .where((element) =>
+                  element.folder != null && element.folder != 'default')
+              .toList();
+
+          Map<String, Map<String, dynamic>> fileByFolders = {};
+          for (var element in folderRecords) {
+            if (fileByFolders.containsKey(element.folder)) {
+              DateTime newDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                  .parse(element.updateAt!);
+              DateTime oldDate = fileByFolders[element.folder!]!['update_at'];
+              fileByFolders[element.folder!]!['length'] += 1;
+              fileByFolders[element.folder!]!['update_at'] =
+                  newDate.isAfter(oldDate) ? newDate : oldDate;
+              // fileByFolders[element.folder!]!.add(element);
+            } else if (element.folder != null && element.folder != 'default') {
+              DateTime newDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                  .parse(element.updateAt!);
+              fileByFolders.addAll({
+                element.folder!: {'length': 1, 'update_at': newDate}
+              });
+            }
+          }
+
+          Map<String, int> folderNames = {'default': 5};
+          for (var element in folderRecords) {
+            if (folderNames.containsKey(element.folder)) {
+              folderNames[element.folder!] = folderNames[element.folder!]! + 1;
+            } else if (element.folder != null && element.folder != 'default') {
+              folderNames.addAll({element.folder!: 1});
+            }
+          }
           return ListView(
             scrollDirection: Axis.vertical,
             padding: EdgeInsets.symmetric(
                 vertical: dimensHeight(), horizontal: dimensWidth() * 3),
             children: [
-              ...state.records.map(
-                (e) {
-                  String? url = e.name != null
-                      ? CloudinaryContext.cloudinary.raw(e.name!).toString()
-                      : null;
-
-                  String fileName = e.name?.split('/').last ?? 'undefine';
-                  String type = fileName.split('.').last;
-                  return InkWell(
-                    splashColor: transparent,
-                    highlightColor: transparent,
-                    onTap: () async {
-                      if (Platform.isAndroid) {
-                        var status = await Permission.storage.status;
-                        if (!status.isGranted) {
-                          await Permission.storage.request();
-                        } else {
-                          if (url != null) {
-                            if (!mounted) return;
-                            context
-                                .read<PatientRecordCubit>()
-                                .openFile(url: url, fileName: fileName);
-                          }
-                        }
-                      } else if (Platform.isIOS) {
-                        var status = await Permission.photos.status;
-                        if (!status.isGranted) {
-                          await Permission.photos.request();
-                        } else {
-                          if (url != null) {
-                            if (!mounted) return;
-                            context
-                                .read<PatientRecordCubit>()
-                                .openFile(url: url, fileName: fileName);
-                          }
-                        }
-                      }
-                    },
-                    child: FileWidget(
-                      extension: type,
-                      title: fileName,
-                    ),
-                  );
-                },
-              ).toList(),
+              ListFolder(fileByFolders: fileByFolders),
+              ListFile(fileRecords: fileRecords),
             ],
           );
         } else {

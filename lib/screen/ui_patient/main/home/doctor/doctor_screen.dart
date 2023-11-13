@@ -67,12 +67,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
         resizeToAvoidBottomInset: true,
         backgroundColor: white,
         appBar: AppBar(
+          centerTitle: true,
           title: Text(
             translate(context, 'list_of_doctors'),
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontWeight: FontWeight.w900),
+            
           ),
         ),
         body: ListView(

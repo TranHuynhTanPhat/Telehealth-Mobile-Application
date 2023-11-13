@@ -24,7 +24,9 @@ class TextFieldWidget extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.maxLine = 1,
-    this.enable=true,
+    this.enable = true,
+    this.onChanged,
+    this.focusNode,
   });
   final TextEditingController controller;
   final String? label;
@@ -47,10 +49,14 @@ class TextFieldWidget extends StatelessWidget {
   final Function()? onTap;
   final int maxLine;
   final bool enable;
+  final Function(String)? onChanged;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
+      onChanged: onChanged,
       enabled: enable,
       maxLines: maxLine,
       textAlign: TextAlign.start,

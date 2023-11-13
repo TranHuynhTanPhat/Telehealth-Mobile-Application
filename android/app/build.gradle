@@ -34,6 +34,9 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -51,11 +54,14 @@ android {
         applicationId "com.example.healthline"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        // Local Notification 
+        multiDexEnabled true
     }
 
     flavorDimensions "track"
@@ -68,7 +74,8 @@ android {
         }
         prod {
             dimension "track"
-            manifestPlaceholders = [applicationLabel: "HealthLine"]
+            applicationIdSuffix ".prod"
+            manifestPlaceholders = [applicationLabel: "[prod] HealthLine"]
         }
     }
 
@@ -87,4 +94,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
 }

@@ -4,6 +4,9 @@ class ApiConstants {
   // CLOUDINARY
   static const UPLOAD = '/upload';
 
+  // SOCKET
+  static const SOCKET_URL = 'http://192.168.80.80:3008';
+
 // common
   static const _COMMON_USER = '/common/user';
   static const _COMMON_DOCTOR = '/common/doctor';
@@ -42,7 +45,6 @@ class ApiConstants {
   static const _VACCINATION = '/vaccination';
   static const VACCINATION_RECORD = '$_VACCINATION/record';
   static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
-
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';

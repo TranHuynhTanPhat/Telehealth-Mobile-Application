@@ -14,7 +14,7 @@ class RefVaccinationScreen extends StatelessWidget {
       context.read<VaccinationCubit>().fetchVaccinationFromStorage();
       return Scaffold(
         appBar: AppBar(
-          elevation: 10,
+          centerTitle: true,
           title: Text(
             translate(context, 'vaccination'),
           ),
