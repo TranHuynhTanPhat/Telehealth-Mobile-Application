@@ -55,11 +55,12 @@ class _ListServicesState extends State<ListServices> {
                 // EasyLoading.showToast(translate(context, 'coming_soon'));
                 JitsiService.instance.join(
                   token:
-                      "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIvNTM2OGM0LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2OTk4MTMzMTYsImV4cCI6MTY5OTgyMDUxNiwibmJmIjoxNjk5ODEzMzExLCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOmZhbHNlLCJuYW1lIjoiIiwiaWQiOiJhdXRoMHw2NTUwYjFiMGQ3ZjA2NTFhYzg2MTA2Y2YiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20ifX0sInJvb20iOiIqIn0.czoB0nMarjqavCG-gv4X5FTKcAdDo6-1GqGFN52LndgJQVGk9DDaA27GfwBd4GaSmBUH_xJH4d0V9W73XxYvThJ1Acx0HWgW8bdY1-aoOZu-T4ruGom4uDloSg090cZPLwDph2aqXeWamGmmXUNwAE_0XoXkQRUpF4AmbtVuOS2dIKHL57KXxsWWrXN3nCyee6DcBQm0ADlPpYEti9vHFz-LyREw-zd7jPAUi9NjbS4ARd-p4ugdpLkkCkdMSBiPtyJQHHGM0GCAHtMesBzGXIL5AbBUnwTNsVtTEll1zMLvw1DBaqDvCBejxHxEcxre56edsH3qIt8tQta9P36aqw",
+                      "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIvNTM2OGM0LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2OTk4ODkzNjEsImV4cCI6MTY5OTg5NjU2MSwibmJmIjoxNjk5ODg5MzU2LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiIiLCJpZCI6ImF1dGgwfDY1NTBiMWIwZDdmMDY1MWFjODYxMDZjZiIsImF2YXRhciI6IiIsImVtYWlsIjoiaGVhbHRobGluZW1hbmFnZXIyMDIzQGdtYWlsLmNvbSJ9fSwicm9vbSI6IioifQ.fj3wLkMmzUL_LdXdSAldus36lJpBCfBvbYWRd5uw8DF2EIa_KtojWmnAzMbv-4r7kBGny54zER17nZGrpwNjSuuPrpaw1CEDNmm3wJe_rzwsCk3ZOkz3MMIOTeustow5aS_wYHSrjjxC3v12Ti7A4mUp9iXiimJJhC5Kr2hRECEhGGGf9w5hL7-MAzp_6LORo-DIbWThDVgnNpAI4W477e8YprnrZv3uXII2A-rcAXvWlnui8bfaCCk5xaBVFFrrfj8AWJKxmIINkH5tlB--2lphKRYGwXlWEca6rT9kFMfH-tt0p8v18hOOi9vEbi3wTZ8Leh4toEUIeDQDXS1Svw",
                   roomName:
                       "vpaas-magic-cookie-0ff6a038233a4cb7b884158345c26d32/test",
                   displayName: 'Tran Huynh Tan phat',
                   urlAvatar: null,
+                  email: null,
                 );
                 PushNotificationManager().display(
                   context,

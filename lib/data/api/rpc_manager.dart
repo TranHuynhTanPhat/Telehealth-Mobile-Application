@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dart_amqp/dart_amqp.dart';
+import 'package:healthline/utils/log_data.dart';
 
 class RpcManager {
   final Completer connected = Completer();
@@ -19,33 +20,33 @@ class RpcManager {
   }
 
   Future<void> init() async {
-    _settings = ConnectionSettings(
-      host: "armadillo.rmq.cloudamqp.com",
-      virtualHost: 'fxqsrbcd',
-      authProvider: const PlainAuthenticator(
-          "fxqsrbcd", "IQdQplBIB_pJboPQw5_Mvw8Lzk_qYK3I"),
-    );
-    _client = Client(settings: _settings);
-    Channel channel = await _client.channel();
-    _serverQueue = await channel.queue("test", durable: true, passive: true);
-    // Allocate a private queue for server responses
-    Queue queue = await _serverQueue.channel.privateQueue();
-    Consumer consumer = await queue.consume();
-    // _replyQueueName = consumer.queue.name;
-    consumer.listen(handleResponse);
-    connected.complete();
+    // _settings = ConnectionSettings(
+    //   host: "armadillo.rmq.cloudamqp.com",
+    //   virtualHost: 'fxqsrbcd',
+    //   authProvider: const PlainAuthenticator(
+    //       "fxqsrbcd", "IQdQplBIB_pJboPQw5_Mvw8Lzk_qYK3I"),
+    // );
+    // _client = Client(settings: _settings);
+    // Channel channel = await _client.channel();
+    // _serverQueue = await channel.queue("healthline.doctor.schedule", durable: true, passive: true);
+    // // Allocate a private queue for server responses
+    // Queue queue = await _serverQueue.channel.privateQueue();
+    // Consumer consumer = await queue.consume();
+    // // _replyQueueName = consumer.queue.name;
+    // consumer.listen(handleResponse);
+    // connected.complete();
   }
 
   void handleResponse(AmqpMessage message) {
     // // Ignore if the correlation id is unknown
     // // Get the payload as a string
-    // print(" [x] Received string: ${message.payloadAsString}");
+    logPrint(" [x] Received string: ${message.payloadAsString}");
 
     // // Or unserialize to json
-    // print(" [x] Received json: ${message.payloadAsJson}");
+    logPrint(" [x] Received json: ${message.payloadAsJson}");
 
     // // Or just get the raw data as a Uint8List
-    // print(" [x] Received raw: ${message.payload}");
+    logPrint(" [x] Received raw: ${message.payload}");
 
     // // The message object contains helper methods for
     // // replying, ack-ing and rejecting
