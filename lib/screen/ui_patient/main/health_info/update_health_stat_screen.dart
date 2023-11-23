@@ -147,10 +147,9 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           ?.toString() ??
                       '')
               : _controllerTemperature.text;
-          return WillPopScope(
-            onWillPop: () {
+          return PopScope(
+            onPopInvoked: (value) {
               Navigator.pop(context, onChange);
-              return true as Future<bool>;
             },
             child: GestureDetector(
               onTap: () {

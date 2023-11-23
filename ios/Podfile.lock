@@ -49,8 +49,8 @@ PODS:
     - libwebp
   - jitsi_meet_flutter_sdk (0.0.1):
     - Flutter
-    - JitsiMeetSDK (= 8.5.0)
-  - JitsiMeetSDK (8.5.0):
+    - JitsiMeetSDK (= 8.6.0)
+  - JitsiMeetSDK (8.6.0):
     - Giphy (= 2.1.20)
     - JitsiWebRTC (~> 111.0)
   - JitsiWebRTC (111.0.2)
@@ -79,18 +79,18 @@ PODS:
     - Flutter
   - restart_app (0.0.1):
     - Flutter
-  - SDWebImage (5.18.3):
-    - SDWebImage/Core (= 5.18.3)
-  - SDWebImage/Core (5.18.3)
+  - SDWebImage (5.18.5):
+    - SDWebImage/Core (= 5.18.5)
+  - SDWebImage/Core (5.18.5)
   - sensors_plus (0.0.1):
     - Flutter
-  - Sentry/HybridSDK (8.14.2):
-    - SentryPrivate (= 8.14.2)
+  - Sentry/HybridSDK (8.15.2):
+    - SentryPrivate (= 8.15.2)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.14.2)
-  - SentryPrivate (8.14.2)
+    - Sentry/HybridSDK (= 8.15.2)
+  - SentryPrivate (8.15.2)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -189,8 +189,8 @@ SPEC CHECKSUMS:
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Giphy: b6d5087521d251bb8c99cdc0eb07bbdf86d142d5
-  jitsi_meet_flutter_sdk: 6d21349052f5b12c7d2270e9b519a9410a23f680
-  JitsiMeetSDK: e219e130f3633c22600980f43bf5323441c39bf3
+  jitsi_meet_flutter_sdk: 67b7e09f4647a3c6f0197e7af0962dd3e4cb36c1
+  JitsiMeetSDK: 183d8131a8948f9b2887ff52f36e27a7ee29783b
   JitsiWebRTC: 80f62908fcf2a1160e0d14b584323fb6e6be630b
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   open_document: 63eea128860263e68b67ef3b31f74a5ae22e4c71
@@ -199,16 +199,16 @@ SPEC CHECKSUMS:
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
-  SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
+  SDWebImage: 7ac2b7ddc5e8484c79aa90fc4e30b149d6a2c88f
   sensors_plus: 4ee32bc7d61a055f27f88d3215ad6b6fb96a2b8e
-  Sentry: e0ea366f95ebb68f26d6030d8c22d6b2e6d23dd0
-  sentry_flutter: 9a04c51c373d76ee22167bf1e65bc468c0a91fed
-  SentryPrivate: 949a21fa59872427edc73b524c3ec8456761d97f
+  Sentry: 6f5742b4c47c17c9adcf265f6f328cf4a0ed1923
+  sentry_flutter: 2c309a1d4b45e59d02cfa15795705687f1e2081b
+  SentryPrivate: b2f7996f37781080f04a946eb4e377ff63c64195
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
 PODFILE CHECKSUM: bcfec4a7e43da3e4e912fff604c575558f526a05
 

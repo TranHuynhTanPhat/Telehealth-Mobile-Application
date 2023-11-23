@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                 title: "healthline",
                 home: MediaQuery(
                   data: MediaQuery.of(context).copyWith(
-                    textScaleFactor: 1.0,
+                    textScaler: const TextScaler.linear(1.0),
                   ),
                   child: const SplashScreen(),
                 ),
