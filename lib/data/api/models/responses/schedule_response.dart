@@ -21,7 +21,7 @@ class ScheduleResponse {
     }
     if (workingTimes != null) {
       result.addAll({
-        'working_times': workingTimes != null ? workingTimes!.join('-') : null
+        'working_times':  workingTimes!.join('-') 
       });
     }
 

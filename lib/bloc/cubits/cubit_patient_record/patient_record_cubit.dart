@@ -53,7 +53,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
         records: state.records, medicalId: state.medicalId));
     try {
       await _fileRepository.uploadRecordPatient(
-          path: path, folder: folderName ?? '');
+          medicalId: state.medicalId!, path: path, folder: folderName ?? '');
       // String publicId = response.publicId!;
 
       // await _patientRepository.addPatientRecord(state.medicalId!, publicId,
@@ -80,13 +80,13 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       PatientRecordResponse record =
           state.records.firstWhere((element) => element.id == patientRecordId);
       String publicId = record.record!.split('/').last;
-      String folderName = record.record!
-          .replaceAll('healthline/users/${state.medicalId}/records/', '')
-          .split('/')
-          .first;
-      await _fileRepository.deleteRecordPatient(
-          publicId: publicId, folder: folderName);
-      // await _patientRepository.deletePatientRecord(patientRecordId);
+      // String folderName = record.record!
+      //     .replaceAll('healthline/users/${state.medicalId}/records/', '')
+      //     .split('/')
+      //     .first;
+      // await _fileRepository.deleteRecordPatient(medicalId: state.medicalId!,
+      //     publicId: publicId, folder: folderName);
+      await _patientRepository.deletePatientRecord([patientRecordId]);
 
       final path = await OpenDocument.getPathDocument();
 
@@ -121,7 +121,8 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
     emit(DeletePatientRecordLoading(
         records: state.records, medicalId: state.medicalId));
     try {
-      await _fileRepository.deleteFolderPatient(folder: folderName);
+      await _fileRepository.deleteFolderPatient(medicalId:state.medicalId!, folderName: folderName);
+
 
       final path = await OpenDocument.getPathDocument();
 
@@ -132,7 +133,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
         String publicId = element.record!.split('/').last;
         String filePath = "$path/$publicId";
         final isCheck = await OpenDocument.checkDocument(filePath: filePath);
-        _patientRepository.deletePatientRecord(element.id!);
+        _patientRepository.deletePatientRecord([element.id!]);
 
         if (isCheck) {
           File(filePath).deleteSync();

@@ -8,7 +8,7 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/components/drawer_menu.dart';
+import 'package:healthline/screen/components/drawer_label.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/account_setting_doctor_screen.dart';
 import 'package:healthline/screen/ui_doctor/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/helps/helps_screen.dart';
@@ -46,16 +46,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     _image = null;
   }
 
-  Future<bool> onWillPop() {
+  void onWillPop(bool value) {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-
-      return Future.value(false);
     }
-    return Future.value(true);
+    // return Future.value(true);
+    Navigator.pop(context);
   }
 
   void clickDrawer() {
@@ -66,8 +65,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: onWillPop,
       child: MultiBlocListener(
         listeners: [
           BlocListener<SideMenuCubit, SideMenuState>(
@@ -251,7 +251,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                           ),
                         );
                       } else {
-                        return const SizedBox();
+                        return SizedBox(
+                          height: dimensHeight() * 5,
+                        );
                       }
                     }),
                     Expanded(
@@ -295,8 +297,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                               //   onChangeToPatient = true;
                               // Future.delayed(const Duration(seconds: 1),
                               //     () {
-                              Navigator.pushNamed(
-                                  context, forumName);
+                              Navigator.pushNamed(context, forumName);
                               // });
                               // });
                             },

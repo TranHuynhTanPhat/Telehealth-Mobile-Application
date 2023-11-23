@@ -5,6 +5,7 @@ class FileRequest {
   String? uploadPreset;
   String? publicId;
   String? folder;
+  String? medicalId;
   FileRequest({
      this.path,
      this.uploadPreset,
