@@ -24,12 +24,12 @@ class FileRepository extends BaseRepository {
     return await _fileService.uploadAvatarDoctor(request);
   }
 
-  Future<FileResponse> uploadRecordPatient({
+  Future<FileResponse> uploadRecordPatient({required String medicalId,
     required String path,
     required String folder,
   }) async {
     FileRequest request = FileRequest(path: path, folder: folder);
-    return await _fileService.uploadRecordPatient(request);
+    return await _fileService.uploadRecordPatient(medicalId,request);
   }
 
   Future<DataResponse> deleteRecordPatient({
@@ -40,11 +40,11 @@ class FileRepository extends BaseRepository {
     return await _fileService.deleteRecordPatient(request);
   }
 
-  Future<DataResponse> deleteFolderPatient({
-    required String folder,
+  Future<DataResponse> deleteFolderPatient({required String medicalId,
+    required String folderName,
   }) async {
-    FileRequest request = FileRequest(folder: folder);
-    return await _fileService.deleteFolderPatient(request);
+
+    return await _fileService.deleteFolderPatient(medicalId, folderName);
   }
 
   Future<String> downloadFile(

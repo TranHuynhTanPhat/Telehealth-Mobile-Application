@@ -222,6 +222,7 @@ class RestClient {
     //   await getDio().delete(
     //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
     // } else
+    AppController.instance.authState = AuthState.Unauthorized;
     if (AppController.instance.authState == AuthState.DoctorAuthorized) {
       await getDio().delete(
           dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
@@ -230,7 +231,6 @@ class RestClient {
           dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
     }
     instance.cookieJar.deleteAll();
-    AppController.instance.authState = AuthState.Unauthorized;
   }
 
   void runHttpInspector() {

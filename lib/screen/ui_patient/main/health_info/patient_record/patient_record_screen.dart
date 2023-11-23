@@ -131,7 +131,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
                                         Expanded(
                                           child: Text(
                                             translate(context,
-                                                'add_vaccination_record'),
+                                                'add_patient_record'),
                                             textAlign: TextAlign.center,
                                             overflow: TextOverflow.visible,
                                             style: Theme.of(context)

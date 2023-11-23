@@ -21,7 +21,8 @@ class JitsiService {
       {required String token,
       required String roomName,
       required String? displayName,
-      required String? urlAvatar}) async {
+      required String? urlAvatar,
+      required String? email}) async {
     var options = JitsiMeetConferenceOptions(
       serverURL: "https://8x8.vc",
       token: token,
@@ -35,8 +36,8 @@ class JitsiService {
         "unsaferoomwarning.enabled": false,
         "ios.screensharing.enabled": true
       },
-      
-      userInfo: JitsiMeetUserInfo(displayName: displayName, avatar: urlAvatar),
+      userInfo: JitsiMeetUserInfo(
+          displayName: displayName, avatar: urlAvatar, email: email),
     );
 
     var listener = JitsiMeetEventListener(

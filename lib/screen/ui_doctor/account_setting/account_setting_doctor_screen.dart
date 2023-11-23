@@ -48,7 +48,14 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              Navigator.pushNamed(context, changePasswordName);
+              // Navigator.pushNamed(context, changePasswordName);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    translate(context, 'upcoming'),
+                  ),
+                ),
+              );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -75,7 +82,14 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              Navigator.pushNamed(context, walletName);
+              // Navigator.pushNamed(context, walletName);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    translate(context, 'upcoming'),
+                  ),
+                ),
+              );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -114,18 +128,17 @@ class SettingScreen extends StatelessWidget {
             leading: FaIcon(
               FontAwesomeIcons.arrowRightFromBracket,
               size: dimensIcon() * .7,
-              color: color9D4B6C,
+              color: Colors.redAccent,
             ),
             title: Text(
               translate(context, 'log_out'),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
-                  ?.copyWith(color: color9D4B6C),
+                  ?.copyWith(color: Colors.redAccent),
             ),
           ),
         ],
-        
       ),
     );
   }

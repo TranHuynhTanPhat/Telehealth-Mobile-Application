@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/file_request.dart';
@@ -30,8 +32,10 @@ class FileService extends BaseService {
     return FileResponse.fromMap(response.data);
   }
 
-  Future<FileResponse> uploadRecordPatient(FileRequest request) async {
+  Future<FileResponse> uploadRecordPatient(
+      String medicalId, FileRequest request) async {
     FormData formData = FormData.fromMap({
+      "medicalId": medicalId,
       "file": await MultipartFile.fromFile(
         request.path!,
       ),
@@ -48,9 +52,13 @@ class FileService extends BaseService {
     return response;
   }
 
-  Future<DataResponse> deleteFolderPatient(FileRequest request) async {
-    final response =
-        await delete('${ApiConstants.UPLOAD_RECORD}/${request.folder}');
+  Future<DataResponse> deleteFolderPatient(
+      String medicalId, String folderName) async {
+    Map<String, String> map = {'folder': folderName, 'medicalId': medicalId};
+    final response = await delete(
+      ApiConstants.UPLOAD_RECORD,
+      data: json.encode(map),
+    );
     return response;
   }
 

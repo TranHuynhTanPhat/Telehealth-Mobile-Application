@@ -75,16 +75,188 @@ class AppRoute {
           ),
         );
       }
-      return MaterialPageRoute(
+      else {
+        return MaterialPageRoute(
         builder: (_) => BlocProvider.value(
           value: _logInCubit,
           child: const LogInScreen(),
         ),
       );
-    }
-    else if(AppController.instance.authState == AuthState.DoctorAuthorized){
+      }
+    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
       switch (settings.name) {
-        
+        case mainScreenDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _sideMenuCubit,
+                ),
+                BlocProvider.value(
+                  value: _doctorProfileCubit,
+                ),
+                BlocProvider.value(
+                  value: _doctorScheduleCubit,
+                ),
+              ],
+              child: const MainScreenDoctor(),
+            ),
+          );
+        case shiftDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: _doctorScheduleCubit),
+              ],
+              child: const ShiftScreen(),
+            ),
+          );
+        case updateProfileDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _doctorProfileCubit,
+              child: const UpdateProfileScreen(),
+            ),
+          );
+        case updateDefaultScheduleDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _doctorScheduleCubit,
+              child: const UpdateDefaultScheduleScreen(),
+            ),
+          );
+        case updateScheduleByDayDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _doctorScheduleCubit,
+              child: const UpdateScheduleByDayScreen(),
+            ),
+          );
+      }
+    } else if (AppController.instance.authState ==
+        AuthState.PatientAuthorized) {
+      switch (settings.name) {
+        case mainScreenPatientName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _sideMenuCubit,
+                ),
+                BlocProvider.value(
+                  value: _vaccineRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _homeCubit,
+                ),
+                BlocProvider.value(
+                  value: _medicalRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _patientRecordCubit,
+                ),
+              ],
+              child: const MainScreenPatient(),
+            ),
+          );
+        case doctorName:
+          return MaterialPageRoute(
+            builder: (_) => const DoctorScreen(),
+          );
+        case detailDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => const DetailDoctorScreen(),
+          );
+        case walletName:
+          return MaterialPageRoute(
+            builder: (_) => const WalletScreen(),
+          );
+        case accountSettingName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _sideMenuCubit,
+              child: const AccountSettingScreen(),
+            ),
+          );
+        case applicationSettingName:
+          return MaterialPageRoute(
+            builder: (_) => const ApplicationSettingScreen(),
+          );
+        case contactName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _contactCubit,
+              child: const ContactScreen(),
+            ),
+          );
+        case updateName:
+          return MaterialPageRoute(
+            builder: (_) => const UpdateScreen(),
+          );
+        case vaccinationName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _vaccineRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _medicalRecordCubit,
+                ),
+              ],
+              child: const VaccinationScreen(),
+            ),
+          );
+        case addVaccinationName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _vaccineRecordCubit,
+              child: const AddVaccinationScreen(),
+            ),
+          );
+        case changePasswordName:
+          return MaterialPageRoute(
+            builder: (_) => const ChangePassword(),
+          );
+        case refVaccinationName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) => _vaccinationCubit,
+              child: const RefVaccinationScreen(),
+            ),
+          );
+        case updateHealthStatName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _medicalRecordCubit,
+              child: const HealthStatUpdateScreen(),
+            ),
+          );
+        case patientRecordName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _medicalRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _patientRecordCubit,
+                ),
+              ],
+              child: const PatientRecordScreen(),
+            ),
+          );
+        case addPatientRecordName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _patientRecordCubit,
+                ),
+              ],
+              child: const AddPatientRecordScreen(),
+            ),
+          );
       }
     }
     switch (settings.name) {
@@ -92,77 +264,45 @@ class AppRoute {
       //   return MaterialPageRoute(
       //       builder: (_) => BlocProvider.value(
       //           value: _applicationUpdateBloc, child: const SplashScreen()));
-      case mainScreenPatientName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: _sideMenuCubit,
-              ),
-              BlocProvider.value(
-                value: _vaccineRecordCubit,
-              ),
-              BlocProvider.value(
-                value: _homeCubit,
-              ),
-              BlocProvider.value(
-                value: _medicalRecordCubit,
-              ),
-              BlocProvider.value(
-                value: _patientRecordCubit,
-              ),
-            ],
-            child: const MainScreenPatient(),
-          ),
-        );
+
       case onboardingName:
         return MaterialPageRoute(
           builder: (_) => const OnboardingScreen(),
         );
-      case signUpName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _signUpCubit,
-            child: const SignUpScreen(),
-          ),
-        );
-      case logInName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _logInCubit,
-            child: const LogInScreen(),
-          ),
-        );
-      case walletName:
-        return MaterialPageRoute(
-          builder: (_) => const WalletScreen(),
-        );
-      case accountSettingName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _sideMenuCubit,
-            child: const AccountSettingScreen(),
-          ),
-        );
-      case applicationSettingName:
-        return MaterialPageRoute(
-          builder: (_) => const ApplicationSettingScreen(),
-        );
-      case contactName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _contactCubit,
-            child: const ContactScreen(),
-          ),
-        );
+      // case signUpName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _signUpCubit,
+      //       child: const SignUpScreen(),
+      //     ),
+      //   );
+      // case logInName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _logInCubit,
+      //       child: const LogInScreen(),
+      //     ),
+      //   );
+      // case signUpName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _signUpCubit,
+      //       child: const SignUpScreen(),
+      //     ),
+      //   );
+      // case logInName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _logInCubit,
+      //       child: const LogInScreen(),
+      //     ),
+      //   );
+
       case errorName:
         return MaterialPageRoute(
           builder: (_) => const ErrorScreen(),
         );
-      case updateName:
-        return MaterialPageRoute(
-          builder: (_) => const UpdateScreen(),
-        );
+
       case termsAndConditionsName:
         return MaterialPageRoute(
           builder: (_) => const TermsAndConditionsScreen(),
@@ -174,125 +314,6 @@ class AppRoute {
       case privacyPolicyName:
         return MaterialPageRoute(
           builder: (_) => const PrivacyPolicyScreen(),
-        );
-      case doctorName:
-        return MaterialPageRoute(
-          builder: (_) => const DoctorScreen(),
-        );
-      case detailDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => const DetailDoctorScreen(),
-        );
-      case changePasswordName:
-        return MaterialPageRoute(
-          builder: (_) => const ChangePassword(),
-        );
-      case refVaccinationName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => _vaccinationCubit,
-            child: const RefVaccinationScreen(),
-          ),
-        );
-      case vaccinationName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: _vaccineRecordCubit,
-              ),
-              BlocProvider.value(
-                value: _medicalRecordCubit,
-              ),
-            ],
-            child: const VaccinationScreen(),
-          ),
-        );
-      case addVaccinationName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _vaccineRecordCubit,
-            child: const AddVaccinationScreen(),
-          ),
-        );
-      case mainScreenDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: _sideMenuCubit,
-              ),
-              BlocProvider.value(
-                value: _doctorProfileCubit,
-              ),
-              BlocProvider.value(
-                value: _doctorScheduleCubit,
-              ),
-            ],
-            child: const MainScreenDoctor(),
-          ),
-        );
-      case shiftDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: _doctorScheduleCubit),
-            ],
-            child: const ShiftScreen(),
-          ),
-        );
-      case updateProfileDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _doctorProfileCubit,
-            child: const UpdateProfileScreen(),
-          ),
-        );
-      case updateHealthStatName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _medicalRecordCubit,
-            child: const HealthStatUpdateScreen(),
-          ),
-        );
-      case patientRecordName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: _medicalRecordCubit,
-              ),
-              BlocProvider.value(
-                value: _patientRecordCubit,
-              ),
-            ],
-            child: const PatientRecordScreen(),
-          ),
-        );
-      case updateDefaultScheduleDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _doctorScheduleCubit,
-            child: const UpdateDefaultScheduleScreen(),
-          ),
-        );
-      case updateScheduleByDayDoctorName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _doctorScheduleCubit,
-            child: const UpdateScheduleByDayScreen(),
-          ),
-        );
-      case addPatientRecordName:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: _patientRecordCubit,
-              ),
-            ],
-            child: const AddPatientRecordScreen(),
-          ),
         );
       case forumName:
         return MaterialPageRoute(
