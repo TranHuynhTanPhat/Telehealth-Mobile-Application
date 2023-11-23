@@ -46,16 +46,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     _image = null;
   }
 
-  Future<bool> onWillPop() {
+  void onWillPop(bool value) {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-
-      return Future.value(false);
     }
-    return Future.value(true);
+    // return Future.value(true);
+    Navigator.pop(context);
   }
 
   void clickDrawer() {
@@ -66,8 +65,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: onWillPop,
       child: MultiBlocListener(
         listeners: [
           BlocListener<SideMenuCubit, SideMenuState>(
