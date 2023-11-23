@@ -65,7 +65,10 @@ class PatientRepository extends BaseRepository {
   Future<List<PatientRecordResponse>> fetchPatientRecord(String medicalId) async {
     return await _patientService.getPatientRecord(medicalId);
   }
-  Future<DataResponse> deletePatientRecord(String recordId) async {
-    return await _patientService.deletePatientRecord(recordId);
+  Future<DataResponse> deletePatientRecord(List<String> recordIds) async {
+    return await _patientService.deletePatientRecord(recordIds);
+  }
+  Future<DataResponse> deletePatientFolderRecord(List<String> recordIds) async {
+    return await _patientService.deletePatientRecord(recordIds);
   }
 }

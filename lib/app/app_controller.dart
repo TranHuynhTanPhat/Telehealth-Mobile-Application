@@ -82,12 +82,16 @@ class AppController {
       try {
         patient = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.PATIENT)!);
+      } catch (e) {
+        // await initRestClient();
+        logPrint(e);
+      }
+      try {
         doctor = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.DOCTOR)!);
       } catch (e) {
         // await initRestClient();
         logPrint(e);
-        authState = AuthState.Unauthorized;
       }
       String? accessTokenPatient = patient?.jwtToken;
       String? accessTokenDoctor = doctor?.jwtToken;

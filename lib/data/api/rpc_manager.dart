@@ -6,9 +6,9 @@ import 'package:healthline/utils/log_data.dart';
 class RpcManager {
   final Completer connected = Completer();
   late Client _client;
-  late ConnectionSettings _settings;
+  // late ConnectionSettings _settings;
   final Map<String, Completer> _pendingOperations = <String, Completer>{};
-  late Queue _serverQueue;
+  // late Queue _serverQueue;
   // late String _replyQueueName;
 
   RpcManager._internal();

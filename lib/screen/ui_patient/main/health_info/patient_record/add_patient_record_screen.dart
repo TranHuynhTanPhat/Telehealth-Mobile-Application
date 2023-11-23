@@ -55,11 +55,11 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
   Future<void> chooseFile(BuildContext context) async {
     _file = await FilePickerCustom().chooseFile();
     double sizeInMb = _file!.size / (1024 * 1024);
-    if (sizeInMb > 4.5) {
+    if (sizeInMb > 10) {
       _file = null;
       if (!mounted) return;
       EasyLoading.showToast(
-        translate(context, '${translate(context, 'max_file_size')}: 4.5 MB'),
+        translate(context, '${translate(context, 'max_file_size')}: 10 MB'),
       );
     }
     setState(() {});
@@ -168,7 +168,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        '${translate(context, 'max_file_size')}: 4.5MB',
+                                        '${translate(context, 'max_file_size')}: 10 MB',
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.visible,
                                         style: Theme.of(context)
