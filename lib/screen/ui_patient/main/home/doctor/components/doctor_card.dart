@@ -3,6 +3,7 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
@@ -12,7 +13,7 @@ class DoctorCard extends StatefulWidget {
     super.key,
     required this.doctor,
   });
-  final Map<String, dynamic> doctor;
+  final DoctorProfileResponse doctor;
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();
@@ -31,13 +32,14 @@ class _DoctorCardState extends State<DoctorCard> {
     _image = _image ??
         NetworkImage(
           CloudinaryContext.cloudinary
-              .image(widget.doctor['avatar'] ?? '')
+              .image(widget.doctor.avatar ?? '')
               .toString(),
         );
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
-      onTap: () => Navigator.pushNamed(context, detailDoctorName),
+      onTap: () => Navigator.pushNamed(context, detailDoctorName,
+          arguments: 'hjjhbjh'),
       child: Row(
         children: [
           Expanded(
@@ -81,7 +83,8 @@ class _DoctorCardState extends State<DoctorCard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    widget.doctor['name'],
+                                    widget.doctor.fullName ??
+                                        translate(context, 'undefine'),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style:
@@ -90,7 +93,10 @@ class _DoctorCardState extends State<DoctorCard> {
                                   Text(
                                     // ignore: prefer_interpolation_to_compose_strings
                                     translate(
-                                        context, widget.doctor['specialty']),
+                                      context,
+                                      widget.doctor.specialty ??
+                                          translate(context, 'undefine'),
+                                    ),
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
                                   ),
@@ -143,12 +149,14 @@ class _DoctorCardState extends State<DoctorCard> {
                         SizedBox(
                           height: dimensHeight(),
                         ),
-                        Text(
-                          widget.doctor['biography'],
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        )
+                        widget.doctor.biography != null
+                            ? Text(
+                                widget.doctor.biography.toString(),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              )
+                            : const SizedBox()
                       ],
                     ),
                   ),

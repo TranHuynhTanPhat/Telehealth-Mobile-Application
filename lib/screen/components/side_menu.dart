@@ -160,7 +160,7 @@ class _SideMenuState extends State<SideMenu> {
                 // ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, helpsScreen);
+                    Navigator.pushNamed(context, helpsName);
                   },
                   title: Text(
                     translate(context, 'Trợ giúp'),

@@ -1,16 +1,19 @@
-const mainScreenPatientName = "/main-screen-patient";
 const onboardingName = "/onboarding";
 const signUpName = "/sign-up";
 const logInName = "/log-in";
 const errorName = "/error";
+const termsAndConditionsName = '/terms-and-conditions';
+const faqsName = '/faqs';
+const privacyPolicyName = '/privacy-policy';
+const forumName = '/forum';
+const newsName = '/news';
+
+const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";
 const applicationSettingName = "/application-setting";
 const updateName = "/update";
 const walletName = "/wallet";
 const contactName = "/contact";
-const termsAndConditionsName = '/terms-and-conditions';
-const faqsName = '/faqs';
-const privacyPolicyName = '/privacy-policy';
 const changePasswordName = '/change-password';
 const refVaccinationName = '/ref-vaccination';
 const vaccinationName = '/vaccination';
@@ -18,10 +21,11 @@ const addVaccinationName = '/add-vaccination';
 const updateHealthStatName = '/update-health-stat';
 const patientRecordName = '/patient-record';
 const addPatientRecordName = '/add-patient-record';
-const helpsScreen = '/helps';
+const helpsName = '/helps';
+const timelineDoctorName ='/timeline-doctor';
+const paymentMethodsName ='/payment-methods';
+const invoiceName ='/invoice';
 
-const forumName = '/forum';
-const newsName = '/news';
 
 const doctorName = '/doctor';
 const detailDoctorName = '/detail-doctor';

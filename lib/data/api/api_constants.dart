@@ -33,6 +33,7 @@ class ApiConstants {
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
   static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
   static const DOCTOR_CHANGE_FIXED_TIMES = '$DOCTOR/fixed-times';
+  static const DOCTOR_LIST = '$DOCTOR/list';
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
   static const DOCTOR_SCHEDULE_CRON = '$DOCTOR_SCHEDULE/cron';
 

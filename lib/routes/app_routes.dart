@@ -32,6 +32,9 @@ import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_va
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/ref_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/update/update_screen.dart';
@@ -48,6 +51,7 @@ class AppRoute {
   final _doctorScheduleCubit = DoctorScheduleCubit();
   final _doctorProfileCubit = DoctorProfileCubit();
   final _patientRecordCubit = PatientRecordCubit();
+  final _doctorCubit = DoctorCubit();
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
@@ -62,6 +66,7 @@ class AppRoute {
     _doctorScheduleCubit.close();
     _doctorProfileCubit.close();
     _patientRecordCubit.close();
+    _doctorCubit.close();
     // _applicationUpdateBloc.close();
   }
 
@@ -74,14 +79,13 @@ class AppRoute {
             child: const SignUpScreen(),
           ),
         );
-      }
-      else {
+      } else {
         return MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: _logInCubit,
-          child: const LogInScreen(),
-        ),
-      );
+          builder: (_) => BlocProvider.value(
+            value: _logInCubit,
+            child: const LogInScreen(),
+          ),
+        );
       }
     } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
       switch (settings.name) {
@@ -161,11 +165,17 @@ class AppRoute {
           );
         case doctorName:
           return MaterialPageRoute(
-            builder: (_) => const DoctorScreen(),
+            builder: (_) => BlocProvider.value(
+              value: _doctorCubit,
+              child: const DoctorScreen(),
+            ),
           );
         case detailDoctorName:
+          final args = settings.arguments as String?;
           return MaterialPageRoute(
-            builder: (_) => const DetailDoctorScreen(),
+            builder: (_) => DetailDoctorScreen(
+              id: args,
+            ),
           );
         case walletName:
           return MaterialPageRoute(
@@ -257,6 +267,22 @@ class AppRoute {
               child: const AddPatientRecordScreen(),
             ),
           );
+        case helpsName:
+          return MaterialPageRoute(
+            builder: (_) => const HelpsScreen(),
+          );
+        case timelineDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => const TimelineDoctorScreen(),
+          );
+        case paymentMethodsName:
+          return MaterialPageRoute(
+            builder: (_) => const PaymentMethodScreen(),
+          );
+        case invoiceName:
+          return MaterialPageRoute(
+            builder: (_) => const InvoiceScreen(),
+          );
       }
     }
     switch (settings.name) {
@@ -323,10 +349,7 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (_) => const NewsScreen(),
         );
-      case helpsScreen:
-        return MaterialPageRoute(
-          builder: (_) => const HelpsScreen(),
-        );
+
       default:
         return null;
     }

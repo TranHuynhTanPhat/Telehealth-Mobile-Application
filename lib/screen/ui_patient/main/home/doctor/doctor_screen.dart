@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -17,47 +19,49 @@ class DoctorScreen extends StatefulWidget {
 class _DoctorScreenState extends State<DoctorScreen> {
   late TextEditingController _searchController;
 
-  final List<Map<String, dynamic>> doctors = [
-    {
-      "avatar": "123",
-      "name": "Drr. Phat Phut Phit",
-      "specialty": "gynaecologist",
-      "biography":
-          "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-      "averageRating": 3.6153846153846154,
-      "reviewed": 13
-    },
-    {
-      "avatar": "123",
-      "name": "Drr. Phat Phut Phit",
-      "specialty": "gynaecologist",
-      "biography":
-          "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-      "averageRating": 3.6153846153846154,
-      "reviewed": 13
-    },
-    {
-      "avatar": "123",
-      "name": "Drr. Phat Phut Phitfasdfsdfsadfsfsdfasdfasd",
-      "specialty": "gynaecologist",
-      "biography":
-          "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-      "averageRating": 3.6153846153846154,
-      "reviewed": 13
-    },
-    {
-      "avatar": "123",
-      "name": "Drr. Phat Phut Phit",
-      "specialty": "gynaecologist",
-      "biography":
-          "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-      "averageRating": 3.6153846153846154,
-      "reviewed": 13
-    },
-  ];
+  // final List<Map<String, dynamic>> doctors = [
+  //   {
+  //     "avatar": "123",
+  //     "name": "Drr. Phat Phut Phit",
+  //     "specialty": "gynaecologist",
+  //     "biography":
+  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
+  //     "averageRating": 3.6153846153846154,
+  //     "reviewed": 13
+  //   },
+  //   {
+  //     "avatar": "123",
+  //     "name": "Drr. Phat Phut Phit",
+  //     "specialty": "gynaecologist",
+  //     "biography":
+  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
+  //     "averageRating": 3.6153846153846154,
+  //     "reviewed": 13
+  //   },
+  //   {
+  //     "avatar": "123",
+  //     "name": "Drr. Phat Phut Phitfasdfsdfsadfsfsdfasdfasd",
+  //     "specialty": "gynaecologist",
+  //     "biography":
+  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
+  //     "averageRating": 3.6153846153846154,
+  //     "reviewed": 13
+  //   },
+  //   {
+  //     "avatar": "123",
+  //     "name": "Drr. Phat Phut Phit",
+  //     "specialty": "gynaecologist",
+  //     "biography":
+  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
+  //     "averageRating": 3.6153846153846154,
+  //     "reviewed": 13
+  //   },
+  // ];
   @override
   void initState() {
     _searchController = TextEditingController();
+    if (!mounted) return;
+    context.read<DoctorCubit>().fetchDoctors();
     super.initState();
   }
 
@@ -70,7 +74,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
           centerTitle: true,
           title: Text(
             translate(context, 'list_of_doctors'),
-            
           ),
         ),
         body: ListView(
@@ -84,7 +87,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   left: dimensWidth() * 3),
               child: TextFieldWidget(
                 validate: (p0) => null,
-                hint: translate(context, 'search_drugs_categories'),
+                hint: translate(context, 'search_doctors'),
                 fillColor: colorF2F5FF,
                 filled: true,
                 focusedBorderColor: colorF2F5FF,
@@ -105,15 +108,33 @@ class _DoctorScreenState extends State<DoctorScreen> {
               padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
               child: const ListCategories(),
             ),
-            buildShimmer(),
-            ...doctors.map(
-              (e) => Padding(
-                padding: EdgeInsets.only(left: dimensWidth() * 3),
-                child: DoctorCard(
-                  doctor: e,
-                ),
-              ),
-            ),
+            BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
+              if (state is FetchDoctorsLoading) {
+                return buildShimmer();
+              } else if (state is FetchDoctorsSuccess) {
+                return Column(
+                  children: state.doctors
+                      .map(
+                        (e) => Padding(
+                          padding: EdgeInsets.only(left: dimensWidth() * 3),
+                          child: DoctorCard(doctor: e),
+                        ),
+                      )
+                      .toList(),
+                );
+              } else {
+                return const SizedBox();
+              }
+            }),
+            // buildShimmer(),
+            // ...doctors.map(
+            //   (e) => Padding(
+            //     padding: EdgeInsets.only(left: dimensWidth() * 3),
+            //     child: DoctorCard(
+            //       doctor: e,
+            //     ),
+            //   ),
+            // ),
           ],
         )
         // ],
