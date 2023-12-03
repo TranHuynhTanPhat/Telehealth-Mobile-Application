@@ -85,4 +85,12 @@ class DoctorService extends BaseService {
 
     return response;
   }
+
+  Future<List<DoctorProfileResponse>> getListDoctor() async {
+    final response = await get(ApiConstants.DOCTOR_LIST);
+    List<DoctorProfileResponse> doctors = response.data
+        .map<DoctorProfileResponse>((e) => DoctorProfileResponse.fromMap(e))
+        .toList();
+    return doctors;
+  }
 }

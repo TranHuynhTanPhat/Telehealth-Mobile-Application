@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
 class DetailDoctorScreen extends StatefulWidget {
-  const DetailDoctorScreen({super.key});
+  const DetailDoctorScreen({
+    super.key,
+    this.id,
+  });
+  final String? id;
 
   @override
   State<DetailDoctorScreen> createState() => _DetailDoctorScreenState();
@@ -16,6 +22,7 @@ class DetailDoctorScreen extends StatefulWidget {
 class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   // ignore: prefer_typing_uninitialized_variables
   var _image;
+
   @override
   void initState() {
     _image = null;
@@ -36,19 +43,21 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
       backgroundColor: white,
       extendBody: true,
       bottomNavigationBar: Container(
-          padding: EdgeInsets.fromLTRB(
-              dimensWidth() * 3, 0, dimensWidth() * 3, dimensHeight() * 3),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.white.withOpacity(0.0), white],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+        padding: EdgeInsets.fromLTRB(
+            dimensWidth() * 3, 0, dimensWidth() * 3, dimensHeight() * 3),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white.withOpacity(0.0), white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          width: double.infinity,
-          child: ElevatedButtonWidget(
-              text: translate(context, 'book_appointment_now'),
-              onPressed: null)),
+        ),
+        width: double.infinity,
+        child: ElevatedButtonWidget(
+          text: translate(context, 'book_appointment_now'),
+          onPressed: () => Navigator.pushNamed(context, timelineDoctorName),
+        ),
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -59,7 +68,17 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               floating: true,
               expandedHeight: dimensHeight() * 35,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
+                background:
+                    //      ShimmerWidget.rectangular(
+                    //   height: dimensHeight()*35,
+                    //   width: dimensWidth()*50,
+                    //   shapeBorder: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.all(
+                    //       Radius.circular(0),
+                    //     ),
+                    //   ),
+                    // )
+                    Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -93,6 +112,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // ShimmerWidget.rectangular(
+                      //   height: dimensHeight() * 4,
+                      //   width: dimensWidth() * 25,
+                      // ),
                       Expanded(
                         child: Text(
                           "Doctor Name",
@@ -104,6 +127,11 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
+                      // const Spacer(),
+                      // ShimmerWidget.rectangular(
+                      //   height: dimensHeight() * 3,
+                      //   width: dimensWidth() * 7,
+                      // )
                       Text(
                         "\$100",
                         maxLines: 2,
@@ -120,7 +148,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             ),
           ];
         },
-        body: ListView(
+        body:
+            // shimmerBuilder()
+
+            ListView(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(
@@ -201,6 +232,103 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  ListView shimmerBuilder() {
+    return ListView(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      padding: EdgeInsets.only(
+          bottom: dimensHeight() * 2,
+          left: dimensWidth() * 3,
+          right: dimensWidth() * 3),
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+              bottom: dimensHeight(),
+              top: dimensHeight(),
+              right: dimensWidth() * 25),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: dimensWidth() * 20),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2.5,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: dimensHeight() * 2, right: dimensWidth() * 35),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 3.5,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: dimensHeight() * 2),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding:
+              EdgeInsets.only(top: dimensHeight(), right: dimensWidth() * 15),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: dimensHeight() * 3, right: dimensWidth() * 20),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 3.5,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: dimensHeight() * 2, right: dimensWidth() * 15),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: dimensHeight() * 3, right: dimensWidth() * 35),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 3.5,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: dimensHeight() * 2, right: dimensWidth() * 20),
+          child: ShimmerWidget.rectangular(
+            height: dimensHeight() * 2,
+          ),
+        ),
+        SizedBox(
+          height: dimensHeight() * 10,
+        )
+      ],
     );
   }
 }

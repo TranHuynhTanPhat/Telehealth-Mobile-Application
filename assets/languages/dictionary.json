@@ -1414,5 +1414,37 @@
     "search_doctors": {
         "vi": "Tìm kiếm bác sĩ",
         "en": "Search doctors"
+    },
+    "choose_time": {
+        "vi": "Chọn thời gian",
+        "en": "Choose time"
+    },
+    "momo_e_wallet": {
+        "vi": "Ví điện tử Momo",
+        "en": "Momo e-wallet"
+    },
+    "invoice": {
+        "vi": "Biên lai",
+        "en": "Invoice"
+    },
+    "time": {
+        "vi": "Thời gian",
+        "en": "Time"
+    },
+    "invoice_code": {
+        "vi": "Mã hoá đơn",
+        "en": "Invoice code"
+    },
+    "created_at": {
+        "vi": "Ngày tạo",
+        "en": "Created at"
+    },
+    "total": {
+        "vi": "Tổng cộng",
+        "en": "Total"
+    },
+    "payment": {
+        "vi": "Thanh toán",
+        "en": "Payment"
     }
 }

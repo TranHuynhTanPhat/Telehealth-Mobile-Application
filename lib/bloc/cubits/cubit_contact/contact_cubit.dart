@@ -25,11 +25,10 @@ class ContactCubit extends Cubit<ContactState> {
       UserResponse userResponse = await _userRepository.fetchContact();
 
       emit(ContactLoaded(phone: userResponse.phone, email: userResponse.email));
+    } on DioException catch (e) {
+      emit(ContactError(e.response!.data['message'].toString(), phone: null, email: null));
     } catch (e) {
-      DioException er = e as DioException;
-
-      emit(ContactError(er.message.toString(),
-          phone: null, email: null));
+      emit(ContactError(e.toString(), phone: null, email: null));
     }
   }
 
@@ -40,10 +39,10 @@ class ContactCubit extends Cubit<ContactState> {
       DataResponse response = await _userRepository.updateEmail(email);
       // print(response.message);
       emit(ContactUpdate(phone: state.phone, email: email, response: response));
+    } on DioException catch (e) {
+      emit(ContactError(e.response!.data['message'].toString(), phone: null, email: null));
     } catch (e) {
-      DioException er = e as DioException;
-      emit(ContactError(er.response!.data['message'].toString(),
-          phone: null, email: null));
+      emit(ContactError(e.toString(), phone: null, email: null));
     }
   }
 }

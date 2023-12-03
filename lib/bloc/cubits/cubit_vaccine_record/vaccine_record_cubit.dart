@@ -48,16 +48,24 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
             age: state.age,
             medicalRecord: state.medicalRecord),
       );
-    } catch (e) {
-      DioException er = e as DioException;
-      logPrint(er);
+    } on DioException catch (e) {
       emit(
         FetchVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: er.response!.data['message'].toString(),
+          message: e.response!.data['message'].toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
+          message: e.toString(),
         ),
       );
     }
@@ -82,16 +90,24 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
             age: state.age,
             medicalRecord: state.medicalRecord),
       );
-    } catch (e) {
-      DioException er = e as DioException;
-      logPrint(er);
+    } on DioException catch (e) {
       emit(
         FetchInjectedVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: er.response!.data['message'].toString(),
+          message: e.response!.data['message'].toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchInjectedVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
+          message: e.toString(),
         ),
       );
     }
@@ -121,16 +137,20 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
           medicalRecord: state.medicalRecord,
         ),
       );
-    } catch (e) {
-      DioException er = e as DioException;
-      logPrint(er);
-
+    } on DioException catch (e) {
       emit(CreateInjectedVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: er.response!.data['message'].toString()));
+          message: e.response!.data['message'].toString()));
+    } catch (e) {
+      emit(CreateInjectedVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
+          message: e.toString()));
     }
   }
 
@@ -148,8 +168,6 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
       InjectedVaccinationResponse vaccination = await _vaccinationRepository
           .updateInjectedVaccination(recordId, doseNumber, date);
 
-
-
       emit(
         UpdateInjectedVaccinationLoaded(
           vaccinations: state.vaccinations,
@@ -159,16 +177,20 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
           medicalRecord: state.medicalRecord,
         ),
       );
-    } catch (e) {
-      DioException er = e as DioException;
-      logPrint(er);
-
+    } on DioException catch (e) {
       emit(UpdateInjectedVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: er.response!.data['message'].toString()));
+          message: e.response!.data['message'].toString()));
+    } catch (e) {
+      emit(UpdateInjectedVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
+          message: e.toString()));
     }
   }
 
@@ -193,16 +215,20 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
           medicalRecord: state.medicalRecord,
         ),
       );
-    } catch (e) {
-      DioException er = e as DioException;
-      logPrint(er);
-
+    } on DioException catch (e) {
       emit(DeleteInjectedVaccinationError(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: er.response!.data['message'].toString()));
+          message: e.response!.data['message'].toString()));
+    } catch (e) {
+      emit(DeleteInjectedVaccinationError(
+          vaccinations: state.vaccinations,
+          injectedVaccinations: state.injectedVaccinations,
+          age: state.age,
+          medicalRecord: state.medicalRecord,
+          message: e.toString()));
     }
   }
 
