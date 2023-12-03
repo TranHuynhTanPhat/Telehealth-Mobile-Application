@@ -14,3 +14,4 @@ export './cubit_application_update/application_update_cubit.dart';
 export './cubit_medical_record/medical_record_cubit.dart';
 export './cubit_vaccine_record/vaccine_record_cubit.dart';
 export 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
+export 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';

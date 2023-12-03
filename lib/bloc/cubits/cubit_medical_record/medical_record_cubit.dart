@@ -42,7 +42,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       emit(
         HealthStatError(
           stats: state.stats,
-          message: e.message.toString(),
+          message: e.response!.data['message'].toString(),
           subUsers: state.subUsers,
           currentId: state.currentId,
         ),
@@ -142,13 +142,20 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
           currentId: state.currentId,
         ));
       }
-    } catch (e) {
-      DioException er = e as DioException;
-
+    } on DioException catch (e) {
       emit(
         HealthStatError(
           stats: state.stats,
-          message: er.message.toString(),
+          message: e.response!.data['message'].toString(),
+          subUsers: state.subUsers,
+          currentId: state.currentId,
+        ),
+      );
+    } catch (e) {
+      emit(
+        HealthStatError(
+          stats: state.stats,
+          message: e.toString(),
           subUsers: state.subUsers,
           currentId: state.currentId,
         ),
@@ -210,7 +217,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     } on DioException catch (e) {
       emit(AddSubUserFailure(
         stats: state.stats,
-        message: e.message.toString(),
+        message: e.response!.data['message'].toString(),
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));
@@ -281,7 +288,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     } on DioException catch (e) {
       emit(UpdateSubUserFailure(
         stats: state.stats,
-        message: e.message.toString(),
+        message:e.response!.data['message'].toString(),
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));

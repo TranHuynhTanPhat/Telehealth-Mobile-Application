@@ -9,7 +9,7 @@ part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(SignUpInitial());
-  final UserRepository _userRepository=UserRepository();
+  final UserRepository _userRepository = UserRepository();
   @override
   void onChange(Change<SignUpState> change) {
     super.onChange(change);
@@ -31,10 +31,12 @@ class SignUpCubit extends Cubit<SignUpState> {
           password, passwordConfirm, gender, birthday, address);
       emit(RegisterAccountActionState(
           message: code == 201 ? 'success_register' : ''));
-    } catch (error) {
-      DioException er = error as DioException;
-      emit(SignUpErrorActionState(code:er.response!.statusCode,
-          message: er.response!.data['message'].toString()));
+    } on DioException catch (e) {
+      emit(SignUpErrorActionState(
+          code: e.response!.statusCode,
+          message: e.response!.data['message'].toString()));
+    } catch (e) {
+      emit(SignUpErrorActionState(code: 0, message: e.toString()));
     }
   }
 }

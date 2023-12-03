@@ -64,7 +64,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(AddPatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
-          message: e.message.toString()));
+          message:e.response!.data['message'].toString()));
     } catch (e) {
       emit(AddPatientRecordError(
           records: state.records,
@@ -108,7 +108,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
-          message: e.toString()));
+          message: e.response!.data['message'].toString()));
     } catch (e) {
       emit(DeletePatientRecordError(
           records: state.records,
@@ -148,7 +148,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
-          message: e.toString()));
+          message: e.response!.data['message'].toString()));
     } catch (e) {
       emit(DeletePatientRecordError(
           records: state.records,
@@ -178,7 +178,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(OpenFileError(
           records: state.records,
-          message: e.message.toString(),
+          message: e.response!.data['message'].toString(),
           url: url,
           medicalId: state.medicalId));
     } on OpenDocumentException catch (e) {

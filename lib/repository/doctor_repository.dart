@@ -40,4 +40,7 @@ class DoctorRepository extends BaseRepository {
   Future<DataResponse> updateScheduleByDay(List<int> workingTimes, String scheduleId) async {
     return await _doctorService.updateScheduleByDay(workingTimes, scheduleId);
   }
+  Future<List<DoctorProfileResponse>> fetchListDoctor() async {
+    return await _doctorService.getListDoctor();
+  }
 }

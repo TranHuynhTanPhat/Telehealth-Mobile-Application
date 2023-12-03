@@ -159,7 +159,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                 padding: EdgeInsets.only(bottom: dimensHeight() * 15),
                 children: [
                   DateSlide(
-                    daysLeft: 14,
+                    daysLeft: 7,
                     dayPressed: dayPressed,
                     daySelected: _daySelected,
                     dateStart: DateTime.now(),
@@ -268,29 +268,29 @@ class _ShiftScreenState extends State<ShiftScreen> {
   }
 }
 
-class BookedShift extends StatelessWidget {
-  const BookedShift({
-    super.key,
-    required this.time,
-  });
-  final String time;
+// class BookedShift extends StatelessWidget {
+//   const BookedShift({
+//     super.key,
+//     required this.time,
+//   });
+//   final String time;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      height: dimensWidth(),
-      padding: EdgeInsets.all(
-        dimensWidth(),
-      ),
-      decoration: BoxDecoration(
-          color: colorDF9F1E.withOpacity(.2),
-          borderRadius: BorderRadius.circular(dimensWidth())),
-      alignment: Alignment.center,
-      child: Text(
-        time,
-        style: Theme.of(context).textTheme.labelLarge,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.maxFinite,
+//       height: dimensWidth(),
+//       padding: EdgeInsets.all(
+//         dimensWidth(),
+//       ),
+//       decoration: BoxDecoration(
+//           color: colorDF9F1E.withOpacity(.2),
+//           borderRadius: BorderRadius.circular(dimensWidth())),
+//       alignment: Alignment.center,
+//       child: Text(
+//         time,
+//         style: Theme.of(context).textTheme.labelLarge,
+//       ),
+//     );
+//   }
+// }

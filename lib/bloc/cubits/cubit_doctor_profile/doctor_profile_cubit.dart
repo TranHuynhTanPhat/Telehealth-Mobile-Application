@@ -55,9 +55,10 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
           ),
         );
       }
+    } on DioException catch (e) {
+      emit(DoctorEmailError(state.profile, message: e.response!.data['message'].toString()));
     } catch (e) {
-      DioException er = e as DioException;
-      emit(DoctorEmailError(state.profile, message: er.message.toString()));
+      emit(DoctorEmailError(state.profile, message: e.toString()));
     }
   }
 
@@ -74,9 +75,10 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
           ),
         );
       }
+    } on DioException catch (e) {
+      emit(DoctorBiographyError(state.profile, message: e.response!.data['message'].toString()));
     } catch (e) {
-      DioException er = e as DioException;
-      emit(DoctorBiographyError(state.profile, message: er.message.toString()));
+      emit(DoctorBiographyError(state.profile, message: e.toString()));
     }
   }
 
@@ -111,12 +113,18 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
           ),
         );
       }
-    } catch (e) {
-      DioException er = e as DioException;
+    } on DioException catch (e) {
       emit(
         DoctorAvatarError(
           state.profile,
-          message: er.message.toString(),
+          message: e.response!.data['message'].toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        DoctorAvatarError(
+          state.profile,
+          message: e.toString(),
         ),
       );
     }

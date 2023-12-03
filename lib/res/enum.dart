@@ -47,3 +47,8 @@ enum TypeHealthStat {
   Blood_group,
   Head_cricumference,
 }
+
+enum PaymentMethod {
+  None,
+  Momo,
+}
