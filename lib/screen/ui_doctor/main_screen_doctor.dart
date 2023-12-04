@@ -27,12 +27,12 @@ class MainScreenDoctor extends StatefulWidget {
 }
 
 class _MainScreenDoctorState extends State<MainScreenDoctor> {
-  DrawerMenus _currentPage = DrawerMenus.Overview;
-
   DateTime? currentBackPressTime;
   bool disableDrawer = false;
   bool onChangeToPatient = false;
+  bool exit = false;
 
+  DrawerMenus _currentPage = DrawerMenus.Overview;
   // ignore: prefer_typing_uninitialized_variables
   var _image;
 
@@ -46,15 +46,17 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     _image = null;
   }
 
-  void onWillPop(bool value) {
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-    }
-    // return Future.value(true);
-    Navigator.pop(context);
+  void onWillPop(bool didPop) {
+    if (didPop) return;
+    EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+    setState(() {
+      exit = true;
+    });
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        exit = false;
+      });
+    });
   }
 
   void clickDrawer() {
@@ -66,7 +68,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: exit,
       onPopInvoked: onWillPop,
       child: MultiBlocListener(
         listeners: [

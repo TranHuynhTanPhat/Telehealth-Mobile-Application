@@ -31,6 +31,7 @@ class MainScreenPatient extends StatefulWidget {
 class _MainScreenPatientState extends State<MainScreenPatient>
     with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
+  bool exit = false;
   double animationValue = 0;
 
   bool isSideMenuClosed = true;
@@ -75,6 +76,41 @@ class _MainScreenPatientState extends State<MainScreenPatient>
     super.dispose();
   }
 
+  void _showBackDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: const Text(
+            'Are you sure you want to leave this page?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Nevermind'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Leave'),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> _pageDetail = [
@@ -117,15 +153,18 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       },
     ];
 
-    void onWillPop(bool value) {
-      DateTime now = DateTime.now();
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-        currentBackPressTime = now;
-        EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-      }
-      // return Future.value(true);
-      Navigator.pop(context);
+    void onWillPop(bool didPop) {
+      if (didPop) return;
+
+      EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+      setState(() {
+        exit = true;
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          exit = false;
+        });
+      });
     }
 
     return MultiBlocListener(
@@ -199,7 +238,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
         ),
       ],
       child: PopScope(
-        canPop: false,
+        canPop: exit,
         onPopInvoked: onWillPop,
         child: Scaffold(
           resizeToAvoidBottomInset: false,

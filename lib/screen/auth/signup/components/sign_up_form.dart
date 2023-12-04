@@ -87,7 +87,7 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Form(
         key: _formKey,
         child: SizedBox(
-          height: dimensHeight()*70,
+          height: dimensHeight()*90,
           child: Stepper(
             elevation: 0,
             margin: const EdgeInsets.all(0),
