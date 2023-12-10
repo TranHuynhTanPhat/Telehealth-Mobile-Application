@@ -39,9 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void startTimer() {
     Future.delayed(const Duration(milliseconds: 1000), () async {
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool? firstTime = AppStorage().getBool(key: DataConstants.FIRST_TIME);
 
+      bool? firstTime = AppStorage().getBool(key: DataConstants.FIRST_TIME);
       // // prefs.setBool('first_time', true);
       try {
         final NotificationAppLaunchDetails? notificationAppLaunchDetails =

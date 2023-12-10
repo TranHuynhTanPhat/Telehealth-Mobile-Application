@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:healthline/utils/log_data.dart';
+import 'package:timezone/timezone.dart';
 
 part 'res_state.dart';
 

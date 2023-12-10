@@ -9,7 +9,7 @@ enum AuthState {
 
 enum AppTheme { LightTheme, DartTheme }
 
-enum DrawerMenus {
+enum DrawerMenu {
   Overview,
   Schedule,
   YourShift,
@@ -17,6 +17,13 @@ enum DrawerMenus {
   AccountSetting,
   ApplicationSetting,
   Helps
+}
+
+enum SignUp{
+  Instruction,
+  Profile,
+  Contact,
+  Secutiry
 }
 
 enum ScheduleTabBar { UpComing, Completed, Canceled }

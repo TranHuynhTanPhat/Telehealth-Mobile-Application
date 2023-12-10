@@ -72,21 +72,71 @@ class AppRoute {
 
   Route? onGeneralRoute(RouteSettings settings) {
     if (AppController.instance.authState == AuthState.Unauthorized) {
-      if (settings.name == signUpName) {
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _signUpCubit,
-            child: const SignUpScreen(),
-          ),
-        );
-      } else {
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _logInCubit,
-            child: const LogInScreen(),
-          ),
-        );
+      switch (settings.name) {
+        case onboardingName:
+          return MaterialPageRoute(
+            builder: (_) => const OnboardingScreen(),
+          );
+        case signUpName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _signUpCubit,
+              child: const SignUpScreen(),
+            ),
+          );
+        case errorName:
+          return MaterialPageRoute(
+            builder: (_) => const ErrorScreen(),
+          );
+
+        case termsAndConditionsName:
+          return MaterialPageRoute(
+            builder: (_) => const TermsAndConditionsScreen(),
+          );
+        case faqsName:
+          return MaterialPageRoute(
+            builder: (_) => const FAQsScreen(),
+          );
+        case privacyPolicyName:
+          return MaterialPageRoute(
+            builder: (_) => const PrivacyPolicyScreen(),
+          );
+        case forumName:
+          return MaterialPageRoute(
+            builder: (_) => const ForumScreen(),
+          );
+        case newsName:
+          return MaterialPageRoute(
+            builder: (_) => const NewsScreen(),
+          );
+        default:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _logInCubit,
+              child: const LogInScreen(),
+            ),
+          );
       }
+      // if (settings.name == onboardingName) {
+      //   return MaterialPageRoute(
+      //     builder: (_) => const OnboardingScreen(),
+      //   );
+      // }
+      // if (settings.name == signUpName) {
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _signUpCubit,
+      //       child: const SignUpScreen(),
+      //     ),
+      //   );
+      // } else {
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _logInCubit,
+      //       child: const LogInScreen(),
+      //     ),
+      //   );
+      // }
     } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
       switch (settings.name) {
         case mainScreenDoctorName:
@@ -291,10 +341,6 @@ class AppRoute {
       //       builder: (_) => BlocProvider.value(
       //           value: _applicationUpdateBloc, child: const SplashScreen()));
 
-      case onboardingName:
-        return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
-        );
       // case signUpName:
       //   return MaterialPageRoute(
       //     builder: (_) => BlocProvider.value(
@@ -323,32 +369,6 @@ class AppRoute {
       //       child: const LogInScreen(),
       //     ),
       //   );
-
-      case errorName:
-        return MaterialPageRoute(
-          builder: (_) => const ErrorScreen(),
-        );
-
-      case termsAndConditionsName:
-        return MaterialPageRoute(
-          builder: (_) => const TermsAndConditionsScreen(),
-        );
-      case faqsName:
-        return MaterialPageRoute(
-          builder: (_) => const FAQsScreen(),
-        );
-      case privacyPolicyName:
-        return MaterialPageRoute(
-          builder: (_) => const PrivacyPolicyScreen(),
-        );
-      case forumName:
-        return MaterialPageRoute(
-          builder: (_) => const ForumScreen(),
-        );
-      case newsName:
-        return MaterialPageRoute(
-          builder: (_) => const NewsScreen(),
-        );
 
       default:
         return null;

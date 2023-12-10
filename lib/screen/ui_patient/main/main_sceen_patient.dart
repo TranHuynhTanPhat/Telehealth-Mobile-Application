@@ -41,7 +41,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   late AnimationController _animationController;
   late Animation<double> animation;
   late Animation<double> scalAnimation;
-  late Animation<double> hideAnimation;
+  // late Animation<double> hideAnimation;
 
   @override
   void initState() {
@@ -61,10 +61,10 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-    hideAnimation = Tween<double>(begin: 1, end: 0).animate(
-      CurvedAnimation(
-          parent: _animationController, curve: Curves.fastOutSlowIn),
-    );
+    // hideAnimation = Tween<double>(begin: 1, end: 0).animate(
+    //   CurvedAnimation(
+    //       parent: _animationController, curve: Curves.fastOutSlowIn),
+    // );
     if (!mounted) return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
     super.initState();
@@ -74,41 +74,6 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   void dispose() {
     _animationController.dispose();
     super.dispose();
-  }
-
-  void _showBackDialog() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: const Text(
-            'Are you sure you want to leave this page?',
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Nevermind'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Leave'),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

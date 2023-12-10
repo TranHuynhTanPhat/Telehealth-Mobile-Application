@@ -8,8 +8,8 @@
         "en": "Change to English"
     },
     "skip": {
-        "vi": "BỎ QUA",
-        "en": "SKIP"
+        "vi": "Bỏ qua",
+        "en": "Skip"
     },
     "next": {
         "vi": "Kế tiếp",
@@ -22,6 +22,10 @@
     "save": {
         "vi": "Lưu",
         "en": "Save"
+    },
+    "back": {
+        "vi": "Trở lại",
+        "en": "Back"
     },
     "log_in": {
         "vi": "Đăng nhập",
@@ -1446,5 +1450,13 @@
     "payment": {
         "vi": "Thanh toán",
         "en": "Payment"
+    },
+    "register_an_account_according_to_the_steps": {
+        "vi": "Đăng ký tài khoản theo các bước",
+        "en": "Register an account according to the steps"
+    },
+    "step": {
+        "vi": "Bước",
+        "en": "Step"
     }
 }

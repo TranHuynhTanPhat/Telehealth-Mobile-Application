@@ -61,10 +61,13 @@ class Validate {
     RegExp uppercase = RegExp(r'^(?=.*[A-Z])');
     RegExp lowercase = RegExp(r'^(?=.*[a-z])');
     RegExp special = RegExp(r'^(?=.*?[!@#\$&*~])');
+
     if (phone.isEmpty) return translate(context, 'please_enter_phone_number');
-    if (phone.length == 10 && phone.characters.first == '0') {
+
+    if (phone.characters.first == '0') {
       phone = phone.replaceFirst('0', '');
     }
+    
     if (uppercase.hasMatch(phone) ||
         lowercase.hasMatch(phone) ||
         special.hasMatch(phone) ||

@@ -1,86 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 
-class TextFieldWidget extends StatelessWidget {
-  const TextFieldWidget(
-      {super.key,
-      this.label,
-      this.hint,
-      this.textInputType,
-      this.obscureText = false,
-      this.enableSuggestions = true,
-      this.autocorrect = false,
-      required this.controller,
-      this.error,
-      this.suffixIcon,
-      this.prefixIcon,
-      this.filled = false,
-      this.fillColor = white,
-      this.enabledBorderColor = colorA8B1CE,
-      this.focusedBorderColor = color1F1F1F,
-      this.suffix,
-      this.prefix,
-      required this.validate,
-      this.readOnly = false,
-      this.onTap,
-      this.maxLine = 1,
-      this.enable = true,
-      this.onChanged,
-      this.focusNode,
-      this.autovalidateMode});
-  final TextEditingController controller;
+class DropdownButtonFieldWidget extends StatelessWidget {
+  const DropdownButtonFieldWidget({
+    super.key,
+    this.label,
+    this.hint,
+    this.error,
+    required this.items,
+    required this.onChanged,
+    this.value,
+    required this.validator,
+    this.fillColor = white,
+    this.enabledBorderColor = colorA8B1CE,
+    this.focusedBorderColor = color1F1F1F,
+    this.onTap,
+    this.autovalidateMode,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.filled = false,
+    this.suffix,
+    this.prefix,
+  });
   final String? label;
   final String? hint;
   final String? error;
-  final TextInputType? textInputType;
-  final bool? obscureText;
-  final bool? enableSuggestions;
-  final bool? autocorrect;
-  final IconButton? suffixIcon;
-  final IconButton? prefixIcon;
-  final Widget? suffix;
-  final bool? filled;
+  final List<DropdownMenuItem> items;
+  final Function(dynamic) onChanged;
+  final dynamic value;
+  final String? Function(dynamic) validator;
   final Color? fillColor;
   final Color? enabledBorderColor;
   final Color? focusedBorderColor;
-  final Widget? prefix;
-  final String? Function(String?) validate;
-  final bool readOnly;
   final Function()? onTap;
-  final int maxLine;
-  final bool enable;
-  final Function(String)? onChanged;
-  final FocusNode? focusNode;
   final AutovalidateMode? autovalidateMode;
+  final bool? filled;
+  final IconButton? suffixIcon;
+  final IconButton? prefixIcon;
+  final Widget? suffix;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      focusNode: focusNode,
-      onChanged: onChanged,
-      enabled: enable,
-      maxLines: maxLine,
-      textAlign: TextAlign.start,
-      onTap: onTap,
-      readOnly: readOnly,
-      validator: validate,
-      controller: controller,
-      style: Theme.of(context)
-          .textTheme
-          .bodyLarge
-          ?.copyWith(fontWeight: FontWeight.w600),
-      keyboardType: textInputType,
-      obscureText: obscureText!,
-      enableSuggestions: enableSuggestions!,
-      autocorrect: autocorrect!,
-      autovalidateMode: autovalidateMode,
+    return DropdownButtonFormField(
       decoration: InputDecoration(
         alignLabelWithHint: true,
         fillColor: fillColor,
         filled: filled,
-        contentPadding: EdgeInsets.all(dimensHeight() * 2),
+        contentPadding: EdgeInsets.symmetric(horizontal: dimensHeight() * 2),
         labelText: label,
-        // labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: validate!=null?Colors.redAccent:color1F1F1F),
         floatingLabelStyle: Theme.of(context)
             .textTheme
             .labelLarge
@@ -116,6 +84,16 @@ class TextFieldWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(width: 1, color: Colors.redAccent)),
       ),
+      onTap: onTap,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(fontWeight: FontWeight.w600),
+      autovalidateMode: autovalidateMode,
+      items: items,
+      onChanged: onChanged,
+      value: value,
+      validator: validator,
     );
   }
 }

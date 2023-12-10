@@ -12,7 +12,6 @@ import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
 
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -33,9 +32,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     configLoading(context);
-    Locale locale = Platform.localeName != 'vi_VN' || Platform.localeName!='vi'
-        ? const Locale('en')
-        : const Locale('vi');
+
+    late Locale locale;
+    if(Platform.localeName.contains('vi')){
+      locale = const Locale('vi');
+    }else {
+      locale = const Locale('en');
+    }
+        // Platform.localeName != 'vi_VN' || Platform.localeName != 'vi'
+        //     ? const Locale('en')
+        //     : const Locale('vi');
 
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -50,18 +50,22 @@ class _LogInScreenState extends State<LogInScreen> {
           return GestureDetector(
             onTap: () => KeyboardUtil.hideKeyboard(context),
             child: Scaffold(
-              body: ListView(
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 10,
-                    horizontal: dimensWidth() * 3),
-                children: [
-                  const HeaderLogIn(),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  const LogInForm(),
-                  const OptionLogIn()
-                ],
+              resizeToAvoidBottomInset: true,
+              body: AbsorbPointer(
+                absorbing: state is LogInLoading,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensHeight() * 10,
+                      horizontal: dimensWidth() * 3),
+                  children: [
+                    const HeaderLogIn(),
+                    SizedBox(
+                      height: dimensHeight() * 3,
+                    ),
+                    const LogInForm(),
+                    const OptionLogIn()
+                  ],
+                ),
               ),
             ),
           );

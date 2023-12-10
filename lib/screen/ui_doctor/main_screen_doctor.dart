@@ -32,7 +32,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
   bool onChangeToPatient = false;
   bool exit = false;
 
-  DrawerMenus _currentPage = DrawerMenus.Overview;
+  DrawerMenu _currentPage = DrawerMenu.Overview;
   // ignore: prefer_typing_uninitialized_variables
   var _image;
 
@@ -143,15 +143,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 return Text(
                   translate(
                     context,
-                    _currentPage == DrawerMenus.Schedule
+                    _currentPage == DrawerMenu.Schedule
                         ? 'schedule'
-                        : _currentPage == DrawerMenus.YourShift
+                        : _currentPage == DrawerMenu.YourShift
                             ? 'your_shift'
-                            : _currentPage == DrawerMenus.Patient
+                            : _currentPage == DrawerMenu.Patient
                                 ? 'patient'
-                                : _currentPage == DrawerMenus.AccountSetting
+                                : _currentPage == DrawerMenu.AccountSetting
                                     ? 'account_setting'
-                                    : _currentPage == DrawerMenus.Helps
+                                    : _currentPage == DrawerMenu.Helps
                                         ? 'helps'
                                         : state.profile != null
                                             ? state.profile?.fullName ??
@@ -331,10 +331,10 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             ),
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Overview,
+                            active: _currentPage == DrawerMenu.Overview,
                             press: () async {
                               setState(() {
-                                _currentPage = DrawerMenus.Overview;
+                                _currentPage = DrawerMenu.Overview;
                                 clickDrawer();
                               });
                             },
@@ -342,34 +342,34 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             icon: FontAwesomeIcons.houseMedical,
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Schedule,
+                            active: _currentPage == DrawerMenu.Schedule,
                             label: 'schedule',
                             icon: FontAwesomeIcons.solidCalendarCheck,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Schedule;
+                                _currentPage = DrawerMenu.Schedule;
                                 clickDrawer();
                               });
                             },
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.YourShift,
+                            active: _currentPage == DrawerMenu.YourShift,
                             label: 'your_shift',
                             icon: FontAwesomeIcons.solidCalendarDays,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.YourShift;
+                                _currentPage = DrawerMenu.YourShift;
                                 clickDrawer();
                               });
                             },
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Patient,
+                            active: _currentPage == DrawerMenu.Patient,
                             label: 'patient',
                             icon: FontAwesomeIcons.hospitalUser,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Patient;
+                                _currentPage = DrawerMenu.Patient;
                                 clickDrawer();
                               });
                             },
@@ -388,12 +388,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             ),
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.AccountSetting,
+                            active: _currentPage == DrawerMenu.AccountSetting,
                             label: 'account_setting',
                             icon: FontAwesomeIcons.userGear,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.AccountSetting;
+                                _currentPage = DrawerMenu.AccountSetting;
                                 clickDrawer();
                               });
                             },
@@ -403,14 +403,14 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             builder: (context, state) {
                               return LabelDrawer(
                                 active: _currentPage ==
-                                    DrawerMenus.ApplicationSetting,
+                                    DrawerMenu.ApplicationSetting,
                                 label: 'application_setting',
                                 icon: FontAwesomeIcons.gear,
                                 isShowBadge: state is UpdateAvailable,
                                 press: () {
                                   setState(() {
                                     _currentPage =
-                                        DrawerMenus.ApplicationSetting;
+                                        DrawerMenu.ApplicationSetting;
                                     clickDrawer();
                                   });
                                 },
@@ -419,12 +419,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                           ),
                           // const Spacer(),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Helps,
+                            active: _currentPage == DrawerMenu.Helps,
                             label: 'helps',
                             icon: FontAwesomeIcons.solidCircleQuestion,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Helps;
+                                _currentPage = DrawerMenu.Helps;
                                 clickDrawer();
                               });
                             },
@@ -448,17 +448,17 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     backgroundColor: MaterialStatePropertyAll(secondary)),
               ),
             ),
-            body: _currentPage == DrawerMenus.AccountSetting
+            body: _currentPage == DrawerMenu.AccountSetting
                 ? const SettingScreen()
-                : _currentPage == DrawerMenus.Schedule
+                : _currentPage == DrawerMenu.Schedule
                     ? const ScheduleDoctorScreen()
-                    : _currentPage == DrawerMenus.YourShift
+                    : _currentPage == DrawerMenu.YourShift
                         ? const ShiftScreen()
-                        : _currentPage == DrawerMenus.Patient
+                        : _currentPage == DrawerMenu.Patient
                             ? const PatientScreen()
-                            : _currentPage == DrawerMenus.Helps
+                            : _currentPage == DrawerMenu.Helps
                                 ? const HelpsScreen()
-                                : _currentPage == DrawerMenus.ApplicationSetting
+                                : _currentPage == DrawerMenu.ApplicationSetting
                                     ? const ApplicationSettingScreen()
                                     : const OverviewScreen(),
           ),
