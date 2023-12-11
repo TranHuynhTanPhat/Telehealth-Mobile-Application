@@ -213,7 +213,9 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
-                                      child: MenuAnchor(
+                                      child: 
+                                      
+                                      MenuAnchor(
                                         style: MenuStyle(
                                           elevation:
                                               const MaterialStatePropertyAll(

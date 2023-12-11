@@ -31,13 +31,13 @@ class ListRecord extends StatelessWidget {
             Navigator.pushNamed(context, patientRecordName);
           },
         ),
-        const Divider(),
-        RecordCard(
-          name: 'prescription',
-          color: color1C6AA3,
-          iconData: FontAwesomeIcons.prescription,
-          press: () {},
-        ),
+        // const Divider(),
+        // RecordCard(
+        //   name: 'prescription',
+        //   color: color1C6AA3,
+        //   iconData: FontAwesomeIcons.prescription,
+        //   press: () {},
+        // ),
       ],
     );
   }

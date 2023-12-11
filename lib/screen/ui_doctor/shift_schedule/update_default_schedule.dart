@@ -4,8 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/widgets/menu_anchor_widget.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
-import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -205,113 +205,53 @@ class _UpdateDefaultScheduleScreenState
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: MenuAnchor(
-                                                  style: MenuStyle(
-                                                    elevation:
-                                                        const MaterialStatePropertyAll(
-                                                            10),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                dimensWidth() *
-                                                                    3),
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    surfaceTintColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    padding: MaterialStatePropertyAll(
-                                                        EdgeInsets.symmetric(
-                                                            horizontal:
-                                                                dimensWidth() *
-                                                                    2,
-                                                            vertical:
-                                                                dimensHeight())),
-                                                  ),
-                                                  builder: (BuildContext
-                                                          context,
-                                                      MenuController controller,
-                                                      Widget? child) {
-                                                    return TextFieldWidget(
-                                                      enable: index ==
-                                                          countInputTimes[
-                                                                  _currentStep] -
-                                                              1,
-                                                      onTap: () {
-                                                        if (controller.isOpen) {
-                                                          controller.close();
+                                                  child: MenuAnchorWidget(
+                                                enable: index ==
+                                                    countInputTimes[
+                                                            _currentStep] -
+                                                        1,
+                                                textEditingController:
+                                                    controllerBegin[
+                                                        _currentStep][index],
+                                                menuChildren: time
+                                                    .where((element) {
+                                                      if (index > 0) {
+                                                        if (end[_currentStep]
+                                                                [index - 1] <
+                                                            element) {
+                                                          return true;
                                                         } else {
-                                                          controller.open();
+                                                          return false;
                                                         }
-                                                      },
-                                                      readOnly: true,
-                                                      label: translate(
-                                                          context, 'start'),
-                                                      controller:
-                                                          controllerBegin[
-                                                                  _currentStep]
-                                                              [index],
-                                                      validate: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return translate(
-                                                              context,
-                                                              'please_choose');
-                                                        }
-                                                        return null;
-                                                      },
-                                                      suffixIcon: const IconButton(
-                                                          onPressed: null,
-                                                          icon: FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .caretDown)),
-                                                    );
-                                                  },
-                                                  menuChildren: time
-                                                      .where((element) {
-                                                        if (index > 0) {
-                                                          if (end[_currentStep]
-                                                                  [index - 1] <
-                                                              element) {
-                                                            return true;
-                                                          } else {
-                                                            return false;
-                                                          }
-                                                        }
-                                                        return true;
-                                                      })
-                                                      .map(
-                                                        (e) => MenuItemButton(
-                                                          style:
-                                                              const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll(
-                                                                    white),
-                                                          ),
-                                                          onPressed: () =>
-                                                              setState(() {
-                                                            controllerBegin[_currentStep]
-                                                                        [index]
-                                                                    .text =
-                                                                convertIntToTime(
-                                                                    e);
-
-                                                            begin[_currentStep]
-                                                                [index] = e;
-                                                          }),
-                                                          child: Text(
-                                                            convertIntToTime(e),
-                                                          ),
+                                                      }
+                                                      return true;
+                                                    })
+                                                    .map(
+                                                      (e) => MenuItemButton(
+                                                        style:
+                                                            const ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStatePropertyAll(
+                                                                  white),
                                                         ),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                              ),
+                                                        onPressed: () =>
+                                                            setState(() {
+                                                          controllerBegin[_currentStep]
+                                                                      [index]
+                                                                  .text =
+                                                              convertIntToTime(
+                                                                  e);
+
+                                                          begin[_currentStep]
+                                                              [index] = e;
+                                                        }),
+                                                        child: Text(
+                                                          convertIntToTime(e),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(), label: 'start',
+                                              )),
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -323,112 +263,159 @@ class _UpdateDefaultScheduleScreenState
                                                 ),
                                               ),
                                               Expanded(
-                                                child: MenuAnchor(
-                                                  style: MenuStyle(
-                                                    elevation:
-                                                        const MaterialStatePropertyAll(
-                                                            10),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                dimensWidth() *
-                                                                    3),
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    surfaceTintColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    padding:
-                                                        MaterialStatePropertyAll(
-                                                      EdgeInsets.symmetric(
-                                                        horizontal:
-                                                            dimensWidth() * 2,
-                                                        vertical:
-                                                            dimensHeight(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  builder: (BuildContext
-                                                          context,
-                                                      MenuController controller,
-                                                      Widget? child) {
-                                                    return TextFieldWidget(
-                                                      enable: index ==
-                                                              countInputTimes[
-                                                                      _currentStep] -
-                                                                  1 &&
-                                                          begin[_currentStep]
-                                                                  [index] !=
-                                                              -1,
-                                                      onTap: () {
-                                                        if (controller.isOpen) {
-                                                          controller.close();
-                                                        } else {
-                                                          controller.open();
-                                                        }
-                                                      },
-                                                      readOnly: true,
-                                                      label: translate(
-                                                          context, 'end'),
-                                                      controller: controllerEnd[
-                                                          _currentStep][index],
-                                                      validate: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return translate(
-                                                              context,
-                                                              'please_choose');
-                                                        }
-                                                        return null;
-                                                      },
-                                                      suffixIcon: const IconButton(
-                                                          onPressed: null,
-                                                          icon: FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .caretDown)),
-                                                    );
-                                                  },
-                                                  menuChildren: time
-                                                      .where((element) {
-                                                        if (begin[_currentStep]
-                                                                [index] <
-                                                            element) {
-                                                          return true;
-                                                        }
-                                                        return false;
-                                                      })
-                                                      .map(
-                                                        (e) => MenuItemButton(
-                                                          style:
-                                                              const ButtonStyle(
-                                                            backgroundColor:
-                                                                MaterialStatePropertyAll(
-                                                                    white),
-                                                          ),
-                                                          onPressed: () =>
-                                                              setState(() {
-                                                            controllerEnd[_currentStep]
-                                                                        [index]
-                                                                    .text =
-                                                                convertIntToTime(
-                                                                    e);
-
-                                                            end[_currentStep]
-                                                                [index] = e;
-                                                          }),
-                                                          child: Text(
-                                                            convertIntToTime(e),
-                                                          ),
+                                                  child: MenuAnchorWidget(
+                                                enable: index ==
+                                                        countInputTimes[
+                                                                _currentStep] -
+                                                            1 &&
+                                                    begin[_currentStep]
+                                                            [index] !=
+                                                        -1,
+                                                textEditingController:
+                                                    controllerEnd[_currentStep]
+                                                        [index],
+                                                menuChildren: time
+                                                    .where((element) {
+                                                      if (begin[_currentStep]
+                                                              [index] <
+                                                          element) {
+                                                        return true;
+                                                      }
+                                                      return false;
+                                                    })
+                                                    .map(
+                                                      (e) => MenuItemButton(
+                                                        style:
+                                                            const ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStatePropertyAll(
+                                                                  white),
                                                         ),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                              ),
+                                                        onPressed: () =>
+                                                            setState(() {
+                                                          controllerEnd[_currentStep]
+                                                                      [index]
+                                                                  .text =
+                                                              convertIntToTime(
+                                                                  e);
+
+                                                          end[_currentStep]
+                                                              [index] = e;
+                                                        }),
+                                                        child: Text(
+                                                          convertIntToTime(e),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(), label: 'end',
+                                              )
+
+                                                  // MenuAnchor(
+                                                  //   style: MenuStyle(
+                                                  //     elevation:
+                                                  //         const MaterialStatePropertyAll(
+                                                  //             10),
+                                                  //     shape: MaterialStateProperty
+                                                  //         .all<
+                                                  //             RoundedRectangleBorder>(
+                                                  //       RoundedRectangleBorder(
+                                                  //         borderRadius:
+                                                  //             BorderRadius.circular(
+                                                  //                 dimensWidth() *
+                                                  //                     3),
+                                                  //       ),
+                                                  //     ),
+                                                  //     backgroundColor:
+                                                  //         const MaterialStatePropertyAll(
+                                                  //             white),
+                                                  //     surfaceTintColor:
+                                                  //         const MaterialStatePropertyAll(
+                                                  //             white),
+                                                  //     padding:
+                                                  //         MaterialStatePropertyAll(
+                                                  //       EdgeInsets.symmetric(
+                                                  //         horizontal:
+                                                  //             dimensWidth() * 2,
+                                                  //         vertical:
+                                                  //             dimensHeight(),
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                  //   builder: (BuildContext
+                                                  //           context,
+                                                  //       MenuController controller,
+                                                  //       Widget? child) {
+                                                  //     return TextFieldWidget(
+                                                  //       enable: index ==
+                                                  //               countInputTimes[
+                                                  //                       _currentStep] -
+                                                  //                   1 &&
+                                                  //           begin[_currentStep]
+                                                  //                   [index] !=
+                                                  //               -1,
+                                                  //       onTap: () {
+                                                  //         if (controller.isOpen) {
+                                                  //           controller.close();
+                                                  //         } else {
+                                                  //           controller.open();
+                                                  //         }
+                                                  //       },
+                                                  //       readOnly: true,
+                                                  //       label: translate(
+                                                  //           context, 'end'),
+                                                  //       controller: controllerEnd[
+                                                  //           _currentStep][index],
+                                                  //       validate: (value) {
+                                                  //         if (value!.isEmpty) {
+                                                  //           return translate(
+                                                  //               context,
+                                                  //               'please_choose');
+                                                  //         }
+                                                  //         return null;
+                                                  //       },
+                                                  //       suffixIcon: const IconButton(
+                                                  //           onPressed: null,
+                                                  //           icon: FaIcon(
+                                                  //               FontAwesomeIcons
+                                                  //                   .caretDown)),
+                                                  //     );
+                                                  //   },
+                                                  // menuChildren: time
+                                                  //     .where((element) {
+                                                  //       if (begin[_currentStep]
+                                                  //               [index] <
+                                                  //           element) {
+                                                  //         return true;
+                                                  //       }
+                                                  //       return false;
+                                                  //     })
+                                                  //     .map(
+                                                  //       (e) => MenuItemButton(
+                                                  //         style:
+                                                  //             const ButtonStyle(
+                                                  //           backgroundColor:
+                                                  //               MaterialStatePropertyAll(
+                                                  //                   white),
+                                                  //         ),
+                                                  //         onPressed: () =>
+                                                  //             setState(() {
+                                                  //           controllerEnd[_currentStep]
+                                                  //                       [index]
+                                                  //                   .text =
+                                                  //               convertIntToTime(
+                                                  //                   e);
+
+                                                  //           end[_currentStep]
+                                                  //               [index] = e;
+                                                  //         }),
+                                                  //         child: Text(
+                                                  //           convertIntToTime(e),
+                                                  //         ),
+                                                  //       ),
+                                                  //     )
+                                                  //     .toList(),
+                                                  // ),
+                                                  ),
                                             ],
                                           ),
                                         ),

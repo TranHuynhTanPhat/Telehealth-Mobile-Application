@@ -8,6 +8,7 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/drawer_label.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/account_setting_doctor_screen.dart';
 import 'package:healthline/screen/ui_doctor/application_setting/application_setting_screen.dart';
@@ -16,7 +17,6 @@ import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
 import 'package:healthline/screen/ui_doctor/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
 
 class MainScreenDoctor extends StatefulWidget {

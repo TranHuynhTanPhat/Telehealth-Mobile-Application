@@ -10,10 +10,10 @@
             "type": "dart",
             // "program": "lib/flavors/main_production.dart",
             "program": "lib/flavors/main_development.dart",
-            "args": [
-                "--flavor",
-                "dev"
-            ]
+            // "args": [
+            //     "--flavor",
+            //     "dev"
+            // ]
         },
         {
             "name": "Healthline (profile mode)",

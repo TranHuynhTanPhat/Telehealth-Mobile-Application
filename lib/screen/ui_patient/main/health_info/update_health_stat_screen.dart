@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/widgets/menu_anchor_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:intl/intl.dart';
 
@@ -30,6 +30,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
   late TextEditingController _controllerWeight;
   late TextEditingController _controllerHead;
   late TextEditingController _controllerTemperature;
+  int? age;
+  num? bloodIndex;
 
   bool onChange = false;
 
@@ -66,15 +68,19 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
       },
       child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
         builder: (context, state) {
-          int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-              .parse(state.subUsers
-                  .firstWhere((element) => element.id == state.currentId)
-                  .dateOfBirth!));
-          num? bloodIndex = state.stats
-              .firstWhere(
-                  (element) => element.type == TypeHealthStat.Blood_group,
-                  orElse: () => HealthStatResponse())
-              .value;
+          if (state.subUsers.isNotEmpty) {
+            age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(
+                state.subUsers
+                    .firstWhere((element) => element.id == state.currentId)
+                    .dateOfBirth!));
+
+            bloodIndex = state.stats
+                .firstWhere(
+                    (element) => element.type == TypeHealthStat.Blood_group,
+                    orElse: () => HealthStatResponse())
+                .value;
+          }
+
           _controllerBloodGroup.text = _controllerBloodGroup.text != ''
               ? _controllerBloodGroup.text
               : bloodIndex == 0
@@ -148,8 +154,9 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                       '')
               : _controllerTemperature.text;
           return PopScope(
+            canPop: true,
             onPopInvoked: (value) {
-              Navigator.pop(context, onChange);
+              // Navigator.pop(context, onChange);
             },
             child: GestureDetector(
               onTap: () {
@@ -179,73 +186,94 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: dimensHeight()),
-                              child: MenuAnchor(
-                                style: MenuStyle(
-                                  elevation: const MaterialStatePropertyAll(10),
-                                  // shadowColor: MaterialStatePropertyAll(black26),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          dimensWidth() * 3),
-                                    ),
-                                  ),
-                                  backgroundColor:
-                                      const MaterialStatePropertyAll(white),
-                                  surfaceTintColor:
-                                      const MaterialStatePropertyAll(white),
-                                  padding: MaterialStatePropertyAll(
-                                      EdgeInsets.symmetric(
-                                          horizontal: dimensWidth() * 2,
-                                          vertical: dimensHeight())),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: dimensHeight()),
+                                child: MenuAnchorWidget(
+                                  label: 'blood_group',
+                                  textEditingController: _controllerBloodGroup,
+                                  menuChildren: bloodGroup
+                                      .map(
+                                        (e) => MenuItemButton(
+                                          style: const ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStatePropertyAll(white),
+                                          ),
+                                          onPressed: () => setState(() {
+                                            _controllerBloodGroup.text =
+                                                translate(context, e);
+                                          }),
+                                          child: Text(
+                                            translate(context, e),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                )
+                                // MenuAnchor(
+                                //   style: MenuStyle(
+                                //     elevation: const MaterialStatePropertyAll(10),
+                                //     // shadowColor: MaterialStatePropertyAll(black26),
+                                //     shape: MaterialStateProperty.all<
+                                //         RoundedRectangleBorder>(
+                                //       RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.circular(
+                                //             dimensWidth() * 3),
+                                //       ),
+                                //     ),
+                                //     backgroundColor:
+                                //         const MaterialStatePropertyAll(white),
+                                //     surfaceTintColor:
+                                //         const MaterialStatePropertyAll(white),
+                                //     padding: MaterialStatePropertyAll(
+                                //         EdgeInsets.symmetric(
+                                //             horizontal: dimensWidth() * 2,
+                                //             vertical: dimensHeight())),
+                                //   ),
+                                //   builder: (BuildContext context,
+                                //       MenuController controller, Widget? child) {
+                                //     return TextFieldWidget(
+                                //       onTap: () {
+                                //         if (controller.isOpen) {
+                                //           controller.close();
+                                //         } else {
+                                //           controller.open();
+                                //         }
+                                //       },
+                                //       readOnly: true,
+                                //       label: translate(context, 'blood_group'),
+                                //       controller: _controllerBloodGroup,
+                                //       validate: (value) {
+                                //         if (value!.isEmpty) {
+                                //           return translate(
+                                //               context, 'please_choose');
+                                //         }
+                                //         return null;
+                                //       },
+                                //       suffixIcon: const IconButton(
+                                //           onPressed: null,
+                                //           icon:
+                                //               FaIcon(FontAwesomeIcons.caretDown)),
+                                //     );
+                                //   },
+                                //   menuChildren: bloodGroup
+                                //       .map(
+                                //         (e) => MenuItemButton(
+                                //           style: const ButtonStyle(
+                                //             backgroundColor:
+                                //                 MaterialStatePropertyAll(white),
+                                //           ),
+                                //           onPressed: () => setState(() {
+                                //             _controllerBloodGroup.text =
+                                //                 translate(context, e);
+                                //           }),
+                                //           child: Text(
+                                //             translate(context, e),
+                                //           ),
+                                //         ),
+                                //       )
+                                //       .toList(),
+                                // ),
                                 ),
-                                builder: (BuildContext context,
-                                    MenuController controller, Widget? child) {
-                                  return TextFieldWidget(
-                                    onTap: () {
-                                      if (controller.isOpen) {
-                                        controller.close();
-                                      } else {
-                                        controller.open();
-                                      }
-                                    },
-                                    readOnly: true,
-                                    label: translate(context, 'blood_group'),
-                                    controller: _controllerBloodGroup,
-                                    validate: (value) {
-                                      if (value!.isEmpty) {
-                                        return translate(
-                                            context, 'please_choose');
-                                      }
-                                      return null;
-                                    },
-                                    suffixIcon: const IconButton(
-                                        onPressed: null,
-                                        icon:
-                                            FaIcon(FontAwesomeIcons.caretDown)),
-                                  );
-                                },
-                                menuChildren: bloodGroup
-                                    .map(
-                                      (e) => MenuItemButton(
-                                        style: const ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStatePropertyAll(white),
-                                        ),
-                                        onPressed: () => setState(() {
-                                          _controllerBloodGroup.text =
-                                              translate(context, e);
-                                        }),
-                                        child: Text(
-                                          translate(context, e),
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: dimensHeight()),
@@ -273,7 +301,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                 textInputType: TextInputType.number,
                               ),
                             ),
-                            if (age <= 3)
+                            if (age != null && age! <= 3)
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: dimensHeight()),

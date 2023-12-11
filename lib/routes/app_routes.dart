@@ -71,6 +71,16 @@ class AppRoute {
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case forumName:
+        return MaterialPageRoute(
+          builder: (_) => const ForumScreen(),
+        );
+      case newsName:
+        return MaterialPageRoute(
+          builder: (_) => const NewsScreen(),
+        );
+    }
     if (AppController.instance.authState == AuthState.Unauthorized) {
       switch (settings.name) {
         case onboardingName:
@@ -84,11 +94,6 @@ class AppRoute {
               child: const SignUpScreen(),
             ),
           );
-        case errorName:
-          return MaterialPageRoute(
-            builder: (_) => const ErrorScreen(),
-          );
-
         case termsAndConditionsName:
           return MaterialPageRoute(
             builder: (_) => const TermsAndConditionsScreen(),
@@ -101,14 +106,7 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => const PrivacyPolicyScreen(),
           );
-        case forumName:
-          return MaterialPageRoute(
-            builder: (_) => const ForumScreen(),
-          );
-        case newsName:
-          return MaterialPageRoute(
-            builder: (_) => const NewsScreen(),
-          );
+
         default:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
@@ -335,43 +333,8 @@ class AppRoute {
           );
       }
     }
-    switch (settings.name) {
-      // case splashName:
-      //   return MaterialPageRoute(
-      //       builder: (_) => BlocProvider.value(
-      //           value: _applicationUpdateBloc, child: const SplashScreen()));
-
-      // case signUpName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider.value(
-      //       value: _signUpCubit,
-      //       child: const SignUpScreen(),
-      //     ),
-      //   );
-      // case logInName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider.value(
-      //       value: _logInCubit,
-      //       child: const LogInScreen(),
-      //     ),
-      //   );
-      // case signUpName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider.value(
-      //       value: _signUpCubit,
-      //       child: const SignUpScreen(),
-      //     ),
-      //   );
-      // case logInName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider.value(
-      //       value: _logInCubit,
-      //       child: const LogInScreen(),
-      //     ),
-      //   );
-
-      default:
-        return null;
-    }
+    return MaterialPageRoute(
+      builder: (_) => const ErrorScreen(),
+    );
   }
 }

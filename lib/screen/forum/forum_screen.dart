@@ -130,7 +130,7 @@ class _ForumScreenState extends State<ForumScreen> {
                 background: Container(
                   color: white,
                   padding: EdgeInsets.fromLTRB(dimensWidth() * 3,
-                      dimensHeight() * 13, dimensWidth() * 3, 0),
+                      dimensHeight() * 16, dimensWidth() * 3, 0),
                   child: CreatePost(
                       textEdittingController: _textEdittingController),
                 ),
