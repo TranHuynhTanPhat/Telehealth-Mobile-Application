@@ -3,7 +3,7 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
@@ -13,7 +13,7 @@ class DoctorCard extends StatefulWidget {
     super.key,
     required this.doctor,
   });
-  final DoctorProfileResponse doctor;
+  final DoctorResponse doctor;
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();

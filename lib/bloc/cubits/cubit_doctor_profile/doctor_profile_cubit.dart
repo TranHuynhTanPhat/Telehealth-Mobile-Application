@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -18,7 +18,7 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
   Future<void> fetchProfile() async {
     emit(FetchDoctorProfileLoading(state.profile));
     try {
-      DoctorProfileResponse profile = await _doctorRepository.fetchProfile();
+      DoctorResponse profile = await _doctorRepository.fetchProfile();
       emit(DoctorProfileInitial(profile));
     } catch (e) {
       // DioException er = e as DioException;

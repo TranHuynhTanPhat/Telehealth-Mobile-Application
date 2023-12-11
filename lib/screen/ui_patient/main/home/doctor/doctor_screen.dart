@@ -6,6 +6,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:meilisearch/meilisearch.dart';
 
 import 'components/export.dart';
 
@@ -19,49 +20,13 @@ class DoctorScreen extends StatefulWidget {
 class _DoctorScreenState extends State<DoctorScreen> {
   late TextEditingController _searchController;
 
-  // final List<Map<String, dynamic>> doctors = [
-  //   {
-  //     "avatar": "123",
-  //     "name": "Drr. Phat Phut Phit",
-  //     "specialty": "gynaecologist",
-  //     "biography":
-  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-  //     "averageRating": 3.6153846153846154,
-  //     "reviewed": 13
-  //   },
-  //   {
-  //     "avatar": "123",
-  //     "name": "Drr. Phat Phut Phit",
-  //     "specialty": "gynaecologist",
-  //     "biography":
-  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-  //     "averageRating": 3.6153846153846154,
-  //     "reviewed": 13
-  //   },
-  //   {
-  //     "avatar": "123",
-  //     "name": "Drr. Phat Phut Phitfasdfsdfsadfsfsdfasdfasd",
-  //     "specialty": "gynaecologist",
-  //     "biography":
-  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-  //     "averageRating": 3.6153846153846154,
-  //     "reviewed": 13
-  //   },
-  //   {
-  //     "avatar": "123",
-  //     "name": "Drr. Phat Phut Phit",
-  //     "specialty": "gynaecologist",
-  //     "biography":
-  //         "BSCKII Nguyễn Quốc Thái có hơn 15 năm kinh nghiệm học tập, nghiên cứu và làm việc trong lĩnh vực Ngoại tổng quát, chuyên ngành nội soi – phẫu thuật nội soi. Sau khi tốt nghiệp Bác sĩ Đa khoa Đại học Y Dược TP.HCM, Bác sĩ Nguyễn Quốc Thái tiếp tục tham gia các khóa đào tạo Bác sĩ Nội trú, chuyên khoa I Ngoại tổng quát và Chuyên khoa II Ngoại tổng quát của đại học này. Năm 2011, Bác sĩ Nguyễn Quốc Thái được cấp chứng chỉ Cắt tuyến giáp mổ mở và nội soi của BV Nội tiết Trung Ương. BSCKII Nguyễn Quốc Thái có 7 năm công tác tại BV Pháp Việt TP.HCM, 3 năm công tác tại BV Vinmec Central Park TP.HCM trước khi về làm việc tại BVĐK Tâm Anh TP.HCM với vai trò Bác sĩ Ngoại tổng quát.",
-  //     "averageRating": 3.6153846153846154,
-  //     "reviewed": 13
-  //   },
-  // ];
   @override
   void initState() {
     _searchController = TextEditingController();
     if (!mounted) return;
-    context.read<DoctorCubit>().fetchDoctors();
+    context
+        .read<DoctorCubit>()
+        .searchDoctor(key: '', searchQuery: const SearchQuery(limit: 20));
     super.initState();
   }
 
@@ -109,9 +74,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
               child: const ListCategories(),
             ),
             BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
-              if (state is FetchDoctorsLoading) {
+              if (state.blocState == BlocState.Pending &&
+                  state.doctors.isEmpty) {
                 return buildShimmer();
-              } else if (state is FetchDoctorsSuccess) {
+              } else if (state.blocState == BlocState.Successed) {
                 return Column(
                   children: state.doctors
                       .map(
@@ -126,15 +92,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 return const SizedBox();
               }
             }),
-            // buildShimmer(),
-            // ...doctors.map(
-            //   (e) => Padding(
-            //     padding: EdgeInsets.only(left: dimensWidth() * 3),
-            //     child: DoctorCard(
-            //       doctor: e,
-            //     ),
-            //   ),
-            // ),
           ],
         )
         // ],

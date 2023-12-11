@@ -14,7 +14,6 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/healthline_app.dart';
-import 'package:healthline/data/api/rpc_manager.dart';
 import 'package:healthline/res/style.dart';
 
 class MockStorage extends Mock implements Storage {}
@@ -56,7 +55,6 @@ Future<void> main() async {
     ).thenAnswer((_) async {});
     HydratedBloc.storage = storage;
   });
-  RpcManager().init();
   testWidgets('My App', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
     expect(AppController().authState, AuthState.Unauthorized);

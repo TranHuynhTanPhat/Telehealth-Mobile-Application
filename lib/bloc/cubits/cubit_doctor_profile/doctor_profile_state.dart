@@ -2,7 +2,7 @@ part of 'doctor_profile_cubit.dart';
 
 class DoctorProfileState {
   const DoctorProfileState(this.profile);
-  final DoctorProfileResponse? profile;
+  final DoctorResponse? profile;
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -17,7 +17,7 @@ class DoctorProfileState {
   factory DoctorProfileState.fromMap(Map<String, dynamic> map) {
     return DoctorProfileState(
       map['profile'] != null
-          ? DoctorProfileResponse.fromMap(map['profile'])
+          ? DoctorResponse.fromMap(map['profile'])
           : null,
     );
   }

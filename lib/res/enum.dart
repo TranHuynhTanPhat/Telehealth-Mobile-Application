@@ -19,12 +19,7 @@ enum DrawerMenu {
   Helps
 }
 
-enum SignUp{
-  Instruction,
-  Profile,
-  Contact,
-  Secutiry
-}
+enum SignUp { Instruction, Profile, Contact, Secutiry }
 
 enum ScheduleTabBar { UpComing, Completed, Canceled }
 
@@ -58,4 +53,10 @@ enum TypeHealthStat {
 enum PaymentMethod {
   None,
   Momo,
+}
+
+enum BlocState {
+  Pending,
+  Successed,
+  Failed,
 }

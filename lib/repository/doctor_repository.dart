@@ -1,7 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/doctor_service.dart';
 import 'package:healthline/repository/base_repository.dart';
@@ -9,7 +9,7 @@ import 'package:healthline/repository/base_repository.dart';
 class DoctorRepository extends BaseRepository {
   final DoctorService _doctorService = DoctorService();
 
-  Future<DoctorProfileResponse> fetchProfile() async {
+  Future<DoctorResponse> fetchProfile() async {
     return await _doctorService.getProfile();
   }
 
@@ -40,7 +40,7 @@ class DoctorRepository extends BaseRepository {
   Future<DataResponse> updateScheduleByDay(List<int> workingTimes, String scheduleId) async {
     return await _doctorService.updateScheduleByDay(workingTimes, scheduleId);
   }
-  Future<List<DoctorProfileResponse>> fetchListDoctor() async {
-    return await _doctorService.getListDoctor();
-  }
+  // Future<List<DoctorResponse>> fetchListDoctor() async {
+  //   return await _doctorService.getListDoctor();
+  // }
 }
