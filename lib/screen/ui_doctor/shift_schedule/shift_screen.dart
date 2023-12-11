@@ -148,7 +148,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                   }
                                 },
                                 child: Text(translate(context, 'update'))),
-                          )
+                          ),
                         ],
                       ),
                     ),

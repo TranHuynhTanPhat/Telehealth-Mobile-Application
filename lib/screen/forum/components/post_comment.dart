@@ -11,22 +11,29 @@ class PostComment extends StatefulWidget {
 }
 
 class _PostCommentState extends State<PostComment> {
+  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-            padding: EdgeInsets.only(top: dimensHeight() * 2),
-            child: const CommentCard()),
-        Container(
-          margin: EdgeInsets.only(left: dimensWidth() * 5),
-          child: Padding(
-              padding: EdgeInsets.only(top: dimensHeight() * 2),
-              child: const CommentCard()),
+          padding: EdgeInsets.only(top: dimensHeight() * 2),
+          child: CommentCard(
+            onTap: () {
+              _focusNode.requestFocus();
+            },
+            child: CommentCard(
+              onTap: () {
+                _focusNode.requestFocus();
+              },
+            ),
+          ),
         ),
         Padding(
             padding: EdgeInsets.only(top: dimensHeight() * 2),
-            child: const CreateComment()),
+            child: CreateComment(
+              focus: _focusNode,
+            )),
       ],
     );
   }
