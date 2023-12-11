@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/res/style.dart';
@@ -8,10 +9,10 @@ import 'package:healthline/screen/widgets/menu_anchor_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../utils/keyboard.dart';
-import '../../../../utils/translate.dart';
-import '../../../widgets/elevated_button_widget.dart';
-import '../../../widgets/text_field_widget.dart';
+import '../../../../../utils/keyboard.dart';
+import '../../../../../utils/translate.dart';
+import '../../../../widgets/elevated_button_widget.dart';
+import '../../../../widgets/text_field_widget.dart';
 
 class HealthStatUpdateScreen extends StatefulWidget {
   const HealthStatUpdateScreen({super.key});
@@ -47,11 +48,17 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
     super.initState();
   }
 
-  // @override
-  // void deactivate() {
-  //   EasyLoading.dismiss();
-  //   super.deactivate();
-  // }
+  @override
+  void dispose() {
+    _controllerBloodGroup.dispose();
+    _controllerHeartRate.dispose();
+    _controllerHeight.dispose();
+    _controllerWeight.dispose();
+    _controllerHead.dispose();
+    _controllerTemperature.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +174,15 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                 backgroundColor: white,
                 extendBody: true,
                 appBar: AppBar(
+                  leading: Center(
+                      child: InkWell(
+                    splashColor: transparent,
+                    highlightColor: transparent,
+                    onTap: () {
+                      Navigator.pop(context, onChange);
+                    },
+                    child: const FaIcon(FontAwesomeIcons.angleLeft),
+                  )),
                   title: Text(
                     translate(context, 'update_health_stat'),
                   ),

@@ -27,7 +27,7 @@ import 'package:healthline/screen/ui_patient/application_setting/application_set
 import 'package:healthline/screen/ui_patient/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/add_patient_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/patient_record_screen.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat_screen.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat/update_health_stat_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
