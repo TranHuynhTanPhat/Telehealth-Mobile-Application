@@ -10,7 +10,7 @@ class TextFieldWidget extends StatelessWidget {
       this.obscureText = false,
       this.enableSuggestions = true,
       this.autocorrect = false,
-      required this.controller,
+       this.controller,
       this.error,
       this.suffixIcon,
       this.prefixIcon,
@@ -28,7 +28,7 @@ class TextFieldWidget extends StatelessWidget {
       this.onChanged,
       this.focusNode,
       this.autovalidateMode});
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? label;
   final String? hint;
   final String? error;

@@ -17,5 +17,6 @@ final class DoctorInitial extends DoctorState {
 }
 
 final class SearchDoctorState extends DoctorState {
-  SearchDoctorState({required super.doctors, required super.blocState, super.error});
+  SearchDoctorState({required super.doctors, required super.blocState, required this.pageKey, super.error});
+  int pageKey;
 }

@@ -20,9 +20,14 @@ class DoctorCubit extends Cubit<DoctorState> {
   final MeiliSearchManager meiliSearchManager = MeiliSearchManager.instance;
 
   Future<void> searchDoctor(
-      {required String key, SearchQuery? searchQuery}) async {
+      {required String key,
+      SearchQuery? searchQuery,
+      required int pageKey}) async {
     emit(
-      SearchDoctorState(doctors: state.doctors, blocState: BlocState.Pending),
+      SearchDoctorState(
+          doctors: state.doctors,
+          blocState: BlocState.Pending,
+          pageKey: pageKey),
     );
     try {
       meiliSearchManager.index(uid: 'doctors');
@@ -33,7 +38,8 @@ class DoctorCubit extends Cubit<DoctorState> {
         ),
       );
       emit(
-        SearchDoctorState(doctors: doctors, blocState: BlocState.Successed),
+        SearchDoctorState(
+            doctors: doctors, blocState: BlocState.Successed, pageKey: pageKey),
       );
     } catch (error) {
       logPrint(error);
@@ -41,7 +47,8 @@ class DoctorCubit extends Cubit<DoctorState> {
         SearchDoctorState(
             error: error.toString(),
             doctors: state.doctors,
-            blocState: BlocState.Failed),
+            blocState: BlocState.Failed,
+            pageKey: pageKey),
       );
     }
   }

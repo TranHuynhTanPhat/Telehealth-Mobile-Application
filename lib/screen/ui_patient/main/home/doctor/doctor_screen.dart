@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
+import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:meilisearch/meilisearch.dart';
 
 import 'components/export.dart';
@@ -19,84 +22,149 @@ class DoctorScreen extends StatefulWidget {
 
 class _DoctorScreenState extends State<DoctorScreen> {
   late TextEditingController _searchController;
+  String? filterExp;
+
+  static const _pageSize = 20;
+
+  final PagingController<int, DoctorResponse> _pagingController =
+      PagingController(firstPageKey: 0, invisibleItemsThreshold: 5);
+
+  void changeFilterExp(String value) {
+    if (value == 'all') {
+      filterExp = null;
+    } else {
+      filterExp = value;
+    }
+    _pagingController.refresh();
+  }
 
   @override
   void initState() {
     _searchController = TextEditingController();
+    _pagingController.addPageRequestListener((pageKey) {
+      context.read<DoctorCubit>().searchDoctor(
+          key: _searchController.text,
+          searchQuery: SearchQuery(
+              limit: 20,
+              attributesToSearchOn: ['full_name'],
+              filter:
+                  filterExp != null ? 'specialty = $filterExp' : filterExp),
+          pageKey: pageKey);
+    });
     if (!mounted) return;
-    context
-        .read<DoctorCubit>()
-        .searchDoctor(key: '', searchQuery: const SearchQuery(limit: 20));
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              translate(context, 'cant_load_data'),
+            ),
+            action: SnackBarAction(
+              label: translate(context, 'retry'),
+              onPressed: () => _pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+    // if (!mounted) return;
+    // context
+    //     .read<DoctorCubit>()
+    //     .searchDoctor(key: '', searchQuery: const SearchQuery(limit: 20));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: white,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            translate(context, 'list_of_doctors'),
-          ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: white,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          translate(context, 'list_of_doctors'),
         ),
-        body: ListView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: dimensHeight() * 1,
-                  right: dimensWidth() * 3,
-                  left: dimensWidth() * 3),
-              child: TextFieldWidget(
-                validate: (p0) => null,
-                hint: translate(context, 'search_doctors'),
-                fillColor: colorF2F5FF,
-                filled: true,
-                focusedBorderColor: colorF2F5FF,
-                enabledBorderColor: colorF2F5FF,
-                controller: _searchController,
-                prefixIcon: IconButton(
-                  padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
-                  onPressed: () {},
-                  icon: FaIcon(
-                    FontAwesomeIcons.magnifyingGlass,
-                    color: color6A6E83,
-                    size: dimensIcon() * .8,
+      ),
+      body: BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
+        if (state is SearchDoctorState) {
+          if (state.blocState == BlocState.Successed) {
+            final isLastPage = state.doctors.length < _pageSize;
+            if (isLastPage) {
+              _pagingController.appendLastPage(state.doctors);
+            } else {
+              final nextPageKey = state.pageKey + state.doctors.length;
+              _pagingController.appendPage(state.doctors, nextPageKey);
+            }
+          }
+          if (state.blocState == BlocState.Failed) {
+            _pagingController.error = state.error;
+          }
+        }
+        return GestureDetector(
+          onTap: () => KeyboardUtil.hideKeyboard(context),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 1,
+                      right: dimensWidth() * 3,
+                      left: dimensWidth() * 3),
+                  child: TextFieldWidget(
+                    validate: (p0) => null,
+                    hint: translate(context, 'search_doctors'),
+                    fillColor: colorF2F5FF,
+                    filled: true,
+                    focusedBorderColor: colorF2F5FF,
+                    enabledBorderColor: colorF2F5FF,
+                    controller: _searchController,
+                    onChanged: (value) => {
+                      _pagingController.refresh(),
+                    },
+                    prefixIcon: IconButton(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
+                      onPressed: () {},
+                      icon: FaIcon(
+                        FontAwesomeIcons.magnifyingGlass,
+                        color: color6A6E83,
+                        size: dimensIcon() * .8,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
-              child: const ListCategories(),
-            ),
-            BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
-              if (state.blocState == BlocState.Pending &&
-                  state.doctors.isEmpty) {
-                return buildShimmer();
-              } else if (state.blocState == BlocState.Successed) {
-                return Column(
-                  children: state.doctors
-                      .map(
-                        (e) => Padding(
-                          padding: EdgeInsets.only(left: dimensWidth() * 3),
-                          child: DoctorCard(doctor: e),
-                        ),
-                      )
-                      .toList(),
-                );
-              } else {
-                return const SizedBox();
-              }
-            }),
-          ],
-        )
-        // ],
-
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
+                  child: ListCategories(callback: changeFilterExp,),
+                ),
+              ),
+              PagedSliverList<int, DoctorResponse>(
+                // prototypeItem: buildShimmer(),
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
+                    itemBuilder: (context, item, index) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensHeight() * 2),
+                    child: DoctorCard(
+                      doctor: item,
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
         );
+      }),
+    );
   }
 }
 

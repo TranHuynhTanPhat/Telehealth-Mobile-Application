@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/jitsi_service.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
-import 'package:healthline/utils/translate.dart';
 
 class ListServices extends StatefulWidget {
   const ListServices({
@@ -52,16 +51,16 @@ class _ListServicesState extends State<ListServices> {
               services: services,
               index: 0,
               press: () async {
-                EasyLoading.showToast(translate(context, 'coming_soon'));
-                // JitsiService.instance.join(
-                //   token:
-                //       "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIvNTM2OGM0LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2OTk4ODkzNjEsImV4cCI6MTY5OTg5NjU2MSwibmJmIjoxNjk5ODg5MzU2LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtMGZmNmEwMzgyMzNhNGNiN2I4ODQxNTgzNDVjMjZkMzIiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiIiLCJpZCI6ImF1dGgwfDY1NTBiMWIwZDdmMDY1MWFjODYxMDZjZiIsImF2YXRhciI6IiIsImVtYWlsIjoiaGVhbHRobGluZW1hbmFnZXIyMDIzQGdtYWlsLmNvbSJ9fSwicm9vbSI6IioifQ.fj3wLkMmzUL_LdXdSAldus36lJpBCfBvbYWRd5uw8DF2EIa_KtojWmnAzMbv-4r7kBGny54zER17nZGrpwNjSuuPrpaw1CEDNmm3wJe_rzwsCk3ZOkz3MMIOTeustow5aS_wYHSrjjxC3v12Ti7A4mUp9iXiimJJhC5Kr2hRECEhGGGf9w5hL7-MAzp_6LORo-DIbWThDVgnNpAI4W477e8YprnrZv3uXII2A-rcAXvWlnui8bfaCCk5xaBVFFrrfj8AWJKxmIINkH5tlB--2lphKRYGwXlWEca6rT9kFMfH-tt0p8v18hOOi9vEbi3wTZ8Leh4toEUIeDQDXS1Svw",
-                //   roomName:
-                //       "vpaas-magic-cookie-0ff6a038233a4cb7b884158345c26d32/test",
-                //   displayName: 'Tran Huynh Tan phat',
-                //   urlAvatar: null,
-                //   email: null,
-                // );
+                // EasyLoading.showToast(translate(context, 'coming_soon'));
+                JitsiService.instance.join(
+                  token:
+                      "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS85NmUwNTkifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDIzNzQyMzgsImV4cCI6MTcwMjM3NzgzOCwibmJmIjoxNzAyMzc0MjMzLCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOnRydWUsIm91dGJvdW5kLWNhbGwiOnRydWUsInNpcC1vdXRib3VuZC1jYWxsIjp0cnVlLCJ0cmFuc2NyaXB0aW9uIjp0cnVlLCJyZWNvcmRpbmciOnRydWV9LCJ1c2VyIjp7ImlkIjoiZGM1MTZiOTgtYjBkYi00OTViLTljZmItMGQzNzdhNTM0NmQxIiwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImF2YXRhciI6IiIsImVtYWlsIjoiaGVhbHRobGluZW1hbmFnZXIyMDIzQGdtYWlsLmNvbSIsIm1vZGVyYXRvciI6ZmFsc2UsImhpZGRlbi1mcm9tLXJlY29yZGVyIjpmYWxzZX19LCJyb29tIjoiKiJ9.SeTy8xwWAtXAc6SB4_9kCMtLW5q4KivnbiMjU5loKI5Gs6ERv7Cvan1L96pKJB17Q9nz1Pcd1Q9ZPEFw-OwQt8IxjXoUisD7NOYMolL8QW1H9R4gmkUrW5gOki2gQamacZEOgqpWe1L8GoC4X4uUohzZx1t6oinJTw3nmMpPcwpZK2Sc4jOY7c30zNolE5gjY667X3E1FLO-9T3307CdOLIl0Ro-ylOy4tX4XYpfnLXYspW1-C-wlOgKIKLi33VMvU5zsW9YqLYong47iaIIIxnvOGkeKzIxyLBCyb23rBR5NBuONUCC9o2vCZLqnYJKQyxMIRy5vmITvj0jv-0bFQ",
+                  roomName:
+                      "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/96e059",
+                  displayName: 'Tran Huynh Tan phat',
+                  urlAvatar: null,
+                  email: null,
+                );
                 // PushNotificationManager().display(
                 //   context,
                 //   RemoteMessage(

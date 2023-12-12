@@ -44,7 +44,6 @@ Future<void> main() async {
   test('Check ENV', () {
     var baseUrl = dotenv.env['BASE_URL'];
     var cloudinaryUrl = dotenv.env['CLOUDINARY_URL'];
-    var cloudinaryApi = dotenv.env['CLOUDINARY_API'];
   });
 
   Storage storage;

@@ -383,6 +383,10 @@
         "vi": "Không thể tải dữ liệu",
         "en": "Can't load data"
     },
+    "retry": {
+        "vi": "Thử lại",
+        "en": "Retry"
+    },
     "failure": {
         "vi": "Thất bại",
         "en": "Failure"
@@ -1458,5 +1462,45 @@
     "step": {
         "vi": "Bước",
         "en": "Step"
+    },
+    "hour_ago": {
+        "vi": "giờ trước",
+        "en": "hour ago"
+    },
+    "hours_ago": {
+        "vi": "giờ trước",
+        "en": "hours ago"
+    },
+    "minute_ago": {
+        "vi": "phút trước",
+        "en": "minute ago"
+    },
+    "minutes_ago": {
+        "vi": "phút trước",
+        "en": "minutes ago"
+    },
+    "day_ago": {
+        "vi": "ngày trước",
+        "en": "day ago"
+    },
+    "days_ago": {
+        "vi": "ngày trước",
+        "en": "days ago"
+    },
+    "month_ago": {
+        "vi": "tháng trước",
+        "en": "month ago"
+    },
+    "months_ago": {
+        "vi": "tháng trước",
+        "en": "months ago"
+    },
+    "year_ago": {
+        "vi": "năm trước",
+        "en": "years ago"
+    },
+    "years_ago": {
+        "vi": "năm trước",
+        "en": "years ago"
     }
 }

@@ -52,6 +52,7 @@ class AppRoute {
   final _doctorProfileCubit = DoctorProfileCubit();
   final _patientRecordCubit = PatientRecordCubit();
   final _doctorCubit = DoctorCubit();
+  final _newsCubit = NewsCubit();
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
@@ -67,6 +68,7 @@ class AppRoute {
     _doctorProfileCubit.close();
     _patientRecordCubit.close();
     _doctorCubit.close();
+    _newsCubit.close();
     // _applicationUpdateBloc.close();
   }
 
@@ -78,8 +80,12 @@ class AppRoute {
         );
       case newsName:
         return MaterialPageRoute(
-          builder: (_) => const NewsScreen(),
+          builder: (_) => BlocProvider.value(
+            value: _newsCubit,
+            child: const NewsScreen(),
+          ),
         );
+
     }
     if (AppController.instance.authState == AuthState.Unauthorized) {
       switch (settings.name) {
