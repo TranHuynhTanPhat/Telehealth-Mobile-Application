@@ -10,6 +10,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 import '../../../../utils/file_picker.dart';
@@ -40,6 +41,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _controllerEmail = TextEditingController();
     _file = null;
     _image = null;
+    if (!mounted) return;
+    context.read<DoctorProfileCubit>().fetchProfile();
     super.initState();
   }
 
@@ -47,25 +50,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return BlocListener<DoctorProfileCubit, DoctorProfileState>(
       listener: (context, state) {
-         if (state is DoctorProfileUpdateSuccessfully) {
-          if (!errEmail && !errBio && !errAvatar) {
-            EasyLoading.showToast(
-              translate(context, 'successfully'),
-            );
-          } else {
-            EasyLoading.showToast(
-              '${translate(context, 'update ')}${errEmail ? '${translate(context, 'email').toLowerCase()} ' : ''}${errBio ? '${translate(context, 'biography').toLowerCase()} ' : ''}${errAvatar ? '${translate(context, 'avatar').toLowerCase()} ' : ''}${translate(context, 'failure').toLowerCase()}',
-            );
+        if (state is UpdateProfileState) {
+          if (state.blocState == BlocState.Failed) {
+            EasyLoading.showToast(translate(context, state.error));
           }
-          errEmail = false;
-          errAvatar = false;
-          errBio = false;
-        } else if (state is DoctorEmailError) {
-          errEmail = true;
-        } else if (state is DoctorBiographyError) {
-          errBio = true;
-        } else if (state is DoctorAvatarError) {
-          errAvatar = true;
+        } else if (state is FetchProfileState) {
+          if (state.blocState == BlocState.Failed) {
+            Navigator.pop(context);
+          }
         }
       },
       child: GestureDetector(
@@ -88,14 +80,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               _controllerBio.text = _controllerBio.text.isEmpty
                   ? state.profile?.biography ?? ''
                   : _controllerBio.text;
-              _image = _image ??
-                  NetworkImage(
-                    CloudinaryContext.cloudinary
-                        .image(state.profile?.avatar ?? '')
-                        .toString(),
-                  );
+              try {
+                if (state.profile?.avatar != null &&
+                    state.profile?.avatar != 'default' &&
+                    state.profile?.avatar != '') {
+                  _image = _image ??
+                      NetworkImage(
+                        CloudinaryContext.cloudinary
+                            .image(state.profile?.avatar ?? '')
+                            .toString(),
+                      );
+                } else {
+                  _image = AssetImage(DImages.placeholder);
+                }
+              } catch (e) {
+                logPrint(e);
+                _image = AssetImage(DImages.placeholder);
+              }
               return AbsorbPointer(
-                absorbing: state is DoctorProfileLoading,
+                absorbing: (state is UpdateProfileState &&
+                        state.blocState == BlocState.Pending) ||
+                    (state is FetchProfileState &&
+                        state.blocState == BlocState.Pending),
                 child: ListView(
                   padding: EdgeInsets.symmetric(
                       horizontal: dimensWidth() * 3,

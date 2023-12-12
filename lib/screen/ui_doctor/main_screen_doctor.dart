@@ -17,6 +17,7 @@ import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
 import 'package:healthline/screen/ui_doctor/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class MainScreenDoctor extends StatefulWidget {
@@ -76,10 +77,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
             listener: (context, state) {
               if (state.blocState == BlocState.Pending) {
                 EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state.blocState == BlocState.Successed) {
-                EasyLoading.dismiss();
-                Navigator.pushReplacementNamed(context, logInName);
-              } else if (state.blocState == BlocState.Failed) {
+              } else if ((state.blocState == BlocState.Successed ||
+                      state.blocState == BlocState.Failed) &&
+                  state is LogoutState) {
                 EasyLoading.dismiss();
                 Navigator.pushReplacementNamed(context, logInName);
               }
@@ -96,17 +96,30 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           ),
           BlocListener<DoctorProfileCubit, DoctorProfileState>(
             listener: (context, state) {
-              if (state is DoctorProfileUpdating) {
-                EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is DoctorAvatarSuccessfully) {
-                if (state.profile != null) {
-                  String url = CloudinaryContext.cloudinary
-                      .image(state.profile!.avatar ?? '')
-                      .toString();
-                  NetworkImage provider = NetworkImage(url);
-                  provider.evict().then<void>((bool success) {
-                    if (success) debugPrint('removed image!');
-                  });
+              if (state is UpdateProfileState) {
+                if (state.blocState == BlocState.Pending) {
+                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                } else if (state.blocState == BlocState.Successed) {
+                  EasyLoading.showToast(translate(context, state.message));
+                  if (state.message == "update_avatar_successfully") {
+                    if (state.profile != null) {
+                      String url = CloudinaryContext.cloudinary
+                          .image(state.profile!.avatar ?? '')
+                          .toString();
+                      NetworkImage provider = NetworkImage(url);
+                      provider.evict().then<void>((bool success) {
+                        if (success) debugPrint('removed image!');
+                      });
+                    }
+                  }
+                }
+              } else if (state is FetchProfileState) {
+                if (state.blocState == BlocState.Pending) {
+                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                } else if (state.blocState == BlocState.Successed) {
+                  EasyLoading.dismiss();
+                } else if (state.blocState == BlocState.Failed) {
+                  EasyLoading.showToast(translate(context, state.error));
                 }
               }
             },
@@ -196,17 +209,23 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
                         builder: (context, state) {
                       if (state.profile != null) {
-                        String url = CloudinaryContext.cloudinary
-                            .image(state.profile!.avatar ?? '')
-                            .toString();
-                        NetworkImage provider = NetworkImage(url);
-                        if (state is DoctorAvatarSuccessfully) {
-                          provider.evict().then<void>((bool success) {
-                            if (success) debugPrint('removed image!');
-                          });
+                        try {
+                          if (state.profile?.avatar != null &&
+                              state.profile?.avatar != 'default' &&
+                              state.profile?.avatar != '') {
+                            _image = _image ??
+                                NetworkImage(
+                                  CloudinaryContext.cloudinary
+                                      .image(state.profile?.avatar ?? '')
+                                      .toString(),
+                                );
+                          } else {
+                            _image = AssetImage(DImages.placeholder);
+                          }
+                        } catch (e) {
+                          logPrint(e);
+                          _image = AssetImage(DImages.placeholder);
                         }
-
-                        _image = _image ?? provider;
 
                         return SizedBox(
                           width: double.maxFinite,

@@ -31,10 +31,9 @@ class _SideMenuState extends State<SideMenu> {
       listener: (context, state) {
         if (state.blocState == BlocState.Pending) {
           EasyLoading.show();
-        } else if (state.blocState == BlocState.Successed) {
-          EasyLoading.dismiss();
-          Navigator.pushReplacementNamed(context, logInName);
-        } else if (state.blocState == BlocState.Failed) {
+        } else if ((state.blocState == BlocState.Successed ||
+                state.blocState == BlocState.Failed) &&
+            state is LogoutState) {
           EasyLoading.dismiss();
           Navigator.pushReplacementNamed(context, logInName);
         }

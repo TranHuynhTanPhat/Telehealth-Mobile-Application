@@ -16,9 +16,7 @@ class DoctorProfileState {
 
   factory DoctorProfileState.fromMap(Map<String, dynamic> map) {
     return DoctorProfileState(
-      map['profile'] != null
-          ? DoctorResponse.fromMap(map['profile'])
-          : null,
+      map['profile'] != null ? DoctorResponse.fromMap(map['profile']) : null,
     );
   }
 }
@@ -27,80 +25,93 @@ final class DoctorProfileInitial extends DoctorProfileState {
   DoctorProfileInitial(super.profile);
 }
 
-abstract class DoctorBiographyState extends DoctorProfileState {
-  DoctorBiographyState(super.profile);
+final class FetchProfileState extends DoctorProfileState {
+  FetchProfileState(super.profile, {required this.blocState, this.error});
+  final BlocState blocState;
+  final String? error;
 }
 
-abstract class DoctorAvatarState extends DoctorProfileState {
-  DoctorAvatarState(super.profile);
+final class UpdateProfileState extends DoctorProfileState {
+  UpdateProfileState(super.profile, {required this.blocState, this.error, this.message});
+  final BlocState blocState;
+  final String? error;
+  final String? message;
 }
 
-abstract class DoctorEmailState extends DoctorProfileState {
-  DoctorEmailState(super.profile);
-}
+// abstract class DoctorBiographyState extends DoctorProfileState {
+//   DoctorBiographyState(super.profile);
+// }
 
-abstract final class DoctorProfileLoading extends DoctorProfileState {
-  DoctorProfileLoading(super.profile);
-}
+// abstract class DoctorAvatarState extends DoctorProfileState {
+//   DoctorAvatarState(super.profile);
+// }
 
-final class FetchDoctorProfileLoading extends DoctorProfileLoading{
-  FetchDoctorProfileLoading(super.profile);
+// abstract class DoctorEmailState extends DoctorProfileState {
+//   DoctorEmailState(super.profile);
+// }
 
-}
+// abstract final class DoctorProfileLoading extends DoctorProfileState {
+//   DoctorProfileLoading(super.profile);
+// }
 
-final class FetchDoctorProfileSuccessfully extends DoctorProfileState {
-  FetchDoctorProfileSuccessfully(super.profile);
-}
+// final class FetchDoctorProfileLoading extends DoctorProfileLoading{
+//   FetchDoctorProfileLoading(super.profile);
 
-final class FetchDoctorProfileError extends DoctorProfileState {
-  FetchDoctorProfileError(super.profile);
-}
+// }
 
-final class DoctorProfileUpdating extends DoctorProfileLoading{
-  DoctorProfileUpdating(super.profile);
-}
-final class DoctorProfileUpdateSuccessfully extends DoctorProfileState{
-  DoctorProfileUpdateSuccessfully(super.profile);
-}
+// final class FetchDoctorProfileSuccessfully extends DoctorProfileState {
+//   FetchDoctorProfileSuccessfully(super.profile);
+// }
 
-final class DoctorBiographyUpdating extends DoctorProfileLoading {
-  DoctorBiographyUpdating(super.profile);
-}
+// final class FetchDoctorProfileError extends DoctorProfileState {
+//   FetchDoctorProfileError(super.profile);
+// }
 
-final class DoctorBiographySuccessfully extends DoctorBiographyState {
-  DoctorBiographySuccessfully(super.profile);
-}
+// final class DoctorProfileUpdating extends DoctorProfileLoading{
+//   DoctorProfileUpdating(super.profile);
+// }
+// final class DoctorProfileUpdateSuccessfully extends DoctorProfileState{
+//   DoctorProfileUpdateSuccessfully(super.profile);
+// }
 
-final class DoctorBiographyError extends DoctorBiographyState {
-  final String message;
+// final class DoctorBiographyUpdating extends DoctorProfileLoading {
+//   DoctorBiographyUpdating(super.profile);
+// }
 
-  DoctorBiographyError(super.profile, {required this.message});
-}
+// final class DoctorBiographySuccessfully extends DoctorBiographyState {
+//   DoctorBiographySuccessfully(super.profile);
+// }
 
-final class DoctorAvatarUpdating extends DoctorProfileLoading {
-  DoctorAvatarUpdating(super.profile);
-}
+// final class DoctorBiographyError extends DoctorBiographyState {
+//   final String message;
 
-final class DoctorAvatarSuccessfully extends DoctorAvatarState {
-  DoctorAvatarSuccessfully(super.profile);
-}
+//   DoctorBiographyError(super.profile, {required this.message});
+// }
 
-final class DoctorAvatarError extends DoctorAvatarState {
-  final String message;
+// final class DoctorAvatarUpdating extends DoctorProfileLoading {
+//   DoctorAvatarUpdating(super.profile);
+// }
 
-  DoctorAvatarError(super.profile, {required this.message});
-}
+// final class DoctorAvatarSuccessfully extends DoctorAvatarState {
+//   DoctorAvatarSuccessfully(super.profile);
+// }
 
-final class DoctorEmailUpdating extends DoctorProfileLoading {
-  DoctorEmailUpdating(super.profile);
-}
+// final class DoctorAvatarError extends DoctorAvatarState {
+//   final String message;
 
-final class DoctorEmailSuccessfully extends DoctorEmailState {
-  DoctorEmailSuccessfully(super.profile);
-}
+//   DoctorAvatarError(super.profile, {required this.message});
+// }
 
-final class DoctorEmailError extends DoctorEmailState {
-  final String message;
+// final class DoctorEmailUpdating extends DoctorProfileLoading {
+//   DoctorEmailUpdating(super.profile);
+// }
 
-  DoctorEmailError(super.profile, {required this.message});
-}
+// final class DoctorEmailSuccessfully extends DoctorEmailState {
+//   DoctorEmailSuccessfully(super.profile);
+// }
+
+// final class DoctorEmailError extends DoctorEmailState {
+//   final String message;
+
+//   DoctorEmailError(super.profile, {required this.message});
+// }

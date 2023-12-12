@@ -100,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return BlocListener<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state.blocState == BlocState.Pending) {
-              EasyLoading.show();
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
             } else if (state.blocState == BlocState.Successed) {
               EasyLoading.showToast(translate(context, 'success_register'));
               Navigator.pushReplacementNamed(context, logInName);
@@ -213,7 +213,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   },
                                   createAccountPressed: () {
-                                    context.read<AuthenticationCubit>().registerAccount(
+                                    context
+                                        .read<AuthenticationCubit>()
+                                        .registerAccount(
                                           _controllerFullName.text,
                                           Validate().changePhoneFormat(
                                               _controllerPhone.text),

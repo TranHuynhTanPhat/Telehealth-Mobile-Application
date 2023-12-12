@@ -21,22 +21,25 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   @override
   void initState() {
-    context.read<ContactCubit>().fetchContact();
+    context.read<PatientProfileCubit>().fetchContact();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ContactCubit, ContactState>(
+    return BlocListener<PatientProfileCubit, PatientProfileState>(
       listener: (context, state) {
-        if (state is ContactLoading) {
+        if (state.blocState == BlocState.Pending) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is ContactError) {
-          EasyLoading.showToast(state.message);
+        } else if (state.blocState == BlocState.Failed) {
+          EasyLoading.showToast(translate(context, state.error));
           Navigator.pop(context);
-        } else if (state is ContactUpdate) {
-          EasyLoading.showToast(translate(context, state.response.message));
+        } else if (state.blocState == BlocState.Successed) {
+          EasyLoading.dismiss();
+          if (state is UpdateContactState) {
+            EasyLoading.showToast(translate(context, state.response?.message));
+          }
         }
       },
       child: GestureDetector(
@@ -53,10 +56,10 @@ class _ContactScreenState extends State<ContactScreen> {
             leadingWidth: dimensWidth() * 10,
             leading: cancelButton(context),
           ),
-          body: BlocBuilder<ContactCubit, ContactState>(
+          body: BlocBuilder<PatientProfileCubit, PatientProfileState>(
             builder: (context, state) {
               return AbsorbPointer(
-                absorbing: state is ContactLoading,
+                absorbing: state.blocState == BlocState.Pending,
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,

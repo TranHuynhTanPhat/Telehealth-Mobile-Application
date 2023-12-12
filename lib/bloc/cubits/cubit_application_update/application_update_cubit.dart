@@ -1,7 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 
 part 'application_update_state.dart';

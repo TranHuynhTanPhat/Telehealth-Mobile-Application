@@ -22,9 +22,9 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state.blocState==BlocState.Pending) {
-          EasyLoading.show();
-        } else if (state.blocState==BlocState.Successed) {
+        if (state.blocState == BlocState.Pending) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state.blocState == BlocState.Successed) {
           EasyLoading.dismiss();
           // if (state.errorDoctor != null) {
           //   EasyLoading.showToast(
@@ -40,7 +40,7 @@ class _LogInScreenState extends State<LogInScreen> {
           } else {
             Navigator.pushReplacementNamed(context, mainScreenPatientName);
           }
-        } else if (state.blocState==BlocState.Failed) {
+        } else if (state.blocState == BlocState.Failed) {
           EasyLoading.dismiss();
           EasyLoading.showToast(translate(context, state.error));
         }
@@ -52,7 +52,7 @@ class _LogInScreenState extends State<LogInScreen> {
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               body: AbsorbPointer(
-                absorbing: state.blocState==BlocState.Pending,
+                absorbing: state.blocState == BlocState.Pending,
                 child: ListView(
                   padding: EdgeInsets.symmetric(
                       vertical: dimensHeight() * 10,

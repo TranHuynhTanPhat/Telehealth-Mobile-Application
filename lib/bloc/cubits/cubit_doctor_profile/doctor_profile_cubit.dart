@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
-import '../../../data/api/models/responses/base/data_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/res/enum.dart';
+import 'package:healthline/utils/log_data.dart';
+
 import '../../../data/api/models/responses/file_response.dart';
 import '../../../repository/doctor_repository.dart';
 import '../../../repository/file_repository.dart';
@@ -16,74 +17,110 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
   final FileRepository _fileRepository = FileRepository();
 
   Future<void> fetchProfile() async {
-    emit(FetchDoctorProfileLoading(state.profile));
+    emit(
+      FetchProfileState(state.profile, blocState: BlocState.Pending),
+    );
     try {
       DoctorResponse profile = await _doctorRepository.fetchProfile();
-      emit(DoctorProfileInitial(profile));
-    } catch (e) {
+      emit(FetchProfileState(profile, blocState: BlocState.Successed));
+    } on DioException catch (e) {
       // DioException er = e as DioException;
-      emit(FetchDoctorProfileError(state.profile));
+      emit(
+        FetchProfileState(
+          state.profile,
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchProfileState(
+          state.profile,
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> updateProfile(String? bio, String? path, String? email) async {
     emit(
-      DoctorProfileUpdating(state.profile),
+      UpdateProfileState(state.profile, blocState: BlocState.Pending),
     );
-    if (bio != null) {
-      await updateBio(bio);
+    bool error = false;
+    try {
+      if (bio != null && bio != state.profile?.biography) {
+        await updateBio(bio);
+      }
+    } catch (e) {
+      error = true;
+      emit(
+        UpdateProfileState(
+          state.profile,
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
     }
-    if (path != null) {
-      await updateAvatar(path);
+    try {
+      if (path != null) {
+        await updateAvatar(path);
+      }
+    } catch (e) {
+      error = true;
+
+      emit(
+        UpdateProfileState(
+          state.profile,
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
     }
-    if (email != null) {
-      await updateEmail(email);
+    try {
+      if (email != null && state.profile?.email != email) {
+        await updateEmail(email);
+      }
+    } catch (e) {
+      error = true;
+
+      emit(
+        UpdateProfileState(
+          state.profile,
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
     }
-    emit(DoctorProfileUpdateSuccessfully(state.profile));
+    if (!error) {
+      Future.delayed(const Duration(seconds: 3), () {
+        emit(UpdateProfileState(state.profile,
+            blocState: BlocState.Successed, message: 'successfully'));
+      });
+    }
   }
 
   Future<void> updateEmail(String email) async {
-    emit(DoctorEmailUpdating(state.profile));
     try {
-      DataResponse response = await _doctorRepository.updateEmail(email);
-      if (response.success) {
-        emit(
-          DoctorEmailSuccessfully(
-            state.profile?.copyWith(
-              email: response.data['email'],
-            ),
-          ),
-        );
-      }
+      await _doctorRepository.updateEmail(email);
     } on DioException catch (e) {
-      emit(DoctorEmailError(state.profile, message: e.response!.data['message'].toString()));
+      throw e.response!.data['message'].toString();
     } catch (e) {
-      emit(DoctorEmailError(state.profile, message: e.toString()));
+      rethrow;
     }
   }
 
   Future<void> updateBio(String bio) async {
-    emit(DoctorBiographyUpdating(state.profile));
     try {
-      DataResponse response = await _doctorRepository.updateBio(bio);
-      if (response.success) {
-        emit(
-          DoctorBiographySuccessfully(
-            state.profile?.copyWith(
-              biography: response.data['biography'],
-            ),
-          ),
-        );
-      }
+      await _doctorRepository.updateBio(bio);
     } on DioException catch (e) {
-      emit(DoctorBiographyError(state.profile, message: e.response!.data['message'].toString()));
+      throw e.response!.data['message'].toString();
     } catch (e) {
-      emit(DoctorBiographyError(state.profile, message: e.toString()));
+      rethrow;
     }
   }
 
   Future<void> updateAvatar(String path) async {
-    emit(DoctorAvatarUpdating(state.profile));
     try {
       String? id = state.profile?.id;
       String? avatar = state.profile?.avatar;
@@ -96,37 +133,18 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
         if (avatar != publicId) {
           await _doctorRepository.updateAvatar(publicId);
           emit(
-            DoctorAvatarSuccessfully(
+            DoctorProfileState(
               state.profile?.copyWith(avatar: publicId),
             ),
           );
-        } else {
-          emit(
-            DoctorAvatarSuccessfully(state.profile),
-          );
-        }
+        } else {}
       } else {
-        emit(
-          DoctorAvatarError(
-            state.profile,
-            message: 'failure',
-          ),
-        );
+        throw 'failed_to_update_avatar';
       }
     } on DioException catch (e) {
-      emit(
-        DoctorAvatarError(
-          state.profile,
-          message: e.response!.data['message'].toString(),
-        ),
-      );
+      throw e.response!.data['message'].toString();
     } catch (e) {
-      emit(
-        DoctorAvatarError(
-          state.profile,
-          message: e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 

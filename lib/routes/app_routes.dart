@@ -43,7 +43,7 @@ class AppRoute {
   final _vaccineRecordCubit = VaccineRecordCubit();
   final _authenticationCubit = AuthenticationCubit();
   final _medicalRecordCubit = MedicalRecordCubit();
-  final _contactCubit = ContactCubit();
+  final _patientProfileCubit = PatientProfileCubit();
   final _docsVaccination = DocsVaccinationCubit();
   final _doctorScheduleCubit = DoctorScheduleCubit();
   final _doctorProfileCubit = DoctorProfileCubit();
@@ -56,7 +56,7 @@ class AppRoute {
     _vaccineRecordCubit.close();
     _authenticationCubit.close();
     _medicalRecordCubit.close();
-    _contactCubit.close();
+    _patientProfileCubit.close();
     _docsVaccination.close();
     _doctorScheduleCubit.close();
     _doctorProfileCubit.close();
@@ -242,7 +242,7 @@ class AppRoute {
         case contactName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
-              value: _contactCubit,
+              value: _patientProfileCubit,
               child: const ContactScreen(),
             ),
           );
