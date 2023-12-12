@@ -47,8 +47,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
           searchQuery: SearchQuery(
               limit: 20,
               attributesToSearchOn: ['full_name'],
-              filter:
-                  filterExp != null ? 'specialty = $filterExp' : filterExp),
+              sort: ['full_name:asc'],
+              filter: filterExp != null ? 'specialty = $filterExp' : filterExp),
           pageKey: pageKey);
     });
     if (!mounted) return;
@@ -143,7 +143,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
-                  child: ListCategories(callback: changeFilterExp,),
+                  child: ListCategories(
+                    callback: changeFilterExp,
+                  ),
                 ),
               ),
               PagedSliverList<int, DoctorResponse>(
