@@ -72,15 +72,16 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
       onPopInvoked: onWillPop,
       child: MultiBlocListener(
         listeners: [
-          BlocListener<SideMenuCubit, SideMenuState>(
+          BlocListener<AuthenticationCubit, AuthenticationState>(
             listener: (context, state) {
-              if (state is SideMenuLoading) {
+              if (state.blocState == BlocState.Pending) {
                 EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is LogoutActionState) {
+              } else if (state.blocState == BlocState.Successed) {
                 EasyLoading.dismiss();
                 Navigator.pushReplacementNamed(context, logInName);
-              } else if (state is ErrorActionState) {
+              } else if (state.blocState == BlocState.Failed) {
                 EasyLoading.dismiss();
+                Navigator.pushReplacementNamed(context, logInName);
               }
             },
           ),

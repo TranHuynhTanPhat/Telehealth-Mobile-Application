@@ -277,7 +277,7 @@ class _LogInFormState extends State<LogInForm> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   KeyboardUtil.hideKeyboard(context);
-                  context.read<LogInCubit>().logIn(
+                  context.read<AuthenticationCubit>().login(
                       Validate().changePhoneFormat(_controllerPhone.text),
                       _controllerPassword.text,
                       isDoctor: isDoctor,

@@ -41,12 +41,10 @@ import 'package:healthline/screen/update/update_screen.dart';
 
 class AppRoute {
   final _vaccineRecordCubit = VaccineRecordCubit();
-  final _sideMenuCubit = SideMenuCubit();
+  final _authenticationCubit = AuthenticationCubit();
   final _medicalRecordCubit = MedicalRecordCubit();
   final _contactCubit = ContactCubit();
   final _docsVaccination = DocsVaccinationCubit();
-  final _logInCubit = LogInCubit();
-  final _signUpCubit = SignUpCubit();
   final _doctorScheduleCubit = DoctorScheduleCubit();
   final _doctorProfileCubit = DoctorProfileCubit();
   final _patientRecordCubit = PatientRecordCubit();
@@ -56,12 +54,10 @@ class AppRoute {
 
   void dispose() {
     _vaccineRecordCubit.close();
-    _sideMenuCubit.close();
+    _authenticationCubit.close();
     _medicalRecordCubit.close();
     _contactCubit.close();
     _docsVaccination.close();
-    _logInCubit.close();
-    _signUpCubit.close();
     _doctorScheduleCubit.close();
     _doctorProfileCubit.close();
     _patientRecordCubit.close();
@@ -93,7 +89,7 @@ class AppRoute {
         case signUpName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
-              value: _signUpCubit,
+              value: _authenticationCubit,
               child: const SignUpScreen(),
             ),
           );
@@ -113,7 +109,7 @@ class AppRoute {
         default:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
-              value: _logInCubit,
+              value: _authenticationCubit,
               child: const LogInScreen(),
             ),
           );
@@ -145,7 +141,7 @@ class AppRoute {
             builder: (_) => MultiBlocProvider(
               providers: [
                 BlocProvider.value(
-                  value: _sideMenuCubit,
+                  value: _authenticationCubit,
                 ),
                 BlocProvider.value(
                   value: _doctorProfileCubit,
@@ -196,7 +192,7 @@ class AppRoute {
             builder: (_) => MultiBlocProvider(
               providers: [
                 BlocProvider.value(
-                  value: _sideMenuCubit,
+                  value: _authenticationCubit,
                 ),
                 BlocProvider.value(
                   value: _vaccineRecordCubit,
@@ -235,7 +231,7 @@ class AppRoute {
         case accountSettingName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
-              value: _sideMenuCubit,
+              value: _authenticationCubit,
               child: const AccountSettingScreen(),
             ),
           );

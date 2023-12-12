@@ -97,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return BlocListener<SignUpCubit, SignUpState>(
+        return BlocListener<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state.blocState == BlocState.Pending) {
               EasyLoading.show();
@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onTap: () => KeyboardUtil.hideKeyboard(context),
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: BlocBuilder<SignUpCubit, SignUpState>(
+              body: BlocBuilder<AuthenticationCubit, AuthenticationState>(
                 builder: (context, state) {
                   return AbsorbPointer(
                     absorbing: state.blocState == BlocState.Pending,
@@ -213,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   },
                                   createAccountPressed: () {
-                                    context.read<SignUpCubit>().registerAccount(
+                                    context.read<AuthenticationCubit>().registerAccount(
                                           _controllerFullName.text,
                                           Validate().changePhoneFormat(
                                               _controllerPhone.text),

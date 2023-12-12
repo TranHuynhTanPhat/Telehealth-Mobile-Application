@@ -6,8 +6,8 @@ sealed class ApplicationUpdateState {
       this.currentPatchVersion,
       this.isCheckingForUpdate = false});
   final bool isShorebirdAvailable;
-  int? currentPatchVersion;
-  bool isCheckingForUpdate;
+  final int? currentPatchVersion;
+  final bool isCheckingForUpdate;
 }
 
 final class ApplicationUpdateInitial extends ApplicationUpdateState {

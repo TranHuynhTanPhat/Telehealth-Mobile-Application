@@ -20,11 +20,11 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LogInCubit, LogInState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state is LogInLoading) {
+        if (state.blocState==BlocState.Pending) {
           EasyLoading.show();
-        } else if (state is LogInSuccessed) {
+        } else if (state.blocState==BlocState.Successed) {
           EasyLoading.dismiss();
           // if (state.errorDoctor != null) {
           //   EasyLoading.showToast(
@@ -40,19 +40,19 @@ class _LogInScreenState extends State<LogInScreen> {
           } else {
             Navigator.pushReplacementNamed(context, mainScreenPatientName);
           }
-        } else if (state is LogInError) {
+        } else if (state.blocState==BlocState.Failed) {
           EasyLoading.dismiss();
           EasyLoading.showToast(translate(context, state.error));
         }
       },
-      child: BlocBuilder<LogInCubit, LogInState>(
+      child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
         builder: (context, state) {
           return GestureDetector(
             onTap: () => KeyboardUtil.hideKeyboard(context),
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               body: AbsorbPointer(
-                absorbing: state is LogInLoading,
+                absorbing: state.blocState==BlocState.Pending,
                 child: ListView(
                   padding: EdgeInsets.symmetric(
                       vertical: dimensHeight() * 10,

@@ -27,15 +27,16 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SideMenuCubit, SideMenuState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state is SideMenuLoading) {
+        if (state.blocState == BlocState.Pending) {
           EasyLoading.show();
-        } else if (state is LogoutActionState) {
+        } else if (state.blocState == BlocState.Successed) {
           EasyLoading.dismiss();
           Navigator.pushReplacementNamed(context, logInName);
-        } else if (state is ErrorActionState) {
+        } else if (state.blocState == BlocState.Failed) {
           EasyLoading.dismiss();
+          Navigator.pushReplacementNamed(context, logInName);
         }
       },
       child: Scaffold(

@@ -121,7 +121,7 @@ class SettingScreen extends StatelessWidget {
               ),
             ),
             onTap: () {
-              context.read<SideMenuCubit>().logout();
+              context.read<AuthenticationCubit>().logout();
             },
             dense: true,
             visualDensity: const VisualDensity(vertical: 0),
