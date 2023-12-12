@@ -36,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
         key: '',
         pageKey: 1,
         searchQuery: const SearchQuery(
-            sort: ['ratings:desc', 'full_name:asc'], limit: 6));
+            sort: ['ratings:desc', 'full_name:asc'], limit: 6),
+        callback: (doctors) {});
     super.initState();
   }
 
@@ -181,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: dimensWidth() * 3,
                   right: dimensWidth() * 3),
               child: TextFieldWidget(
+                onTap: () => Navigator.pushNamed(context, doctorName),
                 validate: (p0) => null,
                 hint: translate(context, 'search_doctors'),
                 fillColor: colorF2F5FF,

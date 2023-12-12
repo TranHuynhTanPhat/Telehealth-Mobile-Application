@@ -22,7 +22,8 @@ class DoctorCubit extends Cubit<DoctorState> {
   Future<void> searchDoctor(
       {required String key,
       SearchQuery? searchQuery,
-      required int pageKey}) async {
+      required int pageKey,
+      required Function(List<DoctorResponse>) callback}) async {
     emit(
       SearchDoctorState(
           doctors: state.doctors,
@@ -37,6 +38,7 @@ class DoctorCubit extends Cubit<DoctorState> {
           (e) => DoctorResponse.fromMap(e),
         ),
       );
+      callback(doctors);
       emit(
         SearchDoctorState(
             doctors: doctors, blocState: BlocState.Successed, pageKey: pageKey),

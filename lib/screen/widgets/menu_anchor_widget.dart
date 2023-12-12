@@ -18,6 +18,7 @@ class MenuAnchorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       style: MenuStyle(
+        maximumSize: MaterialStatePropertyAll(Size.fromHeight(dimensHeight()*40)),
         elevation: const MaterialStatePropertyAll(10),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

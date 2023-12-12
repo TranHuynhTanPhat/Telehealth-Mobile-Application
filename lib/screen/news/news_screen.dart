@@ -37,11 +37,10 @@ class _NewsScreenState extends State<NewsScreen> {
       context.read<NewsCubit>().searchNews(
           key: _searchController.text,
           searchQuery: const SearchQuery(
-            limit: 20,
-            attributesToSearchOn: ['title', 'content'],
-            sort: ['updated_at:desc']
-          ),
-          pageKey: pageKey);
+              limit: 20,
+              attributesToSearchOn: ['title', 'content'],
+              sort: ['updated_at:desc']),
+          pageKey: pageKey,callback:(news) => updateData(news: news, pageKey: pageKey),);
     });
     if (!mounted) return;
     _pagingController.addStatusListener((status) {
@@ -66,6 +65,7 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void dispose() {
     super.dispose();
+    _pagingController.dispose();
     _focus.removeListener(_checkFocus);
     _focus.dispose();
   }
@@ -75,6 +75,16 @@ class _NewsScreenState extends State<NewsScreen> {
       setState(() {
         openSearch = false;
       });
+    }
+  }
+
+  void updateData({required List<NewsResponse> news, required int pageKey}) {
+    final isLastPage = news.length < _pageSize;
+    if (isLastPage) {
+      _pagingController.appendLastPage(news);
+    } else {
+      final nextPageKey = pageKey + news.length;
+      _pagingController.appendPage(news, nextPageKey);
     }
   }
 
@@ -119,10 +129,8 @@ class _NewsScreenState extends State<NewsScreen> {
                               if (_searchController.text.isNotEmpty) {
                                 _searchController.text = '';
                               } else {
-                                setState(() {
-                                  _focus.unfocus();
-                                  _checkFocus();
-                                });
+                                KeyboardUtil.hideKeyboard(context);
+                                _checkFocus();
                               }
                             },
                             child: FaIcon(
@@ -161,7 +169,6 @@ class _NewsScreenState extends State<NewsScreen> {
                       onTap: () {
                         setState(() {
                           openSearch = true;
-                          _focus.requestFocus();
                         });
                       },
                       child: Padding(
@@ -181,46 +188,29 @@ class _NewsScreenState extends State<NewsScreen> {
         },
         body: BlocBuilder<NewsCubit, NewsState>(
           builder: (context, state) {
-            if (state is SearchNewsState) {
-              if (state.blocState == BlocState.Successed) {
-                final isLastPage = state.news.length < _pageSize;
-                if (isLastPage) {
-                  _pagingController.appendLastPage(state.news);
-                } else {
-                  final nextPageKey = state.pageKey + state.news.length;
-                  _pagingController.appendPage(state.news, nextPageKey);
-                }
-              }
-              if (state.blocState == BlocState.Failed) {
-                _pagingController.error = state.error;
-              }
-            }
+            // if (state is SearchNewsState) {
+            //   if (state.blocState == BlocState.Successed) {
+            //     final isLastPage = state.news.length < _pageSize;
+            //     if (isLastPage) {
+            //       _pagingController.appendLastPage(state.news);
+            //     } else {
+            //       final nextPageKey = state.pageKey + state.news.length;
+            //       _pagingController.appendPage(state.news, nextPageKey);
+            //     }
+            //   }
+            //   if (state.blocState == BlocState.Failed) {
+            //     _pagingController.error = state.error;
+            //   }
+            // }
             return GestureDetector(
-              onTap: () {
+              onTapDown: (detail) {
                 KeyboardUtil.hideKeyboard(context);
                 _checkFocus();
               },
               child: CustomScrollView(
                 scrollDirection: Axis.vertical,
-                // padding: EdgeInsets.symmetric(
-                //   horizontal: dimensWidth() * 3,
-                //   vertical: dimensHeight(),
-                // ),
                 slivers: [
-                  // MainNewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
-                  // NewsPost(),
                   PagedSliverList<int, NewsResponse>(
-                    // prototypeItem: buildShimmer(),
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<NewsResponse>(
                         itemBuilder: (context, item, index) {

@@ -52,7 +52,6 @@ class _DoctorCardState extends State<DoctorCard> {
           arguments: widget.doctor.toJson()),
       child: Container(
         padding: EdgeInsets.all(dimensWidth() * 2),
-        margin: EdgeInsets.symmetric(vertical: dimensHeight()),
         decoration: BoxDecoration(
           color: white,
           boxShadow: [

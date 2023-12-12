@@ -33,7 +33,6 @@ class _ForumScreenState extends State<ForumScreen> {
   @override
   void dispose() {
     super.dispose();
-    _focus.removeListener(_checkFocus);
     _focus.dispose();
   }
 
@@ -48,7 +47,7 @@ class _ForumScreenState extends State<ForumScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTapDown: (details) {
         KeyboardUtil.hideKeyboard(context);
         _checkFocus();
       },
@@ -93,6 +92,28 @@ class _ForumScreenState extends State<ForumScreen> {
                             ),
                           ),
                         ),
+                        suffixIcon: IconButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: dimensWidth() * 2),
+                          onPressed: () {},
+                          icon: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            onTap: () {
+                              if (_searchController.text.isNotEmpty) {
+                                _searchController.text = '';
+                              } else {
+                                KeyboardUtil.hideKeyboard(context);
+                                _checkFocus();
+                              }
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.solidCircleXmark,
+                              color: color6A6E83,
+                              size: dimensIcon() * .5,
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   : Text(
@@ -107,9 +128,7 @@ class _ForumScreenState extends State<ForumScreen> {
                       onTap: () {
                         setState(() {
                           openSearch = true;
-                        });
-                        Future.delayed(const Duration(seconds: 1), () {
-                          _checkFocus();
+                          _focus.requestFocus();
                         });
                       },
                       child: Padding(

@@ -22,7 +22,8 @@ class NewsCubit extends Cubit<NewsState> {
   Future<void> searchNews(
       {required String key,
       SearchQuery? searchQuery,
-      required int pageKey}) async {
+      required int pageKey,
+      required Function(List<NewsResponse>) callback}) async {
     emit(
       SearchNewsState(
           news: state.news, blocState: BlocState.Pending, pageKey: pageKey),
@@ -35,6 +36,7 @@ class NewsCubit extends Cubit<NewsState> {
           (e) => NewsResponse.fromMap(e),
         ),
       );
+      callback(news);
       emit(
         SearchNewsState(
             news: news, blocState: BlocState.Successed, pageKey: pageKey),

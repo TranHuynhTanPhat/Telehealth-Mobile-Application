@@ -26,24 +26,24 @@ class MainNewsPost extends StatefulWidget {
 class _MainNewsPostState extends State<MainNewsPost> {
   @override
   Widget build(BuildContext context) {
-    var _image;
+    var image;
 
     String? timeBetween;
 
     try {
       if (widget.news.photo != null && widget.news.photo != 'default') {
-        _image = _image ??
+        image = image ??
             NetworkImage(
               CloudinaryContext.cloudinary
                   .image(widget.news.photo ?? '')
                   .toString(),
             );
       } else {
-        _image = AssetImage(DImages.placeholder);
+        image = AssetImage(DImages.placeholder);
       }
     } catch (e) {
       logPrint(e);
-      _image = AssetImage(DImages.placeholder);
+      image = AssetImage(DImages.placeholder);
     }
     try {
       if (widget.news.updatedAt != null) {
@@ -87,12 +87,12 @@ class _MainNewsPostState extends State<MainNewsPost> {
                   dimensWidth() * 2,
                 ),
                 image: DecorationImage(
-                  image: _image,
+                  image: image,
                   fit: BoxFit.cover,
                   onError: (exception, stackTrace) => {
                     logPrint(exception),
                     setState(() {
-                      _image = AssetImage(DImages.placeholder);
+                      image = AssetImage(DImages.placeholder);
                     }),
                   },
                 ),

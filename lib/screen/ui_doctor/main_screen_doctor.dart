@@ -126,21 +126,20 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           ),
           BlocListener<DoctorScheduleCubit, DoctorScheduleState>(
             listener: (context, state) {
-              if (state is FetchScheduleLoading ||
-                  state is ScheduleByDayUpdating ||
-                  state is FixedScheduleUpdating) {
+              if (state.blocState == BlocState.Pending) {
                 EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is FetchScheduleSuccessfully) {
+              } else if (state is UpdateFixedScheduleState ||
+                  state is UpdateScheduleByDayState) {
+                if (state.blocState == BlocState.Successed) {
+                  EasyLoading.showToast(translate(context, 'successfully'));
+                } else if (state.blocState == BlocState.Failed) {
+                  EasyLoading.showToast(translate(context, state.error));
+                }
+              } else if (state.blocState == BlocState.Successed ||
+                  state.blocState == BlocState.Failed) {
                 EasyLoading.dismiss();
-              } else if (state is FixedScheduleUpdateSuccessfully ||
-                  state is ScheduleByDayUpdateSuccessfully) {
-                EasyLoading.showToast(translate(context, 'successfully'));
-              } else if (state is FetchScheduleError) {
-                EasyLoading.showToast(translate(context, state.message));
-              } else if (state is FixedScheduleUpdateError) {
-                EasyLoading.showToast(translate(context, state.message));
-              } else if (state is ScheduleByDayUpdateError) {
-                EasyLoading.showToast(translate(context, state.message));
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(translate(context, 'cant_load_data'));
               }
             },
           ),
