@@ -18,7 +18,8 @@ class ProfileForm extends StatefulWidget {
       required this.controllerBirthday,
       required this.controllerGender,
       required this.controllerAddress,
-      this.gender, required this.genderPressed});
+      this.gender,
+      required this.genderPressed});
 
   final Function() backPressed;
   final Function() continuePressed;
@@ -60,9 +61,14 @@ class _ProfileFormState extends State<ProfileForm> {
             padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: TextFieldWidget(
               validate: (value) {
-                return widget.controllerFullName.text == ''
-                    ? translate(context, 'please_enter_full_name')
-                    : null;
+                if (widget.controllerFullName.text == '') {
+                  return translate(context, 'please_enter_full_name');
+                } else if (widget.controllerFullName.text.split(' ').length <
+                    2) {
+                  return translate(context,
+                      'full_name_must_be_longer_than_or_equal_to_2_characters');
+                }
+                return null;
               },
               controller: widget.controllerFullName,
               label: translate(context, 'full_name'),

@@ -136,27 +136,20 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       listeners: [
         BlocListener<VaccineRecordCubit, VaccineRecordState>(
           listener: (context, state) {
-            if (state is DeleteInjectedVaccinationLoading ||
-                state is FetchVaccinationLoading ||
-                state is CreateInjectedVaccinationLoading ||
-                state is UpdateInjectedVaccinationLoading) {
+            if (state.blocState == BlocState.Pending) {
               EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            } else if (state is FetchVaccinationLoaded) {
+            } else if (state.blocState == BlocState.Successed) {
               EasyLoading.dismiss();
-            } else if (state is DeleteInjectedVaccinationLoaded) {
-              EasyLoading.showToast(translate(context, 'delete_successfully'));
-            } else if (state is CreateInjectedVaccinationLoaded ||
-                state is UpdateInjectedVaccinationLoaded) {
+              if (state is DeleteVaccinationRecordState) {
+                EasyLoading.showToast(
+                    translate(context, 'delete_successfully'));
+              }
+            } else if ((state is CreateVaccinationRecordState ||
+                    state is UpdateVaccinationRecordState) &&
+                state.blocState == BlocState.Successed) {
               EasyLoading.showToast(translate(context, 'successfully'));
-            } else if (state is DeleteInjectedVaccinationError) {
-              EasyLoading.showToast(
-                  translate(context, translate(context, state.message)));
-            } else if (state is FetchVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
-            } else if (state is CreateInjectedVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
-            } else if (state is UpdateInjectedVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
+            } else if (state.blocState == BlocState.Failed) {
+              EasyLoading.showToast(translate(context, state.error));
             }
           },
         ),

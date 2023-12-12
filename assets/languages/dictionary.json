@@ -1502,5 +1502,13 @@
     "years_ago": {
         "vi": "năm trước",
         "en": "years ago"
+    },
+    "phone_number_has_been_registered": {
+        "vi": "Số điện thoại đã được đăng ký",
+        "en": "Phone number has been registered"
+    },
+    "full_name_must_be_longer_than_or_equal_to_2_characters": {
+        "vi": "Họ và tên phải nhiều hơn 2 từ",
+        "en": "Full name must be longer than or equal to 2 characters"
     }
 }

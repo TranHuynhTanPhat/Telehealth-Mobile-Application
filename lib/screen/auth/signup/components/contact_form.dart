@@ -10,21 +10,25 @@ class ContactForm extends StatefulWidget {
       {super.key,
       required this.backPressed,
       required this.continuePressed,
-      required this.formKey, required this.controllerEmail, required this.controllerPhone});
+      required this.formKey,
+      required this.controllerEmail,
+      required this.controllerPhone,
+      this.conflictEmail,
+      this.conflictPhone});
 
   final Function() backPressed;
   final Function() continuePressed;
   final GlobalKey<FormState> formKey;
   final TextEditingController controllerEmail;
   final TextEditingController controllerPhone;
+  final String? conflictEmail;
+  final String? conflictPhone;
 
   @override
   State<ContactForm> createState() => _ContactFormState();
 }
 
 class _ContactFormState extends State<ContactForm> {
-  
-
   @override
   void initState() {
     super.initState();
@@ -43,20 +47,18 @@ class _ContactFormState extends State<ContactForm> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
-            child: TextFieldWidget(
-              label: translate(context, 'email'),
-              hint: translate(context, 'ex_email'),
-              controller: widget.controllerEmail,
-              validate: (value) => Validate().validateEmail(context, value),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-          ),
-          Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 2),
             child: TextFieldWidget(
               validate: (value) {
-                return Validate().validatePhone(context, widget.controllerPhone.text);
+                if (widget.conflictPhone != null) {
+                  if (Validate().changePhoneFormat(widget.conflictPhone!) ==
+                      Validate().changePhoneFormat(widget.controllerPhone.text)) {
+                    return translate(
+                        context, 'phone_number_has_been_registered');
+                  }
+                }
+                return Validate()
+                    .validatePhone(context, widget.controllerPhone.text);
               },
               prefix: Padding(
                 padding: EdgeInsets.only(right: dimensWidth() * .5),
@@ -74,6 +76,20 @@ class _ContactFormState extends State<ContactForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
+          Padding(
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            child: TextFieldWidget(
+              error: widget.conflictEmail == widget.controllerEmail.text
+                  ? translate(context, 'email_has_been_registered')
+                  : null,
+              label: translate(context, 'email'),
+              hint: translate(context, 'ex_email'),
+              controller: widget.controllerEmail,
+              validate: (value) => Validate().validateEmail(context, value),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
+          ),
+
           Padding(
             padding: EdgeInsets.only(top: dimensHeight() * 5),
             child: Row(

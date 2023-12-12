@@ -49,14 +49,18 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerDayOfLastDose.text = widget.vaccineRecord.date!;
-
-    _controllerDisease.text =
-        translate(context, widget.vaccineRecord.vaccine!.disease!);
+    if (_controllerDayOfLastDose.text.isEmpty) {
+      _controllerDayOfLastDose.text = widget.vaccineRecord.date!;
+    }
+    if (_controllerDisease.text.isEmpty) {
+      _controllerDisease.text =
+          translate(context, widget.vaccineRecord.vaccine!.disease!);
+    }
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
         // listenWhen: (previous, current) => current is UpdateInjectedVaccination,
         listener: (context, state) {
-          if (state is UpdateInjectedVaccinationLoaded) {
+          if (state is UpdateVaccinationRecordState &&
+              state.blocState == BlocState.Successed) {
             Navigator.pop(context, true);
           }
         },
@@ -80,7 +84,7 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
                           borderRadius: BorderRadius.circular(180),
                           onTap: () => context
                               .read<VaccineRecordCubit>()
-                              .updateInjectedVaccination(
+                              .updateVaccinationRecordState(
                                   widget.vaccineRecord.id!,
                                   _currentStep + 1,
                                   _controllerDayOfLastDose.text),
@@ -93,7 +97,7 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
             body: BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
                 builder: (context, state) {
               return AbsorbPointer(
-                absorbing: state is UpdateInjectedVaccinationLoading,
+                absorbing: state.blocState == BlocState.Pending,
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
@@ -149,86 +153,82 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
                       //         .toList(),
                       //   ),
                     ),
-                    _dose != null && _dose! > 0
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 3),
-                            child: Text(
-                                '${translate(context, "how_many_doses_have_you_received")} - ${_currentStep + 1}'),
-                          )
-                        : const SizedBox(),
-                    _dose != null && _dose! > 0
-                        ? Container(
-                            height: dimensHeight() * 18,
-                            alignment: Alignment.topCenter,
-                            child: Stepper(
-                              physics: const NeverScrollableScrollPhysics(),
-                              elevation: 0,
-                              margin: EdgeInsets.zero,
-                              steps: [
-                                ...List.generate(
-                                  _dose!,
-                                  (index) => Step(
-                                      title: const SizedBox(),
-                                      label: Text(
-                                          '${translate(context, 'dose')} ${index + 1}'),
-                                      content: const SizedBox(),
-                                      state: _currentStep >= index
-                                          ? StepState.complete
-                                          : StepState.indexed),
-                                ),
-                              ],
-                              type: StepperType.horizontal,
-                              currentStep: _currentStep,
-                              connectorColor:
-                                  const MaterialStatePropertyAll(secondary),
-                              controlsBuilder: (context, details) =>
-                                  const SizedBox(),
-                              onStepTapped: (step) => setState(() {
-                                _currentStep = step;
-                              }),
+                    if (_dose != null && _dose! > 0)
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                        child: Text(
+                            '${translate(context, "how_many_doses_have_you_received")} - ${_currentStep + 1}'),
+                      ),
+                    if (_dose != null && _dose! > 0)
+                      Container(
+                        height: dimensHeight() * 18,
+                        alignment: Alignment.topCenter,
+                        child: Stepper(
+                          physics: const NeverScrollableScrollPhysics(),
+                          elevation: 0,
+                          margin: EdgeInsets.zero,
+                          steps: [
+                            ...List.generate(
+                              _dose!,
+                              (index) => Step(
+                                  title: const SizedBox(),
+                                  label: Text(
+                                      '${translate(context, 'dose')} ${index + 1}'),
+                                  content: const SizedBox(),
+                                  state: _currentStep >= index
+                                      ? StepState.complete
+                                      : StepState.indexed),
                             ),
-                          )
-                        : const SizedBox(),
-                    _dose != null && _dose! > 0
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3,
-                            ),
-                            child: TextFieldWidget(
-                              onTap: () async {
-                                DateTime? date = await showDatePicker(
-                                    initialEntryMode:
-                                        DatePickerEntryMode.calendarOnly,
-                                    initialDatePickerMode: DatePickerMode.day,
-                                    context: context,
-                                    initialDate:
-                                        _controllerDayOfLastDose.text.isNotEmpty
-                                            ? DateFormat('dd/MM/yyyy').parse(
-                                                _controllerDayOfLastDose.text)
-                                            : DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime.now());
-                                if (date != null) {
-                                  setState(() {
-                                    _controllerDayOfLastDose.text =
-                                        // ignore: use_build_context_synchronously
-                                        formatDayMonthYear(context, date);
-                                  });
-                                }
-                              },
-                              readOnly: true,
-                              label: translate(context, 'time_dose'),
-                              controller: _controllerDayOfLastDose,
-                              validate: (value) => value!.isEmpty
-                                  ? translate(context, 'please_choose')
-                                  : null,
-                              suffixIcon: const IconButton(
-                                  onPressed: null,
-                                  icon: FaIcon(FontAwesomeIcons.calendar)),
-                            ),
-                          )
-                        : const SizedBox(),
+                          ],
+                          type: StepperType.horizontal,
+                          currentStep: _currentStep,
+                          connectorColor:
+                              const MaterialStatePropertyAll(secondary),
+                          controlsBuilder: (context, details) =>
+                              const SizedBox(),
+                          onStepTapped: (step) => setState(() {
+                            _currentStep = step;
+                          }),
+                        ),
+                      ),
+                    if (_dose != null && _dose! > 0)
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                        ),
+                        child: TextFieldWidget(
+                          onTap: () async {
+                            DateTime? date = await showDatePicker(
+                                initialEntryMode:
+                                    DatePickerEntryMode.calendarOnly,
+                                initialDatePickerMode: DatePickerMode.day,
+                                context: context,
+                                initialDate: _controllerDayOfLastDose
+                                        .text.isNotEmpty
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .parse(_controllerDayOfLastDose.text)
+                                    : DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now());
+                            if (date != null) {
+                              setState(() {
+                                _controllerDayOfLastDose.text =
+                                    formatDayMonthYear(context, date);
+                              });
+                            }
+                          },
+                          readOnly: true,
+                          label: translate(context, 'time_dose'),
+                          controller: _controllerDayOfLastDose,
+                          validate: (value) => value!.isEmpty
+                              ? translate(context, 'please_choose')
+                              : null,
+                          suffixIcon: const IconButton(
+                              onPressed: null,
+                              icon: FaIcon(FontAwesomeIcons.calendar)),
+                        ),
+                      ),
                     SizedBox(
                       height: dimensHeight() * 10,
                     ),

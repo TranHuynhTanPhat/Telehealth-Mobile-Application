@@ -3,12 +3,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  SignUpCubit() : super(SignUpInitial());
+  SignUpCubit() : super(SignUpInitial(blocState: BlocState.Successed));
 
   final UserRepository _userRepository = UserRepository();
 
@@ -27,18 +28,25 @@ class SignUpCubit extends Cubit<SignUpState> {
       String gender,
       String birthday,
       String address) async {
-    emit(SignUpLoadingActionState());
+    emit(SignUpState(blocState: BlocState.Pending));
     try {
-      int? code = await _userRepository.registerAccount(fullName, phone, email,
-          password, passwordConfirm, gender, birthday, address);
-      emit(RegisterAccountActionState(
-          message: code == 201 ? 'success_register' : ''));
+      await _userRepository.registerAccount(fullName, phone, email, password,
+          passwordConfirm, gender, birthday, address);
+      emit(SignUpState(blocState: BlocState.Successed));
     } on DioException catch (e) {
-      emit(SignUpErrorActionState(
-          code: e.response!.statusCode,
-          message: e.response!.data['message'].toString()));
+      emit(
+        SignUpState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString(),
+        ),
+      );
     } catch (e) {
-      emit(SignUpErrorActionState(code: 0, message: e.toString()));
+      emit(
+        SignUpState(
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
     }
   }
 }

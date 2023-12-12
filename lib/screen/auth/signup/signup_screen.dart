@@ -37,6 +37,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   late SignUp step;
 
+  String? conflictPhone;
+  String? confictEmail;
+
   bool _agreeTermsAndConditions = false;
   String? _gender;
 
@@ -95,17 +98,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Builder(
       builder: (context) {
         return BlocListener<SignUpCubit, SignUpState>(
-          listenWhen: (previous, current) => current is SignUpActionState,
           listener: (context, state) {
-            if (state is SignUpLoadingActionState) {
+            if (state.blocState == BlocState.Pending) {
               EasyLoading.show();
-            } else if (state is RegisterAccountActionState) {
-              EasyLoading.dismiss();
+            } else if (state.blocState == BlocState.Successed) {
               EasyLoading.showToast(translate(context, 'success_register'));
               Navigator.pushReplacementNamed(context, logInName);
-            } else if (state is SignUpErrorActionState) {
-              EasyLoading.dismiss();
-              EasyLoading.showToast(state.message);
+            } else if (state.blocState == BlocState.Failed) {
+              if (state.error == 'phone_number_has_been_registered') {
+                setState(() {
+                  step = SignUp.Contact;
+                  conflictPhone = _controllerPhone.text;
+                });
+              } else if (state.error == "email_has_been_registered") {
+                setState(() {
+                  step = SignUp.Contact;
+                  confictEmail = _controllerEmail.text;
+                });
+              }
+              EasyLoading.showToast(translate(context, state.error));
             }
           },
           child: GestureDetector(
@@ -115,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               body: BlocBuilder<SignUpCubit, SignUpState>(
                 builder: (context, state) {
                   return AbsorbPointer(
-                    absorbing: false,
+                    absorbing: state.blocState == BlocState.Pending,
                     child: ListView(
                       shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -187,6 +198,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   },
                                   formKey: _formKeyContact,
+                                  conflictEmail: confictEmail,
+                                  conflictPhone: conflictPhone,
                                   controllerEmail: _controllerEmail,
                                   controllerPhone: _controllerPhone,
                                 ),
