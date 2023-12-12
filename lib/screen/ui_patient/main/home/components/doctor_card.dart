@@ -4,8 +4,9 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/data/api/models/responses/top_doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class DoctorCard extends StatefulWidget {
@@ -13,7 +14,7 @@ class DoctorCard extends StatefulWidget {
     super.key,
     required this.doctor,
   });
-  final TopDoctorsResponse doctor;
+  final DoctorResponse doctor;
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();
@@ -29,12 +30,21 @@ class _DoctorCardState extends State<DoctorCard> {
 
   @override
   Widget build(BuildContext context) {
-    _image = _image ??
-        NetworkImage(
-          CloudinaryContext.cloudinary
-              .image(widget.doctor.avatar ?? '')
-              .toString(),
-        );
+    try {
+      if (widget.doctor.avatar != null && widget.doctor.avatar != 'default') {
+        _image = _image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget.doctor.avatar ?? '')
+                  .toString(),
+            );
+      } else {
+        _image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      _image = AssetImage(DImages.placeholder);
+    }
     return Container(
       decoration: BoxDecoration(
         color: white,
@@ -63,6 +73,7 @@ class _DoctorCardState extends State<DoctorCard> {
                     alignment: Alignment.center,
                     fit: BoxFit.cover,
                     onError: (exception, stackTrace) {
+                      logPrint(exception);
                       setState(() {
                         _image = AssetImage(DImages.placeholder);
                       });
@@ -82,7 +93,7 @@ class _DoctorCardState extends State<DoctorCard> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      widget.doctor.name ?? translate(context, 'undefine'),
+                      widget.doctor.fullName ?? translate(context, 'undefine'),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
@@ -102,7 +113,7 @@ class _DoctorCardState extends State<DoctorCard> {
                       children: [
                         RatingBar.builder(
                           ignoreGestures: true,
-                          initialRating: widget.doctor.averageRating ?? 0,
+                          initialRating: widget.doctor.ratings ?? 0,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -115,7 +126,7 @@ class _DoctorCardState extends State<DoctorCard> {
                           onRatingUpdate: (double value) {},
                         ),
                         Text(
-                          widget.doctor.reviewed.toString(),
+                          widget.doctor.ratings.toString(),
                           style: Theme.of(context).textTheme.bodySmall,
                         )
                       ],

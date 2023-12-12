@@ -11,7 +11,7 @@ import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:intl/intl.dart';
 
-class MainNewsPost extends StatelessWidget {
+class MainNewsPost extends StatefulWidget {
   const MainNewsPost({
     super.key,
     required this.news,
@@ -20,16 +20,23 @@ class MainNewsPost extends StatelessWidget {
   final NewsResponse news;
 
   @override
+  State<MainNewsPost> createState() => _MainNewsPostState();
+}
+
+class _MainNewsPostState extends State<MainNewsPost> {
+  @override
   Widget build(BuildContext context) {
     var _image;
 
     String? timeBetween;
 
     try {
-      if (news.photo != null && news.photo != 'default') {
+      if (widget.news.photo != null && widget.news.photo != 'default') {
         _image = _image ??
             NetworkImage(
-              CloudinaryContext.cloudinary.image(news.photo ?? '').toString(),
+              CloudinaryContext.cloudinary
+                  .image(widget.news.photo ?? '')
+                  .toString(),
             );
       } else {
         _image = AssetImage(DImages.placeholder);
@@ -39,9 +46,9 @@ class MainNewsPost extends StatelessWidget {
       _image = AssetImage(DImages.placeholder);
     }
     try {
-      if (news.updatedAt != null) {
-        DateTime from =
-            DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(news.updatedAt!);
+      if (widget.news.updatedAt != null) {
+        DateTime from = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .parse(widget.news.updatedAt!);
 
         DateTime to = DateTime.now();
         timeBetween = daysBetween(context, from, to);
@@ -84,7 +91,9 @@ class MainNewsPost extends StatelessWidget {
                   fit: BoxFit.cover,
                   onError: (exception, stackTrace) => {
                     logPrint(exception),
-                    _image = AssetImage(DImages.placeholder),
+                    setState(() {
+                      _image = AssetImage(DImages.placeholder);
+                    }),
                   },
                 ),
               ),
@@ -93,7 +102,7 @@ class MainNewsPost extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    news.title ?? translate(context, 'undefine'),
+                    widget.news.title ?? translate(context, 'undefine'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -135,7 +144,8 @@ class MainNewsPost extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                      news.content ?? translate(context, 'cant_load_data'),
+                      widget.news.content ??
+                          translate(context, 'cant_load_data'),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium),

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/app/app_controller.dart';
 
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/license/faqs_screen.dart';
-import 'package:healthline/screen/license/privacy_policy_screen.dart';
-import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/forum/forum_screen.dart';
+import 'package:healthline/screen/license/faqs_screen.dart';
+import 'package:healthline/screen/license/privacy_policy_screen.dart';
+import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
 import 'package:healthline/screen/news/news_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
@@ -35,17 +35,16 @@ import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_d
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/ref_vaccination_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 
 class AppRoute {
-  final _homeCubit = HomeCubit();
   final _vaccineRecordCubit = VaccineRecordCubit();
   final _sideMenuCubit = SideMenuCubit();
   final _medicalRecordCubit = MedicalRecordCubit();
   final _contactCubit = ContactCubit();
-  final _vaccinationCubit = VaccinationCubit();
+  final _docsVaccination = DocsVaccinationCubit();
   final _logInCubit = LogInCubit();
   final _signUpCubit = SignUpCubit();
   final _doctorScheduleCubit = DoctorScheduleCubit();
@@ -56,12 +55,11 @@ class AppRoute {
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
-    _homeCubit.close();
     _vaccineRecordCubit.close();
     _sideMenuCubit.close();
     _medicalRecordCubit.close();
     _contactCubit.close();
-    _vaccinationCubit.close();
+    _docsVaccination.close();
     _logInCubit.close();
     _signUpCubit.close();
     _doctorScheduleCubit.close();
@@ -85,7 +83,6 @@ class AppRoute {
             child: const NewsScreen(),
           ),
         );
-
     }
     if (AppController.instance.authState == AuthState.Unauthorized) {
       switch (settings.name) {
@@ -205,13 +202,13 @@ class AppRoute {
                   value: _vaccineRecordCubit,
                 ),
                 BlocProvider.value(
-                  value: _homeCubit,
-                ),
-                BlocProvider.value(
                   value: _medicalRecordCubit,
                 ),
                 BlocProvider.value(
                   value: _patientRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _doctorCubit,
                 ),
               ],
               child: const MainScreenPatient(),
@@ -285,8 +282,8 @@ class AppRoute {
         case refVaccinationName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider(
-              create: (context) => _vaccinationCubit,
-              child: const RefVaccinationScreen(),
+              create: (context) => _docsVaccination,
+              child: const DocsVaccinationScreen(),
             ),
           );
         case updateHealthStatName:
