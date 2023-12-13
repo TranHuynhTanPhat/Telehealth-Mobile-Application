@@ -81,11 +81,20 @@ class _ShiftScreenState extends State<ShiftScreen> {
             child: ElevatedButtonWidget(
                 text: translate(context, 'update_fixed_schedule'),
                 onPressed: () {
-                  Navigator.pushNamed(context, updateDefaultScheduleDoctorName);
+                  Navigator.pushNamed(context, updateDefaultScheduleDoctorName)
+                      .then((value) => {
+                            if (value == true)
+                              {
+                                context
+                                    .read<DoctorScheduleCubit>()
+                                    .fetchSchedule(),
+                              }
+                          });
                 }),
           ),
           body: AbsorbPointer(
-            absorbing: state is FetchScheduleLoading && state.schedules.isEmpty,
+            absorbing:
+                state.blocState == BlocState.Pending && state.schedules.isEmpty,
             child: NestedScrollView(
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
@@ -148,7 +157,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                                   }
                                 },
                                 child: Text(translate(context, 'update'))),
-                          )
+                          ),
                         ],
                       ),
                     ),

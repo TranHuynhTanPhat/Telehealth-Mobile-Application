@@ -9,12 +9,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/side_menu.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/home_screen.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
 import 'package:healthline/screen/ui_patient/main/schedule/schedule_screen.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
@@ -31,6 +31,7 @@ class MainScreenPatient extends StatefulWidget {
 class _MainScreenPatientState extends State<MainScreenPatient>
     with SingleTickerProviderStateMixin {
   var _currentIndex = 0;
+  bool exit = false;
   double animationValue = 0;
 
   bool isSideMenuClosed = true;
@@ -40,7 +41,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   late AnimationController _animationController;
   late Animation<double> animation;
   late Animation<double> scalAnimation;
-  late Animation<double> hideAnimation;
+  // late Animation<double> hideAnimation;
 
   @override
   void initState() {
@@ -60,10 +61,10 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn),
     );
-    hideAnimation = Tween<double>(begin: 1, end: 0).animate(
-      CurvedAnimation(
-          parent: _animationController, curve: Curves.fastOutSlowIn),
-    );
+    // hideAnimation = Tween<double>(begin: 1, end: 0).animate(
+    //   CurvedAnimation(
+    //       parent: _animationController, curve: Curves.fastOutSlowIn),
+    // );
     if (!mounted) return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
     super.initState();
@@ -117,42 +118,38 @@ class _MainScreenPatientState extends State<MainScreenPatient>
       },
     ];
 
-    void onWillPop(bool value) {
-      DateTime now = DateTime.now();
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-        currentBackPressTime = now;
-        EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-      }
-      // return Future.value(true);
-      Navigator.pop(context);
+    void onWillPop(bool didPop) {
+      if (didPop) return;
+
+      EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+      setState(() {
+        exit = true;
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          exit = false;
+        });
+      });
     }
 
     return MultiBlocListener(
       listeners: [
         BlocListener<VaccineRecordCubit, VaccineRecordState>(
           listener: (context, state) {
-            if (state is DeleteInjectedVaccinationLoading ||
-                state is FetchVaccinationLoading ||
-                state is CreateInjectedVaccinationLoading ||
-                state is UpdateInjectedVaccinationLoading) {
+            if (state.blocState == BlocState.Pending) {
               EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            } else if (state is FetchVaccinationLoaded) {
+            } else if (state.blocState == BlocState.Successed) {
               EasyLoading.dismiss();
-            } else if (state is DeleteInjectedVaccinationLoaded) {
-              EasyLoading.showToast(translate(context, 'delete_successfully'));
-            } else if (state is CreateInjectedVaccinationLoaded ||
-                state is UpdateInjectedVaccinationLoaded) {
+              if (state is DeleteVaccinationRecordState) {
+                EasyLoading.showToast(
+                    translate(context, 'delete_successfully'));
+              }
+            } else if ((state is CreateVaccinationRecordState ||
+                    state is UpdateVaccinationRecordState) &&
+                state.blocState == BlocState.Successed) {
               EasyLoading.showToast(translate(context, 'successfully'));
-            } else if (state is DeleteInjectedVaccinationError) {
-              EasyLoading.showToast(
-                  translate(context, translate(context, state.message)));
-            } else if (state is FetchVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
-            } else if (state is CreateInjectedVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
-            } else if (state is UpdateInjectedVaccinationError) {
-              EasyLoading.showToast(translate(context, state.message));
+            } else if (state.blocState == BlocState.Failed) {
+              EasyLoading.showToast(translate(context, state.error));
             }
           },
         ),
@@ -199,7 +196,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
         ),
       ],
       child: PopScope(
-        canPop: false,
+        canPop: exit,
         onPopInvoked: onWillPop,
         child: Scaffold(
           resizeToAvoidBottomInset: false,

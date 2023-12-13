@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:healthline/data/api/rpc_manager.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 // import 'package:healthline/data/api/api_constants.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -31,7 +30,6 @@ void main() async {
   await AppController.instance.init();
   AliceInspector().init();
 
-  RpcManager.instance.call(10);
 
   // HttpOverrides.global = MyHttpOverrides();
   // Sentry

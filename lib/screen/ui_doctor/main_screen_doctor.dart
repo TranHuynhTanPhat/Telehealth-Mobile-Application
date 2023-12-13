@@ -8,6 +8,7 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/drawer_label.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/account_setting_doctor_screen.dart';
 import 'package:healthline/screen/ui_doctor/application_setting/application_setting_screen.dart';
@@ -16,7 +17,7 @@ import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
 import 'package:healthline/screen/ui_doctor/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class MainScreenDoctor extends StatefulWidget {
@@ -27,12 +28,12 @@ class MainScreenDoctor extends StatefulWidget {
 }
 
 class _MainScreenDoctorState extends State<MainScreenDoctor> {
-  DrawerMenus _currentPage = DrawerMenus.Overview;
-
   DateTime? currentBackPressTime;
   bool disableDrawer = false;
   bool onChangeToPatient = false;
+  bool exit = false;
 
+  DrawerMenu _currentPage = DrawerMenu.Overview;
   // ignore: prefer_typing_uninitialized_variables
   var _image;
 
@@ -46,15 +47,17 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     _image = null;
   }
 
-  void onWillPop(bool value) {
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      EasyLoading.showToast(translate(context, 'click_again_to_exit'));
-    }
-    // return Future.value(true);
-    Navigator.pop(context);
+  void onWillPop(bool didPop) {
+    if (didPop) return;
+    EasyLoading.showToast(translate(context, 'click_again_to_exit'));
+    setState(() {
+      exit = true;
+    });
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        exit = false;
+      });
+    });
   }
 
   void clickDrawer() {
@@ -66,19 +69,19 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: exit,
       onPopInvoked: onWillPop,
       child: MultiBlocListener(
         listeners: [
-          BlocListener<SideMenuCubit, SideMenuState>(
+          BlocListener<AuthenticationCubit, AuthenticationState>(
             listener: (context, state) {
-              if (state is SideMenuLoading) {
+              if (state.blocState == BlocState.Pending) {
                 EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is LogoutActionState) {
+              } else if ((state.blocState == BlocState.Successed ||
+                      state.blocState == BlocState.Failed) &&
+                  state is LogoutState) {
                 EasyLoading.dismiss();
                 Navigator.pushReplacementNamed(context, logInName);
-              } else if (state is ErrorActionState) {
-                EasyLoading.dismiss();
               }
             },
           ),
@@ -93,38 +96,50 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           ),
           BlocListener<DoctorProfileCubit, DoctorProfileState>(
             listener: (context, state) {
-              if (state is DoctorProfileUpdating) {
-                EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is DoctorAvatarSuccessfully) {
-                if (state.profile != null) {
-                  String url = CloudinaryContext.cloudinary
-                      .image(state.profile!.avatar ?? '')
-                      .toString();
-                  NetworkImage provider = NetworkImage(url);
-                  provider.evict().then<void>((bool success) {
-                    if (success) debugPrint('removed image!');
-                  });
+              if (state is UpdateProfileState) {
+                if (state.blocState == BlocState.Pending) {
+                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                } else if (state.blocState == BlocState.Successed) {
+                  EasyLoading.showToast(translate(context, state.message));
+                  if (state.message == "update_avatar_successfully") {
+                    if (state.profile != null) {
+                      String url = CloudinaryContext.cloudinary
+                          .image(state.profile!.avatar ?? '')
+                          .toString();
+                      NetworkImage provider = NetworkImage(url);
+                      provider.evict().then<void>((bool success) {
+                        if (success) debugPrint('removed image!');
+                      });
+                    }
+                  }
+                }
+              } else if (state is FetchProfileState) {
+                if (state.blocState == BlocState.Pending) {
+                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                } else if (state.blocState == BlocState.Successed) {
+                  EasyLoading.dismiss();
+                } else if (state.blocState == BlocState.Failed) {
+                  EasyLoading.showToast(translate(context, state.error));
                 }
               }
             },
           ),
           BlocListener<DoctorScheduleCubit, DoctorScheduleState>(
             listener: (context, state) {
-              if (state is FetchScheduleLoading ||
-                  state is ScheduleByDayUpdating ||
-                  state is FixedScheduleUpdating) {
+              if (state.blocState == BlocState.Pending) {
                 EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is FetchScheduleSuccessfully) {
+              } else if (state is UpdateFixedScheduleState ||
+                  state is UpdateScheduleByDayState) {
+                if (state.blocState == BlocState.Successed) {
+                  EasyLoading.showToast(translate(context, 'successfully'));
+                } else if (state.blocState == BlocState.Failed) {
+                  EasyLoading.showToast(translate(context, state.error));
+                }
+              } else if (state.blocState == BlocState.Successed ||
+                  state.blocState == BlocState.Failed) {
                 EasyLoading.dismiss();
-              } else if (state is FixedScheduleUpdateSuccessfully ||
-                  state is ScheduleByDayUpdateSuccessfully) {
-                EasyLoading.showToast(translate(context, 'successfully'));
-              } else if (state is FetchScheduleError) {
-                EasyLoading.showToast(translate(context, state.message));
-              } else if (state is FixedScheduleUpdateError) {
-                EasyLoading.showToast(translate(context, state.message));
-              } else if (state is ScheduleByDayUpdateError) {
-                EasyLoading.showToast(translate(context, state.message));
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(translate(context, 'cant_load_data'));
               }
             },
           ),
@@ -141,15 +156,15 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 return Text(
                   translate(
                     context,
-                    _currentPage == DrawerMenus.Schedule
+                    _currentPage == DrawerMenu.Schedule
                         ? 'schedule'
-                        : _currentPage == DrawerMenus.YourShift
+                        : _currentPage == DrawerMenu.YourShift
                             ? 'your_shift'
-                            : _currentPage == DrawerMenus.Patient
+                            : _currentPage == DrawerMenu.Patient
                                 ? 'patient'
-                                : _currentPage == DrawerMenus.AccountSetting
+                                : _currentPage == DrawerMenu.AccountSetting
                                     ? 'account_setting'
-                                    : _currentPage == DrawerMenus.Helps
+                                    : _currentPage == DrawerMenu.Helps
                                         ? 'helps'
                                         : state.profile != null
                                             ? state.profile?.fullName ??
@@ -193,17 +208,23 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
                         builder: (context, state) {
                       if (state.profile != null) {
-                        String url = CloudinaryContext.cloudinary
-                            .image(state.profile!.avatar ?? '')
-                            .toString();
-                        NetworkImage provider = NetworkImage(url);
-                        if (state is DoctorAvatarSuccessfully) {
-                          provider.evict().then<void>((bool success) {
-                            if (success) debugPrint('removed image!');
-                          });
+                        try {
+                          if (state.profile?.avatar != null &&
+                              state.profile?.avatar != 'default' &&
+                              state.profile?.avatar != '') {
+                            _image = _image ??
+                                NetworkImage(
+                                  CloudinaryContext.cloudinary
+                                      .image(state.profile?.avatar ?? '')
+                                      .toString(),
+                                );
+                          } else {
+                            _image = AssetImage(DImages.placeholder);
+                          }
+                        } catch (e) {
+                          logPrint(e);
+                          _image = AssetImage(DImages.placeholder);
                         }
-
-                        _image = _image ?? provider;
 
                         return SizedBox(
                           width: double.maxFinite,
@@ -329,10 +350,10 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             ),
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Overview,
+                            active: _currentPage == DrawerMenu.Overview,
                             press: () async {
                               setState(() {
-                                _currentPage = DrawerMenus.Overview;
+                                _currentPage = DrawerMenu.Overview;
                                 clickDrawer();
                               });
                             },
@@ -340,34 +361,34 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             icon: FontAwesomeIcons.houseMedical,
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Schedule,
+                            active: _currentPage == DrawerMenu.Schedule,
                             label: 'schedule',
                             icon: FontAwesomeIcons.solidCalendarCheck,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Schedule;
+                                _currentPage = DrawerMenu.Schedule;
                                 clickDrawer();
                               });
                             },
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.YourShift,
+                            active: _currentPage == DrawerMenu.YourShift,
                             label: 'your_shift',
                             icon: FontAwesomeIcons.solidCalendarDays,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.YourShift;
+                                _currentPage = DrawerMenu.YourShift;
                                 clickDrawer();
                               });
                             },
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Patient,
+                            active: _currentPage == DrawerMenu.Patient,
                             label: 'patient',
                             icon: FontAwesomeIcons.hospitalUser,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Patient;
+                                _currentPage = DrawerMenu.Patient;
                                 clickDrawer();
                               });
                             },
@@ -386,12 +407,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             ),
                           ),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.AccountSetting,
+                            active: _currentPage == DrawerMenu.AccountSetting,
                             label: 'account_setting',
                             icon: FontAwesomeIcons.userGear,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.AccountSetting;
+                                _currentPage = DrawerMenu.AccountSetting;
                                 clickDrawer();
                               });
                             },
@@ -401,14 +422,14 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             builder: (context, state) {
                               return LabelDrawer(
                                 active: _currentPage ==
-                                    DrawerMenus.ApplicationSetting,
+                                    DrawerMenu.ApplicationSetting,
                                 label: 'application_setting',
                                 icon: FontAwesomeIcons.gear,
                                 isShowBadge: state is UpdateAvailable,
                                 press: () {
                                   setState(() {
                                     _currentPage =
-                                        DrawerMenus.ApplicationSetting;
+                                        DrawerMenu.ApplicationSetting;
                                     clickDrawer();
                                   });
                                 },
@@ -417,12 +438,12 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                           ),
                           // const Spacer(),
                           LabelDrawer(
-                            active: _currentPage == DrawerMenus.Helps,
+                            active: _currentPage == DrawerMenu.Helps,
                             label: 'helps',
                             icon: FontAwesomeIcons.solidCircleQuestion,
                             press: () {
                               setState(() {
-                                _currentPage = DrawerMenus.Helps;
+                                _currentPage = DrawerMenu.Helps;
                                 clickDrawer();
                               });
                             },
@@ -446,17 +467,17 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     backgroundColor: MaterialStatePropertyAll(secondary)),
               ),
             ),
-            body: _currentPage == DrawerMenus.AccountSetting
+            body: _currentPage == DrawerMenu.AccountSetting
                 ? const SettingScreen()
-                : _currentPage == DrawerMenus.Schedule
+                : _currentPage == DrawerMenu.Schedule
                     ? const ScheduleDoctorScreen()
-                    : _currentPage == DrawerMenus.YourShift
+                    : _currentPage == DrawerMenu.YourShift
                         ? const ShiftScreen()
-                        : _currentPage == DrawerMenus.Patient
+                        : _currentPage == DrawerMenu.Patient
                             ? const PatientScreen()
-                            : _currentPage == DrawerMenus.Helps
+                            : _currentPage == DrawerMenu.Helps
                                 ? const HelpsScreen()
-                                : _currentPage == DrawerMenus.ApplicationSetting
+                                : _currentPage == DrawerMenu.ApplicationSetting
                                     ? const ApplicationSettingScreen()
                                     : const OverviewScreen(),
           ),

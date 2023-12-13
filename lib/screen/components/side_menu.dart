@@ -8,8 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/info_card.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
 import 'package:healthline/utils/translate.dart';
 
 class SideMenu extends StatefulWidget {
@@ -27,15 +27,15 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SideMenuCubit, SideMenuState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state is SideMenuLoading) {
+        if (state.blocState == BlocState.Pending) {
           EasyLoading.show();
-        } else if (state is LogoutActionState) {
+        } else if ((state.blocState == BlocState.Successed ||
+                state.blocState == BlocState.Failed) &&
+            state is LogoutState) {
           EasyLoading.dismiss();
           Navigator.pushReplacementNamed(context, logInName);
-        } else if (state is ErrorActionState) {
-          EasyLoading.dismiss();
         }
       },
       child: Scaffold(

@@ -17,6 +17,7 @@ class _PostCardState extends State<PostCard> {
   late PreloadPageController _preloadPageController;
 
   late int _currentIndex;
+  bool like = false;
   @override
   void initState() {
     _preloadPageController = PreloadPageController(initialPage: 0);
@@ -90,7 +91,8 @@ class _PostCardState extends State<PostCard> {
                   child: Text(
                     'content fdjflksdfjdlskjfdsajflkjsdlfkjaslkfjldskjfijvnaiuehflkajlkdfjalksfjlkdjfkds',
                     style: Theme.of(context).textTheme.bodyLarge,
-                    overflow: TextOverflow.visible,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -107,6 +109,7 @@ class _PostCardState extends State<PostCard> {
                         height: dimensWidth() * 30,
                         child: PreloadPageView.builder(
                             controller: _preloadPageController,
+                            itemCount: 1,
                             preloadPagesCount: 1,
                             physics: const AlwaysScrollableScrollPhysics(),
                             scrollDirection: Axis.horizontal,
@@ -151,10 +154,15 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        like = !like;
+                      });
+                    },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
-                      overlayColor: MaterialStatePropertyAll(Colors.pink.shade50),
+                      overlayColor:
+                          MaterialStatePropertyAll(Colors.pink.shade50),
                       backgroundColor:
                           const MaterialStatePropertyAll(colorF4F4F4),
                       shape: MaterialStatePropertyAll(
@@ -173,11 +181,17 @@ class _PostCardState extends State<PostCard> {
                           flex: 1,
                           child: Align(
                             alignment: Alignment.centerRight,
-                            child: FaIcon(
-                              FontAwesomeIcons.heart,
-                              size: dimensIcon() * .7,
-                              color: black26,
-                            ),
+                            child: like
+                                ? FaIcon(
+                                    FontAwesomeIcons.solidHeart,
+                                    size: dimensIcon() * .7,
+                                    color: Colors.redAccent,
+                                  )
+                                : FaIcon(
+                                    FontAwesomeIcons.heart,
+                                    size: dimensIcon() * .7,
+                                    color: black26,
+                                  ),
                           ),
                         ),
                         SizedBox(
@@ -191,7 +205,8 @@ class _PostCardState extends State<PostCard> {
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge
-                                ?.copyWith(color: black26),
+                                ?.copyWith(
+                                    color: like ? Colors.redAccent : black26),
                           ),
                         ),
                       ],

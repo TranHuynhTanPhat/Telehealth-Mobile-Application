@@ -4,8 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/widgets/menu_anchor_widget.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
-import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -19,17 +19,17 @@ class UpdateDefaultScheduleScreen extends StatefulWidget {
 
 class _UpdateDefaultScheduleScreenState
     extends State<UpdateDefaultScheduleScreen> {
-  List<List<int>> schedules = List.generate(14, (index) => []);
+  List<List<int>> schedules = List.generate(7, (index) => []);
   List<int> time = List<int>.generate(48, (i) => i + 1);
   int _currentStep = 0;
 
-  List<int> countInputTimes = List.generate(14, (index) => 1);
+  List<int> countInputTimes = List.generate(7, (index) => 1);
   List<List<TextEditingController>> controllerBegin =
-      List.generate(14, (index) => [TextEditingController()]);
+      List.generate(7, (index) => [TextEditingController()]);
   List<List<TextEditingController>> controllerEnd =
-      List.generate(14, (index) => [TextEditingController()]);
-  List<List<int>> begin = List.generate(14, (index) => [-1]);
-  List<List<int>> end = List.generate(14, (index) => [-1]);
+      List.generate(7, (index) => [TextEditingController()]);
+  List<List<int>> begin = List.generate(7, (index) => [-1]);
+  List<List<int>> end = List.generate(7, (index) => [-1]);
 
   @override
   void initState() {
@@ -134,6 +134,15 @@ class _UpdateDefaultScheduleScreenState
         title: Text(
           translate(context, 'update_fixed_schedule'),
         ),
+        leading: Center(
+            child: InkWell(
+          splashColor: transparent,
+          highlightColor: transparent,
+          onTap: () {
+            Navigator.pop(context, false);
+          },
+          child: const FaIcon(FontAwesomeIcons.angleLeft),
+        )),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: dimensWidth() * 2),
@@ -147,131 +156,80 @@ class _UpdateDefaultScheduleScreenState
           )
         ],
       ),
-      body: BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
-        builder: (context, state) {
-          return AbsorbPointer(
-            absorbing: state is FixedScheduleUpdating,
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                Stepper(
-                  currentStep: _currentStep,
-                  physics: const NeverScrollableScrollPhysics(),
-                  connectorColor: const MaterialStatePropertyAll(secondary),
-                  onStepTapped: (value) => setState(() {
-                    updateWorkingTime();
-                    _currentStep = value;
-                  }),
-                  onStepContinue: () => setState(() {
-                    updateWorkingTime();
-                    if (_currentStep < 7) {
-                      _currentStep++;
-                    } else {
-                      updateFixedSchedule();
-                    }
-                  }),
-                  controlsBuilder: (context, details) {
-                    if (details.currentStep < 7) {
-                      return TextButton(
-                        onPressed: details.onStepContinue,
-                        child: Text(
-                          translate(context, 'continue'),
-                        ),
-                      );
-                    } else {
-                      return TextButton(
-                        onPressed: details.onStepContinue,
-                        child: Text(
-                          translate(context, 'save'),
-                        ),
-                      );
-                    }
-                  },
-                  steps: [
-                    ...List.generate(
-                      7,
-                      (index) => Step(
-                          title: Text(changeDate(index)),
-                          content: _currentStep == index
-                              ? Form(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ...List.generate(
-                                        countInputTimes[_currentStep],
-                                        (index) => Padding(
-                                          padding: EdgeInsets.only(
-                                              top: dimensHeight() * 2),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: MenuAnchor(
-                                                  style: MenuStyle(
-                                                    elevation:
-                                                        const MaterialStatePropertyAll(
-                                                            10),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                dimensWidth() *
-                                                                    3),
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    surfaceTintColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    padding: MaterialStatePropertyAll(
-                                                        EdgeInsets.symmetric(
-                                                            horizontal:
-                                                                dimensWidth() *
-                                                                    2,
-                                                            vertical:
-                                                                dimensHeight())),
-                                                  ),
-                                                  builder: (BuildContext
-                                                          context,
-                                                      MenuController controller,
-                                                      Widget? child) {
-                                                    return TextFieldWidget(
-                                                      enable: index ==
-                                                          countInputTimes[
-                                                                  _currentStep] -
-                                                              1,
-                                                      onTap: () {
-                                                        if (controller.isOpen) {
-                                                          controller.close();
-                                                        } else {
-                                                          controller.open();
-                                                        }
-                                                      },
-                                                      readOnly: true,
-                                                      label: translate(
-                                                          context, 'start'),
-                                                      controller:
-                                                          controllerBegin[
-                                                                  _currentStep]
-                                                              [index],
-                                                      validate: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return translate(
-                                                              context,
-                                                              'please_choose');
-                                                        }
-                                                        return null;
-                                                      },
-                                                      suffixIcon: const IconButton(
-                                                          onPressed: null,
-                                                          icon: FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .caretDown)),
-                                                    );
-                                                  },
+      body: BlocListener<DoctorScheduleCubit, DoctorScheduleState>(
+        listener: (context, state) {
+          if (state is UpdateFixedScheduleState) {
+            if (state.blocState == BlocState.Successed) {
+              Navigator.pop(context, true);
+            }
+          }
+        },
+        child: BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
+          builder: (context, state) {
+            return AbsorbPointer(
+              absorbing: state.blocState == BlocState.Pending,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  Stepper(
+                    currentStep: _currentStep,
+                    physics: const NeverScrollableScrollPhysics(),
+                    connectorColor: const MaterialStatePropertyAll(secondary),
+                    onStepTapped: (value) => setState(() {
+                      updateWorkingTime();
+                      _currentStep = value;
+                    }),
+                    onStepContinue: () => setState(() {
+                      updateWorkingTime();
+                      if (_currentStep < 6) {
+                        _currentStep++;
+                      } else {
+                        updateFixedSchedule();
+                      }
+                    }),
+                    controlsBuilder: (context, details) {
+                      if (details.currentStep < 6) {
+                        return TextButton(
+                          onPressed: details.onStepContinue,
+                          child: Text(
+                            translate(context, 'continue'),
+                          ),
+                        );
+                      } else {
+                        return TextButton(
+                          onPressed: details.onStepContinue,
+                          child: Text(
+                            translate(context, 'save'),
+                          ),
+                        );
+                      }
+                    },
+                    steps: [
+                      ...List.generate(
+                        7,
+                        (index) => Step(
+                            title: Text(changeDate(index)),
+                            content: _currentStep == index
+                                ? Form(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ...List.generate(
+                                          countInputTimes[_currentStep],
+                                          (index) => Padding(
+                                            padding: EdgeInsets.only(
+                                                top: dimensHeight() * 2),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                    child: MenuAnchorWidget(
+                                                  enable: index ==
+                                                      countInputTimes[
+                                                              _currentStep] -
+                                                          1,
+                                                  textEditingController:
+                                                      controllerBegin[
+                                                          _currentStep][index],
                                                   menuChildren: time
                                                       .where((element) {
                                                         if (index > 0) {
@@ -299,100 +257,41 @@ class _UpdateDefaultScheduleScreenState
                                                                         [index]
                                                                     .text =
                                                                 convertIntToTime(
-                                                                    e);
+                                                                    e - 1);
 
                                                             begin[_currentStep]
-                                                                [index] = e;
+                                                                [index] = e - 1;
                                                           }),
                                                           child: Text(
-                                                            convertIntToTime(e),
+                                                            convertIntToTime(
+                                                                e - 1),
                                                           ),
                                                         ),
                                                       )
                                                       .toList(),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                child: FaIcon(
-                                                  FontAwesomeIcons.arrowRight,
-                                                  color: black26,
-                                                  size: dimensIcon() * .7,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: MenuAnchor(
-                                                  style: MenuStyle(
-                                                    elevation:
-                                                        const MaterialStatePropertyAll(
-                                                            10),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                dimensWidth() *
-                                                                    3),
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    surfaceTintColor:
-                                                        const MaterialStatePropertyAll(
-                                                            white),
-                                                    padding:
-                                                        MaterialStatePropertyAll(
-                                                      EdgeInsets.symmetric(
-                                                        horizontal:
-                                                            dimensWidth() * 2,
-                                                        vertical:
-                                                            dimensHeight(),
-                                                      ),
-                                                    ),
+                                                  label: 'start',
+                                                )),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  child: FaIcon(
+                                                    FontAwesomeIcons.arrowRight,
+                                                    color: black26,
+                                                    size: dimensIcon() * .7,
                                                   ),
-                                                  builder: (BuildContext
-                                                          context,
-                                                      MenuController controller,
-                                                      Widget? child) {
-                                                    return TextFieldWidget(
-                                                      enable: index ==
-                                                              countInputTimes[
-                                                                      _currentStep] -
-                                                                  1 &&
-                                                          begin[_currentStep]
-                                                                  [index] !=
-                                                              -1,
-                                                      onTap: () {
-                                                        if (controller.isOpen) {
-                                                          controller.close();
-                                                        } else {
-                                                          controller.open();
-                                                        }
-                                                      },
-                                                      readOnly: true,
-                                                      label: translate(
-                                                          context, 'end'),
-                                                      controller: controllerEnd[
+                                                ),
+                                                Expanded(
+                                                    child: MenuAnchorWidget(
+                                                  enable: index ==
+                                                          countInputTimes[
+                                                                  _currentStep] -
+                                                              1 &&
+                                                      begin[_currentStep]
+                                                              [index] !=
+                                                          -1,
+                                                  textEditingController:
+                                                      controllerEnd[
                                                           _currentStep][index],
-                                                      validate: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return translate(
-                                                              context,
-                                                              'please_choose');
-                                                        }
-                                                        return null;
-                                                      },
-                                                      suffixIcon: const IconButton(
-                                                          onPressed: null,
-                                                          icon: FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .caretDown)),
-                                                    );
-                                                  },
                                                   menuChildren: time
                                                       .where((element) {
                                                         if (begin[_currentStep]
@@ -416,127 +315,236 @@ class _UpdateDefaultScheduleScreenState
                                                                         [index]
                                                                     .text =
                                                                 convertIntToTime(
-                                                                    e);
+                                                                    e - 1);
 
                                                             end[_currentStep]
-                                                                [index] = e;
+                                                                [index] = e - 1;
                                                           }),
                                                           child: Text(
-                                                            convertIntToTime(e),
+                                                            convertIntToTime(
+                                                                e - 1),
                                                           ),
                                                         ),
                                                       )
                                                       .toList(),
+                                                  label: 'end',
+                                                )
+
+                                                    // MenuAnchor(
+                                                    //   style: MenuStyle(
+                                                    //     elevation:
+                                                    //         const MaterialStatePropertyAll(
+                                                    //             10),
+                                                    //     shape: MaterialStateProperty
+                                                    //         .all<
+                                                    //             RoundedRectangleBorder>(
+                                                    //       RoundedRectangleBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius.circular(
+                                                    //                 dimensWidth() *
+                                                    //                     3),
+                                                    //       ),
+                                                    //     ),
+                                                    //     backgroundColor:
+                                                    //         const MaterialStatePropertyAll(
+                                                    //             white),
+                                                    //     surfaceTintColor:
+                                                    //         const MaterialStatePropertyAll(
+                                                    //             white),
+                                                    //     padding:
+                                                    //         MaterialStatePropertyAll(
+                                                    //       EdgeInsets.symmetric(
+                                                    //         horizontal:
+                                                    //             dimensWidth() * 2,
+                                                    //         vertical:
+                                                    //             dimensHeight(),
+                                                    //       ),
+                                                    //     ),
+                                                    //   ),
+                                                    //   builder: (BuildContext
+                                                    //           context,
+                                                    //       MenuController controller,
+                                                    //       Widget? child) {
+                                                    //     return TextFieldWidget(
+                                                    //       enable: index ==
+                                                    //               countInputTimes[
+                                                    //                       _currentStep] -
+                                                    //                   1 &&
+                                                    //           begin[_currentStep]
+                                                    //                   [index] !=
+                                                    //               -1,
+                                                    //       onTap: () {
+                                                    //         if (controller.isOpen) {
+                                                    //           controller.close();
+                                                    //         } else {
+                                                    //           controller.open();
+                                                    //         }
+                                                    //       },
+                                                    //       readOnly: true,
+                                                    //       label: translate(
+                                                    //           context, 'end'),
+                                                    //       controller: controllerEnd[
+                                                    //           _currentStep][index],
+                                                    //       validate: (value) {
+                                                    //         if (value!.isEmpty) {
+                                                    //           return translate(
+                                                    //               context,
+                                                    //               'please_choose');
+                                                    //         }
+                                                    //         return null;
+                                                    //       },
+                                                    //       suffixIcon: const IconButton(
+                                                    //           onPressed: null,
+                                                    //           icon: FaIcon(
+                                                    //               FontAwesomeIcons
+                                                    //                   .caretDown)),
+                                                    //     );
+                                                    //   },
+                                                    // menuChildren: time
+                                                    //     .where((element) {
+                                                    //       if (begin[_currentStep]
+                                                    //               [index] <
+                                                    //           element) {
+                                                    //         return true;
+                                                    //       }
+                                                    //       return false;
+                                                    //     })
+                                                    //     .map(
+                                                    //       (e) => MenuItemButton(
+                                                    //         style:
+                                                    //             const ButtonStyle(
+                                                    //           backgroundColor:
+                                                    //               MaterialStatePropertyAll(
+                                                    //                   white),
+                                                    //         ),
+                                                    //         onPressed: () =>
+                                                    //             setState(() {
+                                                    //           controllerEnd[_currentStep]
+                                                    //                       [index]
+                                                    //                   .text =
+                                                    //               convertIntToTime(
+                                                    //                   e);
+
+                                                    //           end[_currentStep]
+                                                    //               [index] = e;
+                                                    //         }),
+                                                    //         child: Text(
+                                                    //           convertIntToTime(e),
+                                                    //         ),
+                                                    //       ),
+                                                    //     )
+                                                    //     .toList(),
+                                                    // ),
+                                                    ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // BaseGridview(radio: 3.2, children: [
+                                        //   ...time.map(
+                                        //     (e) => InkWell(
+                                        //       splashColor: transparent,
+                                        //       highlightColor: transparent,
+                                        //       onTap: () {
+                                        //         setState(() {
+                                        //           if (workingTimes.contains(e)) {
+                                        //             workingTimes.remove(e);
+                                        //           } else {
+                                        //             workingTimes.add(e);
+                                        //           }
+                                        //         });
+                                        //       },
+                                        //       child: workingTimes.contains(e)
+                                        //           ? ValidShift(time: convertIntToTime(e))
+                                        //           : InvalidShift(
+                                        //               time: convertIntToTime(e),
+                                        //             ),
+                                        //     ),
+                                        //   )
+                                        // ]),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: dimensHeight() * 2),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: IconButton(
+                                                  onPressed: countInputTimes[
+                                                              _currentStep] <=
+                                                          24
+                                                      ? () {
+                                                          addInputTimes();
+                                                        }
+                                                      : null,
+                                                  icon: FaIcon(
+                                                    FontAwesomeIcons.plus,
+                                                    // color: color1F1F1F,
+                                                    size: dimensIcon() * .5,
+                                                  ),
+                                                  disabledColor: black26,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: IconButton(
+                                                  // style: ButtonStyle(
+                                                  //     iconColor: MaterialStatePropertyAll(
+                                                  //         countInputTimes > 1 ? color1F1F1F : black26)),
+                                                  onPressed: countInputTimes[
+                                                              _currentStep] >
+                                                          1
+                                                      ? () {
+                                                          removeInputTimes();
+                                                        }
+                                                      : null,
+                                                  icon: FaIcon(
+                                                    FontAwesomeIcons.minus,
+                                                    // color: color1F1F1F,
+                                                    size: dimensIcon() * .5,
+                                                  ),
+                                                  disabledColor: black26,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ),
-                                      // BaseGridview(radio: 3.2, children: [
-                                      //   ...time.map(
-                                      //     (e) => InkWell(
-                                      //       splashColor: transparent,
-                                      //       highlightColor: transparent,
-                                      //       onTap: () {
-                                      //         setState(() {
-                                      //           if (workingTimes.contains(e)) {
-                                      //             workingTimes.remove(e);
-                                      //           } else {
-                                      //             workingTimes.add(e);
-                                      //           }
-                                      //         });
-                                      //       },
-                                      //       child: workingTimes.contains(e)
-                                      //           ? ValidShift(time: convertIntToTime(e))
-                                      //           : InvalidShift(
-                                      //               time: convertIntToTime(e),
-                                      //             ),
-                                      //     ),
-                                      //   )
-                                      // ]),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            top: dimensHeight() * 2),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: IconButton(
-                                                onPressed: countInputTimes[
-                                                            _currentStep] <=
-                                                        24
-                                                    ? () {
-                                                        addInputTimes();
-                                                      }
-                                                    : null,
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons.plus,
-                                                  // color: color1F1F1F,
-                                                  size: dimensIcon() * .5,
-                                                ),
-                                                disabledColor: black26,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: IconButton(
-                                                // style: ButtonStyle(
-                                                //     iconColor: MaterialStatePropertyAll(
-                                                //         countInputTimes > 1 ? color1F1F1F : black26)),
-                                                onPressed: countInputTimes[
-                                                            _currentStep] >
-                                                        1
-                                                    ? () {
-                                                        removeInputTimes();
-                                                      }
-                                                    : null,
-                                                icon: FaIcon(
-                                                  FontAwesomeIcons.minus,
-                                                  // color: color1F1F1F,
-                                                  size: dimensIcon() * .5,
-                                                ),
-                                                disabledColor: black26,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              // BaseGridview(radio: 3.2, children: [
-                              //     ...time.map(
-                              //       (e) => InkWell(
-                              //         splashColor: transparent,
-                              //         highlightColor: transparent,
-                              //         onTap: () {
-                              //           setState(() {
-                              //             if (schedules[index].contains(e)) {
-                              //               schedules[index].remove(e);
-                              //             } else {
-                              //               schedules[index].add(e);
-                              //             }
-                              //           });
-                              //         },
-                              //         child: schedules[index].contains(e)
-                              //             ? ValidShift(
-                              //                 time: convertIntToTime(e))
-                              //             : InvalidShift(
-                              //                 time: convertIntToTime(e),
-                              //               ),
-                              //       ),
-                              //     )
-                              //   ])
-                              : const SizedBox(),
-                          state: _currentStep == index
-                              ? StepState.editing
-                              : StepState.indexed),
-                    ).toList(),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
+                                      ],
+                                    ),
+                                  )
+                                // BaseGridview(radio: 3.2, children: [
+                                //     ...time.map(
+                                //       (e) => InkWell(
+                                //         splashColor: transparent,
+                                //         highlightColor: transparent,
+                                //         onTap: () {
+                                //           setState(() {
+                                //             if (schedules[index].contains(e)) {
+                                //               schedules[index].remove(e);
+                                //             } else {
+                                //               schedules[index].add(e);
+                                //             }
+                                //           });
+                                //         },
+                                //         child: schedules[index].contains(e)
+                                //             ? ValidShift(
+                                //                 time: convertIntToTime(e))
+                                //             : InvalidShift(
+                                //                 time: convertIntToTime(e),
+                                //               ),
+                                //       ),
+                                //     )
+                                //   ])
+                                : const SizedBox(),
+                            state: _currentStep == index
+                                ? StepState.editing
+                                : StepState.indexed),
+                      ).toList(),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

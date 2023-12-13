@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
-import 'package:healthline/screen/widgets/slide_days_in_month.dart';
+import 'package:healthline/screen/components/slide_days_in_month.dart';
 import './components/export.dart';
 
 class UpcomingFrame extends StatefulWidget {

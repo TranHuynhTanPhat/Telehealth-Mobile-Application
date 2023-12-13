@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
-class CommentCard extends StatefulWidget {
-  const CommentCard({super.key});
+class CommentCard extends StatelessWidget {
+  const CommentCard({super.key, required this.onTap, this.child});
 
-  @override
-  State<CommentCard> createState() => _CommentCardState();
-}
+  final Function() onTap;
+  final Widget? child;
 
-class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,7 +51,7 @@ class _CommentCardState extends State<CommentCard> {
                             'fkạdflkjdslfjlsdjflkádjfjádlkfjldàkladsjfl dklfjaldskjflsdjfkadsjlfsjdàkdls',
                             style: Theme.of(context).textTheme.bodyLarge,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                            maxLines: 2,
                           ),
                         ),
                       ],
@@ -73,7 +71,7 @@ class _CommentCardState extends State<CommentCard> {
                             width: dimensWidth() * 2,
                           ),
                           InkWell(
-                            onTap: null,
+                            onTap: onTap,
                             child: Text(
                               translate(context, 'reply'),
                               style: Theme.of(context)
@@ -91,6 +89,14 @@ class _CommentCardState extends State<CommentCard> {
             ),
           ],
         ),
+        if (child != null)
+          Container(
+            margin: EdgeInsets.only(left: dimensWidth() * 5),
+            child: 
+            Padding(
+                padding: EdgeInsets.only(top: dimensHeight() * 2),
+                child: child),
+          ),
       ],
     );
   }

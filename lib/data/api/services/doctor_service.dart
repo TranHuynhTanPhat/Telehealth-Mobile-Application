@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/doctor_profile_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -13,10 +13,10 @@ class DoctorService extends BaseService {
   //   return doctors.map((e) => TopDoctorsResponse.fromMap(e)).toList();
   // }
 
-  Future<DoctorProfileResponse> getProfile() async {
+  Future<DoctorResponse> getProfile() async {
     final response = await get(ApiConstants.DOCTOR, isDoctor: true);
 
-    return DoctorProfileResponse.fromMap(response.data);
+    return DoctorResponse.fromMap(response.data);
   }
 
   Future<List<ScheduleResponse>> getSchedule() async {
@@ -86,11 +86,11 @@ class DoctorService extends BaseService {
     return response;
   }
 
-  Future<List<DoctorProfileResponse>> getListDoctor() async {
-    final response = await get(ApiConstants.DOCTOR_LIST);
-    List<DoctorProfileResponse> doctors = response.data
-        .map<DoctorProfileResponse>((e) => DoctorProfileResponse.fromMap(e))
-        .toList();
-    return doctors;
-  }
+  // Future<List<DoctorResponse>> getListDoctor() async {
+  //   final response = await get(ApiConstants.DOCTOR_LIST);
+  //   List<DoctorResponse> doctors = response.data
+  //       .map<DoctorResponse>((e) => DoctorResponse.fromMap(e))
+  //       .toList();
+  //   return doctors;
+  // }
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/repository/doctor_repository.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +10,8 @@ part 'doctor_schedule_state.dart';
 
 class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
   DoctorScheduleCubit()
-      : super(DoctorScheduleInitial(schedules: [], scheduleId: null));
+      : super(DoctorScheduleInitial(
+            schedules: [], scheduleId: null, blocState: BlocState.Successed));
   final DoctorRepository _doctorRepository = DoctorRepository();
   @override
   void onChange(Change<DoctorScheduleState> change) {
@@ -18,46 +20,56 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
   }
 
   Future<void> updateScheduleId(String? id) async {
-    emit(DoctorScheduleInitial(schedules: state.schedules, scheduleId: id));
+    emit(DoctorScheduleState(
+        schedules: state.schedules,
+        scheduleId: id,
+        blocState: BlocState.Successed));
   }
 
   Future<void> fetchSchedule() async {
     try {
-      emit(FetchScheduleLoading(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+      emit(FetchScheduleState(
+          schedules: state.schedules,
+          scheduleId: state.scheduleId,
+          blocState: BlocState.Pending));
       List<ScheduleResponse> schedules =
           await _doctorRepository.fetchSchedule();
-      await updateScheduleId(schedules.first.id);
 
-      emit(FetchScheduleSuccessfully(
+      emit(FetchScheduleState(
           schedules: schedules,
-          scheduleId: schedules.firstWhere((element) {
-            DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
-            DateTime currentDate = DateTime.now();
-            if (dateTime.day == currentDate.day &&
-                dateTime.month == currentDate.month &&
-                dateTime.year == currentDate.year) {
-              return true;
-            } else {
-              return false;
-            }
-          }).id));
+          scheduleId: schedules.firstWhere(
+            (element) {
+              DateTime dateTime = DateFormat('dd/MM/yyyy').parse(element.date!);
+              DateTime currentDate = DateTime.now();
+              if (dateTime.day == currentDate.day &&
+                  dateTime.month == currentDate.month &&
+                  dateTime.year == currentDate.year) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            orElse: () => ScheduleResponse(),
+          ).id,
+          blocState: BlocState.Successed));
     } on DioException catch (e) {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(
-        FetchScheduleError(
+        FetchScheduleState(
           schedules: state.schedules,
-          message: e.response!.data['message'].toString(),
+          error: e.response!.data['message'].toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     } catch (e) {
       logPrint("ERROR FETCH SCHEDULE: ${e.toString()}");
       emit(
-        FetchScheduleError(
+        FetchScheduleState(
           schedules: state.schedules,
-          message: e.toString(),
+          error: e.toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     }
@@ -94,28 +106,34 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
 
   Future<void> updateFixedSchedule(List<List<int>> schedules) async {
     try {
-      emit(FixedScheduleUpdating(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+      emit(UpdateFixedScheduleState(
+          schedules: state.schedules,
+          scheduleId: state.scheduleId,
+          blocState: BlocState.Pending));
 
       await _doctorRepository.updateFixedSchedule(schedules);
-      emit(FixedScheduleUpdateSuccessfully(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+      emit(UpdateFixedScheduleState(
+          schedules: state.schedules,
+          scheduleId: state.scheduleId,
+          blocState: BlocState.Successed));
     } on DioException catch (e) {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(
-        FixedScheduleUpdateError(
+        UpdateFixedScheduleState(
           schedules: state.schedules,
-          message: e.response!.data['message'].toString(),
+          error: e.response!.data['message'].toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     } catch (e) {
       logPrint("ERROR UPDATE FIXED SCHEDULE: ${e.toString()}");
       emit(
-        FixedScheduleUpdateError(
+        UpdateFixedScheduleState(
           schedules: state.schedules,
-          message: e.toString(),
+          error: e.toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     }
@@ -123,29 +141,35 @@ class DoctorScheduleCubit extends HydratedCubit<DoctorScheduleState> {
 
   Future<void> updateScheduleByDay(List<int> workingTimes) async {
     try {
-      emit(ScheduleByDayUpdating(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+      emit(UpdateScheduleByDayState(
+          schedules: state.schedules,
+          scheduleId: state.scheduleId,
+          blocState: BlocState.Pending));
 
       await _doctorRepository.updateScheduleByDay(
           workingTimes, state.scheduleId!);
-      emit(ScheduleByDayUpdateSuccessfully(
-          schedules: state.schedules, scheduleId: state.scheduleId));
+      emit(UpdateScheduleByDayState(
+          schedules: state.schedules,
+          scheduleId: state.scheduleId,
+          blocState: BlocState.Successed));
     } on DioException catch (e) {
       logPrint("ERROR DIO: ${e.message.toString()}");
       emit(
-        ScheduleByDayUpdateError(
+        UpdateScheduleByDayState(
           schedules: state.schedules,
-          message: e.response!.data['message'].toString(),
+          error: e.response!.data['message'].toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     } catch (e) {
       logPrint("ERROR UPDATE SCHEDULE BY DAY: ${e.toString()}");
       emit(
-        FixedScheduleUpdateError(
+        UpdateScheduleByDayState(
           schedules: state.schedules,
-          message: e.toString(),
+          error: e.toString(),
           scheduleId: state.scheduleId,
+          blocState: BlocState.Failed,
         ),
       );
     }

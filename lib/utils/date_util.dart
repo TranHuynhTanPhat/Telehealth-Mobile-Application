@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/widgets.dart';
+import 'package:healthline/utils/translate.dart';
 import 'package:intl/intl.dart';
 
 const DATE_FORMAT = "EEEE, dd MMMM yyyy";
@@ -45,6 +46,7 @@ String formatMonth(BuildContext context, DateTime date) {
   return DateFormat(MONTH_FORMAT, Localizations.localeOf(context).toString())
       .format(date);
 }
+
 String formatFileDate(BuildContext context, DateTime date) {
   return DateFormat(FILE_DATE, Localizations.localeOf(context).toString())
       .format(date);
@@ -83,4 +85,41 @@ calculateAge(DateTime birthDate) {
     }
   }
   return age;
+}
+
+String daysBetween(BuildContext context, DateTime from, DateTime to) {
+  Duration duration = to.difference(from);
+  if (duration.inHours == 0 &&
+      (duration.inMinutes == 0 || duration.inMinutes == 1)) {
+    return "1 ${translate(context, 'minute_ago')}";
+  } else if (duration.inHours == 0) {
+    return '${duration.inMinutes} ${translate(context, 'minutes_ago')}';
+  } else {
+    if (duration.inHours == 1) {
+      return '1 ${translate(context, 'hour_ago')}';
+    } else if (duration.inHours < 24) {
+      return '${duration.inHours} ${translate(context, 'hours_ago')}';
+    } else {
+      int day = (duration.inHours / 24).round();
+      if (day == 1) {
+        return '1 ${translate(context, 'day_ago')}';
+      } else if (day < 28) {
+        return '$day ${translate(context, 'days_ago')}';
+      } else {
+        int month = (day / 30).round();
+        if (month == 1) {
+          return '1 ${translate(context, 'month_ago')}';
+        } else if (day < 365) {
+          return '$month ${translate(context, 'months_ago')}';
+        } else {
+          int year = (day / 365).round();
+          if (year == 1) {
+            return '1 ${translate(context, 'year_ago')}';
+          } else {
+            return '$year ${translate(context, 'years_ago')}';
+          }
+        }
+      }
+    }
+  }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:healthline/app/app_controller.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
@@ -11,7 +10,6 @@ import 'package:healthline/routes/app_routes.dart';
 import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -26,16 +24,22 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     _router.dispose();
-    AppController().close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     configLoading(context);
-    Locale locale = Platform.localeName != 'vi_VN' || Platform.localeName!='vi'
-        ? const Locale('en')
-        : const Locale('vi');
+
+    late Locale locale;
+    if(Platform.localeName.contains('vi')){
+      locale = const Locale('vi');
+    }else {
+      locale = const Locale('en');
+    }
+        // Platform.localeName != 'vi_VN' || Platform.localeName != 'vi'
+        //     ? const Locale('en')
+        //     : const Locale('vi');
 
     return LayoutBuilder(
       builder: (context, constraints) {

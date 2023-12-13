@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  const TextFieldWidget({
-    super.key,
-    this.label,
-    this.hint,
-    this.textInputType = TextInputType.text,
-    this.obscureText = false,
-    this.enableSuggestions = false,
-    this.autocorrect = false,
-    required this.controller,
-    this.error,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.filled = false,
-    this.fillColor = white,
-    this.enabledBorderColor = colorA8B1CE,
-    this.focusedBorderColor = color1F1F1F,
-    this.suffix,
-    this.prefix,
-    required this.validate,
-    this.readOnly = false,
-    this.onTap,
-    this.maxLine = 1,
-    this.enable = true,
-    this.onChanged,
-    this.focusNode,
-  });
-  final TextEditingController controller;
+  const TextFieldWidget(
+      {super.key,
+      this.label,
+      this.hint,
+      this.textInputType,
+      this.obscureText = false,
+      this.enableSuggestions = true,
+      this.autocorrect = false,
+       this.controller,
+      this.error,
+      this.suffixIcon,
+      this.prefixIcon,
+      this.filled = false,
+      this.fillColor = white,
+      this.enabledBorderColor = colorA8B1CE,
+      this.focusedBorderColor = color1F1F1F,
+      this.suffix,
+      this.prefix,
+      required this.validate,
+      this.readOnly = false,
+      this.onTap,
+      this.maxLine = 1,
+      this.enable = true,
+      this.onChanged,
+      this.focusNode,
+      this.autovalidateMode});
+  final TextEditingController? controller;
   final String? label;
   final String? hint;
   final String? error;
@@ -51,6 +51,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool enable;
   final Function(String)? onChanged;
   final FocusNode? focusNode;
+  final AutovalidateMode? autovalidateMode;
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +65,22 @@ class TextFieldWidget extends StatelessWidget {
       readOnly: readOnly,
       validator: validate,
       controller: controller,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(fontWeight: FontWeight.w600),
       keyboardType: textInputType,
       obscureText: obscureText!,
       enableSuggestions: enableSuggestions!,
       autocorrect: autocorrect!,
+      autovalidateMode: autovalidateMode,
       decoration: InputDecoration(
         alignLabelWithHint: true,
         fillColor: fillColor,
         filled: filled,
         contentPadding: EdgeInsets.all(dimensHeight() * 2),
         labelText: label,
-        // labelStyle: Theme.of(context).textTheme.bodyLarge,
+        // labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: validate!=null?Colors.redAccent:color1F1F1F),
         floatingLabelStyle: Theme.of(context)
             .textTheme
             .labelLarge
@@ -83,8 +88,12 @@ class TextFieldWidget extends StatelessWidget {
         hintText: hint,
         hintStyle: Theme.of(context)
             .textTheme
-            .labelLarge
-            ?.copyWith(color: colorA8B1CE),
+            .bodyLarge
+            ?.copyWith(color: colorA8B1CE, fontWeight: FontWeight.w600),
+        errorStyle: Theme.of(context)
+            .textTheme
+            .bodySmall
+            ?.copyWith(color: Colors.redAccent),
         errorText: error,
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,

@@ -36,7 +36,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Padding(
               padding: EdgeInsets.all(dimensWidth()),
               child: FaIcon(
-                FontAwesomeIcons.checkDouble,
+                FontAwesomeIcons.check,
                 size: dimensIcon() * .8,
                 color: color1F1F1F,
               ),

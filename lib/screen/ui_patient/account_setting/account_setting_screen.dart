@@ -110,7 +110,7 @@ class AccountSettingScreen extends StatelessWidget {
           ListTile(
             onTap: () {
               // RestClient().logout();
-              context.read<SideMenuCubit>().logout();
+              context.read<AuthenticationCubit>().logout();
               Navigator.pop(context);
             },
             shape: RoundedRectangleBorder(

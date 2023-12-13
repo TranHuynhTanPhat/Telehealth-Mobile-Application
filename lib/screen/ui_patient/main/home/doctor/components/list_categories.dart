@@ -5,7 +5,10 @@ import 'package:healthline/utils/translate.dart';
 class ListCategories extends StatefulWidget {
   const ListCategories({
     super.key,
+    required this.callback,
   });
+
+  final Function(String) callback;
 
   @override
   State<ListCategories> createState() => _ListCategoriesState();
@@ -13,23 +16,15 @@ class ListCategories extends StatefulWidget {
 
 class _ListCategoriesState extends State<ListCategories> {
   int _selected = 0;
-  final List<String> categories = [
-    'all',
-    'general',
-    'dentist',
-    'cardiologist',
-    'depression',
-    'optician',
-    'audiologist',
-    'paediatric',
-    'therapist'
-  ];
+
+  List<String> specialty = Specialty.values.map((e) => e.name).toList();
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: dimensWidth() * 5.5,
       child: ListView.builder(
-        itemCount: categories.length,
+        itemCount: specialty.length,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(top: dimensWidth()),
@@ -38,11 +33,12 @@ class _ListCategoriesState extends State<ListCategories> {
           highlightColor: transparent,
           onTap: () => setState(() {
             _selected = index;
+            widget.callback(specialty[index]);
           }),
           child: Container(
             margin: EdgeInsets.only(
               left: index == 0 ? dimensWidth() * 3 : dimensWidth(),
-              right: index == categories.length - 1
+              right: index == specialty.length - 1
                   ? dimensWidth() * 3
                   : dimensWidth(),
             ),
@@ -57,7 +53,7 @@ class _ListCategoriesState extends State<ListCategories> {
               ),
             ),
             child: Text(
-              translate(context, categories[index]),
+              translate(context, specialty[index]),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall

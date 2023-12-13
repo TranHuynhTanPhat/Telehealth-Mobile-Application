@@ -15,6 +15,9 @@ jobs:
           cat > .env <<EOF
           BASE_URL=${{ secrets.BASE_URL }}
           SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+          MEILI_SEARCH_HOST=${{ secrets.MEILI_SEARCH_HOST }}
+          MEILI_SEARCH_KEY=${{ secrets.MEILI_SEARCH_KEY }}
           EOF
       - uses: actions/setup-java@v1
         with:
@@ -37,7 +40,8 @@ jobs:
           BASE_URL=${{ secrets.BASE_URL }}
           SENTRY_DSN=${{ secrets.SENTRY_DSN }}
           CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
-          CLOUDINARY_API=${{ secrets.CLOUDINARY_API }}
+          MEILI_SEARCH_HOST=${{ secrets.MEILI_SEARCH_HOST }}
+          MEILI_SEARCH_KEY=${{ secrets.MEILI_SEARCH_KEY }}
           EOF
       - uses: actions/setup-java@v1
         with:
@@ -60,6 +64,9 @@ jobs:
           cat > .env <<EOF
           BASE_URL=${{ secrets.BASE_URL }}
           SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
+          MEILI_SEARCH_HOST=${{ secrets.MEILI_SEARCH_HOST }}
+          MEILI_SEARCH_KEY=${{ secrets.MEILI_SEARCH_KEY }}
           EOF
       - uses: actions/setup-java@v1
         with:

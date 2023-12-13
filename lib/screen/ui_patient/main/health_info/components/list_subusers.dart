@@ -5,8 +5,6 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/export.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/components/subuser_input_dialog.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/components/update_subuser_input_dialog.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 
 class ListSubUser extends StatefulWidget {

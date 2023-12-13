@@ -48,9 +48,11 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   Widget build(BuildContext context) {
     return BlocListener<VaccineRecordCubit, VaccineRecordState>(
       listener: (context, state) {
-        if (state is CreateInjectedVaccinationLoaded) {
+        if (state is CreateVaccinationRecordState &&
+            state.blocState == BlocState.Successed) {
           Navigator.pop(context, true);
-        } else if (state is FetchVaccinationError) {
+        } else if (state is FetchVaccinationState &&
+            state.blocState == BlocState.Failed) {
           Navigator.pop(context);
         }
       },
@@ -78,34 +80,36 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                 centerTitle: true,
                 leading: cancelButton(context),
                 actions: [
-                  checkValid()
-                      ? Padding(
-                          padding: EdgeInsets.only(right: dimensWidth() * 2),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(180),
-                            onTap: () => context
-                                .read<VaccineRecordCubit>()
-                                .createInjectedVaccination(
-                                    state.vaccinations[_index!].id!,
-                                    _currentStep + 1,
-                                    _controllerDayOfLastDose.text),
-                            child: saveButton(context),
-                          ),
-                        )
-                      : const SizedBox(),
+                  if (checkValid())
+                    Padding(
+                      padding: EdgeInsets.only(right: dimensWidth() * 2),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(180),
+                        onTap: () => context
+                            .read<VaccineRecordCubit>()
+                            .createVaccinationRecordState(
+                                state.vaccinations[_index!].id!,
+                                _currentStep + 1,
+                                _controllerDayOfLastDose.text),
+                        child: saveButton(context),
+                      ),
+                    )
                 ],
               ),
               body: AbsorbPointer(
-                absorbing: state is VaccineRecordLoadingState,
+                absorbing: state.blocState == BlocState.Pending,
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+                  padding: EdgeInsets.symmetric(
+                    vertical: dimensHeight(),
+                  ),
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: dimensHeight(),
-                          horizontal: dimensWidth() * 3),
+                        vertical: dimensHeight(),
+                        horizontal: dimensWidth() * 3,
+                      ),
                       child: MenuAnchor(
                         onOpen: () {
                           setState(() {
@@ -113,17 +117,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             _dose = null;
                           });
                         },
-                        onClose: () {
-                          if (_index != null) {
-                            // if (state.diseaseAdult[_index!].vaccinations.length ==
-                            //     1) {
-                            int dose = state.vaccinations[_index!].maxDose!;
-                            // _controllerVaccine.text = dose.toString();
-                            _currentStep = 0;
-                            _dose = dose;
-                            // }
-                          }
-                        },
+                        onClose: () {},
                         style: MenuStyle(
                           elevation: const MaterialStatePropertyAll(10),
                           shape:
@@ -162,8 +156,9 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             controller: _controllerDisease,
                             validate: (value) => null,
                             suffixIcon: const IconButton(
-                                onPressed: null,
-                                icon: FaIcon(FontAwesomeIcons.caretDown)),
+                              onPressed: null,
+                              icon: FaIcon(FontAwesomeIcons.caretDown),
+                            ),
                           );
                         },
                         menuChildren: state.vaccinations
@@ -188,6 +183,13 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                                       translate(context, e.disease.toString());
                                   setState(() {
                                     _index = state.vaccinations.indexOf(e);
+
+                                    int dose =
+                                        state.vaccinations[_index!].maxDose!;
+                                    // _controllerVaccine.text = dose.toString();
+                                    _currentStep = 0;
+                                    _dose = dose;
+                                    // }
                                   });
                                 }),
                                 child: Container(
@@ -205,47 +207,45 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             .toList(),
                       ),
                     ),
-                    _dose != null && _dose! > 0
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 3),
-                            child: Text(
-                                '${translate(context, "how_many_doses_have_you_received")} - ${_currentStep + 1}'),
-                          )
-                        : const SizedBox(),
-                    _dose != null && _dose! > 0
-                        ? Container(
-                            height: dimensHeight() * 18,
-                            alignment: Alignment.topCenter,
-                            child: Stepper(
-                              physics: const NeverScrollableScrollPhysics(),
-                              elevation: 0,
-                              margin: EdgeInsets.zero,
-                              steps: [
-                                ...List.generate(
-                                  _dose!,
-                                  (index) => Step(
-                                      title: const SizedBox(),
-                                      label: Text(
-                                          '${translate(context, 'dose')} ${index + 1}'),
-                                      content: const SizedBox(),
-                                      state: _currentStep >= index
-                                          ? StepState.complete
-                                          : StepState.indexed),
-                                ),
-                              ],
-                              type: StepperType.horizontal,
-                              currentStep: _currentStep,
-                              connectorColor:
-                                  const MaterialStatePropertyAll(secondary),
-                              controlsBuilder: (context, details) =>
-                                  const SizedBox(),
-                              onStepTapped: (step) => setState(() {
-                                _currentStep = step;
-                              }),
+                    if (_dose != null && _dose! > 0)
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                        child: Text(
+                            '${translate(context, "how_many_doses_have_you_received")} - ${_currentStep + 1}'),
+                      ),
+                    if (_dose != null && _dose! > 0)
+                      Container(
+                        height: dimensHeight() * 18,
+                        alignment: Alignment.topCenter,
+                        child: Stepper(
+                          physics: const NeverScrollableScrollPhysics(),
+                          elevation: 0,
+                          margin: EdgeInsets.zero,
+                          steps: [
+                            ...List.generate(
+                              _dose!,
+                              (index) => Step(
+                                  title: const SizedBox(),
+                                  label: Text(
+                                      '${translate(context, 'dose')} ${index + 1}'),
+                                  content: const SizedBox(),
+                                  state: _currentStep >= index
+                                      ? StepState.complete
+                                      : StepState.indexed),
                             ),
-                          )
-                        : const SizedBox(),
+                          ],
+                          type: StepperType.horizontal,
+                          currentStep: _currentStep,
+                          connectorColor:
+                              const MaterialStatePropertyAll(secondary),
+                          controlsBuilder: (context, details) =>
+                              const SizedBox(),
+                          onStepTapped: (step) => setState(() {
+                            _currentStep = step;
+                          }),
+                        ),
+                      ),
                     _dose != null && _dose! > 0
                         ? Padding(
                             padding: EdgeInsets.symmetric(
