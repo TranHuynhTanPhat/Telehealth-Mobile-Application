@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/api/meilisearch_manager.dart';
+import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -48,6 +49,7 @@ class AppController {
     await initAuth();
     await PushNotificationManager.instance.init();
     MeiliSearchManager().init();
+    SocketManager.instance.init();
     setupCloudinary();
   }
 
@@ -148,5 +150,9 @@ class AppController {
       logPrint('Failed to get platform version');
     }
     return "";
+  }
+
+  void close(){
+    SocketManager.instance.close();
   }
 }

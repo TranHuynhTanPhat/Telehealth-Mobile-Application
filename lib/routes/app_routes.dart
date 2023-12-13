@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -31,12 +32,12 @@ import 'package:healthline/screen/ui_patient/main/health_info/patient_record/pat
 import 'package:healthline/screen/ui_patient/main/health_info/update_health_stat/update_health_stat_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 
@@ -51,6 +52,7 @@ class AppRoute {
   final _patientRecordCubit = PatientRecordCubit();
   final _doctorCubit = DoctorCubit();
   final _newsCubit = NewsCubit();
+  final _forumCubit = ForumCubit();
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   void dispose() {
@@ -64,14 +66,20 @@ class AppRoute {
     _patientRecordCubit.close();
     _doctorCubit.close();
     _newsCubit.close();
+    _forumCubit.close();
     // _applicationUpdateBloc.close();
+
+    AppController.instance.close();
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
     switch (settings.name) {
       case forumName:
         return MaterialPageRoute(
-          builder: (_) => const ForumScreen(),
+          builder: (_) => BlocProvider.value(
+            value: _forumCubit,
+            child: const ForumScreen(),
+          ),
         );
       case newsName:
         return MaterialPageRoute(

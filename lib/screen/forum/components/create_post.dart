@@ -1,17 +1,34 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
+import 'package:healthline/utils/file_picker.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
-class CreatePost extends StatelessWidget {
+class CreatePost extends StatefulWidget {
   const CreatePost({
     super.key,
     required TextEditingController textEdittingController,
   }) : _textEdittingController = textEdittingController;
 
   final TextEditingController _textEdittingController;
+
+  @override
+  State<CreatePost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
+  late List<File?> _files;
+
+  @override
+  void initState() {
+    _files = [];
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +46,7 @@ class CreatePost extends StatelessWidget {
           padding: EdgeInsets.only(
               top: dimensHeight(), bottom: dimensHeight() * 1.5),
           child: TextFieldWidget(
-            controller: _textEdittingController,
+            controller: widget._textEdittingController,
             validate: (value) => null,
             maxLine: 3,
             fillColor: colorF2F5FF,
@@ -51,28 +68,46 @@ class CreatePost extends StatelessWidget {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     KeyboardUtil.hideKeyboard(context);
+                    _files = await FilePickerCustom().getImages();
+                    setState(() {});
                   },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.photoFilm,
-                        size: dimensIcon() * .5,
-                        color: color1F1F1F,
-                      ),
-                      SizedBox(
-                        width: dimensWidth(),
-                      ),
-                      Text(
-                        translate(context, 'attach'),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
+                  child: _files.isEmpty
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.photoFilm,
+                              size: dimensIcon() * .5,
+                              color: color1F1F1F,
+                            ),
+                            SizedBox(
+                              width: dimensWidth(),
+                            ),
+                            Text(
+                              translate(context, 'attach'),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${_files.length} ${translate(context, 'files')} ${translate(context, 'attach').toLowerCase()}',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.labelLarge,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
               ),
               Expanded(

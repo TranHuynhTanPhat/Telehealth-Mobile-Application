@@ -125,6 +125,7 @@ class _NewsScreenState extends State<NewsScreen> {
                             focusedBorderColor: colorF2F5FF,
                             enabledBorderColor: colorF2F5FF,
                             controller: _searchController,
+                            onChanged: (value) => _pagingController.refresh(),
                             prefixIcon: IconButton(
                               padding: EdgeInsets.symmetric(
                                   horizontal: dimensWidth() * 2),
@@ -150,6 +151,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 onTap: () {
                                   if (_searchController.text.isNotEmpty) {
                                     _searchController.text = '';
+                                    _pagingController.refresh();
                                   } else {
                                     KeyboardUtil.hideKeyboard(context);
                                     _checkFocus();
@@ -216,8 +218,8 @@ class _NewsScreenState extends State<NewsScreen> {
                   }),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(height: dimensHeight()*10),
-                )
+                  child: SizedBox(height: dimensHeight() * 10),
+                ),
               ],
             ),
 

@@ -36,28 +36,50 @@ class FilePickerCustom {
 
     if (checkPermission) {
       logPrint("PERMISSION FOR GALLERY");
-      return await _openGallery();
+      return await _openGallery().then((value) => value.first);
     } else {
       logPrint("NOT PERMISSION FOR GALLERY");
       checkPermission = await requestStoragePermission();
       if (checkPermission) {
         logPrint("PERMISSION FOR GALLERY");
 
-        return _openGallery();
+        return await _openGallery().then((value) => value.first);
       }
     }
     return null;
   }
 
-  Future<File?> _openGallery() async {
+  Future<List<File?>> getImages() async {
+    bool checkPermission = await checkStoragePermission();
+
+    if (checkPermission) {
+      logPrint("PERMISSION FOR GALLERY");
+      return await _openGallery(allowMultiple: true);
+    } else {
+      logPrint("NOT PERMISSION FOR GALLERY");
+      checkPermission = await requestStoragePermission();
+      if (checkPermission) {
+        logPrint("PERMISSION FOR GALLERY");
+
+        return await _openGallery(allowMultiple: true);
+      }
+    }
+    return [null];
+  }
+
+  Future<List<File?>> _openGallery({allowMultiple = false}) async {
     FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, allowMultiple: false);
+        .pickFiles(type: FileType.image, allowMultiple: allowMultiple);
 
     if (result != null) {
+      if (allowMultiple) {
+        List<File> files = result.paths.map((path) => File(path!)).toList();
+        return files;
+      }
       final file = File(result.files.single.path!);
-      return file;
+      return [file];
     }
-    return null;
+    return [null];
   }
 
   Future<PlatformFile?> chooseFile() async {

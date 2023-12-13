@@ -106,159 +106,171 @@ class _DoctorScreenState extends State<DoctorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: white,
-      extendBody: true,
-      body: BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            KeyboardUtil.hideKeyboard(context);
-            _checkFocus();
-          },
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                centerTitle: false,
-                pinned: true,
-                floating: true,
-                titleSpacing: 0,
-                leadingWidth: openSearch ? 0 : null,
-                leading: openSearch ? const SizedBox() : null,
-                title: openSearch
-                    ? Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
-                        child: TextFieldWidget(
-                          focusNode: _focus,
-                          validate: (p0) => null,
-                          hint: translate(context, 'search_doctors'),
-                          fillColor: colorF2F5FF,
-                          filled: true,
-                          focusedBorderColor: colorF2F5FF,
-                          enabledBorderColor: colorF2F5FF,
-                          controller: _searchController,
-                          onChanged: (value) => _pagingController.refresh(),
-                          suffixIcon: IconButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 2),
-                            onPressed: () {},
-                            icon: InkWell(
-                              splashColor: transparent,
-                              highlightColor: transparent,
-                              onTap: () {
-                                if (_searchController.text.isNotEmpty) {
-                                  _searchController.text = '';
-                                } else {
-                                  KeyboardUtil.hideKeyboard(context);
-                                  _checkFocus();
-                                }
-                              },
-                              child: FaIcon(
-                                FontAwesomeIcons.solidCircleXmark,
-                                color: color6A6E83,
-                                size: dimensIcon() * .5,
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        context.read<DoctorCubit>().searchDoctor(
+            key: '',
+            pageKey: 1,
+            searchQuery: const SearchQuery(
+                sort: ['ratings:desc', 'full_name:asc'], limit: 6),
+            callback: (doctors) {});
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: white,
+        extendBody: true,
+        body: BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
+          return GestureDetector(
+            onTap: () {
+              KeyboardUtil.hideKeyboard(context);
+              _checkFocus();
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  centerTitle: false,
+                  pinned: true,
+                  floating: true,
+                  titleSpacing: 0,
+                  leadingWidth: openSearch ? 0 : null,
+                  leading: openSearch ? const SizedBox() : null,
+                  title: openSearch
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: dimensWidth() * 3),
+                          child: TextFieldWidget(
+                            focusNode: _focus,
+                            validate: (p0) => null,
+                            hint: translate(context, 'search_doctors'),
+                            fillColor: colorF2F5FF,
+                            filled: true,
+                            focusedBorderColor: colorF2F5FF,
+                            enabledBorderColor: colorF2F5FF,
+                            controller: _searchController,
+                            onChanged: (value) => _pagingController.refresh(),
+                            suffixIcon: IconButton(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: dimensWidth() * 2),
+                              onPressed: () {},
+                              icon: InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () {
+                                  if (_searchController.text.isNotEmpty) {
+                                    _searchController.text = '';
+                                    _pagingController.refresh();
+                                  } else {
+                                    KeyboardUtil.hideKeyboard(context);
+                                    _checkFocus();
+                                  }
+                                },
+                                child: FaIcon(
+                                  FontAwesomeIcons.solidCircleXmark,
+                                  color: color6A6E83,
+                                  size: dimensIcon() * .5,
+                                ),
+                              ),
+                            ),
+                            prefixIcon: IconButton(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: dimensWidth() * 2),
+                              onPressed: () {},
+                              icon: InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () {},
+                                child: FaIcon(
+                                  FontAwesomeIcons.magnifyingGlass,
+                                  color: color6A6E83,
+                                  size: dimensIcon() * .8,
+                                ),
                               ),
                             ),
                           ),
-                          prefixIcon: IconButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 2),
-                            onPressed: () {},
-                            icon: InkWell(
-                              splashColor: transparent,
-                              highlightColor: transparent,
-                              onTap: () {},
-                              child: FaIcon(
-                                FontAwesomeIcons.magnifyingGlass,
-                                color: color6A6E83,
-                                size: dimensIcon() * .8,
-                              ),
+                        )
+                      : Text(
+                          translate(context, 'news'),
+                        ),
+                  actions: [
+                    if (openSearch == false)
+                      Padding(
+                        padding: EdgeInsets.only(right: dimensWidth() * 2),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(180),
+                          onTap: () {
+                            setState(() {
+                              openSearch = true;
+                              _focus.requestFocus();
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              dimensWidth(),
+                            ),
+                            child: FaIcon(
+                              FontAwesomeIcons.magnifyingGlass,
+                              size: dimensIcon() * .7,
                             ),
                           ),
                         ),
                       )
-                    : Text(
-                        translate(context, 'news'),
-                      ),
-                actions: [
-                  if (openSearch == false)
-                    Padding(
-                      padding: EdgeInsets.only(right: dimensWidth() * 2),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(180),
-                        onTap: () {
-                          setState(() {
-                            openSearch = true;
-                            _focus.requestFocus();
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                            dimensWidth(),
-                          ),
+                  ],
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: dimensHeight() * 2,
+                        left: dimensWidth() * 3,
+                        right: dimensWidth() * 3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: dimensWidth()),
                           child: FaIcon(
-                            FontAwesomeIcons.magnifyingGlass,
-                            size: dimensIcon() * .7,
+                            FontAwesomeIcons.filter,
+                            size: dimensIcon() * .5,
                           ),
                         ),
-                      ),
-                    )
-                ],
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: dimensHeight() * 2,
-                      left: dimensWidth() * 3,
-                      right: dimensWidth() * 3),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: dimensWidth()),
-                        child: FaIcon(
-                          FontAwesomeIcons.filter,
-                          size: dimensIcon() * .5,
+                        Text(
+                          translate(context, 'filters'),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                      ),
-                      Text(
-                        translate(context, 'filters'),
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: dimensHeight() * 2),
-                  child: ListCategories(
-                    callback: changeFilterExp,
-                  ),
-                ),
-              ),
-              PagedSliverList<int, DoctorResponse>(
-                // prototypeItem: buildShimmer(),
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
-                    itemBuilder: (context, item, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: dimensWidth() * 2,
-                        vertical: dimensHeight()),
-                    child: DoctorCard(
-                      doctor: item,
+                      ],
                     ),
-                  );
-                }),
-              ),
-            ],
-          ),
-        );
-      }),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: dimensHeight() * 2),
+                    child: ListCategories(
+                      callback: changeFilterExp,
+                    ),
+                  ),
+                ),
+                PagedSliverList<int, DoctorResponse>(
+                  // prototypeItem: buildShimmer(),
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
+                      itemBuilder: (context, item, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 2,
+                          vertical: dimensHeight()),
+                      child: DoctorCard(
+                        doctor: item,
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 }

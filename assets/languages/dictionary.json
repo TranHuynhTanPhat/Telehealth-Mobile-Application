@@ -1319,6 +1319,10 @@
         "vi": "Đính kèm",
         "en": "Attach"
     },
+    "files": {
+        "vi": "tệp",
+        "en": "files"
+    },
     "Post": {
         "vi": "Đăng",
         "en": "Post"
@@ -1330,6 +1334,10 @@
     "like": {
         "vi": "Thích",
         "en": "Like"
+    },
+    "liked": {
+        "vi": "lượt thích",
+        "en": "liked"
     },
     "comment": {
         "vi": "Bình luận",
