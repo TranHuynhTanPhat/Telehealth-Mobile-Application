@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_application_update/application_update_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_res/res_cubit.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 
 import '../../../../../res/style.dart';
 import '../../../../../utils/translate.dart';

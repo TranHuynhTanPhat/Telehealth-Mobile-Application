@@ -20,11 +20,11 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LogInCubit, LogInState>(
+    return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state is LogInLoading) {
-          EasyLoading.show();
-        } else if (state is LogInSuccessed) {
+        if (state.blocState == BlocState.Pending) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state.blocState == BlocState.Successed) {
           EasyLoading.dismiss();
           // if (state.errorDoctor != null) {
           //   EasyLoading.showToast(
@@ -40,28 +40,32 @@ class _LogInScreenState extends State<LogInScreen> {
           } else {
             Navigator.pushReplacementNamed(context, mainScreenPatientName);
           }
-        } else if (state is LogInError) {
+        } else if (state.blocState == BlocState.Failed) {
           EasyLoading.dismiss();
           EasyLoading.showToast(translate(context, state.error));
         }
       },
-      child: BlocBuilder<LogInCubit, LogInState>(
+      child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
         builder: (context, state) {
           return GestureDetector(
             onTap: () => KeyboardUtil.hideKeyboard(context),
             child: Scaffold(
-              body: ListView(
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 10,
-                    horizontal: dimensWidth() * 3),
-                children: [
-                  const HeaderLogIn(),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  const LogInForm(),
-                  const OptionLogIn()
-                ],
+              resizeToAvoidBottomInset: true,
+              body: AbsorbPointer(
+                absorbing: state.blocState == BlocState.Pending,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensHeight() * 10,
+                      horizontal: dimensWidth() * 3),
+                  children: [
+                    const HeaderLogIn(),
+                    SizedBox(
+                      height: dimensHeight() * 3,
+                    ),
+                    const LogInForm(),
+                    const OptionLogIn()
+                  ],
+                ),
               ),
             ),
           );

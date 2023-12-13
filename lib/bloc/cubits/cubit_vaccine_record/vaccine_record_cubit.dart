@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/vaccination_response.dart';
 import 'package:healthline/repository/vaccination_repository.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -13,7 +14,8 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
             vaccinations: [],
             injectedVaccinations: [],
             age: 0,
-            medicalRecord: ''));
+            medicalRecord: '',
+            blocState: BlocState.Successed));
   final VaccinationRepository _vaccinationRepository = VaccinationRepository();
   @override
   void onChange(Change<VaccineRecordState> change) {
@@ -27,100 +29,113 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: age,
-          medicalRecord: medicalRecord),
+          medicalRecord: medicalRecord,
+          blocState: BlocState.Successed),
     );
   }
 
+  /// Fetch vaccinations
   Future<void> fetchVaccination() async {
-    emit(FetchVaccinationLoading(
+    emit(FetchVaccinationState(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
-        medicalRecord: state.medicalRecord));
+        medicalRecord: state.medicalRecord,
+        blocState: BlocState.Pending));
     try {
       List<VaccinationResponse> vaccinations =
           await _vaccinationRepository.fetchVaccination();
 
       emit(
-        FetchVaccinationLoaded(
+        FetchVaccinationState(
             vaccinations: vaccinations,
             injectedVaccinations: state.injectedVaccinations,
             age: state.age,
-            medicalRecord: state.medicalRecord),
+            medicalRecord: state.medicalRecord,
+            blocState: BlocState.Successed),
       );
     } on DioException catch (e) {
       emit(
-        FetchVaccinationError(
+        FetchVaccinationState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.response!.data['message'].toString(),
+          error: e.response!.data['message'].toString(),
+          blocState: BlocState.Failed,
         ),
       );
     } catch (e) {
       emit(
-        FetchVaccinationError(
+        FetchVaccinationState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.toString(),
+          error: e.toString(),
+          blocState: BlocState.Failed,
         ),
       );
     }
   }
 
-  Future<void> fetchInjectedVaccination(String medicalRecord) async {
+  /// Fetch vaccination records
+  Future<void> fetchVaccinationRecord(String medicalRecord) async {
     emit(
-      FetchInjectedVaccinationLoading(
+      FetchVaccinationRecordState(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
         medicalRecord: state.medicalRecord,
+        blocState: BlocState.Pending,
       ),
     );
     try {
       List<InjectedVaccinationResponse> injectedVaccinations =
           await _vaccinationRepository.fetchInjectedVaccination(medicalRecord);
       emit(
-        FetchInjectedVaccinationLoaded(
+        FetchVaccinationRecordState(
             vaccinations: state.vaccinations,
             injectedVaccinations: injectedVaccinations,
             age: state.age,
-            medicalRecord: state.medicalRecord),
+            medicalRecord: state.medicalRecord,
+            blocState: BlocState.Successed),
       );
     } on DioException catch (e) {
       emit(
-        FetchInjectedVaccinationError(
+        FetchVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.response!.data['message'].toString(),
+          error: e.response!.data['message'].toString(),
+          blocState: BlocState.Failed,
         ),
       );
     } catch (e) {
       emit(
-        FetchInjectedVaccinationError(
+        FetchVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.toString(),
+          error: e.toString(),
+          blocState: BlocState.Failed,
         ),
       );
     }
   }
 
-  Future<void> createInjectedVaccination(
+  /// Create vaccination records
+  Future<void> createVaccinationRecordState(
       String vaccineId, int doseNumber, String date) async {
     emit(
-      CreateInjectedVaccinationLoading(
+      CreateVaccinationRecordState(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
         medicalRecord: state.medicalRecord,
+        blocState: BlocState.Pending,
       ),
     );
     try {
@@ -129,39 +144,44 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
               state.medicalRecord, vaccineId, doseNumber, date);
 
       emit(
-        CreateInjectedVaccinationLoaded(
+        CreateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: List.from(state.injectedVaccinations)
             ..add(vaccination),
           age: state.age,
           medicalRecord: state.medicalRecord,
+          blocState: BlocState.Successed,
         ),
       );
     } on DioException catch (e) {
-      emit(CreateInjectedVaccinationError(
+      emit(CreateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.response!.data['message'].toString()));
+          error: e.response!.data['message'].toString(),
+          blocState: BlocState.Failed));
     } catch (e) {
-      emit(CreateInjectedVaccinationError(
+      emit(CreateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.toString()));
+          error: e.toString(),
+          blocState: BlocState.Failed));
     }
   }
 
-  Future<void> updateInjectedVaccination(
+  /// Update vaccination records
+  Future<void> updateVaccinationRecordState(
       String recordId, int doseNumber, String date) async {
     emit(
-      UpdateInjectedVaccinationLoading(
+      UpdateVaccinationRecordState(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
         medicalRecord: state.medicalRecord,
+        blocState: BlocState.Pending,
       ),
     );
     try {
@@ -169,76 +189,70 @@ class VaccineRecordCubit extends Cubit<VaccineRecordState> {
           .updateInjectedVaccination(recordId, doseNumber, date);
 
       emit(
-        UpdateInjectedVaccinationLoaded(
+        UpdateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: List.from(state.injectedVaccinations)
             ..removeWhere((element) => element.id == vaccination.id),
           age: state.age,
           medicalRecord: state.medicalRecord,
+          blocState: BlocState.Successed,
         ),
       );
     } on DioException catch (e) {
-      emit(UpdateInjectedVaccinationError(
+      emit(UpdateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.response!.data['message'].toString()));
+          error: e.response!.data['message'].toString(),
+          blocState: BlocState.Failed));
     } catch (e) {
-      emit(UpdateInjectedVaccinationError(
+      emit(UpdateVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.toString()));
+          error: e.toString(),
+          blocState: BlocState.Failed));
     }
   }
 
-  Future<void> deleteInjectedVaccination(String recordId) async {
+  /// Delete vaccination records
+  Future<void> deleteVaccinationRecordState(String recordId) async {
     emit(
-      DeleteInjectedVaccinationLoading(
+      DeleteVaccinationRecordState(
         vaccinations: state.vaccinations,
         injectedVaccinations: state.injectedVaccinations,
         age: state.age,
-        medicalRecord: state.medicalRecord,
+        medicalRecord: state.medicalRecord, blocState: BlocState.Pending,
       ),
     );
     try {
       await _vaccinationRepository.deleteInjectedVaccination(recordId);
 
       emit(
-        DeleteInjectedVaccinationLoaded(
+        DeleteVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: List.from(state.injectedVaccinations)
             ..removeWhere((element) => element.id == recordId),
           age: state.age,
-          medicalRecord: state.medicalRecord,
+          medicalRecord: state.medicalRecord, blocState: BlocState.Successed,
         ),
       );
     } on DioException catch (e) {
-      emit(DeleteInjectedVaccinationError(
+      emit(DeleteVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.response!.data['message'].toString()));
+          error: e.response!.data['message'].toString(), blocState: BlocState.Failed));
     } catch (e) {
-      emit(DeleteInjectedVaccinationError(
+      emit(DeleteVaccinationRecordState(
           vaccinations: state.vaccinations,
           injectedVaccinations: state.injectedVaccinations,
           age: state.age,
           medicalRecord: state.medicalRecord,
-          message: e.toString()));
+          error: e.toString(), blocState: BlocState.Failed));
     }
   }
-
-  // @override
-  // VaccineRecordState? fromJson(Map<String, dynamic> json) {
-  //   return VaccineRecordState.fromMap(json);
-  // }
-
-  // @override
-  // Map<String, dynamic>? toJson(VaccineRecordState state) {
-  //   return state.toMap();
-  // }
 }

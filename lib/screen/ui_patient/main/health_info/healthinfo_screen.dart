@@ -7,11 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
-
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/components/export.dart';
-import 'package:healthline/screen/ui_patient/main/health_info/components/list_record.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -140,38 +138,43 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                   ),
                 ),
                 actions: [
-                  Padding(
-                    padding: EdgeInsets.only(right: dimensWidth() * 2),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(180),
-                      child: Padding(
-                        padding: EdgeInsets.all(dimensWidth()),
-                        child: AnimatedIcon(
-                          icon: AnimatedIcons.menu_close,
-                          progress: _animationIC,
-                          color: color1F1F1F,
-                          size: dimensIcon(),
-                        ),
-                      ),
-                      onTap: () {
-                        if (_showUsers) {
-                          _animationController.reverse();
-                          _showUsers = false;
-                        } else {
-                          _animationController.forward();
-                          _showUsers = true;
-                        }
-                      },
-                    ),
-                  ),
+                  state.subUsers.isNotEmpty
+                      ? Padding(
+                          padding: EdgeInsets.only(right: dimensWidth() * 2),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(180),
+                            child: Padding(
+                              padding: EdgeInsets.all(dimensWidth()),
+                              child: AnimatedIcon(
+                                icon: AnimatedIcons.menu_close,
+                                progress: _animationIC,
+                                color: color1F1F1F,
+                                size: dimensIcon(),
+                              ),
+                            ),
+                            onTap: () {
+                              if (_showUsers) {
+                                _animationController.reverse();
+                                _showUsers = false;
+                              } else {
+                                _animationController.forward();
+                                _showUsers = true;
+                              }
+                            },
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               body: ListView(
                 shrinkWrap: false,
                 scrollDirection: Axis.vertical,
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                    horizontal: dimensWidth() * 3, vertical: dimensHeight()),
+                padding: EdgeInsets.only(
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3,
+                    top: dimensHeight(),
+                    bottom: dimensHeight() * 10),
                 children: [
                   _animation.value > 0
                       ? AnimatedContainer(
@@ -198,317 +201,61 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
                     ),
                     child: state is! HealthStatLoading &&
                             state is! FetchSubUserLoading
-                        ? Stack(
-                            children: [
-                              Column(
+                        ? state.subUsers.isNotEmpty
+                            ? Stack(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'full_name')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        if (state.subUsers.isNotEmpty)
-                                          Expanded(
-                                            child: Text(
-                                              fullName ??
-                                                  translate(
-                                                      context, 'undefine'),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                          )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'relationship')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        if (state.subUsers.isNotEmpty)
-                                          Expanded(
-                                            child: Text(
-                                              translate(
-                                                  context,
-                                                  relationship != null
-                                                      ? relationship
-                                                          .toLowerCase()
-                                                      : ''),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                          )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'heart_rate')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '$heartRate bpm',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'blood_group')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            bloodGroup,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'height')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '$height m',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'weight')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '$weight Kg',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'BMI')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '${double.parse(
-                                              bmi.toStringAsFixed(2),
-                                            )} ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dimensHeight()),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '${translate(context, 'temperature')}: ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            '$temperature °C',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          ),
-                                        )
-                                      ],
+                                  HealthStat(
+                                      fullName: fullName,
+                                      relationship: relationship,
+                                      heartRate: heartRate,
+                                      bloodGroup: bloodGroup,
+                                      height: height,
+                                      weight: weight,
+                                      bmi: bmi,
+                                      temperature: temperature),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      splashColor: transparent,
+                                      highlightColor: transparent,
+                                      onTap: () {
+                                        // if (state.subUsers.isNotEmpty) {
+                                        Navigator.pushNamed(
+                                                context, updateHealthStatName)
+                                            .then((value) {
+                                          if (value == true) {
+                                            context
+                                                .read<MedicalRecordCubit>()
+                                                .fetchStats();
+                                          }
+                                        });
+                                        // } else {
+                                        //   EasyLoading.showToast(
+                                        //       translate(context, 'cant_load_data'));
+                                        // }
+                                      },
+                                      child: FaIcon(
+                                        FontAwesomeIcons.solidPenToSquare,
+                                        size: dimensIcon() * .8,
+                                        color: black26,
+                                      ),
                                     ),
                                   ),
                                 ],
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: InkWell(
-                                  splashColor: transparent,
-                                  highlightColor: transparent,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                            context, updateHealthStatName)
-                                        .then((value) {
-                                      if (value == true) {
-                                        context
-                                            .read<MedicalRecordCubit>()
-                                            .fetchStats();
-                                      }
-                                    });
-                                  },
-                                  child: FaIcon(
-                                    FontAwesomeIcons.solidPenToSquare,
-                                    size: dimensIcon() * .8,
-                                    color: black26,
-                                  ),
+                              )
+                            : Center(
+                                child: Text(
+                                  translate(context, 'cant_load_data'),
                                 ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 30,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 15,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 20,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 21,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 19,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 23,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 20,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
-                                  height: dimensWidth() * 2,
-                                  width: dimensWidth() * 30,
-                                ),
-                              ),
-                            ],
-                          ),
+                              )
+                        : const HealthStatShimmer(),
                   ),
-                  const ListRecord(),
-                  SizedBox(
-                    height: dimensHeight() * 10,
-                  ),
+                  state is! HealthStatLoading &&
+                          state is! FetchSubUserLoading &&
+                          state.subUsers.isNotEmpty
+                      ? const ListRecord()
+                      : const SizedBox(),
                 ],
               ),
             ),
@@ -516,6 +263,77 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
           );
         },
       ),
+    );
+  }
+}
+
+class HealthStatShimmer extends StatelessWidget {
+  const HealthStatShimmer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 30,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 15,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 20,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 21,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 19,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 23,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 20,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+          child: ShimmerWidget.rectangular(
+            height: dimensWidth() * 2,
+            width: dimensWidth() * 30,
+          ),
+        ),
+      ],
     );
   }
 }

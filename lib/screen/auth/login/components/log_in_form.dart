@@ -201,6 +201,7 @@ class _LogInFormState extends State<LogInForm> {
               ),
               label: translate(context, 'phone'),
               textInputType: TextInputType.phone,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           Padding(
@@ -265,20 +266,6 @@ class _LogInFormState extends State<LogInForm> {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
-                // TextButton(
-                //   style: const ButtonStyle(
-                //     padding: MaterialStatePropertyAll(
-                //       EdgeInsets.all(0),
-                //     ),
-                //   ),
-                //   onPressed: () =>
-                //       Navigator.pushNamed(context, termsAndConditionsName),
-                //   child: Text(
-                //     translate(context, 'terms_and_conditions'),
-                //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                //         color: secondary, fontWeight: FontWeight.w600),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -287,13 +274,10 @@ class _LogInFormState extends State<LogInForm> {
             child: ElevatedButtonWidget(
               text: translate(context, 'log_in'),
               onPressed: () {
-                // setState(() {
-                //   errorCheckTermsAndConditions = agreeTermsAndConditions;
-                // });
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   KeyboardUtil.hideKeyboard(context);
-                  context.read<LogInCubit>().logIn(
+                  context.read<AuthenticationCubit>().login(
                       Validate().changePhoneFormat(_controllerPhone.text),
                       _controllerPassword.text,
                       isDoctor: isDoctor,

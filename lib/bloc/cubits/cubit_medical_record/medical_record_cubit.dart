@@ -184,6 +184,13 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
               ? userResponses.firstWhere((element) => element.isMainProfile!).id
               : state.currentId));
       await fetchStats();
+    } on DioException catch (e) {
+      logPrint(e);
+      emit(FetchSubUserError(
+        stats: state.stats,
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+      ));
     } catch (e) {
       emit(FetchSubUserError(
         stats: state.stats,
@@ -288,7 +295,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
     } on DioException catch (e) {
       emit(UpdateSubUserFailure(
         stats: state.stats,
-        message:e.response!.data['message'].toString(),
+        message: e.response!.data['message'].toString(),
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));

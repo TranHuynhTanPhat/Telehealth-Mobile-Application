@@ -5,8 +5,8 @@ import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
 class CreateComment extends StatefulWidget {
-  const CreateComment({super.key});
-
+  const CreateComment({super.key, required this.focus});
+  final FocusNode focus;
   @override
   State<CreateComment> createState() => _CreateCommentState();
 }
@@ -33,6 +33,7 @@ class _CreateCommentState extends State<CreateComment> {
         ),
         Expanded(
           child: TextFieldWidget(
+            focusNode: widget.focus,
             validate: (p0) => null,
             hint: translate(context, 'write_a_comment'),
             fillColor: colorF2F5FF,

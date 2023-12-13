@@ -1,25 +1,77 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
+import 'package:healthline/data/api/models/responses/news_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/news/detail_news_screen.dart';
+import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
-class MainNewsPost extends StatelessWidget {
+class MainNewsPost extends StatefulWidget {
   const MainNewsPost({
     super.key,
+    required this.news,
   });
+
+  final NewsResponse news;
+
+  @override
+  State<MainNewsPost> createState() => _MainNewsPostState();
+}
+
+class _MainNewsPostState extends State<MainNewsPost> {
+  var image;
+
+  String? timeBetween;
+  @override
+  void initState() {
+    image = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    try {
+      if (widget.news.photo != null && widget.news.photo != 'default') {
+        image = image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget.news.photo ?? '')
+                  .toString(),
+            );
+      } else {
+        image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      image = AssetImage(DImages.placeholder);
+    }
+    try {
+      if (widget.news.updatedAt != null) {
+        DateTime from = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .parse(widget.news.updatedAt!);
+
+        DateTime to = DateTime.now();
+        timeBetween = daysBetween(context, from, to);
+      } else {
+        timeBetween = null;
+      }
+    } catch (e) {
+      logPrint(e);
+    }
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => const DetailNewsScreen(),
-          ),
+          detailNewsName,
+          arguments: widget.news.toJson(),
         );
       },
       child: Container(
@@ -40,10 +92,14 @@ class MainNewsPost extends StatelessWidget {
                   dimensWidth() * 2,
                 ),
                 image: DecorationImage(
-                  image: AssetImage(
-                    DImages.placeholder,
-                  ),
+                  image: image,
                   fit: BoxFit.cover,
+                  onError: (exception, stackTrace) => {
+                    logPrint(exception),
+                    setState(() {
+                      image = AssetImage(DImages.placeholder);
+                    }),
+                  },
                 ),
               ),
             ),
@@ -51,7 +107,7 @@ class MainNewsPost extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Covid-19 tại thành phố Hồ Chí Minh',
+                    widget.news.title ?? translate(context, 'undefine'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -77,7 +133,7 @@ class MainNewsPost extends StatelessWidget {
                     color: primary.withOpacity(.2),
                   ),
                   child: Text(
-                    translate(context, 'covid-19'),
+                    translate(context, 'news'),
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
@@ -93,7 +149,8 @@ class MainNewsPost extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                      'Covid-19 tại thành phố Hồ Chí Minh flkajfkljsdlfjsdf f ladskjflksadf  flkajdfljasldf sadflsadf adlfsalkdfjksdjfka flasdjflskd fldksjflahd f dfjadl dkf adljfl ldfjad lfkas djaflksd fdks',
+                      widget.news.content ??
+                          translate(context, 'cant_load_data'),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium),
@@ -115,7 +172,7 @@ class MainNewsPost extends StatelessWidget {
                   width: dimensWidth(),
                 ),
                 Text(
-                  '1h trước',
+                  timeBetween ?? translate(context, 'undefine'),
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall

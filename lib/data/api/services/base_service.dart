@@ -78,6 +78,7 @@ abstract class BaseService {
               data: response.data, message: response.statusMessage);
         }
         try {
+          logPrint(response.toString());
           return DataResponse(
               data: response.data['data'],
               message: response.statusMessage,

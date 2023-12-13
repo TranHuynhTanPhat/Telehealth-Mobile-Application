@@ -59,7 +59,6 @@ android {
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-
         // Local Notification 
         multiDexEnabled true
     }

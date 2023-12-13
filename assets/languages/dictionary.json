@@ -8,8 +8,8 @@
         "en": "Change to English"
     },
     "skip": {
-        "vi": "BỎ QUA",
-        "en": "SKIP"
+        "vi": "Bỏ qua",
+        "en": "Skip"
     },
     "next": {
         "vi": "Kế tiếp",
@@ -22,6 +22,10 @@
     "save": {
         "vi": "Lưu",
         "en": "Save"
+    },
+    "back": {
+        "vi": "Trở lại",
+        "en": "Back"
     },
     "log_in": {
         "vi": "Đăng nhập",
@@ -379,6 +383,10 @@
         "vi": "Không thể tải dữ liệu",
         "en": "Can't load data"
     },
+    "retry": {
+        "vi": "Thử lại",
+        "en": "Retry"
+    },
     "failure": {
         "vi": "Thất bại",
         "en": "Failure"
@@ -698,6 +706,10 @@
     "appointment": {
         "vi": "Cuộc hẹn",
         "en": "Appointment"
+    },
+    "appointments": {
+        "vi": "cuộc hẹn",
+        "en": "appointments"
     },
     "available": {
         "vi": "Có sẵn",
@@ -1446,5 +1458,73 @@
     "payment": {
         "vi": "Thanh toán",
         "en": "Payment"
+    },
+    "register_an_account_according_to_the_steps": {
+        "vi": "Đăng ký tài khoản theo các bước",
+        "en": "Register an account according to the steps"
+    },
+    "step": {
+        "vi": "Bước",
+        "en": "Step"
+    },
+    "hour_ago": {
+        "vi": "giờ trước",
+        "en": "hour ago"
+    },
+    "hours_ago": {
+        "vi": "giờ trước",
+        "en": "hours ago"
+    },
+    "minute_ago": {
+        "vi": "phút trước",
+        "en": "minute ago"
+    },
+    "minutes_ago": {
+        "vi": "phút trước",
+        "en": "minutes ago"
+    },
+    "day_ago": {
+        "vi": "ngày trước",
+        "en": "day ago"
+    },
+    "days_ago": {
+        "vi": "ngày trước",
+        "en": "days ago"
+    },
+    "month_ago": {
+        "vi": "tháng trước",
+        "en": "month ago"
+    },
+    "months_ago": {
+        "vi": "tháng trước",
+        "en": "months ago"
+    },
+    "year_ago": {
+        "vi": "năm trước",
+        "en": "years ago"
+    },
+    "years_ago": {
+        "vi": "năm trước",
+        "en": "years ago"
+    },
+    "phone_number_has_been_registered": {
+        "vi": "Số điện thoại đã được đăng ký",
+        "en": "Phone number has been registered"
+    },
+    "full_name_must_be_longer_than_or_equal_to_2_characters": {
+        "vi": "Họ và tên phải nhiều hơn 2 từ",
+        "en": "Full name must be longer than or equal to 2 characters"
+    },
+    "failed_to_update_avatar": {
+        "vi": "Cập nhật ảnh đại diện thất bại",
+        "en": "Failed to update avatar"
+    },
+    "filters": {
+        "vi": "Bộ lọc",
+        "en": "Filters"
+    },
+    "minute": {
+        "vi": "Phút",
+        "en": "Minute"
     }
 }

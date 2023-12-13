@@ -7,6 +7,7 @@ const faqsName = '/faqs';
 const privacyPolicyName = '/privacy-policy';
 const forumName = '/forum';
 const newsName = '/news';
+const detailNewsName = '/detail-news';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";

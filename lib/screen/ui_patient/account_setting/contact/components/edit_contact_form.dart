@@ -66,10 +66,8 @@ class _EditContactFormState extends State<EditContactForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ContactCubit, ContactState>(builder: (context, state) {
-      
-      
-      
+    return BlocBuilder<PatientProfileCubit, PatientProfileState>(
+        builder: (context, state) {
       state.phone != null
           ? _controllerPhone.text = state.phone!.replaceFirst('+84', '')
           : '';
@@ -222,7 +220,7 @@ class _EditContactFormState extends State<EditContactForm> {
             Padding(
               padding: EdgeInsets.only(bottom: dimensHeight() * 3),
               child: TextFieldWidget(
-                  readOnly: state is ContactLoading,
+                  readOnly: state.blocState == BlocState.Pending,
                   label: translate(context, 'email'),
                   hint: translate(context, 'ex_email'),
                   controller: _controllerEmail,
@@ -251,7 +249,7 @@ class _EditContactFormState extends State<EditContactForm> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             context
-                                .read<ContactCubit>()
+                                .read<PatientProfileCubit>()
                                 .updateEmail(_controllerEmail.text);
                           }
                         }

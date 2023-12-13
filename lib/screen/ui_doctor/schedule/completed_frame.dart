@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
-import 'package:healthline/screen/widgets/slide_months_in_year.dart';
+import 'package:healthline/screen/components/slide_months_in_year.dart';
 import './components/export.dart';
 
 class CompletedFrame extends StatefulWidget {

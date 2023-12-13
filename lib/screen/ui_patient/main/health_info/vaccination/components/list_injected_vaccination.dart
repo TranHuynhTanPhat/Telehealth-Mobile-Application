@@ -18,7 +18,8 @@ class ListInjectedVaccination extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VaccineRecordCubit, VaccineRecordState>(
       builder: (context, state) {
-        if (state is! FetchInjectedVaccinationLoading &&
+        if (state is FetchVaccinationRecordState &&
+            state.blocState != BlocState.Pending &&
             state.injectedVaccinations.isEmpty) {
           return Center(
             child: Column(
@@ -75,7 +76,8 @@ class ListInjectedVaccination extends StatelessWidget {
           );
         } else {
           return AbsorbPointer(
-            absorbing: state is VaccineRecordLoadingState,
+            absorbing: state is FetchVaccinationRecordState &&
+                state.blocState == BlocState.Pending,
             child: ListView(
               shrinkWrap: false,
               scrollDirection: Axis.vertical,
@@ -84,7 +86,7 @@ class ListInjectedVaccination extends StatelessWidget {
                 vertical: dimensHeight(),
               ),
               children: [
-                if (state is FetchInjectedVaccinationLoading)
+                if (state is FetchVaccinationRecordState && state.blocState==BlocState.Pending)
                   const BuildShimmer()
                 else
                   Column(
@@ -99,7 +101,7 @@ class ListInjectedVaccination extends StatelessWidget {
                                   onPressed: (context) {
                                     context
                                         .read<VaccineRecordCubit>()
-                                        .deleteInjectedVaccination(e.id!);
+                                        .deleteVaccinationRecordState(e.id!);
                                   },
                                   backgroundColor: transparent,
                                   foregroundColor: color9D4B6C,
@@ -238,7 +240,7 @@ class ListInjectedVaccination extends StatelessWidget {
                                           // ignore: use_build_context_synchronously
                                           context
                                               .read<VaccineRecordCubit>()
-                                              .fetchInjectedVaccination(
+                                              .fetchVaccinationRecord(
                                                   state.medicalRecord);
                                         }
                                       },

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/main/home/ref_vaccination/components/export.dart';
+import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/components/export.dart';
 import 'package:healthline/utils/translate.dart';
 
-class RefVaccinationScreen extends StatelessWidget {
-  const RefVaccinationScreen({super.key});
+class DocsVaccinationScreen extends StatelessWidget {
+  const DocsVaccinationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      context.read<VaccinationCubit>().fetchVaccinationFromStorage();
+      context.read<DocsVaccinationCubit>().fetchVaccinationFromStorage();
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -21,9 +21,9 @@ class RefVaccinationScreen extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: dimensHeight() * 10),
-          child: BlocBuilder<VaccinationCubit, VaccinationState>(
+          child: BlocBuilder<DocsVaccinationCubit, DocsVaccinationState>(
             builder: (context, state) {
-              if (state is VaccinationError) {
+              if (state.blocState == BlocState.Failed) {
                 return Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(top: dimensHeight() * 3),
@@ -31,7 +31,7 @@ class RefVaccinationScreen extends StatelessWidget {
                       "Can't load data",
                       style: Theme.of(context).textTheme.titleLarge,
                     ));
-              } else if (state is VaccinationLoading) {
+              } else if (state.blocState==BlocState.Pending) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/widgets/badge_notification.dart';
+import 'package:healthline/screen/components/badge_notification.dart';
 
 import '../../../res/style.dart';
 import '../../../utils/translate.dart';

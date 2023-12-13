@@ -21,25 +21,19 @@ class _ErrorScreenState extends State<ErrorScreen> {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 5),
-              child: Text(
-                translate(context, ''),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: Colors.red),
+              child: Center(
+                child: Text(
+                  translate(context, 'error'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Colors.red),
+                ),
               ),
-            ),
-            ElevatedButton(
-              style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Color(0xffff9494))),
-              child: Text(
-                "Login",
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              onPressed: () {},
             ),
           ],
         ),

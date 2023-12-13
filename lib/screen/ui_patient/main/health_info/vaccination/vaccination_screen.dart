@@ -29,8 +29,7 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
         int age = calculateAge(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .parse(user.dateOfBirth!));
         context.read<VaccineRecordCubit>().updateAge(age, user.id!);
-        context.read<VaccineRecordCubit>().fetchInjectedVaccination(state
-            .subUsers
+        context.read<VaccineRecordCubit>().fetchVaccinationRecord(state.subUsers
             .firstWhere((element) => element.id == state.currentId)
             .id!);
 
@@ -45,10 +44,9 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                   translate(context, 'vaccination_record'),
                 ),
                 actions: [
-                  Padding(
-                    padding: EdgeInsets.only(right: dimensWidth() * 3),
-                    child: AbsorbPointer(
-                      absorbing: state is FetchInjectedVaccinationLoading,
+                  if (state.blocState != BlocState.Pending)
+                    Padding(
+                      padding: EdgeInsets.only(right: dimensWidth() * 3),
                       child: InkWell(
                         onTap: () async {
                           await Navigator.pushNamed(
@@ -65,11 +63,10 @@ class _VaccinationScreenState extends State<VaccinationScreen> {
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
               body: AbsorbPointer(
-                absorbing: state is FetchInjectedVaccinationLoading,
+                absorbing: state.blocState == BlocState.Pending,
                 child: const ListInjectedVaccination(),
               ),
             );

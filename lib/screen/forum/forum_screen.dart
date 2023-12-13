@@ -33,7 +33,6 @@ class _ForumScreenState extends State<ForumScreen> {
   @override
   void dispose() {
     super.dispose();
-    _focus.removeListener(_checkFocus);
     _focus.dispose();
   }
 
@@ -47,16 +46,16 @@ class _ForumScreenState extends State<ForumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        KeyboardUtil.hideKeyboard(context);
-        _checkFocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        extendBody: true,
-        backgroundColor: white,
-        body: CustomScrollView(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      extendBody: true,
+      backgroundColor: white,
+      body: GestureDetector(
+        onTap: () {
+          KeyboardUtil.hideKeyboard(context);
+          _checkFocus();
+        },
+        child: CustomScrollView(
           slivers: [
             SliverAppBar(
               centerTitle: false,
@@ -93,6 +92,28 @@ class _ForumScreenState extends State<ForumScreen> {
                             ),
                           ),
                         ),
+                        suffixIcon: IconButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: dimensWidth() * 2),
+                          onPressed: () {},
+                          icon: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            onTap: () {
+                              if (_searchController.text.isNotEmpty) {
+                                _searchController.text = '';
+                              } else {
+                                KeyboardUtil.hideKeyboard(context);
+                                _checkFocus();
+                              }
+                            },
+                            child: FaIcon(
+                              FontAwesomeIcons.solidCircleXmark,
+                              color: color6A6E83,
+                              size: dimensIcon() * .5,
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   : Text(
@@ -107,9 +128,7 @@ class _ForumScreenState extends State<ForumScreen> {
                       onTap: () {
                         setState(() {
                           openSearch = true;
-                        });
-                        Future.delayed(const Duration(seconds: 1), () {
-                          _checkFocus();
+                          _focus.requestFocus();
                         });
                       },
                       child: Padding(
@@ -124,13 +143,13 @@ class _ForumScreenState extends State<ForumScreen> {
                     ),
                   )
               ],
-              expandedHeight: dimensHeight() * 35,
+              expandedHeight: dimensHeight() * 40,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Container(
                   color: white,
                   padding: EdgeInsets.fromLTRB(dimensWidth() * 3,
-                      dimensHeight() * 13, dimensWidth() * 3, 0),
+                      dimensHeight() * 16, dimensWidth() * 3, 0),
                   child: CreatePost(
                       textEdittingController: _textEdittingController),
                 ),
