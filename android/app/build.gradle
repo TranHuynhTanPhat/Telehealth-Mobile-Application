@@ -61,6 +61,17 @@ android {
         versionName flutterVersionName
         // Local Notification 
         multiDexEnabled true
+        ndk {
+            abiFilters.clear()
+        }
+        splits {
+            abi {
+                enable true //enables the ABIs split mechanism
+                reset() //reset the list of ABIs to be included to an empty string
+                include 'arm64-v8a', 'armeabi-v7a', 'x86'
+                universalApk true
+            }
+        }
     }
 
     flavorDimensions "track"
@@ -83,8 +94,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi-v7a','arm64-v8a','x86_64'
