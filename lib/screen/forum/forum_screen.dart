@@ -46,16 +46,16 @@ class _ForumScreenState extends State<ForumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (details) {
-        KeyboardUtil.hideKeyboard(context);
-        _checkFocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        extendBody: true,
-        backgroundColor: white,
-        body: CustomScrollView(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      extendBody: true,
+      backgroundColor: white,
+      body: GestureDetector(
+        onTap: () {
+          KeyboardUtil.hideKeyboard(context);
+          _checkFocus();
+        },
+        child: CustomScrollView(
           slivers: [
             SliverAppBar(
               centerTitle: false,
@@ -143,7 +143,7 @@ class _ForumScreenState extends State<ForumScreen> {
                     ),
                   )
               ],
-              expandedHeight: dimensHeight() * 35,
+              expandedHeight: dimensHeight() * 40,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Container(

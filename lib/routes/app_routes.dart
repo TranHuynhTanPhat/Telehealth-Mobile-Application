@@ -12,6 +12,7 @@ import 'package:healthline/screen/forum/forum_screen.dart';
 import 'package:healthline/screen/license/faqs_screen.dart';
 import 'package:healthline/screen/license/privacy_policy_screen.dart';
 import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
+import 'package:healthline/screen/news/detail_news_screen.dart';
 import 'package:healthline/screen/news/news_screen.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
@@ -78,6 +79,11 @@ class AppRoute {
             value: _newsCubit,
             child: const NewsScreen(),
           ),
+        );
+      case detailNewsName:
+        final args = settings.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => DetailNewsScreen(args: args),
         );
     }
     if (AppController.instance.authState == AuthState.Unauthorized) {
@@ -221,7 +227,7 @@ class AppRoute {
           final args = settings.arguments as String?;
           return MaterialPageRoute(
             builder: (_) => DetailDoctorScreen(
-              id: args,
+              args: args,
             ),
           );
         case walletName:

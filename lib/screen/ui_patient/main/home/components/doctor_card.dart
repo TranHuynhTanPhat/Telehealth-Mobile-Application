@@ -49,7 +49,7 @@ class _DoctorCardState extends State<DoctorCard> {
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
-      onTap: () => Navigator.pushNamed(context, detailDoctorName),
+      onTap: () => Navigator.pushNamed(context, detailDoctorName,arguments: widget.doctor.toJson()),
       child: Container(
         decoration: BoxDecoration(
           color: white,

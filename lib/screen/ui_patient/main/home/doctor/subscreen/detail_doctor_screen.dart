@@ -1,42 +1,66 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
-import 'package:healthline/screen/widgets/shimmer_widget.dart';
+import 'package:healthline/utils/currency_util.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class DetailDoctorScreen extends StatefulWidget {
   const DetailDoctorScreen({
     super.key,
-    this.id,
+    this.args,
   });
-  final String? id;
+  final String? args;
 
   @override
   State<DetailDoctorScreen> createState() => _DetailDoctorScreenState();
 }
 
 class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
-  // ignore: prefer_typing_uninitialized_variables
   var _image;
+  late DoctorResponse doctor;
 
   @override
   void initState() {
     _image = null;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _image = _image ??
-        NetworkImage(
-          CloudinaryContext.cloudinary
-              .image('healthline/avatar/doctor/eoohtomji5dgvhvl2oga')
-              .toString(),
-        );
+    try {
+      doctor = DoctorResponse.fromJson(widget.args!);
+    } catch (e) {
+      EasyLoading.showToast(translate(context, 'cant_load_data'));
+      Navigator.pop(context);
+      return const SizedBox();
+    }
+    try {
+      if (doctor.avatar != null &&
+          doctor.avatar != 'default' &&
+          doctor.avatar != '') {
+        _image = _image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(doctor.avatar ?? '')
+                  .toString(),
+            );
+      } else {
+        _image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      _image = AssetImage(DImages.placeholder);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -68,22 +92,13 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               floating: true,
               expandedHeight: dimensHeight() * 35,
               flexibleSpace: FlexibleSpaceBar(
-                background:
-                    //      ShimmerWidget.rectangular(
-                    //   height: dimensHeight()*35,
-                    //   width: dimensWidth()*50,
-                    //   shapeBorder: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(0),
-                    //     ),
-                    //   ),
-                    // )
-                    Container(
+                background: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: _image,
                       onError: (exception, stackTrace) => setState(() {
+                        logPrint(exception);
                         _image = AssetImage(DImages.placeholder);
                       }),
                       fit: BoxFit.cover,
@@ -112,13 +127,9 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // ShimmerWidget.rectangular(
-                      //   height: dimensHeight() * 4,
-                      //   width: dimensWidth() * 25,
-                      // ),
                       Expanded(
                         child: Text(
-                          "Doctor Name",
+                          doctor.fullName ?? translate(context, 'undefine'),
                           maxLines: 2,
                           overflow: TextOverflow.fade,
                           style: Theme.of(context)
@@ -127,13 +138,8 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      // const Spacer(),
-                      // ShimmerWidget.rectangular(
-                      //   height: dimensHeight() * 3,
-                      //   width: dimensWidth() * 7,
-                      // )
                       Text(
-                        "\$100",
+                        "${convertToVND(doctor.feePerMinutes ?? 0)}/${translate(context, 'minute')}",
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: Theme.of(context)
@@ -148,10 +154,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
             ),
           ];
         },
-        body:
-            // shimmerBuilder()
-
-            ListView(
+        body: ListView(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(
@@ -163,7 +166,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               padding:
                   EdgeInsets.only(bottom: dimensHeight(), top: dimensHeight()),
               child: Text(
-                'Tim mạch',
+                translate(context, doctor.specialty ?? 'undefine'),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -172,7 +175,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               children: [
                 RatingBar.builder(
                   ignoreGestures: true,
-                  initialRating: 3.5,
+                  initialRating: doctor.ratings ?? 0,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -187,7 +190,8 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: dimensWidth()),
                   child: Text(
-                    "3.5 (+800 ${translate(context, 'feedbacks')})",
+                    // "3.5 (+800 ${translate(context, 'feedbacks')})",
+                    "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 )
@@ -201,7 +205,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               ),
             ),
             Text(
-              'sndlcklkndslncvladsnvjadsnfldncljfkjaslkfjlskdjflakdsjflksjlfsdjfslkfjlskadflkdsjflksdjflksdjflsdjlkfsdlkfjslkdfjlsakjflksdajfjaewkjclksjdlcjsdlkjlfkdsfkawfjklsdjflkslkvlskdvnlskdjfklsdjflksdclksdnflsjkdflskdlkcasdmclknadslkvjsflkjejfoaisclksndlcklkndslncvladsnvjadsnfldncljfkjaslkfjlskdjflakdsjflksjlfsdjfslkfjlskadflkdsjflksdjflksdjflsdjlkfsdlkfjslkdfjlsakjflksdajfjaewkjclksjdlcjsdlkjlfkdsfkawfjklsdjflkslkvlskdvnlskdjfklsdjflksdclksdnflsjkdflskdlkcasdmclknadslkvjsflkjejfoaisclksndlcklkndslncvladsnvjadsnfldncljfkjaslkfjlskdjflakdsjflksjlfsdjfslkfjlskadflkdsjflksdjflksdjflsdjlkfsdlkfjslkdfjlsakjflksdajfjaewkjclksjdlcjsdlkjlfkdsfkawfjklsdjflkslkvlskdvnlskdjfklsdjflksdclksdnflsjkdflskdlkcasdmclknadslkvjsflkjejfoaisclksndlcklkndslncvladsnvjadsnfldncl',
+              doctor.biography ?? translate(context, 'undefine'),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             Padding(
@@ -235,100 +239,100 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
     );
   }
 
-  ListView shimmerBuilder() {
-    return ListView(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      padding: EdgeInsets.only(
-          bottom: dimensHeight() * 2,
-          left: dimensWidth() * 3,
-          right: dimensWidth() * 3),
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-              bottom: dimensHeight(),
-              top: dimensHeight(),
-              right: dimensWidth() * 25),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: dimensWidth() * 20),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2.5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 2, right: dimensWidth() * 35),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 3.5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: dimensHeight() * 2),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: dimensHeight()),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: dimensHeight()),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: dimensHeight()),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(top: dimensHeight(), right: dimensWidth() * 15),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 3, right: dimensWidth() * 20),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 3.5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 2, right: dimensWidth() * 15),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 3, right: dimensWidth() * 35),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 3.5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 2, right: dimensWidth() * 20),
-          child: ShimmerWidget.rectangular(
-            height: dimensHeight() * 2,
-          ),
-        ),
-        SizedBox(
-          height: dimensHeight() * 10,
-        )
-      ],
-    );
-  }
+  // ListView shimmerBuilder() {
+  //   return ListView(
+  //     shrinkWrap: true,
+  //     scrollDirection: Axis.vertical,
+  //     padding: EdgeInsets.only(
+  //         bottom: dimensHeight() * 2,
+  //         left: dimensWidth() * 3,
+  //         right: dimensWidth() * 3),
+  //     children: [
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             bottom: dimensHeight(),
+  //             top: dimensHeight(),
+  //             right: dimensWidth() * 25),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(right: dimensWidth() * 20),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2.5,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             top: dimensHeight() * 2, right: dimensWidth() * 35),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 3.5,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(top: dimensHeight() * 2),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(top: dimensHeight()),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(top: dimensHeight()),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(top: dimensHeight()),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding:
+  //             EdgeInsets.only(top: dimensHeight(), right: dimensWidth() * 15),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             top: dimensHeight() * 3, right: dimensWidth() * 20),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 3.5,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             top: dimensHeight() * 2, right: dimensWidth() * 15),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             top: dimensHeight() * 3, right: dimensWidth() * 35),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 3.5,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: EdgeInsets.only(
+  //             top: dimensHeight() * 2, right: dimensWidth() * 20),
+  //         child: ShimmerWidget.rectangular(
+  //           height: dimensHeight() * 2,
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: dimensHeight() * 10,
+  //       )
+  //     ],
+  //   );
+  // }
 }

@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
@@ -111,30 +110,14 @@ class _DoctorScreenState extends State<DoctorScreen> {
       resizeToAvoidBottomInset: true,
       backgroundColor: white,
       extendBody: true,
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: Text(
-      //     translate(context, 'list_of_doctors'),
-      //   ),
-      // ),
       body: BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
-        if (state is SearchDoctorState) {
-          if (state.blocState == BlocState.Successed) {
-            final isLastPage = state.doctors.length < _pageSize;
-            if (isLastPage) {
-              _pagingController.appendLastPage(state.doctors);
-            } else {
-              final nextPageKey = state.pageKey + state.doctors.length;
-              _pagingController.appendPage(state.doctors, nextPageKey);
-            }
-          }
-          if (state.blocState == BlocState.Failed) {
-            _pagingController.error = state.error;
-          }
-        }
-        return NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
+        return GestureDetector(
+          onTap: () {
+            KeyboardUtil.hideKeyboard(context);
+            _checkFocus();
+          },
+          child: CustomScrollView(
+            slivers: [
               SliverAppBar(
                 centerTitle: false,
                 pinned: true,
@@ -223,70 +206,56 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     )
                 ],
               ),
-            ];
-          },
-          body: GestureDetector(
-            onTapDown: (detail) {
-              KeyboardUtil.hideKeyboard(context);
-              _checkFocus();
-            },
-            child: CustomScrollView(
-              slivers: [
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: EdgeInsets.only(
-                //         top: dimensHeight() * 1,
-                //         right: dimensWidth() * 3,
-                //         left: dimensWidth() * 3),
-                //     child: TextFieldWidget(
-                //       validate: (p0) => null,
-                //       hint: translate(context, 'search_doctors'),
-                //       fillColor: colorF2F5FF,
-                //       filled: true,
-                //       focusedBorderColor: colorF2F5FF,
-                //       enabledBorderColor: colorF2F5FF,
-                //       controller: _searchController,
-                //       onChanged: (value) => {
-                //         _pagingController.refresh(),
-                //       },
-                //       prefixIcon: IconButton(
-                //         padding:
-                //             EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
-                //         onPressed: () {},
-                //         icon: FaIcon(
-                //           FontAwesomeIcons.magnifyingGlass,
-                //           color: color6A6E83,
-                //           size: dimensIcon() * .8,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
-                    child: ListCategories(
-                      callback: changeFilterExp,
-                    ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: dimensHeight() * 2,
+                      left: dimensWidth() * 3,
+                      right: dimensWidth() * 3),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: dimensWidth()),
+                        child: FaIcon(
+                          FontAwesomeIcons.filter,
+                          size: dimensIcon() * .5,
+                        ),
+                      ),
+                      Text(
+                        translate(context, 'filters'),
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ],
                   ),
                 ),
-                PagedSliverList<int, DoctorResponse>(
-                  // prototypeItem: buildShimmer(),
-                  pagingController: _pagingController,
-                  builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
-                      itemBuilder: (context, item, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: dimensWidth() * 2,
-                          vertical: dimensHeight()),
-                      child: DoctorCard(
-                        doctor: item,
-                      ),
-                    );
-                  }),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: dimensHeight() * 2),
+                  child: ListCategories(
+                    callback: changeFilterExp,
+                  ),
                 ),
-              ],
-            ),
+              ),
+              PagedSliverList<int, DoctorResponse>(
+                // prototypeItem: buildShimmer(),
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
+                    itemBuilder: (context, item, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: dimensWidth() * 2,
+                        vertical: dimensHeight()),
+                    child: DoctorCard(
+                      doctor: item,
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         );
       }),
@@ -294,76 +263,76 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 }
 
-Widget buildShimmer() => Padding(
-      padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(dimensWidth() * 2),
-              margin: EdgeInsets.symmetric(vertical: dimensHeight() * 1),
-              decoration: BoxDecoration(
-                color: white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(.1),
-                    spreadRadius: dimensWidth() * .4,
-                    blurRadius: dimensWidth() * .4,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(dimensWidth() * 3),
-                border:
-                    Border.all(color: colorA8B1CE.withOpacity(.2), width: 2),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            ShimmerWidget.circular(
-                                width: dimensWidth() * 9,
-                                height: dimensWidth() * 9),
-                            SizedBox(
-                              width: dimensWidth() * 2.5,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ShimmerWidget.rectangular(
-                                      height: dimensHeight() * 3),
-                                  SizedBox(
-                                    height: dimensHeight() * .5,
-                                  ),
-                                  ShimmerWidget.rectangular(
-                                      height: dimensHeight() * 1.5),
-                                  SizedBox(
-                                    height: dimensHeight() * .5,
-                                  ),
-                                  ShimmerWidget.rectangular(
-                                    height: dimensHeight() * 3.5,
-                                    width: dimensWidth() * 17,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dimensHeight(),
-                        ),
-                        ShimmerWidget.rectangular(
-                          height: dimensHeight() * 10,
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+// Widget buildShimmer() => Padding(
+//       padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: Container(
+//               padding: EdgeInsets.all(dimensWidth() * 2),
+//               margin: EdgeInsets.symmetric(vertical: dimensHeight() * 1),
+//               decoration: BoxDecoration(
+//                 color: white,
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.grey.withOpacity(.1),
+//                     spreadRadius: dimensWidth() * .4,
+//                     blurRadius: dimensWidth() * .4,
+//                   ),
+//                 ],
+//                 borderRadius: BorderRadius.circular(dimensWidth() * 3),
+//                 border:
+//                     Border.all(color: colorA8B1CE.withOpacity(.2), width: 2),
+//               ),
+//               child: Row(
+//                 children: [
+//                   Expanded(
+//                     child: Column(
+//                       children: [
+//                         Row(
+//                           children: [
+//                             ShimmerWidget.circular(
+//                                 width: dimensWidth() * 9,
+//                                 height: dimensWidth() * 9),
+//                             SizedBox(
+//                               width: dimensWidth() * 2.5,
+//                             ),
+//                             Expanded(
+//                               child: Column(
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   ShimmerWidget.rectangular(
+//                                       height: dimensHeight() * 3),
+//                                   SizedBox(
+//                                     height: dimensHeight() * .5,
+//                                   ),
+//                                   ShimmerWidget.rectangular(
+//                                       height: dimensHeight() * 1.5),
+//                                   SizedBox(
+//                                     height: dimensHeight() * .5,
+//                                   ),
+//                                   ShimmerWidget.rectangular(
+//                                     height: dimensHeight() * 3.5,
+//                                     width: dimensWidth() * 17,
+//                                   )
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         SizedBox(
+//                           height: dimensHeight(),
+//                         ),
+//                         ShimmerWidget.rectangular(
+//                           height: dimensHeight() * 10,
+//                         )
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );

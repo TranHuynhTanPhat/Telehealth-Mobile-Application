@@ -3,13 +3,14 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
 import 'package:healthline/data/api/models/responses/news_response.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/news/detail_news_screen.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:intl/intl.dart';
 
 class MainNewsPost extends StatefulWidget {
   const MainNewsPost({
@@ -24,12 +25,17 @@ class MainNewsPost extends StatefulWidget {
 }
 
 class _MainNewsPostState extends State<MainNewsPost> {
+  var image;
+
+  String? timeBetween;
+  @override
+  void initState() {
+    image = null;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var image;
-
-    String? timeBetween;
-
     try {
       if (widget.news.photo != null && widget.news.photo != 'default') {
         image = image ??
@@ -62,11 +68,10 @@ class _MainNewsPostState extends State<MainNewsPost> {
       splashColor: transparent,
       highlightColor: transparent,
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => const DetailNewsScreen(),
-          ),
+          detailNewsName,
+          arguments: widget.news.toJson(),
         );
       },
       child: Container(

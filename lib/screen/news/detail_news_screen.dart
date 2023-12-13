@@ -1,20 +1,81 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/res/style.dart';
-import 'package:healthline/utils/translate.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
 
-class DetailNewsScreen extends StatelessWidget {
-  const DetailNewsScreen({super.key});
+import 'package:cloudinary_flutter/cloudinary_context.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/news_response.dart';
+import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/log_data.dart';
+import 'package:healthline/utils/translate.dart';
+import 'package:intl/intl.dart';
+
+class DetailNewsScreen extends StatefulWidget {
+  const DetailNewsScreen({super.key, this.args});
+  final String? args;
+
+  @override
+  State<DetailNewsScreen> createState() => _DetailNewsScreenState();
+}
+
+class _DetailNewsScreenState extends State<DetailNewsScreen> {
+  late NewsResponse news;
+
+  var image;
+
+  String? timeBetween;
+
+  @override
+  void initState() {
+    image = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    try {
+      news = NewsResponse.fromJson(widget.args!);
+    } catch (e) {
+      EasyLoading.showToast(translate(context, 'cant_load_data'));
+      Navigator.pop(context);
+      return const SizedBox();
+    }
+
+    try {
+      if (news.photo != null && news.photo != 'default') {
+        image = image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary.image(news.photo ?? '').toString(),
+            );
+      } else {
+        image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      image = AssetImage(DImages.placeholder);
+    }
+    try {
+      if (news.updatedAt != null) {
+        DateTime from =
+            DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(news.updatedAt!);
+
+        DateTime to = DateTime.now();
+        timeBetween = daysBetween(context, from, to);
+      } else {
+        timeBetween = null;
+      }
+    } catch (e) {
+      logPrint(e);
+    }
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBody: true,
       backgroundColor: white,
       appBar: AppBar(
-        title: const Text(
-            "How accurate are the claims about ashwagandha's benefits?"),
+        title: Text(
+          news.title ?? translate(context, 'undefine'),
+        ),
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -34,10 +95,14 @@ class DetailNewsScreen extends StatelessWidget {
                 dimensWidth() * 2,
               ),
               image: DecorationImage(
-                image: AssetImage(
-                  DImages.placeholder,
-                ),
+                image: image,
                 fit: BoxFit.cover,
+                onError: (exception, stackTrace) => {
+                  logPrint(exception),
+                  setState(() {
+                    image = AssetImage(DImages.placeholder);
+                  }),
+                },
               ),
             ),
           ),
@@ -45,10 +110,11 @@ class DetailNewsScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  "How accurate are the claims about ashwagandha's benefits?",
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  news.title ?? translate(context, 'cant_load_data'),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
+                  textAlign: TextAlign.justify,
                 ),
               ),
             ],
@@ -68,7 +134,7 @@ class DetailNewsScreen extends StatelessWidget {
                 width: dimensWidth(),
               ),
               Text(
-                '1h trước',
+                timeBetween ?? translate(context, 'undefine'),
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -105,7 +171,7 @@ class DetailNewsScreen extends StatelessWidget {
                   color: primary.withOpacity(.2),
                 ),
                 child: Text(
-                  translate(context, 'covid-19'),
+                  translate(context, 'news'),
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -114,19 +180,19 @@ class DetailNewsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: dimensHeight() * 5,
-          ),
           Row(
             children: [
               Expanded(
                 child: Text(
-                    'From the ALS Ice Bucket Challenge to the Wednesday Dance, social media is known for starting trends that take on a life of their own. However, it is important to remember that not everything you read or hear on social media is true, especially when it comes to health trends. One recent health trend on social platforms is ashwagandha, with users reporting immense stress relief, boosted confidence, and increased libido. But are these claims true? And are there potential risks to using ashwagandha?,There is no denying the fact that stress can have a profound effect on a person’s overall health. According to the State of the Global Workplace 2023 Report, about 44% of workers around the globe say they experience a lot of stress. Previous research shows that ongoing stress can lead to high blood pressureTrusted Source and an increase in cardiovascular events. It can also negatively impact the immune systemTrusted Source, affect metabolic healthTrusted Source, and impact sleep qualityTrusted Source.Because stress can be so damaging to our bodies, it is no wonder why people look for different ways to alleviate it. One method many people on social media platforms are using and promoting is taking supplements of the herb ashwagandha. Called “glizzy pills,” influencers using the hashtag #ashwagandha are reporting benefits including boosted testosterone, increased libido, improved brain function, and feeling so happy, confident, and stress-free that they can better deal with unhappy events like a break-up or removing toxic people from their lives. Could these claims be true or are they misleading? Are there potential risks of taking ashwagandha that people need to know about? And are there other ways people can relieve stress without taking a supplement? Medical News Today spoke with seven medical experts to get the answers to these questions and find out the truth behind social media’s ashwagandha claims',
+                    news.content ?? translate(context, 'cant_load_data'),
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.justify,
                     style: Theme.of(context).textTheme.bodyLarge),
               ),
             ],
+          ),
+          SizedBox(
+            height: dimensHeight() * 10,
           ),
         ],
       ),
