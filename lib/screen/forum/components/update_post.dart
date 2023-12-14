@@ -1,38 +1,37 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
+import 'package:healthline/data/api/models/responses/post_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
-import 'package:healthline/utils/file_picker.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({
+class UpdatePost extends StatefulWidget {
+  const UpdatePost({
     super.key,
+    required this.post,
   });
+  final PostResponse post;
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<UpdatePost> createState() => _UpdatePostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
-  late List<File?> _files;
-  late TextEditingController _textEdittingController;
+class _UpdatePostState extends State<UpdatePost> {
+  late TextEditingController contentController;
 
   @override
   void initState() {
-    _files = [];
-    _textEdittingController = TextEditingController();
-
+    contentController = TextEditingController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (contentController.text.trim().isEmpty) {
+      contentController.text = widget.post.description ?? '';
+    }
     return BlocBuilder<ForumCubit, ForumState>(
       builder: (context, state) {
         return AbsorbPointer(
@@ -51,7 +50,7 @@ class _CreatePostState extends State<CreatePost> {
                 padding: EdgeInsets.only(
                     top: dimensHeight(), bottom: dimensHeight() * 1.5),
                 child: TextFieldWidget(
-                  controller: _textEdittingController,
+                  controller: contentController,
                   validate: (value) => null,
                   maxLine: 3,
                   fillColor: colorF2F5FF,
@@ -75,57 +74,33 @@ class _CreatePostState extends State<CreatePost> {
                       child: InkWell(
                         onTap: () async {
                           KeyboardUtil.hideKeyboard(context);
-                          _files = await FilePickerCustom().getImages();
-                          setState(() {});
                         },
-                        child: _files.isEmpty
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.photoFilm,
-                                    size: dimensIcon() * .5,
-                                    color: color1F1F1F,
-                                  ),
-                                  SizedBox(
-                                    width: dimensWidth(),
-                                  ),
-                                  Text(
-                                    translate(context, 'attach'),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                ],
-                              )
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      '${_files.length} ${translate(context, 'files')} ${translate(context, 'attach').toLowerCase()}',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${widget.post.photo?.length} ${translate(context, 'files')} ${translate(context, 'attach').toLowerCase()}',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.labelLarge,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
                           KeyboardUtil.hideKeyboard(context);
-                          if (_textEdittingController.text.trim().isNotEmpty) {
+                          if (contentController.text.trim().isNotEmpty) {
                             context.read<ForumCubit>().editPost(
-                                files: _files,
-                                content: _textEdittingController.text);
+                                idPost: widget.post.id,
+                                files: [],
+                                content: contentController.text);
                           }
                         },
                         style: ButtonStyle(
@@ -139,7 +114,7 @@ class _CreatePostState extends State<CreatePost> {
                               const MaterialStatePropertyAll(primary),
                         ),
                         child: Text(
-                          translate(context, 'post'),
+                          translate(context, 'update'),
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme

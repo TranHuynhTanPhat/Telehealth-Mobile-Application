@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:healthline/data/api/models/responses/comment_response.dart';
 import 'package:healthline/res/style.dart';
@@ -20,6 +23,13 @@ class CommentCard extends StatefulWidget {
 
 class _CommentCardState extends State<CommentCard> {
   String? timeBetween;
+  var _image;
+  @override
+  void initState() {
+    _image = null;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     try {
@@ -35,6 +45,23 @@ class _CommentCardState extends State<CommentCard> {
     } catch (e) {
       logPrint(e);
     }
+    try {
+      if (widget.comment.user?.avatar != null &&
+          widget.comment.user?.avatar != 'default' &&
+          widget.comment.user?.avatar != '') {
+        _image = _image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget.comment.user?.avatar ?? '')
+                  .toString(),
+            );
+      } else {
+        _image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      _image = AssetImage(DImages.placeholder);
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,8 +72,14 @@ class _CommentCardState extends State<CommentCard> {
           children: [
             CircleAvatar(
               backgroundColor: primary,
-              backgroundImage: AssetImage(DImages.placeholder),
+              backgroundImage: _image,
               radius: dimensHeight() * 2.5,
+              onBackgroundImageError: (exception, stackTrace) {
+                logPrint(exception);
+                setState(() {
+                  _image = AssetImage(DImages.placeholder);
+                });
+              },
             ),
             Expanded(
               child: Container(

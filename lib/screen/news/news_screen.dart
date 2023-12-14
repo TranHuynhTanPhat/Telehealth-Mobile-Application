@@ -36,10 +36,12 @@ class _NewsScreenState extends State<NewsScreen> {
     _pagingController.addPageRequestListener((pageKey) {
       context.read<NewsCubit>().searchNews(
             key: _searchController.text,
-            searchQuery: const SearchQuery(
-                limit: 20,
-                attributesToSearchOn: ['title', 'content'],
-                sort: ['updated_at:desc']),
+            searchQuery: SearchQuery(
+              limit: 20,
+              attributesToSearchOn: ['title', 'content'],
+              sort: ['updated_at:desc'],
+              page: pageKey + 1,
+            ),
             pageKey: pageKey,
             callback: (news) => updateData(news: news, pageKey: pageKey),
           );
@@ -85,7 +87,7 @@ class _NewsScreenState extends State<NewsScreen> {
     if (isLastPage) {
       _pagingController.appendLastPage(news);
     } else {
-      final nextPageKey = pageKey + news.length;
+      final nextPageKey = pageKey + 1;
       _pagingController.appendPage(news, nextPageKey);
     }
   }

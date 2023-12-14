@@ -6,28 +6,28 @@ import 'package:healthline/screen/forum/components/comment_card.dart';
 import 'package:healthline/screen/forum/components/create_comment.dart';
 
 class PostComment extends StatelessWidget {
-  PostComment({super.key, required this.idPost});
+  const PostComment({super.key, required this.idPost, required this.focusNode});
   final String? idPost;
 
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: dimensWidth()*2),
+      padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
       decoration: BoxDecoration(color: secondary.withOpacity(.02)),
       child: Column(
         children: [
           BlocBuilder<ForumCubit, ForumState>(
             builder: (context, state) {
-              if (state is FetchCommentState &&
-                  state.comments.isNotEmpty &&
-                  state.idPost == idPost) {
+              if (state.comments.isNotEmpty && state.currentPost == idPost) {
                 return Column(
                   children: state.comments
                       .map(
                         (e) => Padding(
-                          padding: EdgeInsets.only(top: dimensHeight(), ),
+                          padding: EdgeInsets.only(
+                            top: dimensHeight(),
+                          ),
                           child: CommentCard(
                             onTap: () {},
                             comment: e,
@@ -35,7 +35,7 @@ class PostComment extends StatelessWidget {
                         ),
                       )
                       .toList(),
-      
+
                   // CommentCard(
                   //   onTap: () {
                   //     // _focusNode.requestFocus();
@@ -50,7 +50,8 @@ class PostComment extends StatelessWidget {
           Padding(
               padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
               child: CreateComment(
-                focus: _focusNode,
+                focus: focusNode,
+                idPost: idPost,
               )),
         ],
       ),

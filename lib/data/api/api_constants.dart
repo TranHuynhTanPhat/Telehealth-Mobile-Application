@@ -4,9 +4,6 @@ class ApiConstants {
   // CLOUDINARY
   static const UPLOAD = '/upload';
 
-  // SOCKET
-  static const SOCKET_URL = 'http://192.168.80.80:3008';
-
 // common
   static const _COMMON_USER = '/common/user';
   static const _COMMON_DOCTOR = '/common/doctor';
@@ -47,9 +44,18 @@ class ApiConstants {
   static const VACCINATION_RECORD = '$_VACCINATION/record';
   static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
 
+  // forum
+  static const _FORUM = '/health-forum';
+  static const FORUM_POST = '$_FORUM/posts';
+
+  // consultation
+  static const _CONSULTATION = '/consultation';
+  static const CONSULTATION_DOCTOR_SCHEDULE = '$_CONSULTATION/doctor';
+
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';
   static const UPLOAD_AVATAR_DOCTOR = '$_FILE_UPLOAD/doctor/avatar';
   static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
   static const UPLOAD_RECORD = '$_FILE_UPLOAD/user/record';
+  static const UPLOAD_POST = '$_FILE_UPLOAD/post';
 }

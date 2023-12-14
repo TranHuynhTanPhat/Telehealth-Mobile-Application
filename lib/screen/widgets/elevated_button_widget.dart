@@ -22,7 +22,7 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
       onPressed: widget.onPressed,
       style: ButtonStyle(
         padding: MaterialStatePropertyAll(
-          EdgeInsets.symmetric(vertical: dimensHeight() * 2, horizontal: dimensWidth()*2.5),
+          EdgeInsets.symmetric(vertical: dimensHeight() * 1, horizontal: dimensWidth()*2.5),
         ),
         backgroundColor: const MaterialStatePropertyAll(primary),
       ),

@@ -11,9 +11,9 @@ void configLoading(context) {
     ..indicatorSize = 40
     ..radius = 21.0
     ..progressColor = white
-    ..backgroundColor = colorDF9F1E
+    ..backgroundColor = colorF2F5FF
     ..indicatorColor = primary
-    ..textColor = white
+    ..textColor = color1F1F1F
     ..maskColor = transparent
     ..userInteractions = true
     ..dismissOnTap = false

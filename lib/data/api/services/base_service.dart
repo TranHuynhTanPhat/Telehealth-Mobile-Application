@@ -75,10 +75,9 @@ abstract class BaseService {
       case 201:
         if (isUpload) {
           return DataResponse(
-              data: response.data, message: response.statusMessage);
+              data: response.data, message: response.statusMessage, code: response.statusCode);
         }
         try {
-          logPrint(response.toString());
           return DataResponse(
               data: response.data['data'],
               message: response.statusMessage,

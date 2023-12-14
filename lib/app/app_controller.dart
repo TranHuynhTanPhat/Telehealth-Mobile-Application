@@ -49,7 +49,7 @@ class AppController {
     await initAuth();
     await PushNotificationManager.instance.init();
     MeiliSearchManager().init();
-    SocketManager.instance.init();
+    authState != AuthState.Unauthorized ? SocketManager.instance.init() : null;
     setupCloudinary();
   }
 
@@ -152,7 +152,7 @@ class AppController {
     return "";
   }
 
-  void close(){
+  void close() {
     SocketManager.instance.close();
   }
 }

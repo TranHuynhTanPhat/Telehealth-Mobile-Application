@@ -7,9 +7,6 @@ import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class UserService extends BaseService {
-
-  
-
   Future<int?> registerAccount(UserRequest request) async {
     final response = await post(ApiConstants.USER, data: request.toJson());
     return response.code;

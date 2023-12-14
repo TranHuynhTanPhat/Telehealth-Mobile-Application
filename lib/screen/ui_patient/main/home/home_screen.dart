@@ -186,6 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 validate: (p0) => null,
                 hint: translate(context, 'search_doctors'),
                 fillColor: colorF2F5FF,
+                readOnly: true,
                 filled: true,
                 focusedBorderColor: colorF2F5FF,
                 enabledBorderColor: colorF2F5FF,

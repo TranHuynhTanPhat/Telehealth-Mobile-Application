@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
-import 'package:healthline/screen/components/slide_days_in_month.dart';
+import 'package:healthline/screen/widgets/date_slide.dart';
 import './components/export.dart';
 
 class UpcomingFrame extends StatefulWidget {
@@ -67,6 +67,22 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
     },
   ];
 
+  late int _daySelected;
+
+  // List<int> timeline = [];
+
+  void dayPressed(int index, DateTime dateTime) {
+    setState(() {
+      _daySelected = index;
+    });
+  }
+
+  @override
+  void initState() {
+    _daySelected = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -74,7 +90,12 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.symmetric(vertical: dimensWidth()),
       children: [
-        const SlideDaysInMonth(),
+        DateSlide(
+          daysLeft: 7,
+          dayPressed: dayPressed,
+          daySelected: _daySelected,
+          dateStart: DateTime.now(),
+        ),
         SizedBox(
           height: dimensHeight(),
         ),

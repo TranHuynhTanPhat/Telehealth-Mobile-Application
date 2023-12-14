@@ -2,7 +2,10 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
@@ -31,7 +34,9 @@ class _DoctorCardState extends State<DoctorCard> {
   @override
   Widget build(BuildContext context) {
     try {
-      if (widget.doctor.avatar != null && widget.doctor.avatar != 'default') {
+      if (widget.doctor.avatar != null &&
+          widget.doctor.avatar != 'default' &&
+          widget.doctor.avatar != '') {
         _image = _image ??
             NetworkImage(
               CloudinaryContext.cloudinary
@@ -65,6 +70,8 @@ class _DoctorCardState extends State<DoctorCard> {
           border: Border.all(color: colorA8B1CE.withOpacity(.2), width: 2),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -72,11 +79,14 @@ class _DoctorCardState extends State<DoctorCard> {
                   radius: dimensWidth() * 4.5,
                   backgroundImage: _image,
                   backgroundColor: white,
-                  onBackgroundImageError: (exception, stackTrace) => setState(
-                    () {
-                      _image = AssetImage(DImages.placeholder);
-                    },
-                  ),
+                  onBackgroundImageError: (exception, stackTrace) {
+                    logPrint(exception);
+                    setState(
+                      () {
+                        _image = AssetImage(DImages.placeholder);
+                      },
+                    );
+                  },
                 ),
                 SizedBox(
                   width: dimensWidth() * 2.5,
@@ -106,6 +116,24 @@ class _DoctorCardState extends State<DoctorCard> {
                       InkWell(
                         splashColor: transparent,
                         highlightColor: transparent,
+                        onTap: () {
+                          if (widget.doctor.id != null) {
+                            DateTime dateTime = DateTime.now();
+                            context.read<ConsultationCubit>().fetchTimeline(
+                                doctorId: widget.doctor.id!,
+                                date:
+                                    '${dateTime.day}/${dateTime.month}/${dateTime.year}');
+                            Navigator.pushNamed(
+                              context,
+                              timelineDoctorName,
+                              arguments: widget.doctor.id,
+                            );
+                          } else {
+                            EasyLoading.showToast(
+                                translate(context, 'cant_load_data'));
+                            Navigator.pop(context);
+                          }
+                        },
                         child: Container(
                           width: dimensWidth() * 17,
                           padding: EdgeInsets.all(dimensWidth() * .8),

@@ -1,6 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/data/storage/data_constants.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketManager {
@@ -11,11 +16,23 @@ class SocketManager {
   SocketManager._internal();
 
   void init() {
+    String? jwtToken;
+    if (AppController.instance.authState == AuthState.PatientAuthorized) {
+      LoginResponse response = LoginResponse.fromJson(
+          AppStorage().getString(key: DataConstants.PATIENT)!);
+      jwtToken = response.jwtToken;
+    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+      LoginResponse response = LoginResponse.fromJson(
+          AppStorage().getString(key: DataConstants.DOCTOR)!);
+      jwtToken = response.jwtToken;
+    }
     socket = io(
       dotenv.get('SOCKET_URL', fallback: ''),
       OptionBuilder()
           .setTransports(['websocket']) // for Flutter or Dart VM
-          .disableAutoConnect() // disable auto-connection
+          .disableAutoConnect()
+          .setExtraHeaders(
+              {'Authorization': 'Bearer $jwtToken'}) // disable auto-connection
           .build(),
     );
     socket.connect();
@@ -47,7 +64,7 @@ class SocketManager {
       {required String event,
       required dynamic data,
       required Function(dynamic) listen}) {
-    socket.emitWithAck(event, data, ack: (data){
+    socket.emitWithAck(event, data, ack: (data) {
       listen(data);
     });
   }

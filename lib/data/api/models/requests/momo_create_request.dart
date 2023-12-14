@@ -32,58 +32,6 @@ class MomoCreateRequest {
     this.signature,
   });
 
-  // MomoCreateRequest(
-  //     {this.partnerCode,
-  //     this.partnerName,
-  //     this.storeId,
-  //     this.requestType,
-  //     this.ipnUrl,
-  //     this.redirectUrl,
-  //     this.orderId,
-  //     this.amount,
-  //     this.lang,
-  //     this.autoCapture,
-  //     this.orderInfo,
-  //     this.requestId,
-  //     this.extraData,
-  //     this.signature});
-
-  // MomoCreateRequest.fromJson(Map<String, dynamic> json) {
-  //   partnerCode = json['partnerCode'];
-  //   partnerName = json['partnerName'];
-  //   storeId = json['storeId'];
-  //   requestType = json['requestType'];
-  //   ipnUrl = json['ipnUrl'];
-  //   redirectUrl = json['redirectUrl'];
-  //   orderId = json['orderId'];
-  //   amount = json['amount'];
-  //   lang = json['lang'];
-  //   autoCapture = json['autoCapture'];
-  //   orderInfo = json['orderInfo'];
-  //   requestId = json['requestId'];
-  //   extraData = json['extraData'];
-  //   signature = json['signature'];
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['partnerCode'] = this.partnerCode;
-  //   data['partnerName'] = this.partnerName;
-  //   data['storeId'] = this.storeId;
-  //   data['requestType'] = this.requestType;
-  //   data['ipnUrl'] = this.ipnUrl;
-  //   data['redirectUrl'] = this.redirectUrl;
-  //   data['orderId'] = this.orderId;
-  //   data['amount'] = this.amount;
-  //   data['lang'] = this.lang;
-  //   data['autoCapture'] = this.autoCapture;
-  //   data['orderInfo'] = this.orderInfo;
-  //   data['requestId'] = this.requestId;
-  //   data['extraData'] = this.extraData;
-  //   data['signature'] = this.signature;
-  //   return data;
-  // }
-
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
