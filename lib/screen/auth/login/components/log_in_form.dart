@@ -8,6 +8,7 @@ import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:healthline/utils/validate.dart';
+import 'package:healthline/routes/app_pages.dart';
 
 class LogInForm extends StatefulWidget {
   const LogInForm({super.key});
@@ -296,6 +297,7 @@ class _LogInFormState extends State<LogInForm> {
               highlightColor: transparent,
               onTap: () {
                 KeyboardUtil.hideKeyboard(context);
+                Navigator.pushReplacementNamed(context, forgetPasswordName);
               },
               // style: const ButtonStyle(
               //     padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
