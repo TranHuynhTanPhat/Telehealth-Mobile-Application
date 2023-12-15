@@ -90,7 +90,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               Navigator.pushNamed(
                 context,
                 timelineDoctorName,
-                arguments: doctor.id,
+                arguments: doctor.toJson(),
               );
             } else {
               EasyLoading.showToast(translate(context, 'cant_load_data'));
@@ -107,6 +107,24 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               snap: false,
               pinned: true,
               floating: true,
+              leading: Container(
+                  margin: EdgeInsets.all(dimensWidth()),
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    // splashColor: transparent,
+                    // highlightColor: transparent,
+                    style: ButtonStyle(
+                        backgroundColor: const MaterialStatePropertyAll(white),
+                        padding: MaterialStatePropertyAll(
+                            EdgeInsets.all(dimensWidth()))),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const FaIcon(
+                      FontAwesomeIcons.angleLeft,
+                      color: color1F1F1F,
+                    ),
+                  )),
               expandedHeight: dimensHeight() * 35,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
@@ -136,10 +154,16 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [white.withOpacity(0.0), white],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                        colors: [
+                          white.withOpacity(0.0),
+                          white.withOpacity(.3),
+                          white.withOpacity(.6),
+                          white.withOpacity(.9),
+                          white
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        tileMode: TileMode.clamp),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

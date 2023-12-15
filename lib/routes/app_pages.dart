@@ -9,6 +9,7 @@ const forumName = '/forum';
 const editPostName = '/edit-forum';
 const newsName = '/news';
 const detailNewsName = '/detail-news';
+const forgetPasswordName = '/forget-password';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";

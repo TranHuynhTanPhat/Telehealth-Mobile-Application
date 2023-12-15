@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/repository/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 
@@ -10,8 +11,9 @@ class ConsultationCubit extends Cubit<ConsultationState> {
   ConsultationCubit()
       : super(
           ConsultationInitial(
-            blocState: BlocState.Successed, timeline: [],
-          ),
+              blocState: BlocState.Successed,
+              timeline: [],
+              request: ConsultationRequest()),
         );
   final ConsultationRepository _consultationRepository =
       ConsultationRepository();
@@ -21,6 +23,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       FetchTimelineState(
         blocState: BlocState.Pending,
         timeline: [],
+        request: state.request,
       ),
     );
     try {
@@ -30,6 +33,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
           blocState: BlocState.Successed,
           timeline: timeline,
+          request: state.request,
         ),
       );
     } on DioException catch (e) {
@@ -38,6 +42,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           blocState: BlocState.Failed,
           timeline: [],
           error: e.response!.data['message'].toString(),
+          request: state.request,
         ),
       );
     } catch (e) {
@@ -45,8 +50,14 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
           blocState: BlocState.Failed,
           timeline: [],
+          request: state.request,
         ),
       );
     }
+  }
+  Future<void> updateExpectTime(
+      {required String time}) async {
+
+    emit(ConsultationInitial(blocState: BlocState.Successed, timeline: state.timeline, request: state.request.copyWith(expectedTime: time)));
   }
 }

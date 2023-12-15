@@ -12,7 +12,8 @@ class ConsultationService extends BaseService {
     final response = await post(
         '${ApiConstants.CONSULTATION_DOCTOR_SCHEDULE}/$id/schedule',
         data: jsonEncode({'date': date}));
-    List<int> timeline = response.data.map<int>((e) => e);
+    List<int> timeline = List<int>.from(response.data);
+
     return timeline;
   }
 

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/components/valid_shift.dart';
 import 'package:healthline/screen/widgets/date_slide.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class TimelineDoctorScreen extends StatefulWidget {
   const TimelineDoctorScreen({super.key, required this.args});
-  final String args;
+  final String? args;
 
   @override
   State<TimelineDoctorScreen> createState() => _TimelineDoctorScreenState();
@@ -22,15 +25,18 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
   final List<int> time = List<int>.generate(48, (i) => i + 1);
 
   late int _daySelected;
+  int? _timeSelected;
+  late DoctorResponse doctor;
 
   // List<int> timeline = [];
 
   void dayPressed(int index, DateTime dateTime) {
     context.read<ConsultationCubit>().fetchTimeline(
-        doctorId: widget.args,
+        doctorId: doctor.id!,
         date: '${dateTime.day}/${dateTime.month}/${dateTime.year}');
     setState(() {
       _daySelected = index;
+      _timeSelected = null;
     });
   }
 
@@ -43,6 +49,16 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    try {
+      doctor = DoctorResponse.fromJson(widget.args!);
+      if (doctor.id == null) {
+        throw 'not_found';
+      }
+    } catch (e) {
+      logPrint(e);
+      EasyLoading.showToast(translate(context, 'not_found'));
+      Navigator.pop(context);
+    }
     return BlocListener<ConsultationCubit, ConsultationState>(
       listener: (context, state) {
         if (state is FetchTimelineState) {
@@ -57,27 +73,30 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
             resizeToAvoidBottomInset: true,
             backgroundColor: white,
             extendBody: true,
-            bottomNavigationBar: Container(
-              padding: EdgeInsets.fromLTRB(
-                dimensWidth() * 10,
-                0,
-                dimensWidth() * 10,
-                dimensHeight() * 3,
-              ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.white.withOpacity(0.0), white],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: ElevatedButtonWidget(
-                text: translate(context, 'book_appointment_now'),
-                onPressed: () {
-                  Navigator.pushNamed(context, paymentMethodsName);
-                },
-              ),
-            ),
+            bottomNavigationBar:
+                _timeSelected != null && state.timeline.contains(_timeSelected)
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(
+                          dimensWidth() * 10,
+                          0,
+                          dimensWidth() * 10,
+                          dimensHeight() * 3,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.0), white],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: ElevatedButtonWidget(
+                          text: translate(context, 'book_appointment_now'),
+                          onPressed: () {
+                            Navigator.pushNamed(context, paymentMethodsName);
+                          },
+                        ),
+                      )
+                    : null,
             appBar: AppBar(
               title: Text(
                 translate(context, 'choose_time'),
@@ -163,8 +182,18 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                         radio: 3.2,
                         children: [
                           ...state.timeline.map(
-                            (e) => ValidShift(
-                              time: convertIntToTime(e),
+                            (e) => InkWell(
+                              splashColor: transparent,
+                              highlightColor: transparent,
+                              onTap: () {
+                                setState(() {
+                                  _timeSelected = e;
+                                });
+                              },
+                              child: ValidShift(
+                                time: convertIntToTime(e),
+                                choosed: e == (_timeSelected ?? -1),
+                              ),
                             ),
                           ),
                         ],

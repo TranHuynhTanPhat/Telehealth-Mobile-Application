@@ -7,6 +7,7 @@ import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/auth/forget_password/forget_password_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
@@ -135,6 +136,13 @@ class AppRoute {
               child: const SignUpScreen(),
             ),
           );
+        case forgetPasswordName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _authenticationCubit,
+              child: const ForgetPasswordScreen(),
+            ),
+          );
 
         default:
           return MaterialPageRoute(
@@ -237,8 +245,11 @@ class AppRoute {
         case detailDoctorName:
           final args = settings.arguments as String?;
           return MaterialPageRoute(
-            builder: (_) => DetailDoctorScreen(
-              args: args,
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: DetailDoctorScreen(
+                args: args,
+              ),
             ),
           );
         case walletName:
@@ -339,7 +350,7 @@ class AppRoute {
             builder: (_) => const HelpsScreen(),
           );
         case timelineDoctorName:
-          String args = settings.arguments as String;
+          String? args = settings.arguments as String?;
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: _consultationCubit,
