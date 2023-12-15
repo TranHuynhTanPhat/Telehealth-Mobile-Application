@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
+import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/repository/common_repository.dart';
@@ -86,6 +87,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         AppController.instance.authState = AuthState.DoctorAuthorized;
       }
       AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
+      SocketManager.instance.init();
       emit(LoginState(blocState: BlocState.Successed));
     } on DioException catch (e) {
       AppController.instance.authState = AuthState.Unauthorized;
@@ -155,6 +157,29 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     } catch (e) {
       logPrint(e);
       emit(LogoutState(blocState: BlocState.Failed, error: e.toString()));
+    }
+  }
+
+  Future<void> changePassword(
+      {required String password, required String passwordConfirm}) async {
+    emit(ChangePasswordState(blocState: BlocState.Pending));
+    try {
+      int? code = await _userRepository.changePassword(
+          password: password, passwordConfirm: passwordConfirm);
+      if (code == 200 || code == 201) {
+        emit(ChangePasswordState(blocState: BlocState.Successed));
+      } else {
+        emit(
+            ChangePasswordState(blocState: BlocState.Failed, error: 'failure'));
+      }
+    } on DioException catch (e) {
+      emit(ChangePasswordState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString()));
+    } catch (e) {
+      logPrint(e);
+      emit(ChangePasswordState(
+          blocState: BlocState.Failed, error: e.toString()));
     }
   }
 }

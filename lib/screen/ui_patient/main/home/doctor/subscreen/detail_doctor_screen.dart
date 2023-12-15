@@ -2,9 +2,11 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -79,7 +81,22 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
         width: double.infinity,
         child: ElevatedButtonWidget(
           text: translate(context, 'book_appointment_now'),
-          onPressed: () => Navigator.pushNamed(context, timelineDoctorName),
+          onPressed: () {
+            if (doctor.id != null) {
+              DateTime dateTime = DateTime.now();
+              context.read<ConsultationCubit>().fetchTimeline(
+                  doctorId: doctor.id!,
+                  date: '${dateTime.day}/${dateTime.month}/${dateTime.year}');
+              Navigator.pushNamed(
+                context,
+                timelineDoctorName,
+                arguments: doctor.id,
+              );
+            } else {
+              EasyLoading.showToast(translate(context, 'cant_load_data'));
+              Navigator.pop(context);
+            }
+          },
         ),
       ),
       body: NestedScrollView(

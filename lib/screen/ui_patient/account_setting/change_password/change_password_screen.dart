@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import './components/export.dart';
 import 'package:healthline/screen/widgets/cancel_button.dart';
@@ -25,12 +28,29 @@ class ChangePassword extends StatelessWidget {
         ),
         body: SafeArea(
           bottom: true,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            children: const [ChangePasswordForm()],
-          ),
+          child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
+              listener: (context, state) {
+            if (state is ChangePasswordState) {
+              if (state.blocState == BlocState.Pending) {
+                EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              } else if (state.blocState == BlocState.Successed) {
+                EasyLoading.showToast(translate(context, 'successfully'));
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(translate(context, state.error));
+              }
+            }
+          }, builder: (context, state) {
+            return AbsorbPointer(
+              absorbing: state is ChangePasswordState &&
+                  state.blocState == BlocState.Pending,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                children: const [ChangePasswordForm()],
+              ),
+            );
+          }),
         ),
       ),
     );

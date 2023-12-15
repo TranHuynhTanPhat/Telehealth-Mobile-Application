@@ -7,18 +7,15 @@ import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class UserService extends BaseService {
-
-  
-
   Future<int?> registerAccount(UserRequest request) async {
     final response = await post(ApiConstants.USER, data: request.toJson());
     return response.code;
   }
 
-  Future<DataResponse> addMedicalRecord(UserRequest request) async {
+  Future<int?> addMedicalRecord(UserRequest request) async {
     final response =
         await post(ApiConstants.USER_MEDICAL_RECORD, data: request.toJson());
-    return response;
+    return response.code;
   }
 
   Future<DataResponse> updateMedicalRecord(UserRequest request) async {
@@ -28,7 +25,8 @@ class UserService extends BaseService {
   }
 
   Future<DataResponse> deleteMedicalRecord(String recordId) async {
-    final response = await delete('${ApiConstants.USER_MEDICAL_RECORD}/$recordId');
+    final response =
+        await delete('${ApiConstants.USER_MEDICAL_RECORD}/$recordId');
     return response;
   }
 
@@ -53,5 +51,15 @@ class UserService extends BaseService {
     return userResponse;
   }
 
- 
+  Future<int?> changePassword(
+      {required String password, required String passwordConfirm}) async {
+    final response = await patch(
+      ApiConstants.USER_PASSWORD,
+      data: json.encode(
+        {"password": password, "passwordConfirm": passwordConfirm},
+      ),
+    );
+
+    return response.code;
+  }
 }
