@@ -40,41 +40,41 @@ class _SplashScreenState extends State<SplashScreen> {
   void startTimer() {
     Future.delayed(const Duration(milliseconds: 1000), () async {
       bool? firstTime = AppStorage().getBool(key: DataConstants.FIRST_TIME);
-      // // prefs.setBool('first_time', true);
-      // try {
-      //   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-      //       await PushNotificationManager().getNotificationAppLaunchDetails();
-      //   final didNotificationLaunchApp =
-      //       notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
+      // prefs.setBool('first_time', true);
+      try {
+        final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+            await PushNotificationManager().getNotificationAppLaunchDetails();
+        final didNotificationLaunchApp =
+            notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
 
-      //   if (didNotificationLaunchApp) {
-      //     Navigator.pushReplacementNamed(context,
-      //         notificationAppLaunchDetails!.notificationResponse!.payload!);
-      //     PushNotificationManager().cancelNotification(
-      //         notificationAppLaunchDetails.notificationResponse?.id);
-      //   } else {
-      //     if (firstTime != null && !firstTime) {
-      //       if (AppController.instance.authState == AuthState.Unauthorized) {
-      //         Navigator.pushReplacementNamed(context, logInName);
-      //       } else if (
-      //           // AppController.instance.authState ==
-      //           //       AuthState.AllAuthorized ||
-      //           AppController.instance.authState ==
-      //               AuthState.DoctorAuthorized) {
-      //         Navigator.pushReplacementNamed(context, mainScreenDoctorName);
-      //       } else {
-      //         Navigator.pushReplacementNamed(context, mainScreenPatientName);
-      //       }
-      //     } else {
-      //       AppStorage().setBool(key: DataConstants.FIRST_TIME, value: false);
-      //       Navigator.pushReplacementNamed(context, onboardingName);
-      //     }
-      //   }
-      // } catch (e) {
-      //   logPrint(e);
-      // }
+        if (didNotificationLaunchApp) {
+          Navigator.pushReplacementNamed(context,
+              notificationAppLaunchDetails!.notificationResponse!.payload!);
+          PushNotificationManager().cancelNotification(
+              notificationAppLaunchDetails.notificationResponse?.id);
+        } else {
+          if (firstTime != null && !firstTime) {
+            if (AppController.instance.authState == AuthState.Unauthorized) {
+              Navigator.pushReplacementNamed(context, logInName);
+            } else if (
+                // AppController.instance.authState ==
+                //       AuthState.AllAuthorized ||
+                AppController.instance.authState ==
+                    AuthState.DoctorAuthorized) {
+              Navigator.pushReplacementNamed(context, mainScreenDoctorName);
+            } else {
+              Navigator.pushReplacementNamed(context, mainScreenPatientName);
+            }
+          } else {
+            AppStorage().setBool(key: DataConstants.FIRST_TIME, value: false);
+            Navigator.pushReplacementNamed(context, onboardingName);
+          }
+        }
+      } catch (e) {
+        logPrint(e);
+      }
 
-      Navigator.pushReplacementNamed(context, mainScreenPatientName);
+      // Navigator.pushReplacementNamed(context, mainScreenPatientName);
     });
   }
 

@@ -7,6 +7,7 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class SubUserCard extends StatefulWidget {
@@ -32,21 +33,37 @@ class _SubUserCardState extends State<SubUserCard> {
 
   @override
   Widget build(BuildContext context) {
-    String url = CloudinaryContext.cloudinary
-        .image(widget.subUser.avatar ?? '')
-        .toString();
-    NetworkImage provider = NetworkImage(url);
+    try {
+      if (widget.subUser.avatar != null &&
+          widget.subUser.avatar != 'default' &&
+          widget.subUser.avatar != '') {
+        _image = _image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget.subUser.avatar ?? '')
+                  .toString(),
+            );
+      } else {
+        _image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      _image = AssetImage(DImages.placeholder);
+    }
+    // String url = CloudinaryContext.cloudinary
+    //     .image(widget.subUser.avatar ?? '')
+    //     .toString();
+    // NetworkImage provider = NetworkImage(url);
 
     return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
-        if (state is UpdateSubUserSuccessfully) {
-          provider.evict().then<void>((bool success) {
-            if (success) debugPrint('removed image!');
-          });
-        }
+        // if (state is UpdateSubUserSuccessfully) {
+        //   provider.evict().then<void>((bool success) {
+        //     if (success) debugPrint('removed image!');
+        //   });
+        // }
       },
       child: Builder(builder: (context) {
-        _image = _image ?? provider;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: AnimatedContainer(
@@ -60,6 +77,7 @@ class _SubUserCardState extends State<SubUserCard> {
                 borderRadius: BorderRadius.circular(dimensWidth() * 2),
                 image: DecorationImage(
                     onError: (exception, stackTrace) {
+                      logPrint(exception);
                       setState(() {
                         _image = AssetImage(DImages.placeholder);
                       });

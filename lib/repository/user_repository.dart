@@ -9,7 +9,6 @@ import 'package:healthline/res/enum.dart';
 class UserRepository extends BaseRepository {
   final UserService _userService = UserService();
 
- 
   Future<int?> registerAccount(
       String fullName,
       String phone,
@@ -31,7 +30,7 @@ class UserRepository extends BaseRepository {
     return await _userService.registerAccount(request);
   }
 
-  Future<DataResponse> addMedicalRecord(
+  Future<int?> addMedicalRecord(
       String avatar,
       String fullName,
       String birthday,
@@ -63,14 +62,16 @@ class UserRepository extends BaseRepository {
         fullName: fullName,
         gender: gender,
         birthday: birthday,
-        relationship:relationship!=null?
-            Relationship.values.firstWhere((e) => e.name == relationship):Relationship.Children,
+        relationship: relationship != null
+            ? Relationship.values.firstWhere((e) => e.name == relationship)
+            : Relationship.Children,
         address: address);
     return await _userService.updateMedicalRecord(request);
   }
+
   Future<DataResponse> deleteMedicalRecord(
-      String recordId,) async {
-   
+    String recordId,
+  ) async {
     return await _userService.deleteMedicalRecord(recordId);
   }
 
@@ -86,7 +87,9 @@ class UserRepository extends BaseRepository {
     return await _userService.getMedicalRecord();
   }
 
-  // Future<void> logout() async {
-  //   await _userService.logout();
-  // }
+  Future<int?> changePassword(
+      {required String password, required String passwordConfirm}) async {
+    return await _userService.changePassword(
+        password: password, passwordConfirm: passwordConfirm);
+  }
 }

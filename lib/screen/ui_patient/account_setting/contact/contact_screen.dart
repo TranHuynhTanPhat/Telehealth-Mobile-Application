@@ -33,7 +33,8 @@ class _ContactScreenState extends State<ContactScreen> {
         if (state.blocState == BlocState.Pending) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state.blocState == BlocState.Failed) {
-          EasyLoading.showToast(translate(context, state.error));
+          EasyLoading.showToast(
+              translate(context, state.error.toString().toLowerCase()));
           Navigator.pop(context);
         } else if (state.blocState == BlocState.Successed) {
           EasyLoading.dismiss();

@@ -84,10 +84,12 @@ class _WalletScreenState extends State<WalletScreen>
                       isScrollControlled: true,
                       useSafeArea: true,
                       builder: (BuildContext contextBottomSheet) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: dimensHeight() * 3,
-                              horizontal: dimensWidth() * 3),
+                        return Container(
+                          height: dimensHeight() * 60,
+                          padding: EdgeInsets.only(
+                              top: dimensHeight() * 3,
+                              bottom: MediaQuery.of(context).viewInsets.bottom +
+                                  dimensHeight()*3),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -121,7 +123,8 @@ class _WalletScreenState extends State<WalletScreen>
                                     Container(
                                       alignment: Alignment.center,
                                       padding: EdgeInsets.symmetric(
-                                          vertical: dimensHeight() * 3),
+                                          vertical: dimensHeight() * 3,
+                                          horizontal: dimensWidth() * 3),
                                       child: Form(
                                         child: Column(
                                           children: [
@@ -177,7 +180,8 @@ class _WalletScreenState extends State<WalletScreen>
                                     Container(
                                       alignment: Alignment.center,
                                       padding: EdgeInsets.symmetric(
-                                          vertical: dimensHeight() * 3),
+                                          vertical: dimensHeight() * 3,
+                                          horizontal: dimensWidth() * 3),
                                       child: Form(
                                         child: Column(
                                           children: [

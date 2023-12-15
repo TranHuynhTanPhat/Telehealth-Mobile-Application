@@ -159,4 +159,27 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(LogoutState(blocState: BlocState.Failed, error: e.toString()));
     }
   }
+
+  Future<void> changePassword(
+      {required String password, required String passwordConfirm}) async {
+    emit(ChangePasswordState(blocState: BlocState.Pending));
+    try {
+      int? code = await _userRepository.changePassword(
+          password: password, passwordConfirm: passwordConfirm);
+      if (code == 200 || code == 201) {
+        emit(ChangePasswordState(blocState: BlocState.Successed));
+      } else {
+        emit(
+            ChangePasswordState(blocState: BlocState.Failed, error: 'failure'));
+      }
+    } on DioException catch (e) {
+      emit(ChangePasswordState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString()));
+    } catch (e) {
+      logPrint(e);
+      emit(ChangePasswordState(
+          blocState: BlocState.Failed, error: e.toString()));
+    }
+  }
 }

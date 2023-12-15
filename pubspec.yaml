@@ -118,6 +118,7 @@ flutter:
     - assets/lotties/
     - assets/languages/
     - assets/vaccination/
+    - assets/license/
     - .env
     - shorebird.yaml
   # An image asset can refer to one or more resolution-specific "variants", see

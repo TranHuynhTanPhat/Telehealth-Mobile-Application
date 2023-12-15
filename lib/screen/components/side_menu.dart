@@ -163,7 +163,7 @@ class _SideMenuState extends State<SideMenu> {
                     Navigator.pushNamed(context, helpsName);
                   },
                   title: Text(
-                    translate(context, 'Trợ giúp'),
+                    translate(context, 'helps'),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
