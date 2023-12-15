@@ -65,6 +65,10 @@ class _HealthInfoScreenState extends State<HealthInfoScreen>
           EasyLoading.dismiss();
         } else if (state is HealthStatError) {
           EasyLoading.showToast(translate(context, state.message));
+        } else if (state is AddSubUserSuccessfully ||
+            state is UpdateSubUserSuccessfully ||
+            state is DeleteSubUserSuccessfully) {
+          context.read<MedicalRecordCubit>().fetchMedicalRecord();
         }
       },
       child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(

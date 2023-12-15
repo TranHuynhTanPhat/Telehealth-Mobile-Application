@@ -111,7 +111,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
               Expanded(
                 child: Text(
                   news.title ?? translate(context, 'cant_load_data'),
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                   textAlign: TextAlign.justify,
@@ -147,6 +147,7 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 '${translate(context, 'tags')}:',

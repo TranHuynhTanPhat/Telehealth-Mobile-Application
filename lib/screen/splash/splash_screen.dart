@@ -39,9 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void startTimer() {
     Future.delayed(const Duration(milliseconds: 1000), () async {
-
       bool? firstTime = AppStorage().getBool(key: DataConstants.FIRST_TIME);
-      // // prefs.setBool('first_time', true);
+      // prefs.setBool('first_time', true);
       try {
         final NotificationAppLaunchDetails? notificationAppLaunchDetails =
             await PushNotificationManager().getNotificationAppLaunchDetails();
@@ -58,8 +57,8 @@ class _SplashScreenState extends State<SplashScreen> {
             if (AppController.instance.authState == AuthState.Unauthorized) {
               Navigator.pushReplacementNamed(context, logInName);
             } else if (
-              // AppController.instance.authState ==
-              //       AuthState.AllAuthorized ||
+                // AppController.instance.authState ==
+                //       AuthState.AllAuthorized ||
                 AppController.instance.authState ==
                     AuthState.DoctorAuthorized) {
               Navigator.pushReplacementNamed(context, mainScreenDoctorName);
@@ -105,8 +104,10 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           // ProgressIndicator()
-          const LinearProgressIndicatorLoading(
-            seconds: 2,
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: dimensWidth() * 5, vertical: dimensHeight() * 10),
+            child: const LinearProgressIndicatorLoading(),
           )
         ],
       ),

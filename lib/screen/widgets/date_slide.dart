@@ -8,7 +8,7 @@ class DateSlide extends StatefulWidget {
       required this.daysLeft,
       required this.dayPressed,
       required this.daySelected,
-      required this.dateStart});
+      required this.dateStart,});
   final int daysLeft;
   final int daySelected;
   final DateTime dateStart;

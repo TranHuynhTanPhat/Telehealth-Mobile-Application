@@ -1,40 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/forum/components/comment_card.dart';
 import 'package:healthline/screen/forum/components/create_comment.dart';
 
-class PostComment extends StatefulWidget {
-  const PostComment({super.key});
+class PostComment extends StatelessWidget {
+  const PostComment({super.key, required this.idPost, required this.focusNode});
+  final String? idPost;
 
-  @override
-  State<PostComment> createState() => _PostCommentState();
-}
+  final FocusNode focusNode;
 
-class _PostCommentState extends State<PostComment> {
-  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: dimensHeight() * 2),
-          child: CommentCard(
-            onTap: () {
-              _focusNode.requestFocus();
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
+      decoration: BoxDecoration(color: secondary.withOpacity(.02)),
+      child: Column(
+        children: [
+          BlocBuilder<ForumCubit, ForumState>(
+            builder: (context, state) {
+              if (state.comments.isNotEmpty && state.currentPost == idPost) {
+                return Column(
+                  children: state.comments
+                      .map(
+                        (e) => Padding(
+                          padding: EdgeInsets.only(
+                            top: dimensHeight(),
+                          ),
+                          child: CommentCard(
+                            onTap: () {},
+                            comment: e,
+                          ),
+                        ),
+                      )
+                      .toList(),
+
+                  // CommentCard(
+                  //   onTap: () {
+                  //     // _focusNode.requestFocus();
+                  //   },
+                  // ),
+                );
+              } else {
+                return const SizedBox();
+              }
             },
-            child: CommentCard(
-              onTap: () {
-                _focusNode.requestFocus();
-              },
-            ),
           ),
-        ),
-        Padding(
-            padding: EdgeInsets.only(top: dimensHeight() * 2),
-            child: CreateComment(
-              focus: _focusNode,
-            )),
-      ],
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
+              child: CreateComment(
+                focus: focusNode,
+                idPost: idPost,
+              )),
+        ],
+      ),
     );
   }
 }

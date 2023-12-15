@@ -22,3 +22,7 @@ final class LoginState extends AuthenticationState {
 final class LogoutState extends AuthenticationState {
   LogoutState({required super.blocState, super.error});
 }
+
+final class ChangePasswordState extends AuthenticationState {
+  ChangePasswordState({required super.blocState, super.error});
+}
