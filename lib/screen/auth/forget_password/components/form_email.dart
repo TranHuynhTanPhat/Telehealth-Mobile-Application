@@ -41,7 +41,7 @@ class _FormEmailState extends State<FormEmail> {
                 text: translate(context, 'send_otp'),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    context.read<AuthenticationCubit>().sendOTP(email: widget.emailController.text.trim());;
+                    context.read<AuthenticationCubit>().sendOTP(email: widget.emailController.text.trim());
                   }
                 }),
           )
