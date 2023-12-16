@@ -194,9 +194,6 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    width: dimensWidth() * .3,
-                  ),
                 ],
               ),
               Row(

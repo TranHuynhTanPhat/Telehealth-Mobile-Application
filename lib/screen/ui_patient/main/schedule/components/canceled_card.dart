@@ -1,15 +1,63 @@
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/log_data.dart';
+import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:intl/intl.dart';
 
-class CanceledCard extends StatelessWidget {
-  const CanceledCard({super.key, required this.object});
-  final Map<String, dynamic> object;
+class CanceledCard extends StatefulWidget {
+  const CanceledCard({super.key, required this.cancel});
+  final ConsultationResponse cancel;
+
+  @override
+  State<CanceledCard> createState() => _CanceledCardState();
+}
+
+class _CanceledCardState extends State<CanceledCard> {
+  var image;
+  List<int> time = [];
+  @override
+  void initState() {
+    image = null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    try {
+      if (widget.cancel.doctor?.avatar != null &&
+          widget.cancel.doctor?.avatar != 'default' &&
+          widget.cancel.doctor?.avatar != '') {
+        image = image ??
+            NetworkImage(
+              CloudinaryContext.cloudinary
+                  .image(widget.cancel.doctor?.avatar ?? '')
+                  .toString(),
+            );
+      } else {
+        image = AssetImage(DImages.placeholder);
+      }
+    } catch (e) {
+      logPrint(e);
+      image = AssetImage(DImages.placeholder);
+    }
+    try {
+      time = widget.cancel.expectedTime
+              ?.split('-')
+              .map((e) => int.parse(e))
+              .toList() ??
+          [int.parse(widget.cancel.expectedTime!)];
+    } catch (e) {
+      EasyLoading.showToast(translate(context, 'failure'));
+    }
+    String expectedTime =
+        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+
     return Container(
       margin: EdgeInsets.only(top: dimensHeight() * 2),
       padding: EdgeInsets.symmetric(
@@ -35,7 +83,7 @@ class CanceledCard extends StatelessWidget {
                   SizedBox(
                     width: dimensWidth() * 32,
                     child: Text(
-                      "${translate(context, 'dr')}. ${translate(context, object['dr'])}",
+                      "${translate(context, 'dr')}. ${translate(context, widget.cancel.doctor?.fullName)}",
                       overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: color6A6E83, fontWeight: FontWeight.w900),
@@ -44,14 +92,14 @@ class CanceledCard extends StatelessWidget {
                   SizedBox(
                     width: dimensWidth() * 32,
                     child: Text(
-                      translate(context, object['specialist']),
+                      translate(context, widget.cancel.doctor?.specialty),
                       overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: color6A6E83, fontWeight: FontWeight.w900),
                     ),
                   ),
                   Text(
-                    "${translate(context, 'patient')}: ${object['patient']}",
+                    "${translate(context, 'patient')}: ${widget.cancel.medical?.fullName}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -88,28 +136,15 @@ class CanceledCard extends StatelessWidget {
                     width: dimensWidth(),
                   ),
                   Text(
-                    object['begin'].format(context).toString(),
+                    expectedTime,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color6A6E83, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * .3,
+                        color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "-",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color6A6E83, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * .3,
-                  ),
-                  Text(
-                    object['end'].format(context).toString(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color6A6E83, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    formatDayMonthYear(context, object['date']),
+                    formatDayMonthYear(
+                        context,
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                            .parse(widget.cancel.date!)),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: color6A6E83, fontWeight: FontWeight.bold),
                   ),
@@ -118,7 +153,7 @@ class CanceledCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    translate(context, object['status']),
+                    translate(context, widget.cancel.status),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: color6A6E83, fontWeight: FontWeight.bold),
                   ),

@@ -17,7 +17,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             timeline: [],
             request: ConsultationRequest(),
             doctorName: null,
-            patientName: null,
+            patientName: null, consultations: null,
           ),
         );
   final ConsultationRepository _consultationRepository =
@@ -37,7 +37,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         timeline: [],
         request: state.request,
         doctorName: state.doctorName,
-        patientName: state.patientName,
+        patientName: state.patientName, consultations: state.consultations,
       ),
     );
     try {
@@ -49,7 +49,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           timeline: timeline,
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName,
+          patientName: state.patientName, consultations: state.consultations,
         ),
       );
     } on DioException catch (e) {
@@ -60,7 +60,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           error: e.response!.data['message'].toString(),
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName,
+          patientName: state.patientName, consultations: state.consultations,
         ),
       );
     } catch (e) {
@@ -70,7 +70,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           timeline: [],
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName,
+          patientName: state.patientName, consultations: state.consultations,
         ),
       );
     }
@@ -84,11 +84,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         request: ConsultationRequest(),
         doctorName: null,
         patientName: null,
-        consultations: AllConsultationResponse(
-          coming: [],
-          finish: [],
-          cancel: [],
-        ),
+        consultations: state.consultations
       ),
     );
     try {
@@ -112,11 +108,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           request: state.request,
           doctorName: state.doctorName,
           patientName: state.patientName,
-          consultations: AllConsultationResponse(
-            coming: [],
-            finish: [],
-            cancel: [],
-          ),
+          consultations: state.consultations
         ),
       );
     } catch (e) {
@@ -127,11 +119,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           request: state.request,
           doctorName: state.doctorName,
           patientName: state.patientName,
-          consultations: AllConsultationResponse(
-            coming: [],
-            finish: [],
-            cancel: [],
-          ),
+          consultations: state.consultations
         ),
       );
     }
@@ -144,7 +132,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           timeline: state.timeline,
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName,
+          patientName: state.patientName, consultations: state.consultations,
           ),
     );
     try {
@@ -157,7 +145,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
               timeline: state.timeline,
               request: state.request,
               doctorName: state.doctorName,
-              patientName: state.patientName,
+              patientName: state.patientName, consultations: state.consultations,
               ),
         );
       } else {
@@ -171,7 +159,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             error: e.response!.data['message'].toString(),
             request: state.request,
             doctorName: state.doctorName,
-            patientName: state.patientName,
+            patientName: state.patientName, consultations: state.consultations,
             ),
       );
     } catch (e) {
@@ -181,7 +169,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             timeline: state.timeline,
             request: state.request,
             doctorName: state.doctorName,
-            patientName: state.patientName,
+            patientName: state.patientName, consultations: state.consultations,
             ),
       );
     }
@@ -208,7 +196,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
               discountCode: discountCode,
               date: date),
           doctorName: doctorName ?? state.doctorName,
-          patientName: patientName ?? state.patientName,
+          patientName: patientName ?? state.patientName, consultations: state.consultations,
           ),
     );
   }

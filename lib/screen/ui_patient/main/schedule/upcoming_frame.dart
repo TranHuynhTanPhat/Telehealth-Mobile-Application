@@ -6,9 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
+import 'package:healthline/screen/widgets/date_slide.dart';
+import 'package:intl/intl.dart';
 
 import 'components/upcoming_card.dart';
-
 
 class UpcomingFrame extends StatefulWidget {
   const UpcomingFrame({super.key});
@@ -18,35 +19,63 @@ class UpcomingFrame extends StatefulWidget {
 }
 
 class _UpcomingFrameState extends State<UpcomingFrame> {
-  
+  final DateTime now = DateTime.now();
+  late int _index;
+  @override
+  void initState() {
+    _index = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ConsultationCubit, ConsultationState>(
       builder: (context, state) {
-        if (state is FetchConsultationState &&
-            state.consultations.coming.isNotEmpty) {
+        if (state.consultations != null &&
+            state.consultations!.coming.isNotEmpty) {
           return ListView(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
             children: [
               // const SlideDaysInMonth(),
+              DateSlide(
+                  daysLeft: 7,
+                  dayPressed: (index, datetime) {
+                    setState(() {
+                      _index = index;
+                    });
+                  },
+                  daySelected: _index,
+                  dateStart: now),
               SizedBox(
                 height: dimensHeight(),
               ),
+              // ...List.generate(7, (index) {
+              //   DateTime datetime = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+              // .parse(widget.coming.date!);
+              // }),
               ...List.generate(24, (index) {
-                if (state.consultations.coming.any((element) {
-                  List<int> times = element.expectedTime
-                          ?.split('-')
-                          .map((e) => int.tryParse(e) ?? -1)
-                          .toList() ??
-                      [-1];
-                  if (times.first ~/ 2 == index) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-                })) {
+                if (state.consultations!.coming.any(
+                  (element) {
+                    List<int> times = element.expectedTime
+                            ?.split('-')
+                            .map((e) => int.tryParse(e) ?? -1)
+                            .toList() ??
+                        [-1];
+
+                    DateTime date = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        .parse(element.date!);
+
+                    if (times.first ~/ 2 == index &&
+                        DateTime(date.year, date.month, date.day) ==
+                            DateTime(now.year, now.month, now.day + _index)) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  },
+                )) {
                   return Padding(
                     padding: EdgeInsets.only(
                         left: dimensWidth() * 3,
@@ -80,13 +109,20 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                           ],
                         ),
                         BaseListviewHorizontal(
-                          children: state.consultations.coming.map((e) {
+                          children: state.consultations!.coming.map((e) {
                             List<int> times = e.expectedTime
                                     ?.split('-')
                                     .map((e) => int.tryParse(e) ?? -1)
                                     .toList() ??
                                 [-1];
-                            if (times.first ~/ 2 == index) {
+                            DateTime date =
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                    .parse(e.date!);
+
+                            if (times.first ~/ 2 == index &&
+                                DateTime(date.year, date.month, date.day) ==
+                                    DateTime(now.year, now.month,
+                                        now.day + _index)) {
                               return UpcomingCard(coming: e);
                             } else {
                               return const SizedBox();
@@ -99,20 +135,7 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                 }
                 return Container();
               }),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       top: 0,
-              //       right: dimensWidth() * 3,
-              //       left: dimensWidth() * 3,
-              //       bottom: dimensHeight() * 10),
-              //   child: BaseListviewHorizontal(
-              //     children: appointments
-              //         .map(
-              //           (e) => UpcomingCard(coming: e),
-              //         )
-              //         .toList(),
-              //   ),
-              // ),
+             
               SizedBox(
                 height: dimensHeight() * 10,
               )
