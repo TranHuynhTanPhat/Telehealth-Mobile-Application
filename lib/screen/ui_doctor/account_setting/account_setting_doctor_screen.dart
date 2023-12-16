@@ -48,14 +48,14 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              // Navigator.pushNamed(context, changePasswordName);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    translate(context, 'upcoming'),
-                  ),
-                ),
-              );
+              Navigator.pushNamed(context, changePasswordName);
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       translate(context, 'upcoming'),
+              //     ),
+              //   ),
+              // );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
@@ -82,14 +82,14 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
           ListTile(
             onTap: () {
-              // Navigator.pushNamed(context, walletName);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    translate(context, 'upcoming'),
-                  ),
-                ),
-              );
+              Navigator.pushNamed(context, walletName);
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       translate(context, 'upcoming'),
+              //     ),
+              //   ),
+              // );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(

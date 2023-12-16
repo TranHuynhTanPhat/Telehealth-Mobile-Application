@@ -64,6 +64,13 @@ class _CompletedFrameState extends State<CompletedFrame> {
       'status': 'finished'
     },
   ];
+  DateTime current = DateTime.now();
+  late int daySelected;
+  @override
+  void initState() {
+    daySelected = 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,16 @@ class _CompletedFrameState extends State<CompletedFrame> {
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.symmetric(vertical: dimensWidth()),
       children: [
-        const SlideMonthsInYear(),
+        SlideMonthsInYear(
+          current: current,
+          daySelected: daySelected,
+          callBack: (index, date) {
+            setState(() {
+              daySelected = index;
+              current = date;
+            });
+          },
+        ),
         Padding(
           padding: EdgeInsets.only(
               top: 0,

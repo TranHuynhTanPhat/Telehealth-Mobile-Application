@@ -39,7 +39,7 @@ class _NewsScreenState extends State<NewsScreen> {
             searchQuery: SearchQuery(
               limit: 20,
               attributesToSearchOn: ['title', 'content'],
-              sort: ['updated_at:desc'],
+              sort: ['updatedAt:desc'],
               page: pageKey + 1,
             ),
             pageKey: pageKey,

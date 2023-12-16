@@ -7,6 +7,7 @@ import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/auth/forget_password/forgot_password_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
@@ -24,9 +25,9 @@ import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_default_schedule.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_schedule_by_day_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
-import 'package:healthline/screen/ui_patient/account_setting/change_password/change_password_screen.dart';
+import 'package:healthline/screen/change_password/change_password_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
-import 'package:healthline/screen/ui_patient/account_setting/wallet/wallet_screen.dart';
+import 'package:healthline/screen/wallet/wallet_screen.dart';
 import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/add_patient_record_screen.dart';
@@ -37,7 +38,9 @@ import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccin
 import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_create_consultation.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/medical_record_creen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
@@ -120,6 +123,27 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => const PrivacyPolicyScreen(),
           );
+        case walletName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _patientProfileCubit,
+                ),
+                BlocProvider.value(
+                  value: _doctorProfileCubit,
+                ),
+              ],
+              child: const WalletScreen(),
+            ),
+          );
+        case changePasswordName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _authenticationCubit,
+              child: const ChangePassword(),
+            ),
+          );
       }
     }
     if (AppController.instance.authState == AuthState.Unauthorized) {
@@ -133,6 +157,13 @@ class AppRoute {
             builder: (_) => BlocProvider.value(
               value: _authenticationCubit,
               child: const SignUpScreen(),
+            ),
+          );
+        case forgetPasswordName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _authenticationCubit,
+              child: const ForgotPasswordScreen(),
             ),
           );
 
@@ -216,6 +247,9 @@ class AppRoute {
                 BlocProvider.value(
                   value: _doctorCubit,
                 ),
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
               ],
               child: const MainScreenPatient(),
             ),
@@ -237,14 +271,14 @@ class AppRoute {
         case detailDoctorName:
           final args = settings.arguments as String?;
           return MaterialPageRoute(
-            builder: (_) => DetailDoctorScreen(
-              args: args,
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: DetailDoctorScreen(
+                args: args,
+              ),
             ),
           );
-        case walletName:
-          return MaterialPageRoute(
-            builder: (_) => const WalletScreen(),
-          );
+
         case accountSettingName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
@@ -288,13 +322,7 @@ class AppRoute {
               child: const AddVaccinationScreen(),
             ),
           );
-        case changePasswordName:
-          return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _authenticationCubit,
-              child: const ChangePassword(),
-            ),
-          );
+
         case refVaccinationName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider(
@@ -339,7 +367,7 @@ class AppRoute {
             builder: (_) => const HelpsScreen(),
           );
         case timelineDoctorName:
-          String args = settings.arguments as String;
+          String? args = settings.arguments as String?;
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: _consultationCubit,
@@ -348,11 +376,38 @@ class AppRoute {
           );
         case paymentMethodsName:
           return MaterialPageRoute(
-            builder: (_) => const PaymentMethodScreen(),
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: const PaymentMethodScreen(),
+            ),
           );
         case invoiceName:
           return MaterialPageRoute(
-            builder: (_) => const InvoiceScreen(),
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: const InvoiceScreen(),
+            ),
+          );
+        case medicalRecordName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _medicalRecordCubit,
+                ),
+              ],
+              child: const MedicalRecordScreen(),
+            ),
+          );
+        case formConsultationName:
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: const FormConsultationScreen(),
+            ),
           );
       }
     }

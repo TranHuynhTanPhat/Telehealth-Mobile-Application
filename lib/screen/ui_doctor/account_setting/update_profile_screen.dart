@@ -75,19 +75,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
             builder: (context, state) {
               _controllerEmail.text = _controllerEmail.text.isEmpty
-                  ? state.profile?.email ?? ''
+                  ? state.profile.email ?? ''
                   : _controllerEmail.text;
               _controllerBio.text = _controllerBio.text.isEmpty
-                  ? state.profile?.biography ?? ''
+                  ? state.profile.biography ?? ''
                   : _controllerBio.text;
               try {
-                if (state.profile?.avatar != null &&
-                    state.profile?.avatar != 'default' &&
-                    state.profile?.avatar != '') {
+                if (state.profile.avatar != null &&
+                    state.profile.avatar != 'default' &&
+                    state.profile.avatar != '') {
                   _image = _image ??
                       NetworkImage(
                         CloudinaryContext.cloudinary
-                            .image(state.profile?.avatar ?? '')
+                            .image(state.profile.avatar ?? '')
                             .toString(),
                       );
                 } else {
@@ -185,11 +185,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   _formKey.currentState!.save();
                                   String? email;
                                   String? bio;
-                                  if (state.profile?.email !=
+                                  if (state.profile.email !=
                                       _controllerEmail.text) {
                                     email = _controllerEmail.text;
                                   }
-                                  if (state.profile?.biography !=
+                                  if (state.profile.biography !=
                                       _controllerBio.text) {
                                     bio = _controllerBio.text;
                                   }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
@@ -232,6 +233,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                     itemBuilder: (context, index) => InkWell(
                       onTap: () => setState(() {
                         _currentIndex = index;
+                        if (_pageDetail[index]['title'] == 'schedule') {
+                          context.read<ConsultationCubit>().fetchConsultation();
+                        }
                       }),
                       splashColor: transparent,
                       highlightColor: transparent,

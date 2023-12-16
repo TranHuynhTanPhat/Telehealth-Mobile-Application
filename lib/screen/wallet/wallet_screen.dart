@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/account_setting/wallet/components/exports.dart';
+import 'package:healthline/screen/wallet/components/exports.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/translate.dart';
@@ -20,6 +23,12 @@ class _WalletScreenState extends State<WalletScreen>
   void initState() {
     tabController = TabController(length: 2, vsync: this);
     _controller = TextEditingController();
+    if (AppController.instance.authState == AuthState.PatientAuthorized) {
+      context.read<PatientProfileCubit>().fetProfile();
+    }
+    if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+      context.read<DoctorProfileCubit>().fetchProfile();
+    }
     super.initState();
   }
 
@@ -39,7 +48,10 @@ class _WalletScreenState extends State<WalletScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WalletCard(),
+              if (AppController().authState == AuthState.DoctorAuthorized)
+                const WalletCardDoctor(),
+              if (AppController().authState == AuthState.PatientAuthorized)
+                const WalletCardPatient(),
               Padding(
                 padding: EdgeInsets.only(
                     top: dimensHeight() * 4, bottom: dimensHeight() * 1.5),
@@ -89,7 +101,7 @@ class _WalletScreenState extends State<WalletScreen>
                           padding: EdgeInsets.only(
                               top: dimensHeight() * 3,
                               bottom: MediaQuery.of(context).viewInsets.bottom +
-                                  dimensHeight()*3),
+                                  dimensHeight() * 3),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,

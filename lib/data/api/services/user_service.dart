@@ -38,7 +38,7 @@ class UserService extends BaseService {
     return response;
   }
 
-  Future<UserResponse> getContact() async {
+  Future<UserResponse> getProfile() async {
     final response = await get(ApiConstants.USER);
     return UserResponse.fromMap(response.data);
   }
@@ -59,6 +59,30 @@ class UserService extends BaseService {
         {"password": password, "passwordConfirm": passwordConfirm},
       ),
     );
+
+    return response.code;
+  }
+
+  Future<int?> sendOTP({required String email}) async {
+    final response = await post(
+      '${ApiConstants.USER_FORGOT_PASSWORD}/$email',
+    );
+
+    return response.code;
+  }
+
+  Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    final response = await post(ApiConstants.USER_FORGOT_PASSWORD_RESET,
+        data: json.encode({
+          "email": email,
+          "otp": otp,
+          "password": password,
+          "passwordConfirm": confirmPassword
+        }));
 
     return response.code;
   }

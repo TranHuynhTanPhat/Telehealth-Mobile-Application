@@ -126,7 +126,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             Navigator.pushNamed(
                               context,
                               timelineDoctorName,
-                              arguments: widget.doctor.id,
+                              arguments: widget.doctor.toJson(),
                             );
                           } else {
                             EasyLoading.showToast(

@@ -9,6 +9,7 @@ const forumName = '/forum';
 const editPostName = '/edit-forum';
 const newsName = '/news';
 const detailNewsName = '/detail-news';
+const forgetPasswordName = '/forget-password';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";
@@ -27,6 +28,8 @@ const helpsName = '/helps';
 const timelineDoctorName ='/timeline-doctor';
 const paymentMethodsName ='/payment-methods';
 const invoiceName ='/invoice';
+const formConsultationName ='/form-consultaion';
+const medicalRecordName ='/medical-record';
 
 
 const doctorName = '/doctor';

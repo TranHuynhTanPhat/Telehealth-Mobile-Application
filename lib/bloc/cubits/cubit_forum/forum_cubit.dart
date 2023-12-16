@@ -4,6 +4,7 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/repository/forum_repository.dart';
 import 'package:meilisearch/meilisearch.dart';
 
@@ -33,7 +34,7 @@ class ForumCubit extends Cubit<ForumState> {
           blocState: BlocState.Pending,
           pageKey: pageKey,
           comments: [],
-          currentPost: state.currentPost),
+          currentPost: null),
     );
     try {
       meiliSearchManager.index(uid: 'post');
@@ -167,6 +168,10 @@ class ForumCubit extends Cubit<ForumState> {
                   currentPost: state.currentPost));
             }
           });
+      emit(CreateCommentState(
+          blocState: BlocState.Successed,
+          comments: state.comments,
+          currentPost: state.currentPost));
     } catch (error) {
       logPrint(error);
       emit(
@@ -192,7 +197,10 @@ class ForumCubit extends Cubit<ForumState> {
     );
     try {
       int? code = await _forumRepository.editPost(
-          idPost: idPost, content: content, files: files);
+          idPost: idPost,
+          content: content,
+          files: files,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           EditPostState(
@@ -224,7 +232,7 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.likePost(idPost: idPost);
+      int? code = await _forumRepository.likePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           LikePostState(
@@ -264,7 +272,7 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.unlikePost(idPost: idPost);
+      int? code = await _forumRepository.unlikePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           UnlikePostState(
@@ -304,7 +312,7 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.deletePost(idPost: idPost);
+      int? code = await _forumRepository.deletePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           DeletePostState(

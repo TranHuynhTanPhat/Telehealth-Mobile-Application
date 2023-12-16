@@ -17,7 +17,7 @@ class ChangePasswordForm extends StatefulWidget {
 }
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
-  // late TextEditingController _controllerOldPassword;
+  late TextEditingController _controllerOldPassword;
   late TextEditingController _controllerNewPassword;
   late TextEditingController _controllerConfirmNewPassword;
 
@@ -27,7 +27,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   @override
   void initState() {
-    // _controllerOldPassword = TextEditingController();
+    _controllerOldPassword = TextEditingController();
     _controllerNewPassword = TextEditingController();
     _controllerConfirmNewPassword = TextEditingController();
 
@@ -40,33 +40,33 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       key: _formKey,
       child: Column(
         children: [
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //       bottom: dimensHeight() * 3, top: dimensHeight() * 2),
-          //   child:
-          //   TextFieldWidget(
-          //     validate: (value) {
-          //       return null;
-          //     },
-          //     controller: _controllerOldPassword,
-          //     label: translate(context, 'old_password'),
-          //     obscureText: !showPassword,
-          //     suffixIcon: IconButton(
-          //       icon: Icon(showPassword
-          //           ? Icons.visibility_rounded
-          //           : Icons.visibility_off_rounded),
-          //       onPressed: () {
-          //         setState(
-          //           () {
-          //             showPassword = !showPassword;
-          //           },
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
           Padding(
-            padding: EdgeInsets.only(bottom: dimensHeight() * 3, top: dimensHeight()*2),
+            padding: EdgeInsets.only(
+                bottom: dimensHeight() * 3, top: dimensHeight() * 2),
+            child:
+            TextFieldWidget(
+              validate: (value) {
+                return null;
+              },
+              controller: _controllerOldPassword,
+              label: translate(context, 'old_password'),
+              obscureText: !showPassword,
+              suffixIcon: IconButton(
+                icon: Icon(showPassword
+                    ? Icons.visibility_rounded
+                    : Icons.visibility_off_rounded),
+                onPressed: () {
+                  setState(
+                    () {
+                      showPassword = !showPassword;
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3, ),
             child: TextFieldWidget(
               validate: (value) {
                 return Validate().validatePassword(
@@ -129,9 +129,9 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     context.read<AuthenticationCubit>().changePassword(
-                          password: _controllerNewPassword.text.trim(),
-                          passwordConfirm:
-                              _controllerConfirmNewPassword.text.trim(),
+                          password: _controllerOldPassword.text.trim(),
+                          newPassword:
+                              _controllerNewPassword.text.trim(),
                         );
                   }
                 },

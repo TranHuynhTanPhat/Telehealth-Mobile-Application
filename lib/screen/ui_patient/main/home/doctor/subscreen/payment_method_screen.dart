@@ -33,7 +33,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               child: ElevatedButtonWidget(
                   text: translate(context, 'payment'),
                   onPressed: () {
-                    Navigator.pushNamed(context, invoiceName);
+                    Navigator.pushNamed(context, formConsultationName);
                   }),
             )
           : null,
@@ -49,14 +49,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           padding: EdgeInsets.symmetric(
               vertical: dimensHeight() * 3, horizontal: dimensWidth() * 3),
           children: [
-            // ListTile(
-            // leading: Image.asset(DImages.mono, width: dimensWidth()*5, height: dimensHeight()*5,),
-            // title: Text(translate(context, 'momo_e_wallet'),),
-            //   trailing: Rad,
-            // ),
             ListTile(
               title: Text(
-                translate(context, 'momo_e_wallet'),
+                translate(context, 'healthline_wallet'),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -68,7 +63,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 ),
               ),
               onTap: () => setState(() {
-                _payment = PaymentMethod.Momo;
+                _payment = PaymentMethod.Healthline;
               }),
               dense: true,
               visualDensity: const VisualDensity(vertical: 0),
@@ -77,12 +72,12 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 vertical: dimensHeight(),
               ),
               leading: Image.asset(
-                DImages.mono,
+                DImages.icApp,
                 width: dimensWidth() * 4,
                 height: dimensHeight() * 4,
               ),
               trailing: Radio<PaymentMethod>(
-                value: PaymentMethod.Momo,
+                value: PaymentMethod.Healthline,
                 groupValue: _payment,
                 onChanged: (PaymentMethod? value) {
                   setState(() {
@@ -91,6 +86,43 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 },
               ),
             ),
+            // ListTile(
+            //   title: Text(
+            //     translate(context, 'momo_e_wallet'),
+            //     style: Theme.of(context)
+            //         .textTheme
+            //         .titleMedium
+            //         ?.copyWith(color: color1F1F1F),
+            //   ),
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(
+            //       dimensWidth(),
+            //     ),
+            //   ),
+            //   onTap: () => setState(() {
+            //     _payment = PaymentMethod.Momo;
+            //   }),
+            //   dense: true,
+            //   visualDensity: const VisualDensity(vertical: 0),
+            //   contentPadding: EdgeInsets.symmetric(
+            //     horizontal: dimensWidth(),
+            //     vertical: dimensHeight(),
+            //   ),
+            //   leading: Image.asset(
+            //     DImages.mono,
+            //     width: dimensWidth() * 4,
+            //     height: dimensHeight() * 4,
+            //   ),
+            //   trailing: Radio<PaymentMethod>(
+            //     value: PaymentMethod.Momo,
+            //     groupValue: _payment,
+            //     onChanged: (PaymentMethod? value) {
+            //       setState(() {
+            //         _payment = value ?? PaymentMethod.None;
+            //       });
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),
