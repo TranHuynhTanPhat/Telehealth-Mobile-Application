@@ -119,6 +119,7 @@ flutter:
     - assets/languages/
     - assets/vaccination/
     - assets/license/
+    - assets/icons/ic_app.png
     - .env
     - shorebird.yaml
   # An image asset can refer to one or more resolution-specific "variants", see

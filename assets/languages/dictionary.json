@@ -1562,5 +1562,21 @@
     "post_not_found": {
         "vi": "Không tìm thấy bài viết",
         "en": "Post not found"
+    },
+    "you": {
+        "vi": "Bạn",
+        "en": "You"
+    },
+    "healthline_wallet": {
+        "vi": "Ví Healthline",
+        "en": "Healthline wallet"
+    },
+    "appointment_information": {
+        "vi": "Thông tin cuộc hẹn",
+        "en": "Appointment information"
+    },
+    "you_have_not_enough_money": {
+        "vi": "Bạn không có đủ tiền",
+        "en": "You have not enough money"
     }
 }

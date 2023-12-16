@@ -26,6 +26,7 @@ class SocketManager {
           AppStorage().getString(key: DataConstants.DOCTOR)!);
       jwtToken = response.jwtToken;
     }
+    // print(jwtToken);
     socket = io(
       dotenv.get('SOCKET_URL', fallback: ''),
       OptionBuilder()

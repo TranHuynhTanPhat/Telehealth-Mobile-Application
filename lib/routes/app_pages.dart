@@ -28,6 +28,8 @@ const helpsName = '/helps';
 const timelineDoctorName ='/timeline-doctor';
 const paymentMethodsName ='/payment-methods';
 const invoiceName ='/invoice';
+const formConsultationName ='/form-consultaion';
+const medicalRecordName ='/medical-record';
 
 
 const doctorName = '/doctor';

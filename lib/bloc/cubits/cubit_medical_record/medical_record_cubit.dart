@@ -287,6 +287,18 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
                 address);
           }
         }
+      } else {
+        if (id != null) {
+          if (fullName != user.fullName ||
+              birthday != user.dateOfBirth ||
+              gender != user.gender ||
+              relationship != user.relationship!.name ||
+              address != user.address ||
+              bdChanged) {
+            await _userRepository.updateMedicalRecord(id, avatar ?? 'default',
+                fullName, birthday, gender, relationship, address);
+          }
+        }
       }
       emit(UpdateSubUserSuccessfully(
         stats: state.stats,
@@ -325,7 +337,7 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         subUsers: state.subUsers,
         currentId: state.subUsers.first.id,
       ));
-    }on DioException catch(e){
+    } on DioException catch (e) {
       emit(DeleteSubUserFailure(
         stats: state.stats,
         subUsers: state.subUsers,

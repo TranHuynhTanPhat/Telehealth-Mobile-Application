@@ -79,8 +79,8 @@ class UserRepository extends BaseRepository {
     return await _userService.updateEmail(email);
   }
 
-  Future<UserResponse> fetchContact() async {
-    return await _userService.getContact();
+  Future<UserResponse> fetchProfile() async {
+    return await _userService.getProfile();
   }
 
   Future<List<UserResponse>> fetchMdicalRecord() async {

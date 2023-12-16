@@ -38,7 +38,7 @@ class UserService extends BaseService {
     return response;
   }
 
-  Future<UserResponse> getContact() async {
+  Future<UserResponse> getProfile() async {
     final response = await get(ApiConstants.USER);
     return UserResponse.fromMap(response.data);
   }

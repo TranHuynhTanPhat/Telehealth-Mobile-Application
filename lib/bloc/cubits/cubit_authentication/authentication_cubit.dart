@@ -9,6 +9,7 @@ import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/repository/common_repository.dart';
+import 'package:healthline/repository/doctor_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 
 import 'package:healthline/res/enum.dart';
@@ -20,6 +21,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit()
       : super(AuthenticationInitial(blocState: BlocState.Successed));
   final UserRepository _userRepository = UserRepository();
+  final DoctorRepository _doctorRepository = DoctorRepository();
   final CommonRepository _commonRepository = CommonRepository();
 
   @override
@@ -161,11 +163,19 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> changePassword(
-      {required String password, required String passwordConfirm}) async {
+      {required String password, required String newPassword}) async {
     emit(ChangePasswordState(blocState: BlocState.Pending));
     try {
-      int? code = await _userRepository.changePassword(
-          password: password, passwordConfirm: passwordConfirm);
+      int? code;
+      if (AppController().authState == AuthState.DoctorAuthorized) {
+        code = await _doctorRepository.changePassword(
+            password: password, newPassword: newPassword);
+      }
+      if (AppController().authState == AuthState.PatientAuthorized) {
+        code = await _userRepository.changePassword(
+            password: password, passwordConfirm: newPassword);
+      }
+
       if (code == 200 || code == 201) {
         emit(ChangePasswordState(blocState: BlocState.Successed));
       } else {

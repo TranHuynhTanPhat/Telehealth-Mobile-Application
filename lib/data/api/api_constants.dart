@@ -27,6 +27,7 @@ class ApiConstants {
 // doctor-management
   static const _DOCTOR = '/doctor-management';
   static const DOCTOR = '$_DOCTOR/doctor';
+  static const DOCTOR_PASSWORD = '$DOCTOR/password';
   static const DOCTOR_CHANGE_AVATAR = '$DOCTOR/avatar';
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
   static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
@@ -50,8 +51,10 @@ class ApiConstants {
   static const FORUM_POST = '$_FORUM/posts';
 
   // consultation
-  static const _CONSULTATION = '/consultation';
-  static const CONSULTATION_DOCTOR_SCHEDULE = '$_CONSULTATION/doctor';
+  static const CONSULTATION = '/consultation';
+  static const CONSULTATION_USER = '$CONSULTATION/user';
+  static const CONSULTATION_DOCTOR_SCHEDULE = '$CONSULTATION/doctor';
+  static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR_SCHEDULE/information';
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';

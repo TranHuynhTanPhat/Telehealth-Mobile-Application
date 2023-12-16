@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
-import 'package:healthline/data/api/models/requests/user_request.dart';
-import 'package:healthline/data/api/models/responses/login_response.dart';
-import 'package:healthline/data/api/rest_client.dart';
+import 'package:healthline/data/api/models/requests/consultation_request.dart';
+import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
+import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class ConsultationService extends BaseService {
@@ -17,22 +17,30 @@ class ConsultationService extends BaseService {
     return timeline;
   }
 
-  Future<void> refreshTokenPatient() async {
-    await post(baseUrl + ApiConstants.USER_REFRESH_TOKEN);
-  }
-
-  Future<void> logoutPatient() async {
-    RestClient().logout();
-    await delete(baseUrl + ApiConstants.USER_LOG_OUT);
-  }
-
-  Future<LoginResponse> loginDoctor(UserRequest request) async {
+  Future<int?> createConsultation(
+      {required ConsultationRequest request}) async {
     final response =
-        await post(ApiConstants.DOCTOR_LOG_IN, data: request.toJson());
-    return LoginResponse.fromMap(response.data);
+        await post(ApiConstants.CONSULTATION, data: request.toJson());
+
+    return response.code;
   }
 
-  Future<void> refreshTokenDoctor() async {
-    await post(baseUrl + ApiConstants.DOCTOR_REFRESH_TOKEN);
+  Future<AllConsultationResponse> fetchPatientConsultation() async {
+    final response = await get(ApiConstants.CONSULTATION_USER);
+    final List<dynamic> oComing =
+        json.decode(json.encode(response.data['coming']));
+    final List<dynamic> oFinish =
+        json.decode(json.encode(response.data['finish']));
+    final List<dynamic> oCancel =
+        json.decode(json.encode(response.data['cancel']));
+    final List<ConsultationResponse> coming =
+        oComing.map((e) => ConsultationResponse.fromMap(e)).toList();
+    final List<ConsultationResponse> finish =
+        oFinish.map((e) => ConsultationResponse.fromMap(e)).toList();
+    final List<ConsultationResponse> cancel =
+        oCancel.map((e) => ConsultationResponse.fromMap(e)).toList();
+
+    return AllConsultationResponse(
+        coming: coming, finish: finish, cancel: cancel);
   }
 }

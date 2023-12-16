@@ -25,40 +25,45 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
   final List<int> time = List<int>.generate(48, (i) => i + 1);
 
   late int _daySelected;
-  int? _timeSelected;
-  late DoctorResponse doctor;
+  final List<int> _timeSelected = [];
+  DoctorResponse? doctor;
+  late DateTime now;
 
   // List<int> timeline = [];
 
   void dayPressed(int index, DateTime dateTime) {
     context.read<ConsultationCubit>().fetchTimeline(
-        doctorId: doctor.id!,
+        doctorId: doctor!.id!,
         date: '${dateTime.day}/${dateTime.month}/${dateTime.year}');
     setState(() {
       _daySelected = index;
-      _timeSelected = null;
+      _timeSelected.clear();
+      now = dateTime;
     });
   }
 
   @override
   void initState() {
     _daySelected = 0;
-
+    now = DateTime.now();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     try {
-      doctor = DoctorResponse.fromJson(widget.args!);
-      if (doctor.id == null) {
-        throw 'not_found';
+      if (doctor == null) {
+        doctor = DoctorResponse.fromJson(widget.args!);
+        if (doctor?.id == null) {
+          throw 'not_found';
+        }
       }
     } catch (e) {
       logPrint(e);
       EasyLoading.showToast(translate(context, 'not_found'));
       Navigator.pop(context);
     }
+
     return BlocListener<ConsultationCubit, ConsultationState>(
       listener: (context, state) {
         if (state is FetchTimelineState) {
@@ -73,30 +78,40 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
             resizeToAvoidBottomInset: true,
             backgroundColor: white,
             extendBody: true,
-            bottomNavigationBar:
-                _timeSelected != null && state.timeline.contains(_timeSelected)
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(
-                          dimensWidth() * 10,
-                          0,
-                          dimensWidth() * 10,
-                          dimensHeight() * 3,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.0), white],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: ElevatedButtonWidget(
-                          text: translate(context, 'book_appointment_now'),
-                          onPressed: () {
-                            Navigator.pushNamed(context, paymentMethodsName);
-                          },
-                        ),
-                      )
-                    : null,
+            bottomNavigationBar: _timeSelected.isNotEmpty &&
+                    _timeSelected
+                        .every((element) => state.timeline.contains(element))
+                ? Container(
+                    padding: EdgeInsets.fromLTRB(
+                      dimensWidth() * 10,
+                      0,
+                      dimensWidth() * 10,
+                      dimensHeight() * 3,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.white.withOpacity(0.0), white],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    child: ElevatedButtonWidget(
+                      text: translate(context, 'book_appointment_now'),
+                      onPressed: () {
+                        context.read<ConsultationCubit>().updateRequest(
+                            doctorId: doctor?.id,
+                            price: doctor!.feePerMinutes! *
+                                30 *
+                                _timeSelected.length,
+                            date: '${now.day}/${now.month}/${now.year}',
+                            doctorName: doctor!.fullName,
+                            expectedTime: _timeSelected.join('-'),
+                            discountCode: "");
+                        Navigator.pushNamed(context, medicalRecordName);
+                      },
+                    ),
+                  )
+                : null,
             appBar: AppBar(
               title: Text(
                 translate(context, 'choose_time'),
@@ -112,67 +127,11 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                     daysLeft: 7,
                     dayPressed: dayPressed,
                     daySelected: _daySelected,
-                    dateStart: DateTime.now(),
+                    dateStart: now,
                   ),
                   const Divider(
                     thickness: 2,
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(
-                  //       horizontal: dimensWidth() * 3,
-                  //       vertical: dimensHeight()),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Expanded(
-                  //         child: Row(
-                  //           children: [
-                  //             const CircleAvatar(
-                  //               radius: 10,
-                  //               backgroundColor: colorCDDEFF,
-                  //             ),
-                  //             Text(
-                  //               translate(context, 'available'),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       Expanded(
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: [
-                  //             CircleAvatar(
-                  //               radius: 10,
-                  //               backgroundColor: colorDF9F1E.withOpacity(.2),
-                  //             ),
-                  //             Text(
-                  //               translate(context, 'booked'),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       Expanded(
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.end,
-                  //           children: [
-                  //             const CircleAvatar(
-                  //               radius: 10,
-                  //               backgroundColor: colorCDDEFF,
-                  //               child: CircleAvatar(
-                  //                 radius: 9,
-                  //                 backgroundColor: white,
-                  //               ),
-                  //             ),
-                  //             Text(
-                  //               translate(context, 'empty'),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   if (state.timeline.isNotEmpty)
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -187,12 +146,22 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                               highlightColor: transparent,
                               onTap: () {
                                 setState(() {
-                                  _timeSelected = e;
+                                  if (_timeSelected.length == 2) {
+                                    _timeSelected.clear();
+                                  }
+                                  if (_timeSelected.isEmpty ||
+                                      (_timeSelected.last - e).abs() == 1) {
+                                    if (!_timeSelected.contains(e)) {
+                                      _timeSelected.add(e);
+                                    } else {
+                                      _timeSelected.remove(e);
+                                    }
+                                  }
                                 });
                               },
                               child: ValidShift(
                                 time: convertIntToTime(e),
-                                choosed: e == (_timeSelected ?? -1),
+                                choosed: _timeSelected.contains(e),
                               ),
                             ),
                           ),

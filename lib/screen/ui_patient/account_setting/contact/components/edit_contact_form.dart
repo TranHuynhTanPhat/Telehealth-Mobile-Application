@@ -68,10 +68,10 @@ class _EditContactFormState extends State<EditContactForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<PatientProfileCubit, PatientProfileState>(
         builder: (context, state) {
-      state.phone != null
-          ? _controllerPhone.text = state.phone!.replaceFirst('+84', '')
+      state.profile.phone != null
+          ? _controllerPhone.text = state.profile.phone!.replaceFirst('+84', '')
           : '';
-      _controllerEmail.text = state.email ?? '';
+      _controllerEmail.text = state.profile.email ?? '';
       return Form(
         key: _formKey,
         child: Column(
@@ -244,7 +244,7 @@ class _EditContactFormState extends State<EditContactForm> {
                 width: double.infinity,
                 child: ElevatedButtonWidget(
                   text: translate(context, 'update_information'),
-                  onPressed: _controllerEmail.text != state.email
+                  onPressed: _controllerEmail.text != state.profile.email
                       ? () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();

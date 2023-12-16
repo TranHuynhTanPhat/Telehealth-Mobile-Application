@@ -52,6 +52,7 @@ enum TypeHealthStat {
 
 enum PaymentMethod {
   None,
+  Healthline,
   Momo,
 }
 

@@ -102,15 +102,13 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 } else if (state.blocState == BlocState.Successed) {
                   EasyLoading.showToast(translate(context, state.message));
                   if (state.message == "update_avatar_successfully") {
-                    if (state.profile != null) {
-                      String url = CloudinaryContext.cloudinary
-                          .image(state.profile!.avatar ?? '')
-                          .toString();
-                      NetworkImage provider = NetworkImage(url);
-                      provider.evict().then<void>((bool success) {
-                        if (success) debugPrint('removed image!');
-                      });
-                    }
+                    String url = CloudinaryContext.cloudinary
+                        .image(state.profile.avatar ?? '')
+                        .toString();
+                    NetworkImage provider = NetworkImage(url);
+                    provider.evict().then<void>((bool success) {
+                      if (success) debugPrint('removed image!');
+                    });
                   }
                 }
               } else if (state is FetchProfileState) {
@@ -155,22 +153,19 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   builder: (context, state) {
                 return Text(
                   translate(
-                    context,
-                    _currentPage == DrawerMenu.Schedule
-                        ? 'schedule'
-                        : _currentPage == DrawerMenu.YourShift
-                            ? 'your_shift'
-                            : _currentPage == DrawerMenu.Patient
-                                ? 'patient'
-                                : _currentPage == DrawerMenu.AccountSetting
-                                    ? 'account_setting'
-                                    : _currentPage == DrawerMenu.Helps
-                                        ? 'helps'
-                                        : state.profile != null
-                                            ? state.profile?.fullName ??
-                                                'undefine'
-                                            : 'overview',
-                  ),
+                      context,
+                      _currentPage == DrawerMenu.Schedule
+                          ? 'schedule'
+                          : _currentPage == DrawerMenu.YourShift
+                              ? 'your_shift'
+                              : _currentPage == DrawerMenu.Patient
+                                  ? 'patient'
+                                  : _currentPage == DrawerMenu.AccountSetting
+                                      ? 'account_setting'
+                                      : _currentPage == DrawerMenu.Helps
+                                          ? 'helps'
+                                          : state.profile.fullName ??
+                                              'overview'),
                 );
               }),
               leading:
@@ -202,31 +197,30 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               child: Drawer(
                 width: dimensWidth() * 40,
                 backgroundColor: white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-                        builder: (context, state) {
-                      if (state.profile != null) {
-                        try {
-                          if (state.profile?.avatar != null &&
-                              state.profile?.avatar != 'default' &&
-                              state.profile?.avatar != '') {
-                            _image = _image ??
-                                NetworkImage(
-                                  CloudinaryContext.cloudinary
-                                      .image(state.profile?.avatar ?? '')
-                                      .toString(),
-                                );
-                          } else {
-                            _image = AssetImage(DImages.placeholder);
-                          }
-                        } catch (e) {
-                          logPrint(e);
-                          _image = AssetImage(DImages.placeholder);
-                        }
+                child: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+                  builder: (context, state) {
+                    try {
+                      if (state.profile.avatar != null &&
+                          state.profile.avatar != 'default' &&
+                          state.profile.avatar != '') {
+                        _image = _image ??
+                            NetworkImage(
+                              CloudinaryContext.cloudinary
+                                  .image(state.profile.avatar ?? '')
+                                  .toString(),
+                            );
+                      } else {
+                        _image = AssetImage(DImages.placeholder);
+                      }
+                    } catch (e) {
+                      logPrint(e);
+                      _image = AssetImage(DImages.placeholder);
+                    }
 
-                        return SizedBox(
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
                           width: double.maxFinite,
                           child: DrawerHeader(
                             decoration: const BoxDecoration(
@@ -248,7 +242,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                   height: 15,
                                 ),
                                 Text(
-                                  state.profile?.fullName ??
+                                  state.profile.fullName ??
                                       translate(context, 'undefine'),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -258,7 +252,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                       ?.copyWith(color: white),
                                 ),
                                 Text(
-                                  state.profile?.email ??
+                                  state.profile.email ??
                                       translate(context, 'undefine'),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -270,188 +264,191 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                               ],
                             ),
                           ),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: dimensHeight() * 5,
-                        );
-                      }
-                    }),
-                    Expanded(
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.zero,
-                        children: [
-                          // if (AppController.instance.authState ==
-                          //     AuthState.AllAuthorized)
-                          //   ListTile(
-                          //     onTap: () {
-                          //       EasyLoading.show(
-                          //           maskType: EasyLoadingMaskType.black);
-                          //       setState(() {
-                          //         onChangeToPatient = true;
-                          //         Future.delayed(const Duration(seconds: 1),
-                          //             () {
-                          //           Navigator.pushReplacementNamed(
-                          //               context, mainScreenPatientName);
-                          //         });
-                          //       });
-                          //     },
-                          //     title: Text(
-                          //       translate(context, 'use_patient_account'),
-                          //       style: Theme.of(context)
-                          //           .textTheme
-                          //           .titleMedium
-                          //           ?.copyWith(color: color1F1F1F),
-                          //     ),
-                          //     leading: FaIcon(
-                          //       FontAwesomeIcons.solidUser,
-                          //       size: dimensIcon() * .5,
-                          //       color: color1F1F1F,
-                          //     ),
-                          //   ),
-                          ListTile(
-                            onTap: () {
-                              // EasyLoading.show(
-                              //     maskType: EasyLoadingMaskType.black);
-                              // setState(() {
-                              //   onChangeToPatient = true;
-                              // Future.delayed(const Duration(seconds: 1),
-                              //     () {
-                              Navigator.pushNamed(context, forumName);
-                              // });
-                              // });
-                            },
-                            title: Text(
-                              translate(context, 'forum'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                            leading: FaIcon(
-                              FontAwesomeIcons.solidComments,
-                              size: dimensIcon() * .5,
-                              color: color1F1F1F,
-                            ),
-                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            padding: EdgeInsets.zero,
+                            children: [
+                              // if (AppController.instance.authState ==
+                              //     AuthState.AllAuthorized)
+                              //   ListTile(
+                              //     onTap: () {
+                              //       EasyLoading.show(
+                              //           maskType: EasyLoadingMaskType.black);
+                              //       setState(() {
+                              //         onChangeToPatient = true;
+                              //         Future.delayed(const Duration(seconds: 1),
+                              //             () {
+                              //           Navigator.pushReplacementNamed(
+                              //               context, mainScreenPatientName);
+                              //         });
+                              //       });
+                              //     },
+                              //     title: Text(
+                              //       translate(context, 'use_patient_account'),
+                              //       style: Theme.of(context)
+                              //           .textTheme
+                              //           .titleMedium
+                              //           ?.copyWith(color: color1F1F1F),
+                              //     ),
+                              //     leading: FaIcon(
+                              //       FontAwesomeIcons.solidUser,
+                              //       size: dimensIcon() * .5,
+                              //       color: color1F1F1F,
+                              //     ),
+                              //   ),
+                              ListTile(
+                                onTap: () {
+                                  // EasyLoading.show(
+                                  //     maskType: EasyLoadingMaskType.black);
+                                  // setState(() {
+                                  //   onChangeToPatient = true;
+                                  // Future.delayed(const Duration(seconds: 1),
+                                  //     () {
+                                  Navigator.pushNamed(context, forumName);
+                                  // });
+                                  // });
+                                },
+                                title: Text(
+                                  translate(context, 'forum'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(color: color1F1F1F),
+                                ),
+                                leading: FaIcon(
+                                  FontAwesomeIcons.solidComments,
+                                  size: dimensIcon() * .5,
+                                  color: color1F1F1F,
+                                ),
+                              ),
 
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: dimensHeight() * 2,
-                                left: dimensWidth() * 2,
-                                bottom: dimensHeight()),
-                            child: Text(
-                              translate(context, 'general'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                          ),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.Overview,
-                            press: () async {
-                              setState(() {
-                                _currentPage = DrawerMenu.Overview;
-                                clickDrawer();
-                              });
-                            },
-                            label: 'overview',
-                            icon: FontAwesomeIcons.houseMedical,
-                          ),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.Schedule,
-                            label: 'schedule',
-                            icon: FontAwesomeIcons.solidCalendarCheck,
-                            press: () {
-                              setState(() {
-                                _currentPage = DrawerMenu.Schedule;
-                                clickDrawer();
-                              });
-                            },
-                          ),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.YourShift,
-                            label: 'your_shift',
-                            icon: FontAwesomeIcons.solidCalendarDays,
-                            press: () {
-                              setState(() {
-                                _currentPage = DrawerMenu.YourShift;
-                                clickDrawer();
-                              });
-                            },
-                          ),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.Patient,
-                            label: 'patient',
-                            icon: FontAwesomeIcons.hospitalUser,
-                            press: () {
-                              setState(() {
-                                _currentPage = DrawerMenu.Patient;
-                                clickDrawer();
-                              });
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: dimensHeight() * 2,
-                                left: dimensWidth() * 2,
-                                bottom: dimensHeight()),
-                            child: Text(
-                              translate(context, 'setting'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                          ),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.AccountSetting,
-                            label: 'account_setting',
-                            icon: FontAwesomeIcons.userGear,
-                            press: () {
-                              setState(() {
-                                _currentPage = DrawerMenu.AccountSetting;
-                                clickDrawer();
-                              });
-                            },
-                          ),
-                          BlocBuilder<ApplicationUpdateCubit,
-                              ApplicationUpdateState>(
-                            builder: (context, state) {
-                              return LabelDrawer(
-                                active: _currentPage ==
-                                    DrawerMenu.ApplicationSetting,
-                                label: 'application_setting',
-                                icon: FontAwesomeIcons.gear,
-                                isShowBadge: state is UpdateAvailable,
-                                press: () {
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: dimensHeight() * 2,
+                                    left: dimensWidth() * 2,
+                                    bottom: dimensHeight()),
+                                child: Text(
+                                  translate(context, 'general'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(color: color1F1F1F),
+                                ),
+                              ),
+                              LabelDrawer(
+                                active: _currentPage == DrawerMenu.Overview,
+                                press: () async {
                                   setState(() {
-                                    _currentPage =
-                                        DrawerMenu.ApplicationSetting;
+                                    _currentPage = DrawerMenu.Overview;
                                     clickDrawer();
                                   });
                                 },
-                              );
-                            },
+                                label: 'overview',
+                                icon: FontAwesomeIcons.houseMedical,
+                              ),
+                              LabelDrawer(
+                                active: _currentPage == DrawerMenu.Schedule,
+                                label: 'schedule',
+                                icon: FontAwesomeIcons.solidCalendarCheck,
+                                press: () {
+                                  setState(() {
+                                    _currentPage = DrawerMenu.Schedule;
+                                    clickDrawer();
+                                  });
+                                },
+                              ),
+                              LabelDrawer(
+                                active: _currentPage == DrawerMenu.YourShift,
+                                label: 'your_shift',
+                                icon: FontAwesomeIcons.solidCalendarDays,
+                                press: () {
+                                  setState(() {
+                                    _currentPage = DrawerMenu.YourShift;
+                                    clickDrawer();
+                                  });
+                                },
+                              ),
+                              LabelDrawer(
+                                active: _currentPage == DrawerMenu.Patient,
+                                label: 'patient',
+                                icon: FontAwesomeIcons.hospitalUser,
+                                press: () {
+                                  setState(() {
+                                    _currentPage = DrawerMenu.Patient;
+                                    if (state.profile.id != null) {
+                                      context
+                                          .read<DoctorProfileCubit>()
+                                          .fetchPatient(
+                                              doctorId: state.profile.id!);
+                                    }
+                                    clickDrawer();
+                                  });
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: dimensHeight() * 2,
+                                    left: dimensWidth() * 2,
+                                    bottom: dimensHeight()),
+                                child: Text(
+                                  translate(context, 'setting'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(color: color1F1F1F),
+                                ),
+                              ),
+                              LabelDrawer(
+                                active:
+                                    _currentPage == DrawerMenu.AccountSetting,
+                                label: 'account_setting',
+                                icon: FontAwesomeIcons.userGear,
+                                press: () {
+                                  setState(() {
+                                    _currentPage = DrawerMenu.AccountSetting;
+                                    clickDrawer();
+                                  });
+                                },
+                              ),
+                              BlocBuilder<ApplicationUpdateCubit,
+                                  ApplicationUpdateState>(
+                                builder: (context, state) {
+                                  return LabelDrawer(
+                                    active: _currentPage ==
+                                        DrawerMenu.ApplicationSetting,
+                                    label: 'application_setting',
+                                    icon: FontAwesomeIcons.gear,
+                                    isShowBadge: state is UpdateAvailable,
+                                    press: () {
+                                      setState(() {
+                                        _currentPage =
+                                            DrawerMenu.ApplicationSetting;
+                                        clickDrawer();
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                              // const Spacer(),
+                              LabelDrawer(
+                                active: _currentPage == DrawerMenu.Helps,
+                                label: 'helps',
+                                icon: FontAwesomeIcons.solidCircleQuestion,
+                                press: () {
+                                  setState(() {
+                                    _currentPage = DrawerMenu.Helps;
+                                    clickDrawer();
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          // const Spacer(),
-                          LabelDrawer(
-                            active: _currentPage == DrawerMenu.Helps,
-                            label: 'helps',
-                            icon: FontAwesomeIcons.solidCircleQuestion,
-                            press: () {
-                              setState(() {
-                                _currentPage = DrawerMenu.Helps;
-                                clickDrawer();
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

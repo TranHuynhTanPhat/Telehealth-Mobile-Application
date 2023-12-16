@@ -48,7 +48,7 @@ class ConsultationRequest {
       date: map['date'],
       expectedTime: map['expected_time'],
       price: map['price']?.toInt(),
-      discountCode: map['discount_ode'],
+      discountCode: map['discount_code'],
     );
   }
 

@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: '',
         pageKey: 1,
         searchQuery: const SearchQuery(
-            sort: ['ratings:desc', 'full_name:asc'], limit: 6),
+            sort: ['ratings:desc', ], limit: 6),
         callback: (doctors) {});
     super.initState();
   }

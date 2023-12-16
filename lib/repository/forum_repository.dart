@@ -12,31 +12,32 @@ class ForumRepository extends BaseRepository {
   Future<int?> editPost(
       {required List<File?> files,
       String? idPost,
-      required String content}) async {
+      required String content,
+      bool isDoctor = false}) async {
     PostRequest request = PostRequest(
         files: files,
         dto: PostResponse(
           id: idPost,
           description: content,
         ));
-    return await _forumService.editPost(request);
+    return await _forumService.editPost(request: request, isDoctor: isDoctor);
   }
 
-  Future<int?> likePost({
-    required String idPost,
-  }) async {
-    return await _forumService.likePost(idPost);
+  Future<int?> likePost({required String idPost, bool isDoctor = false}) async {
+    return await _forumService.likePost(idPost: idPost, isDoctor: isDoctor);
   }
 
   Future<int?> unlikePost({
     required String idPost,
+bool isDoctor =false
   }) async {
-    return await _forumService.unlikePost(idPost);
+    return await _forumService.unlikePost(idPost:idPost, isDoctor:isDoctor);
   }
 
   Future<int?> deletePost({
     required String idPost,
+    bool isDoctor = false
   }) async {
-    return await _forumService.deletePost(idPost);
+    return await _forumService.deletePost(idPost:idPost, isDoctor:isDoctor);
   }
 }
