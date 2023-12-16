@@ -235,6 +235,10 @@
         "vi": "Mật khẩu phải giống ở trên",
         "en": "Password must be same as above"
     },
+    "invalid": {
+        "vi": "Không hợp lệ",
+        "en": "Invalid"
+    },
     "sign_in_with_google": {
         "vi": "Đăng nhập với Google",
         "en": "Sign in with Google"
@@ -1578,5 +1582,9 @@
     "you_have_not_enough_money": {
         "vi": "Bạn không có đủ tiền",
         "en": "You have not enough money"
+    },
+    "send_otp": {
+        "vi": "Gửi OTP",
+        "en": "Send OTP"
     }
 }

@@ -22,27 +22,30 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
-        if (state.blocState == BlocState.Pending) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state.blocState == BlocState.Successed) {
-          EasyLoading.dismiss();
-          // if (state.errorDoctor != null) {
-          //   EasyLoading.showToast(
-          //       translate(context, 'login_to_doctor_account_failed'));
-          // }
-          // if (state.errorPatient != null) {
-          //   print(state.errorPatient);
-          //   EasyLoading.showToast(
-          //       translate(context, 'login_to_patient_account_failed'));
-          // }
-          if (AppController.instance.authState == AuthState.DoctorAuthorized) {
-            Navigator.pushReplacementNamed(context, mainScreenDoctorName);
-          } else {
-            Navigator.pushReplacementNamed(context, mainScreenPatientName);
+        if (state is LoginState) {
+          if (state.blocState == BlocState.Pending) {
+            EasyLoading.show(maskType: EasyLoadingMaskType.black);
+          } else if (state.blocState == BlocState.Successed) {
+            EasyLoading.dismiss();
+            // if (state.errorDoctor != null) {
+            //   EasyLoading.showToast(
+            //       translate(context, 'login_to_doctor_account_failed'));
+            // }
+            // if (state.errorPatient != null) {
+            //   print(state.errorPatient);
+            //   EasyLoading.showToast(
+            //       translate(context, 'login_to_patient_account_failed'));
+            // }
+            if (AppController.instance.authState ==
+                AuthState.DoctorAuthorized) {
+              Navigator.pushReplacementNamed(context, mainScreenDoctorName);
+            } else {
+              Navigator.pushReplacementNamed(context, mainScreenPatientName);
+            }
+          } else if (state.blocState == BlocState.Failed) {
+            EasyLoading.dismiss();
+            EasyLoading.showToast(translate(context, state.error));
           }
-        } else if (state.blocState == BlocState.Failed) {
-          EasyLoading.dismiss();
-          EasyLoading.showToast(translate(context, state.error));
         }
       },
       child: BlocBuilder<AuthenticationCubit, AuthenticationState>(

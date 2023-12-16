@@ -22,6 +22,8 @@ class ApiConstants {
   static const _USER = '/user-management';
   static const USER = '$_USER/user';
   static const USER_PASSWORD = '$USER/password';
+  static const USER_FORGOT_PASSWORD = '$USER/forget-password';
+  static const USER_FORGOT_PASSWORD_RESET = '$USER/reset-password-forgot';
   static const USER_MEDICAL_RECORD = '$_USER/medical-record';
 
 // doctor-management

@@ -30,13 +30,8 @@ class UserRepository extends BaseRepository {
     return await _userService.registerAccount(request);
   }
 
-  Future<int?> addMedicalRecord(
-      String avatar,
-      String fullName,
-      String birthday,
-      String gender,
-      String relationship,
-      String address) async {
+  Future<int?> addMedicalRecord(String avatar, String fullName, String birthday,
+      String gender, String relationship, String address) async {
     UserRequest request = UserRequest(
         avatar: avatar,
         fullName: fullName,
@@ -91,5 +86,18 @@ class UserRepository extends BaseRepository {
       {required String password, required String passwordConfirm}) async {
     return await _userService.changePassword(
         password: password, passwordConfirm: passwordConfirm);
+  }
+
+  Future<int?> sendOTP({required String email}) async {
+    return await _userService.sendOTP(email: email);
+  }
+
+ Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    return await _userService.resetPassword(email: email, otp: otp,
+        password: password, confirmPassword: confirmPassword);
   }
 }

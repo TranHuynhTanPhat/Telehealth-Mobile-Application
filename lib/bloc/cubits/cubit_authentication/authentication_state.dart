@@ -26,3 +26,11 @@ final class LogoutState extends AuthenticationState {
 final class ChangePasswordState extends AuthenticationState {
   ChangePasswordState({required super.blocState, super.error});
 }
+
+final class ResetPasswordState extends AuthenticationState {
+  ResetPasswordState({required super.blocState, super.error});
+}
+
+final class SendOTPState extends AuthenticationState {
+  SendOTPState({required super.blocState, super.error});
+}

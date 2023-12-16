@@ -7,7 +7,7 @@ import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
-import 'package:healthline/screen/auth/forget_password/forget_password_screen.dart';
+import 'package:healthline/screen/auth/forget_password/forgot_password_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
@@ -163,7 +163,7 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: _authenticationCubit,
-              child: const ForgetPasswordScreen(),
+              child: const ForgotPasswordScreen(),
             ),
           );
 

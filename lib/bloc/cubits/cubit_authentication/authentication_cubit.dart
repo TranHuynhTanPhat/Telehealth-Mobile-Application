@@ -192,4 +192,72 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           blocState: BlocState.Failed, error: e.toString()));
     }
   }
+
+  Future<void> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword,
+      bool isDoctor = false}) async {
+    emit(ResetPasswordState(blocState: BlocState.Pending));
+    try {
+      int? code;
+      // if (AppController().authState == AuthState.DoctorAuthorized) {
+      //   code = await _doctorRepository.changePassword(
+      //       password: password, newPassword: newPassword);
+      // }
+      // if (AppController().authState == AuthState.PatientAuthorized) {
+      code = await _userRepository.resetPassword(
+          password: password,
+          confirmPassword: confirmPassword,
+          email: email,
+          otp: otp);
+      // }
+
+      if (code == 200 || code == 201) {
+        emit(ResetPasswordState(blocState: BlocState.Successed));
+      } else {
+        emit(ResetPasswordState(blocState: BlocState.Failed, error: 'failure'));
+      }
+    } on DioException catch (e) {
+      emit(ResetPasswordState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString()));
+    } catch (e) {
+      logPrint(e);
+      emit(
+          ResetPasswordState(blocState: BlocState.Failed, error: e.toString()));
+    }
+  }
+
+  Future<void> sendOTP(
+      {required String email,
+      }) async {
+    emit(SendOTPState(blocState: BlocState.Pending));
+    try {
+      int? code;
+      // if (AppController().authState == AuthState.DoctorAuthorized) {
+      //   code = await _doctorRepository.changePassword(
+      //       password: password, newPassword: newPassword);
+      // }
+      // if (AppController().authState == AuthState.PatientAuthorized) {
+      code = await _userRepository.sendOTP(
+          email: email);
+      // }
+
+      if (code == 200 || code == 201) {
+        emit(SendOTPState(blocState: BlocState.Successed));
+      } else {
+        emit(SendOTPState(blocState: BlocState.Failed, error: 'failure'));
+      }
+    } on DioException catch (e) {
+      emit(SendOTPState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString()));
+    } catch (e) {
+      logPrint(e);
+      emit(
+          SendOTPState(blocState: BlocState.Failed, error: e.toString()));
+    }
+  }
 }

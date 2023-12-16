@@ -99,24 +99,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
       builder: (context) {
         return BlocListener<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
-            if (state.blocState == BlocState.Pending) {
-              EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            } else if (state.blocState == BlocState.Successed) {
-              EasyLoading.showToast(translate(context, 'success_register'));
-              Navigator.pushReplacementNamed(context, logInName);
-            } else if (state.blocState == BlocState.Failed) {
-              if (state.error == 'phone_number_has_been_registered') {
-                setState(() {
-                  step = SignUp.Contact;
-                  conflictPhone = _controllerPhone.text;
-                });
-              } else if (state.error == "email_has_been_registered") {
-                setState(() {
-                  step = SignUp.Contact;
-                  confictEmail = _controllerEmail.text;
-                });
+            if (state is RegisterAccountState) {
+              if (state.blocState == BlocState.Pending) {
+                EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              } else if (state.blocState == BlocState.Successed) {
+                EasyLoading.showToast(translate(context, 'success_register'));
+                Navigator.pushReplacementNamed(context, logInName);
+              } else if (state.blocState == BlocState.Failed) {
+                if (state.error == 'phone_number_has_been_registered') {
+                  setState(() {
+                    step = SignUp.Contact;
+                    conflictPhone = _controllerPhone.text;
+                  });
+                } else if (state.error == "email_has_been_registered") {
+                  setState(() {
+                    step = SignUp.Contact;
+                    confictEmail = _controllerEmail.text;
+                  });
+                }
+                EasyLoading.showToast(translate(context, state.error));
               }
-              EasyLoading.showToast(translate(context, state.error));
             }
           },
           child: GestureDetector(
