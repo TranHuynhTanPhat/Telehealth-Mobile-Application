@@ -14,6 +14,7 @@ import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:meilisearch/meilisearch.dart';
 
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: '',
         pageKey: 1,
         searchQuery: const SearchQuery(
-            sort: ['ratings:desc', 'full_name:asc'], limit: 6),
+            sort: ['ratings:desc', ], limit: 6),
         callback: (doctors) {});
     super.initState();
   }
@@ -95,7 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 int index = state.subUsers
                     .indexWhere((element) => element.isMainProfile!);
 
-                if (index != -1) {
+                if (index != -1 &&
+                    state.subUsers[index].avatar != '' &&
+                    state.subUsers[index].avatar != null &&
+                    state.subUsers[index].avatar != 'default') {
                   String url = CloudinaryContext.cloudinary
                       .image(state.subUsers[index].avatar ?? '')
                       .toString();
@@ -157,10 +161,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: CircleAvatar(
                             radius: dimensWidth() * 5,
                             backgroundImage: _image,
-                            onBackgroundImageError: (exception, stackTrace) =>
-                                setState(() {
-                              _image = AssetImage(DImages.placeholder);
-                            }),
+                            onBackgroundImageError: (exception, stackTrace) {
+                              logPrint(exception);
+                              setState(() {
+                                _image = AssetImage(DImages.placeholder);
+                              });
+                            },
                           ),
                           isShow: state is UpdateAvailable,
                           color: Theme.of(context).colorScheme.error,
@@ -186,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 validate: (p0) => null,
                 hint: translate(context, 'search_doctors'),
                 fillColor: colorF2F5FF,
+                readOnly: true,
                 filled: true,
                 focusedBorderColor: colorF2F5FF,
                 enabledBorderColor: colorF2F5FF,

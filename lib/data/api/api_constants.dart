@@ -4,9 +4,6 @@ class ApiConstants {
   // CLOUDINARY
   static const UPLOAD = '/upload';
 
-  // SOCKET
-  static const SOCKET_URL = 'http://192.168.80.80:3008';
-
 // common
   static const _COMMON_USER = '/common/user';
   static const _COMMON_DOCTOR = '/common/doctor';
@@ -24,11 +21,15 @@ class ApiConstants {
 // user-management
   static const _USER = '/user-management';
   static const USER = '$_USER/user';
+  static const USER_PASSWORD = '$USER/password';
+  static const USER_FORGOT_PASSWORD = '$USER/forget-password';
+  static const USER_FORGOT_PASSWORD_RESET = '$USER/reset-password-forgot';
   static const USER_MEDICAL_RECORD = '$_USER/medical-record';
 
 // doctor-management
   static const _DOCTOR = '/doctor-management';
   static const DOCTOR = '$_DOCTOR/doctor';
+  static const DOCTOR_PASSWORD = '$DOCTOR/password';
   static const DOCTOR_CHANGE_AVATAR = '$DOCTOR/avatar';
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
   static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';
@@ -47,9 +48,20 @@ class ApiConstants {
   static const VACCINATION_RECORD = '$_VACCINATION/record';
   static const VACCINATION_VACCINE = '$_VACCINATION/vaccine';
 
+  // forum
+  static const _FORUM = '/health-forum';
+  static const FORUM_POST = '$_FORUM/posts';
+
+  // consultation
+  static const CONSULTATION = '/consultation';
+  static const CONSULTATION_USER = '$CONSULTATION/user';
+  static const CONSULTATION_DOCTOR_SCHEDULE = '$CONSULTATION/doctor';
+  static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR_SCHEDULE/information';
+
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';
   static const UPLOAD_AVATAR_DOCTOR = '$_FILE_UPLOAD/doctor/avatar';
   static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
   static const UPLOAD_RECORD = '$_FILE_UPLOAD/user/record';
+  static const UPLOAD_POST = '$_FILE_UPLOAD/post';
 }

@@ -2,17 +2,12 @@ import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
+import 'package:healthline/data/api/models/responses/consultaion_infomation_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class DoctorService extends BaseService {
-  // Future<List<TopDoctorsResponse>> getDoctors() async {
-  //   final response = await get(ApiConstants.DOCTOR_GET_PUBLIC);
-  //   List<dynamic> doctors = response.data.toList();
-  //   return doctors.map((e) => TopDoctorsResponse.fromMap(e)).toList();
-  // }
-
   Future<DoctorResponse> getProfile() async {
     final response = await get(ApiConstants.DOCTOR, isDoctor: true);
 
@@ -26,15 +21,6 @@ class DoctorService extends BaseService {
         .toList();
     return schedules;
   }
-
-  // Future<DataResponse> getScheduleCron() async {
-  //   final response =
-  //       await get(ApiConstants.DOCTOR_SCHEDULE_CRON, isDoctor: true);
-  //   // List<ScheduleResponse> schedules = response.data
-  //   //     .map<ScheduleResponse>((e) => ScheduleResponse.fromMap(e))
-  //   //     .toList();
-  //   return response;
-  // }
 
   Future<DataResponse> updateBio(String bio) async {
     var jsonRequest = json.encode({
@@ -84,6 +70,30 @@ class DoctorService extends BaseService {
         data: jsonRequest, isDoctor: true);
 
     return response;
+  }
+
+  Future<List<ConsultationInformationResponse>> fetchPatient(
+      {required String doctorId}) async {
+    final response = await get(
+        '${ApiConstants.CONSULTATION_DOCTOR_INFORMATION}/$doctorId',
+        isDoctor: true);
+    final List<dynamic> objects =
+        json.decode(json.encode(response.data['consultaion']));
+    final List<ConsultationInformationResponse> patients =
+        objects.map((e) => ConsultationInformationResponse.fromMap(e)).toList();
+    return patients;
+  }
+
+  Future<int?> changePassword(
+      {required String password, required String newPassword}) async {
+    final response = await patch(
+      ApiConstants.DOCTOR_PASSWORD,
+      data: json.encode(
+        {"password": password, "new_password": newPassword},
+      ),isDoctor: true
+    );
+
+    return response.code;
   }
 
   // Future<List<DoctorResponse>> getListDoctor() async {

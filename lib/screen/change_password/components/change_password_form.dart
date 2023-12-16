@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -41,7 +43,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           Padding(
             padding: EdgeInsets.only(
                 bottom: dimensHeight() * 3, top: dimensHeight() * 2),
-            child: TextFieldWidget(
+            child:
+            TextFieldWidget(
               validate: (value) {
                 return null;
               },
@@ -63,12 +66,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+            padding: EdgeInsets.only(bottom: dimensHeight() * 3, ),
             child: TextFieldWidget(
               validate: (value) {
-                return Validate()
-                    .validatePassword(context, _controllerNewPassword.text);
+                return Validate().validatePassword(
+                    context, _controllerNewPassword.text.trim());
               },
+              onChanged: (value) => _controllerNewPassword.text =
+                  _controllerNewPassword.text.trim(),
               controller: _controllerNewPassword,
               label: translate(context, 'new_password'),
               obscureText: !showPassword,
@@ -84,16 +89,19 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                   );
                 },
               ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 2),
             child: TextFieldWidget(
-              validate: (value) => _controllerNewPassword.text ==
-                      _controllerConfirmNewPassword.text
+              validate: (value) => _controllerNewPassword.text.trim() ==
+                      _controllerConfirmNewPassword.text.trim()
                   ? null
                   : translate(context, 'password_must_be_same_as_above'),
               controller: _controllerConfirmNewPassword,
+              onChanged: (value) => _controllerConfirmNewPassword.text =
+                  _controllerConfirmNewPassword.text.trim(),
               label: translate(context, 'confirm_new_password'),
               obscureText: !showPassword,
               suffixIcon: IconButton(
@@ -108,6 +116,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                   );
                 },
               ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           Padding(
@@ -119,6 +128,11 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+                    context.read<AuthenticationCubit>().changePassword(
+                          password: _controllerOldPassword.text.trim(),
+                          newPassword:
+                              _controllerNewPassword.text.trim(),
+                        );
                   }
                 },
               ),

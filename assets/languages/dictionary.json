@@ -235,6 +235,10 @@
         "vi": "Mật khẩu phải giống ở trên",
         "en": "Password must be same as above"
     },
+    "invalid": {
+        "vi": "Không hợp lệ",
+        "en": "Invalid"
+    },
     "sign_in_with_google": {
         "vi": "Đăng nhập với Google",
         "en": "Sign in with Google"
@@ -318,6 +322,10 @@
     "edit": {
         "vi": "Sửa",
         "en": "Edit"
+    },
+    "edit_content": {
+        "vi": "Chỉnh sửa nội dung",
+        "en": "Edit content"
     },
     "update_now": {
         "vi": "Cập nhật ngay",
@@ -787,13 +795,33 @@
         "vi": "Trợ giúp",
         "en": "Helps"
     },
+    "must_be_greater_than_or_equal_to": {
+        "vi": "phải lớn hơn hoặc bằng ",
+        "en": "must be greater than or equal to"
+    },
+    "amount_to_top_up": {
+        "vi": "Số tiền cần nạp",
+        "en": "Amount to top up"
+    },
+    "amount_to_withdraw": {
+        "vi": "Số tiền cần rút",
+        "en": "Amount to withdraw"
+    },
+    "recharge": {
+        "vi": "Nạp tiền",
+        "en": "Recharge"
+    },
+    "withdraw": {
+        "vi": "Rút tiền",
+        "en": "Withdraw"
+    },
     "wallet": {
         "vi": "Ví",
         "en": "Wallet"
     },
-    "recharge_with": {
-        "vi": "Nạp tiền bằng",
-        "en": "Recharge with"
+    "recharge_withdraw": {
+        "vi": "Nạp/rút tiền",
+        "en": "Recharge/withdraw"
     },
     "transfer": {
         "vi": "Chuyển khoản",
@@ -1319,6 +1347,10 @@
         "vi": "Đính kèm",
         "en": "Attach"
     },
+    "files": {
+        "vi": "tệp",
+        "en": "files"
+    },
     "Post": {
         "vi": "Đăng",
         "en": "Post"
@@ -1330,6 +1362,10 @@
     "like": {
         "vi": "Thích",
         "en": "Like"
+    },
+    "liked": {
+        "vi": "lượt thích",
+        "en": "liked"
     },
     "comment": {
         "vi": "Bình luận",
@@ -1526,5 +1562,29 @@
     "minute": {
         "vi": "Phút",
         "en": "Minute"
+    },
+    "post_not_found": {
+        "vi": "Không tìm thấy bài viết",
+        "en": "Post not found"
+    },
+    "you": {
+        "vi": "Bạn",
+        "en": "You"
+    },
+    "healthline_wallet": {
+        "vi": "Ví Healthline",
+        "en": "Healthline wallet"
+    },
+    "appointment_information": {
+        "vi": "Thông tin cuộc hẹn",
+        "en": "Appointment information"
+    },
+    "you_have_not_enough_money": {
+        "vi": "Bạn không có đủ tiền",
+        "en": "You have not enough money"
+    },
+    "send_otp": {
+        "vi": "Gửi OTP",
+        "en": "Send OTP"
     }
 }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+
 import 'package:healthline/res/style.dart';
 
 class ValidShift extends StatelessWidget {
   const ValidShift({
-    super.key,
+    Key? key,
     required this.time,
-  });
+    this.choosed = false,
+  }) : super(key: key);
   final String time;
+  final bool choosed;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +20,15 @@ class ValidShift extends StatelessWidget {
         dimensWidth(),
       ),
       decoration: BoxDecoration(
-          color: colorCDDEFF,
-          borderRadius: BorderRadius.circular(dimensWidth()*2)),
+          color: choosed ? secondary : colorCDDEFF,
+          borderRadius: BorderRadius.circular(dimensWidth() * 2)),
       alignment: Alignment.center,
       child: Text(
         time,
-        style: Theme.of(context).textTheme.labelLarge,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: choosed ? white : null),
       ),
     );
   }

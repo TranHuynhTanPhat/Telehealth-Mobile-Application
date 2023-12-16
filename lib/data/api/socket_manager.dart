@@ -1,27 +1,53 @@
-import 'package:healthline/data/api/api_constants.dart';
-import 'package:healthline/utils/log_data.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:developer';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/data/api/models/responses/login_response.dart';
+import 'package:healthline/data/storage/app_storage.dart';
+import 'package:healthline/data/storage/data_constants.dart';
+import 'package:healthline/res/enum.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketManager {
-  final WebSocketChannel channel =
-      IOWebSocketChannel.connect(ApiConstants.SOCKET_URL);
-  late bool isConnected;
-  final List<Function(dynamic)> _messageListeners = [];
+  late Socket socket;
 
-  SocketManager._internal() {
-    // print(channel.ready);
-    isConnected = true;
-    channel.stream.listen((data) {
-      _handleMessage(data);
-      logPrint("CHEKKKKK");
-      logPrint(data);
-      // addMessageListener(_handleCreateGroup);
-      // log(data);
+  late bool isConnected;
+
+  SocketManager._internal();
+
+  void init() {
+    String? jwtToken;
+    if (AppController.instance.authState == AuthState.PatientAuthorized) {
+      LoginResponse response = LoginResponse.fromJson(
+          AppStorage().getString(key: DataConstants.PATIENT)!);
+      jwtToken = response.jwtToken;
+    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+      LoginResponse response = LoginResponse.fromJson(
+          AppStorage().getString(key: DataConstants.DOCTOR)!);
+      jwtToken = response.jwtToken;
+    }
+    // print(jwtToken);
+    socket = io(
+      dotenv.get('SOCKET_URL', fallback: ''),
+      OptionBuilder()
+          .setTransports(['websocket']) // for Flutter or Dart VM
+          .disableAutoConnect()
+          .setExtraHeaders(
+              {'Authorization': 'Bearer $jwtToken'}) // disable auto-connection
+          .build(),
+    );
+    socket.connect();
+    // Event listeners.
+    socket.onConnect((_) {
+      isConnected = true;
+
+      log('Connected to the socket server');
     });
-    channel.sink.done.then((_) {
+
+    socket.onDisconnect((_) {
       isConnected = false;
-      logPrint("WebSocket connection closed.");
+
+      log('Disconnected from the socket server');
     });
   }
 
@@ -31,28 +57,26 @@ class SocketManager {
     return instance;
   }
 
-  Stream<dynamic> get onMessage => channel.stream;
-
-  void sendData(String data) {
-    // print(data);
-    channel.sink.add(data);
+  void sendData({required String event, required dynamic data}) {
+    socket.emit(event, data);
   }
 
-  void addMessageListener(Function(dynamic) listener) {
-    _messageListeners.add(listener);
+  void sendDataWithAck(
+      {required String event,
+      required dynamic data,
+      required Function(dynamic) listen}) {
+    socket.emitWithAck(event, data, ack: (data) {
+      listen(data);
+    });
   }
 
-  void removeMessageListener(Function(dynamic) listener) {
-    _messageListeners.remove(listener);
-  }
-
-  void _handleMessage(dynamic data) {
-    for (final listener in _messageListeners) {
-      listener(data);
-    }
+  void addListener(
+      {required String event, required Function(dynamic) listener}) {
+    socket.on(event, listener);
   }
 
   void close() {
-    channel.sink.close();
+    socket.disconnect();
+    socket.dispose();
   }
 }

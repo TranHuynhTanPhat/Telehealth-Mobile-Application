@@ -21,7 +21,7 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   @override
   void initState() {
-    context.read<PatientProfileCubit>().fetchContact();
+    context.read<PatientProfileCubit>().fetProfile();
 
     super.initState();
   }
@@ -33,12 +33,13 @@ class _ContactScreenState extends State<ContactScreen> {
         if (state.blocState == BlocState.Pending) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state.blocState == BlocState.Failed) {
-          EasyLoading.showToast(translate(context, state.error));
+          EasyLoading.showToast(
+              translate(context, state.error.toString().toLowerCase()));
           Navigator.pop(context);
         } else if (state.blocState == BlocState.Successed) {
           EasyLoading.dismiss();
           if (state is UpdateContactState) {
-            EasyLoading.showToast(translate(context, state.response?.message));
+            EasyLoading.showToast(translate(context, 'successfully'));
           }
         }
       },

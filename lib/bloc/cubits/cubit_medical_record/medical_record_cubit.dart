@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intl/intl.dart';
 
-import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/file_response.dart';
+import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repository/file_repository.dart';
 import 'package:healthline/repository/patient_repository.dart';
 import 'package:healthline/repository/user_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
-import 'package:intl/intl.dart';
 
 part 'medical_record_state.dart';
 
@@ -208,19 +207,21 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
       currentId: state.currentId,
     ));
     try {
-      DataResponse response = await _userRepository.addMedicalRecord(
+      int? code = await _userRepository.addMedicalRecord(
           'default', fullName, birthday, gender, relationship, address);
-      String? recordId = response.data['record_id'];
-      if (recordId != null && avatar != null) {
-        await _fileRepository.uploadAvatarPatient(
-            path: avatar, publicId: recordId);
+      if (code == 201 || code == 200) {
+        emit(AddSubUserSuccessfully(
+          stats: state.stats,
+          subUsers: state.subUsers,
+          currentId: state.currentId,
+        ));
+      } else {
+        throw 'failure';
       }
-
-      emit(AddSubUserSuccessfully(
-        stats: state.stats,
-        subUsers: state.subUsers,
-        currentId: state.currentId,
-      ));
+      // if (recordId != null && avatar != null) {
+      //   await _fileRepository.uploadAvatarPatient(
+      //       path: avatar, publicId: recordId);
+      // }
     } on DioException catch (e) {
       emit(AddSubUserFailure(
         stats: state.stats,
@@ -286,6 +287,18 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
                 address);
           }
         }
+      } else {
+        if (id != null) {
+          if (fullName != user.fullName ||
+              birthday != user.dateOfBirth ||
+              gender != user.gender ||
+              relationship != user.relationship!.name ||
+              address != user.address ||
+              bdChanged) {
+            await _userRepository.updateMedicalRecord(id, avatar ?? 'default',
+                fullName, birthday, gender, relationship, address);
+          }
+        }
       }
       emit(UpdateSubUserSuccessfully(
         stats: state.stats,
@@ -323,6 +336,13 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         stats: state.stats,
         subUsers: state.subUsers,
         currentId: state.subUsers.first.id,
+      ));
+    } on DioException catch (e) {
+      emit(DeleteSubUserFailure(
+        stats: state.stats,
+        subUsers: state.subUsers,
+        currentId: state.currentId,
+        message: e.response!.data['message'].toString(),
       ));
     } catch (e) {
       emit(DeleteSubUserFailure(

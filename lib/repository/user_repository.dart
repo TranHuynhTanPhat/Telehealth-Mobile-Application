@@ -9,7 +9,6 @@ import 'package:healthline/res/enum.dart';
 class UserRepository extends BaseRepository {
   final UserService _userService = UserService();
 
- 
   Future<int?> registerAccount(
       String fullName,
       String phone,
@@ -31,13 +30,8 @@ class UserRepository extends BaseRepository {
     return await _userService.registerAccount(request);
   }
 
-  Future<DataResponse> addMedicalRecord(
-      String avatar,
-      String fullName,
-      String birthday,
-      String gender,
-      String relationship,
-      String address) async {
+  Future<int?> addMedicalRecord(String avatar, String fullName, String birthday,
+      String gender, String relationship, String address) async {
     UserRequest request = UserRequest(
         avatar: avatar,
         fullName: fullName,
@@ -63,14 +57,16 @@ class UserRepository extends BaseRepository {
         fullName: fullName,
         gender: gender,
         birthday: birthday,
-        relationship:relationship!=null?
-            Relationship.values.firstWhere((e) => e.name == relationship):Relationship.Children,
+        relationship: relationship != null
+            ? Relationship.values.firstWhere((e) => e.name == relationship)
+            : Relationship.Children,
         address: address);
     return await _userService.updateMedicalRecord(request);
   }
+
   Future<DataResponse> deleteMedicalRecord(
-      String recordId,) async {
-   
+    String recordId,
+  ) async {
     return await _userService.deleteMedicalRecord(recordId);
   }
 
@@ -78,15 +74,30 @@ class UserRepository extends BaseRepository {
     return await _userService.updateEmail(email);
   }
 
-  Future<UserResponse> fetchContact() async {
-    return await _userService.getContact();
+  Future<UserResponse> fetchProfile() async {
+    return await _userService.getProfile();
   }
 
   Future<List<UserResponse>> fetchMdicalRecord() async {
     return await _userService.getMedicalRecord();
   }
 
-  // Future<void> logout() async {
-  //   await _userService.logout();
-  // }
+  Future<int?> changePassword(
+      {required String password, required String passwordConfirm}) async {
+    return await _userService.changePassword(
+        password: password, passwordConfirm: passwordConfirm);
+  }
+
+  Future<int?> sendOTP({required String email}) async {
+    return await _userService.sendOTP(email: email);
+  }
+
+ Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    return await _userService.resetPassword(email: email, otp: otp,
+        password: password, confirmPassword: confirmPassword);
+  }
 }

@@ -22,8 +22,10 @@ class _ListSubUserState extends State<ListSubUser> {
   Future<void> showUpdateDialogInput(
       BuildContext context, UserResponse subUser) async {
     final medicalRecordCubit = context.read<MedicalRecordCubit>();
-    bool? result =await showDialog(
-      barrierDismissible: true,
+    await showModalBottomSheet(
+      // barrierDismissible: true,
+      isScrollControlled: true,
+      useSafeArea: true,
       context: context,
       builder: (context) => BlocProvider.value(
         value: medicalRecordCubit,
@@ -32,24 +34,24 @@ class _ListSubUserState extends State<ListSubUser> {
         ),
       ),
     );
-    if (result == true) {
-
-      medicalRecordCubit.fetchMedicalRecord();
-    }
+    // if (result == true) {
+    //   medicalRecordCubit.fetchMedicalRecord();
+    // }
   }
 
   Future<void> showDialogInput(BuildContext context) async {
     final medicalRecordCubit = context.read<MedicalRecordCubit>();
-    final result = await showDialog(
-        barrierDismissible: true,
+     await showModalBottomSheet(
+        isScrollControlled: true,
+        useSafeArea: true,
         context: context,
         builder: (context) => BlocProvider.value(
               value: medicalRecordCubit,
               child: SubUserInputDialog(formKey: _formKey),
             ));
-    if (result == true) {
-      medicalRecordCubit.fetchMedicalRecord();
-    }
+    // if (result == true) {
+    //   medicalRecordCubit.fetchMedicalRecord();
+    // }
   }
 
   @override
@@ -91,7 +93,9 @@ class _ListSubUserState extends State<ListSubUser> {
                       highlightColor: transparent,
                       onTap: () {
                         if (e.id != state.currentId) {
-                          context.read<MedicalRecordCubit>().updateCurrentId(e.id!);
+                          context
+                              .read<MedicalRecordCubit>()
+                              .updateCurrentId(e.id!);
                         }
                       },
                       child: SubUserCard(

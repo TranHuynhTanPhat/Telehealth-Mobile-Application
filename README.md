@@ -21,3 +21,5 @@ shorebird release android --flavor dev --artifact apk  ./lib/flavors/main_develo
 
 Patch Android development
 shorebird patch android --flavor dev ./lib/flavors/main_development.dart
+
+build apk --release --flavor prod lib/flavors/main_production.dart 

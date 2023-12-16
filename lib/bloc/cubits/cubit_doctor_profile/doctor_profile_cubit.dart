@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/data/api/models/responses/consultaion_infomation_response.dart';
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/enum.dart';
@@ -11,23 +12,23 @@ import '../../../repository/file_repository.dart';
 
 part 'doctor_profile_state.dart';
 
-class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
-  DoctorProfileCubit() : super(DoctorProfileInitial(null));
+class DoctorProfileCubit extends Cubit<DoctorProfileState> {
+  DoctorProfileCubit() : super(DoctorProfileInitial(profile: DoctorResponse()));
   final DoctorRepository _doctorRepository = DoctorRepository();
   final FileRepository _fileRepository = FileRepository();
 
   Future<void> fetchProfile() async {
     emit(
-      FetchProfileState(state.profile, blocState: BlocState.Pending),
+      FetchProfileState(profile: state.profile, blocState: BlocState.Pending),
     );
     try {
       DoctorResponse profile = await _doctorRepository.fetchProfile();
-      emit(FetchProfileState(profile, blocState: BlocState.Successed));
+      emit(FetchProfileState(profile: profile, blocState: BlocState.Successed));
     } on DioException catch (e) {
       // DioException er = e as DioException;
       emit(
         FetchProfileState(
-          state.profile,
+          profile: state.profile,
           blocState: BlocState.Failed,
           error: e.response!.data['message'].toString(),
         ),
@@ -35,7 +36,7 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
     } catch (e) {
       emit(
         FetchProfileState(
-          state.profile,
+          profile: state.profile,
           blocState: BlocState.Failed,
           error: e.toString(),
         ),
@@ -43,20 +44,54 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
     }
   }
 
+  Future<void> fetchPatient({required String doctorId}) async {
+    emit(
+      FetchPatientState(
+          profile: state.profile, blocState: BlocState.Pending, patients: []),
+    );
+    try {
+      List<ConsultationInformationResponse> patients =
+          await _doctorRepository.fetchPatient(doctorId: doctorId);
+      emit(FetchPatientState(
+          profile: state.profile,
+          blocState: BlocState.Successed,
+          patients: patients));
+    } on DioException catch (e) {
+      // DioException er = e as DioException;
+      emit(
+        FetchPatientState(
+          profile: state.profile,
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString(),
+          patients: [],
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchPatientState(
+          profile: state.profile,
+          blocState: BlocState.Failed,
+          error: e.toString(),
+          patients: [],
+        ),
+      );
+    }
+  }
+
   Future<void> updateProfile(String? bio, String? path, String? email) async {
     emit(
-      UpdateProfileState(state.profile, blocState: BlocState.Pending),
+      UpdateProfileState(profile: state.profile, blocState: BlocState.Pending),
     );
     bool error = false;
     try {
-      if (bio != null && bio != state.profile?.biography) {
+      if (bio != null && bio != state.profile.biography) {
         await updateBio(bio);
       }
     } catch (e) {
       error = true;
       emit(
         UpdateProfileState(
-          state.profile,
+          profile: state.profile,
           blocState: BlocState.Failed,
           error: e.toString(),
         ),
@@ -71,14 +106,14 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
 
       emit(
         UpdateProfileState(
-          state.profile,
+          profile: state.profile,
           blocState: BlocState.Failed,
           error: e.toString(),
         ),
       );
     }
     try {
-      if (email != null && state.profile?.email != email) {
+      if (email != null && state.profile.email != email) {
         await updateEmail(email);
       }
     } catch (e) {
@@ -86,7 +121,7 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
 
       emit(
         UpdateProfileState(
-          state.profile,
+          profile: state.profile,
           blocState: BlocState.Failed,
           error: e.toString(),
         ),
@@ -94,8 +129,10 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
     }
     if (!error) {
       Future.delayed(const Duration(seconds: 3), () {
-        emit(UpdateProfileState(state.profile,
-            blocState: BlocState.Successed, message: 'successfully'));
+        emit(UpdateProfileState(
+            profile: state.profile,
+            blocState: BlocState.Successed,
+            message: 'successfully'));
       });
     }
   }
@@ -122,8 +159,8 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
 
   Future<void> updateAvatar(String path) async {
     try {
-      String? id = state.profile?.id;
-      String? avatar = state.profile?.avatar;
+      String? id = state.profile.id;
+      String? avatar = state.profile.avatar;
       if (id != null) {
         FileResponse fileResponse = await _fileRepository.uploadAvatarDoctor(
           path: path,
@@ -134,7 +171,7 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
           await _doctorRepository.updateAvatar(publicId);
           emit(
             DoctorProfileState(
-              state.profile?.copyWith(avatar: publicId),
+              profile: state.profile.copyWith(avatar: publicId),
             ),
           );
         } else {}
@@ -146,16 +183,6 @@ class DoctorProfileCubit extends HydratedCubit<DoctorProfileState> {
     } catch (e) {
       rethrow;
     }
-  }
-
-  @override
-  DoctorProfileState? fromJson(Map<String, dynamic> json) {
-    return DoctorProfileState.fromMap(json);
-  }
-
-  @override
-  Map<String, dynamic>? toJson(DoctorProfileState state) {
-    return state.toMap();
   }
 
   @override
