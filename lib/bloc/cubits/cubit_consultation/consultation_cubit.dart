@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
+import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/repository/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -17,7 +18,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             timeline: [],
             request: ConsultationRequest(),
             doctorName: null,
-            patientName: null, consultations: null,
+            patientName: null,
+            consultations: null,
           ),
         );
   final ConsultationRepository _consultationRepository =
@@ -37,7 +39,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         timeline: [],
         request: state.request,
         doctorName: state.doctorName,
-        patientName: state.patientName, consultations: state.consultations,
+        patientName: state.patientName,
+        consultations: state.consultations,
       ),
     );
     try {
@@ -49,7 +52,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           timeline: timeline,
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName, consultations: state.consultations,
+          patientName: state.patientName,
+          consultations: state.consultations,
         ),
       );
     } on DioException catch (e) {
@@ -60,7 +64,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           error: e.response!.data['message'].toString(),
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName, consultations: state.consultations,
+          patientName: state.patientName,
+          consultations: state.consultations,
         ),
       );
     } catch (e) {
@@ -70,7 +75,66 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           timeline: [],
           request: state.request,
           doctorName: state.doctorName,
-          patientName: state.patientName, consultations: state.consultations,
+          patientName: state.patientName,
+          consultations: state.consultations,
+        ),
+      );
+    }
+  }
+
+  Future<void> cancelConsultation({required String consultationId}) async {
+    emit(
+      CancelConsultationState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        request: state.request,
+        doctorName: state.doctorName,
+        patientName: state.patientName,
+        consultations: state.consultations,
+      ),
+    );
+    try {
+      await _consultationRepository.cancelConsultation(
+          consultationId: consultationId);
+
+      List<ConsultationResponse> coming =
+          List<ConsultationResponse>.from(state.consultations?.coming ?? []);
+      coming.removeWhere((element) => element.id == consultationId);
+
+      emit(
+        CancelConsultationState(
+          blocState: BlocState.Successed,
+          timeline: state.timeline,
+          request: state.request,
+          doctorName: state.doctorName,
+          patientName: state.patientName,
+          consultations: AllConsultationResponse(
+              coming: coming,
+              finish: state.consultations?.finish ?? [],
+              cancel: state.consultations?.cancel ?? []),
+        ),
+      );
+    } on DioException catch (e) {
+      emit(
+        CancelConsultationState(
+          blocState: BlocState.Failed,
+          timeline: [],
+          error: e.response!.data['message'].toString(),
+          request: state.request,
+          doctorName: state.doctorName,
+          patientName: state.patientName,
+          consultations: state.consultations,
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchTimelineState(
+          blocState: BlocState.Failed,
+          timeline: [],
+          request: state.request,
+          doctorName: state.doctorName,
+          patientName: state.patientName,
+          consultations: state.consultations,
         ),
       );
     }
@@ -79,13 +143,12 @@ class ConsultationCubit extends Cubit<ConsultationState> {
   Future<void> fetchConsultation() async {
     emit(
       FetchConsultationState(
-        blocState: BlocState.Pending,
-        timeline: [],
-        request: ConsultationRequest(),
-        doctorName: null,
-        patientName: null,
-        consultations: state.consultations
-      ),
+          blocState: BlocState.Pending,
+          timeline: [],
+          request: ConsultationRequest(),
+          doctorName: null,
+          patientName: null,
+          consultations: state.consultations),
     );
     try {
       AllConsultationResponse consultations =
@@ -102,25 +165,23 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     } on DioException catch (e) {
       emit(
         FetchConsultationState(
-          blocState: BlocState.Failed,
-          timeline: [],
-          error: e.response!.data['message'].toString(),
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
-          consultations: state.consultations
-        ),
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            request: state.request,
+            doctorName: state.doctorName,
+            patientName: state.patientName,
+            consultations: state.consultations),
       );
     } catch (e) {
       emit(
         FetchConsultationState(
-          blocState: BlocState.Failed,
-          timeline: [],
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
-          consultations: state.consultations
-        ),
+            blocState: BlocState.Failed,
+            timeline: [],
+            request: state.request,
+            doctorName: state.doctorName,
+            patientName: state.patientName,
+            consultations: state.consultations),
       );
     }
   }
@@ -128,12 +189,13 @@ class ConsultationCubit extends Cubit<ConsultationState> {
   Future<void> createConsultation() async {
     emit(
       CreateConsultationState(
-          blocState: BlocState.Pending,
-          timeline: state.timeline,
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName, consultations: state.consultations,
-          ),
+        blocState: BlocState.Pending,
+        timeline: state.timeline,
+        request: state.request,
+        doctorName: state.doctorName,
+        patientName: state.patientName,
+        consultations: state.consultations,
+      ),
     );
     try {
       int? code = await _consultationRepository.createConsultation(
@@ -141,12 +203,13 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       if (code == 200 || code == 201) {
         emit(
           CreateConsultationState(
-              blocState: BlocState.Successed,
-              timeline: state.timeline,
-              request: state.request,
-              doctorName: state.doctorName,
-              patientName: state.patientName, consultations: state.consultations,
-              ),
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            request: state.request,
+            doctorName: state.doctorName,
+            patientName: state.patientName,
+            consultations: state.consultations,
+          ),
         );
       } else {
         throw 'failure';
@@ -154,23 +217,25 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     } on DioException catch (e) {
       emit(
         CreateConsultationState(
-            blocState: BlocState.Failed,
-            timeline: [],
-            error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName, consultations: state.consultations,
-            ),
+          blocState: BlocState.Failed,
+          timeline: [],
+          error: e.response!.data['message'].toString(),
+          request: state.request,
+          doctorName: state.doctorName,
+          patientName: state.patientName,
+          consultations: state.consultations,
+        ),
       );
     } catch (e) {
       emit(
         CreateConsultationState(
-            blocState: BlocState.Failed,
-            timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName, consultations: state.consultations,
-            ),
+          blocState: BlocState.Failed,
+          timeline: state.timeline,
+          request: state.request,
+          doctorName: state.doctorName,
+          patientName: state.patientName,
+          consultations: state.consultations,
+        ),
       );
     }
   }
@@ -186,18 +251,19 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       String? doctorName}) async {
     emit(
       ConsultationInitial(
-          blocState: BlocState.Successed,
-          timeline: state.timeline,
-          request: state.request.copyWith(
-              expectedTime: expectedTime,
-              doctorId: doctorId,
-              medicalRecord: medicalRecord,
-              price: price,
-              discountCode: discountCode,
-              date: date),
-          doctorName: doctorName ?? state.doctorName,
-          patientName: patientName ?? state.patientName, consultations: state.consultations,
-          ),
+        blocState: BlocState.Successed,
+        timeline: state.timeline,
+        request: state.request.copyWith(
+            expectedTime: expectedTime,
+            doctorId: doctorId,
+            medicalRecord: medicalRecord,
+            price: price,
+            discountCode: discountCode,
+            date: date),
+        doctorName: doctorName ?? state.doctorName,
+        patientName: patientName ?? state.patientName,
+        consultations: state.consultations,
+      ),
     );
   }
 }

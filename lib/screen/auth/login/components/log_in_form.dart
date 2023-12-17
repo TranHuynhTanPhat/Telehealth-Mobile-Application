@@ -297,7 +297,7 @@ class _LogInFormState extends State<LogInForm> {
               highlightColor: transparent,
               onTap: () {
                 KeyboardUtil.hideKeyboard(context);
-                Navigator.pushNamed(context, forgetPasswordName);
+                Navigator.pushNamed(context, forgetPasswordName, arguments: isDoctor);
               },
               // style: const ButtonStyle(
               //     padding: MaterialStatePropertyAll(EdgeInsets.all(0))),

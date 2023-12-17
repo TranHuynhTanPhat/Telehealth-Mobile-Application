@@ -99,184 +99,256 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
           },
         ),
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              centerTitle: true,
-              snap: false,
-              pinned: true,
-              floating: true,
-              leading: Container(
-                  margin: EdgeInsets.all(dimensWidth()),
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    // splashColor: transparent,
-                    // highlightColor: transparent,
-                    style: ButtonStyle(
-                        backgroundColor: const MaterialStatePropertyAll(white),
-                        padding: MaterialStatePropertyAll(
-                            EdgeInsets.all(dimensWidth()))),
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
-                    child: const FaIcon(
-                      FontAwesomeIcons.angleLeft,
-                      color: color1F1F1F,
-                    ),
-                  )),
-              expandedHeight: dimensHeight() * 35,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: _image,
-                      onError: (exception, stackTrace) => setState(() {
-                        logPrint(exception);
-                        _image = AssetImage(DImages.placeholder);
-                      }),
-                      fit: BoxFit.cover,
-                    ),
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          centerTitle: true,
+          elevation: 0,
+          snap: true,
+          floating: true,
+          stretch: true,
+          pinned: true,
+          backgroundColor: white,
+          // leading: Container(
+          //     margin: EdgeInsets.all(dimensWidth()),
+          //     alignment: Alignment.center,
+          //     child: ElevatedButton(
+          //       // splashColor: transparent,
+          //       // highlightColor: transparent,
+          //       style: ButtonStyle(
+          //           backgroundColor: const MaterialStatePropertyAll(white),
+          //           padding: MaterialStatePropertyAll(
+          //               EdgeInsets.all(dimensWidth()))),
+          //       onPressed: () {
+          //         Navigator.pop(context, false);
+          //       },
+          //       child: const FaIcon(
+          //         FontAwesomeIcons.angleLeft,
+          //         color: color1F1F1F,
+          //       ),
+          //     )),
+          expandedHeight: MediaQuery.of(context).size.height * 0.3,
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: const [StretchMode.zoomBackground],
+            background: Hero(
+              tag: doctor.id!,
+              transitionOnUserGestures: true,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: _image,
+                    onError: (exception, stackTrace) => setState(() {
+                      logPrint(exception);
+                      _image = AssetImage(DImages.placeholder);
+                    }),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(dimensHeight() * 7),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                    dimensWidth() * 3,
-                    dimensHeight(),
-                    dimensWidth() * 3,
-                    dimensHeight(),
-                  ),
-                  alignment: Alignment.bottomLeft,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          white.withOpacity(0.0),
-                          white.withOpacity(.3),
-                          white.withOpacity(.6),
-                          white.withOpacity(.9),
-                          white
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        tileMode: TileMode.clamp),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          doctor.fullName ?? translate(context, 'undefine'),
-                          maxLines: 2,
-                          overflow: TextOverflow.fade,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "${convertToVND(doctor.feePerMinutes ?? 0)}/${translate(context, 'minute')}",
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: secondary),
-                      ),
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(dimensHeight() * 7),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(
+                dimensWidth() * 3,
+                dimensHeight(),
+                dimensWidth() * 3,
+                dimensHeight(),
+              ),
+              alignment: Alignment.bottomLeft,
+              width: double.infinity,
+              height: dimensHeight() * 7,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      white.withOpacity(0.0),
+                      white.withOpacity(.3),
+                      white.withOpacity(.6),
+                      white.withOpacity(.9),
+                      white,
+                      white
                     ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    tileMode: TileMode.clamp),
+                // color: white,
+                // borderRadius: BorderRadius.only(
+                //   topLeft: Radius.circular(dimensWidth() * 3),
+                //   topRight: Radius.circular(dimensWidth() * 3),
+                // ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      doctor.fullName ?? translate(context, 'undefine'),
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ];
-        },
-        body: ListView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          padding: EdgeInsets.only(
-              bottom: dimensHeight() * 2,
-              left: dimensWidth() * 3,
-              right: dimensWidth() * 3),
-          children: [
-            Padding(
-              padding:
-                  EdgeInsets.only(bottom: dimensHeight(), top: dimensHeight()),
-              child: Text(
-                translate(context, doctor.specialty ?? 'undefine'),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RatingBar.builder(
-                  ignoreGestures: true,
-                  initialRating: doctor.ratings ?? 0,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemSize: dimensWidth() * 2,
-                  itemBuilder: (context, _) => const FaIcon(
-                    FontAwesomeIcons.solidStar,
-                    color: Colors.amber,
+                  Text(
+                    "${convertToVND(doctor.feePerMinutes ?? 0)}/${translate(context, 'minute')}",
+                    maxLines: 2,
+                    overflow: TextOverflow.fade,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: secondary),
                   ),
-                  onRatingUpdate: (double value) {},
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: dimensWidth()),
-                  child: Text(
-                    // "3.5 (+800 ${translate(context, 'feedbacks')})",
-                    "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: dimensHeight() * 3),
-              child: Text(
-                translate(context, 'biography'),
-                style: Theme.of(context).textTheme.titleLarge,
+                ],
               ),
             ),
-            Text(
-              doctor.biography ?? translate(context, 'undefine'),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: dimensHeight() * 3),
-              child: Text(
-                translate(context, 'working_time'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            Text(
-              'Mon - Sat, 10:00 am - 07:00 pm',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: dimensHeight() * 3),
-              child: Text(
-                translate(context, 'feedbacks'),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            Text(
-              'Mon - Sat, 10:00 am - 07:00 pm',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            SizedBox(
-              height: dimensHeight() * 10,
-            )
-          ],
+          ),
         ),
-      ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              //  ListView(
+              // shrinkWrap: true,
+              // scrollDirection: Axis.vertical,
+              // padding: EdgeInsets.only(
+              //     bottom: dimensHeight() * 2,
+              //     left: dimensWidth() * 3,
+              //     right: dimensWidth() * 3),
+              // children: [
+              // Padding(
+              //   padding:  EdgeInsets.only(
+              //     left: dimensWidth() * 3,
+              //     right: dimensWidth() * 3),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       Expanded(
+              //         child: Text(
+              //           doctor.fullName ?? translate(context, 'undefine'),
+              //           maxLines: 2,
+              //           overflow: TextOverflow.fade,
+              //           style: Theme.of(context)
+              //               .textTheme
+              //               .headlineMedium
+              //               ?.copyWith(fontWeight: FontWeight.bold),
+              //         ),
+              //       ),
+              //       Text(
+              //         "${convertToVND(doctor.feePerMinutes ?? 0)}/${translate(context, 'minute')}",
+              //         maxLines: 2,
+              //         overflow: TextOverflow.fade,
+              //         style: Theme.of(context)
+              //             .textTheme
+              //             .bodyLarge
+              //             ?.copyWith(color: secondary),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: dimensHeight(), horizontal: dimensWidth() * 3),
+                child: Text(
+                  translate(context, doctor.specialty ?? 'undefine'),
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: dimensWidth() * 3, right: dimensWidth() * 3),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RatingBar.builder(
+                      ignoreGestures: true,
+                      initialRating: doctor.ratings ?? 0,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: dimensWidth() * 2,
+                      itemBuilder: (context, _) => const FaIcon(
+                        FontAwesomeIcons.solidStar,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (double value) {},
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: dimensWidth()),
+                      child: Text(
+                        // "3.5 (+800 ${translate(context, 'feedbacks')})",
+                        "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: dimensHeight() * 3,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3),
+                child: Text(
+                  translate(context, 'biography'),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: dimensWidth() * 3, right: dimensWidth() * 3),
+                child: Text(
+                  doctor.biography ?? translate(context, 'undefine'),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: dimensHeight() * 3,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3),
+                child: Text(
+                  translate(context, 'working_time'),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: dimensWidth() * 3, right: dimensWidth() * 3),
+                child: Text(
+                  'Mon - Sat, 10:00 am - 07:00 pm',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: dimensHeight() * 3,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3),
+                child: Text(
+                  translate(context, 'feedbacks'),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: dimensWidth() * 3, right: dimensWidth() * 3),
+                child: Text(
+                  'Mon - Sat, 10:00 am - 07:00 pm',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              SizedBox(
+                height: dimensHeight() * 15,
+              )
+              //   ],
+              // ),
+            ],
+          ),
+        ),
+      ]),
     );
   }
 

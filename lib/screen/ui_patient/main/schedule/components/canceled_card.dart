@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 
 class CanceledCard extends StatefulWidget {
   const CanceledCard({super.key, required this.cancel});
+
   final ConsultationResponse cancel;
 
   @override
@@ -109,18 +110,18 @@ class _CanceledCardState extends State<CanceledCard> {
                   ),
                 ],
               ),
-              InkWell(
-                splashColor: transparent,
-                highlightColor: transparent,
-                onTap: () {},
-                child: Text(
-                  translate(context, 'detail'),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: primary,
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic),
-                ),
-              ),
+              // InkWell(
+              //   splashColor: transparent,
+              //   highlightColor: transparent,
+              //   onTap: () {},
+              //   child: Text(
+              //     translate(context, 'detail'),
+              //     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              //         color: primary,
+              //         fontWeight: FontWeight.normal,
+              //         fontStyle: FontStyle.italic),
+              //   ),
+              // ),
             ],
           ),
           Row(
@@ -141,6 +142,9 @@ class _CanceledCardState extends State<CanceledCard> {
                     expectedTime,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: color1F1F1F, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: dimensWidth()*2,
                   ),
                   Text(
                     formatDayMonthYear(

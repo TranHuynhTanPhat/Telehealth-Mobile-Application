@@ -4,7 +4,7 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/repository/common_repository.dart';
 import 'package:healthline/res/style.dart';
@@ -36,49 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<DoctorCubit>().searchDoctor(
         key: '',
         pageKey: 1,
-        searchQuery: const SearchQuery(
-            sort: ['ratings:desc', ], limit: 6),
+        searchQuery: const SearchQuery(sort: [
+          'ratings:desc',
+        ], limit: 6),
         callback: (doctors) {});
+    context.read<ConsultationCubit>().fetchConsultation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> appointments = [
-      {
-        'dr': 'Dr. Phat',
-        'description': 'depression',
-        'color': colorCDDEFF,
-        'icon': FontAwesomeIcons.briefcaseMedical,
-        'date': DateTime.now(),
-        'time': TimeOfDay.now()
-      },
-      {
-        'dr': 'Dr. Truong',
-        'description': 'cardiologist',
-        'color': colorCDDEFF,
-        'icon': FontAwesomeIcons.briefcaseMedical,
-        'date': DateTime.now(),
-        'time': TimeOfDay.now()
-      },
-      {
-        'dr': 'Dr. Chien',
-        'description': 'general_examination',
-        'color': colorCDDEFF,
-        'icon': FontAwesomeIcons.briefcaseMedical,
-        'date': DateTime.now(),
-        'time': TimeOfDay.now()
-      },
-      {
-        'dr': 'Dr. Dang',
-        'description': 'depression',
-        'color': colorCDDEFF,
-        'icon': FontAwesomeIcons.briefcaseMedical,
-        'date': DateTime.now(),
-        'time': TimeOfDay.now()
-      },
-    ];
-
     return BlocListener<MedicalRecordCubit, MedicalRecordState>(
       listener: (context, state) {
         if (state is FetchSubUserLoaded) {
@@ -88,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: white,
+        extendBody: true,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(dimensHeight() * 8),
           child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
@@ -181,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: ListView(
           scrollDirection: Axis.vertical,
+          shrinkWrap: true,
           children: [
             Padding(
               padding: EdgeInsets.only(
@@ -239,38 +208,54 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: const ForumCard(),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: dimensHeight() * 4,
-                  left: dimensWidth() * 3,
-                  right: dimensWidth() * 3),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    translate(context, 'upcoming_appointments'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: color1F1F1F),
-                  ),
-                  InkWell(
-                    child: Text(
-                      translate(context, 'see_all'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: primary, fontWeight: FontWeight.bold),
+            BlocBuilder<ConsultationCubit, ConsultationState>(
+                builder: (BuildContext context, ConsultationState state) {
+              if (state.consultations?.coming != null &&
+                  state.consultations!.coming.isNotEmpty) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: dimensHeight() * 4,
+                          left: dimensWidth() * 3,
+                          right: dimensWidth() * 3),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            translate(context, 'upcoming_appointments'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: color1F1F1F),
+                          ),
+                          InkWell(
+                            child: Text(
+                              translate(context, 'see_all'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      color: primary,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: dimensWidth()),
-              child: UpcomingApointment(
-                appointments: appointments,
-              ),
-            ),
+                    Padding(
+                      padding: EdgeInsets.only(top: dimensWidth()),
+                      child: UpcomingApointment(
+                        appointments: state.consultations!.coming,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const SizedBox();
+              }
+            }),
             Padding(
               padding: EdgeInsets.only(
                   top: dimensHeight() * 4,

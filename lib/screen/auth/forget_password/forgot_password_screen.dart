@@ -9,7 +9,8 @@ import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  const ForgotPasswordScreen({super.key, required this.isDoctor});
+  final bool isDoctor;
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -30,13 +31,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               inputEmail = false;
             });
           } else if (state.blocState == BlocState.Failed) {
-            EasyLoading.showError(translate(context, state.error));
+            EasyLoading.showToast(translate(context, state.error));
           } else if (state.blocState == BlocState.Pending) {
             EasyLoading.show(maskType: EasyLoadingMaskType.black);
           }
         } else if (state is ResetPasswordState) {
           if (state.blocState == BlocState.Failed) {
-            EasyLoading.showError(translate(context, state.error));
+            EasyLoading.showToast(translate(context, state.error));
           } else if (state.blocState == BlocState.Successed) {
             EasyLoading.dismiss();
             Navigator.pushReplacementNamed(context, logInName);
@@ -72,10 +73,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     children: [
                       inputEmail
                           ? FormEmail(
-                              emailController: emailController,
+                              emailController: emailController, isDoctor:widget.isDoctor
                             )
                           : FormChangePassword(
-                              emailController: emailController,
+                              emailController: emailController, isDoctor:widget.isDoctor
                             ),
                     ],
                   ),

@@ -30,6 +30,8 @@ class ApiConstants {
   static const _DOCTOR = '/doctor-management';
   static const DOCTOR = '$_DOCTOR/doctor';
   static const DOCTOR_PASSWORD = '$DOCTOR/password';
+  static const DOCTOR_FORGOT_PASSWORD = '$DOCTOR/forget-password';
+  static const DOCTOR_FORGOT_PASSWORD_RESET = '$DOCTOR/reset-password-forgot';
   static const DOCTOR_CHANGE_AVATAR = '$DOCTOR/avatar';
   static const DOCTOR_CHANGE_BIOGRAPHY = '$DOCTOR/biography';
   static const DOCTOR_CHANGE_EMAIL = '$DOCTOR/email';

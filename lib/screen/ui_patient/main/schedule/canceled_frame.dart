@@ -6,6 +6,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
 import 'package:healthline/screen/components/slide_months_in_year.dart';
 import 'package:healthline/screen/ui_patient/main/schedule/components/export.dart';
+import 'package:intl/intl.dart';
 
 class CanceledFrame extends StatefulWidget {
   const CanceledFrame({super.key});
@@ -15,61 +16,9 @@ class CanceledFrame extends StatefulWidget {
 }
 
 class _CanceledFrameState extends State<CanceledFrame> {
-  final List<Map<String, dynamic>> appointments = [
-    {
-      'dr': 'Dr. Phat',
-      'specialist': 'traumatologist',
-      'patient': 'Tran Huynh Tan Phat',
-      'image': DImages.placeholder,
-      'date': DateTime.now(),
-      'begin': const TimeOfDay(hour: 10, minute: 0),
-      'end': const TimeOfDay(hour: 10, minute: 30),
-      'status': 'canceled'
-    },
-    {
-      'dr': 'Dr. Truong',
-      'specialist': 'obstetrician',
-      'patient': 'Tran Huynh Tan Phat',
-      'image': DImages.logoGoogle,
-      'date': DateTime.now(),
-      'begin': const TimeOfDay(hour: 11, minute: 0),
-      'end': const TimeOfDay(hour: 11, minute: 30),
-      'status': 'denied'
-    },
-    {
-      'dr': 'Dr. Chien',
-      'specialist': 'general_examination',
-      'patient': 'Tran Huynh Tan Phat',
-      'image': DImages.placeholder,
-      'date': DateTime.now(),
-      'begin': const TimeOfDay(hour: 8, minute: 0),
-      'end': const TimeOfDay(hour: 8, minute: 30),
-      'status': 'denied'
-    },
-    {
-      'dr': 'Dr. Dang',
-      'specialist': 'paeditrician',
-      'patient': 'Tran Huynh Tan Phat',
-      'image': DImages.placeholder,
-      'date': DateTime.now(),
-      'begin': const TimeOfDay(hour: 8, minute: 30),
-      'end': const TimeOfDay(hour: 9, minute: 30),
-      'status': 'canceled'
-    },
-    {
-      'dr': 'Dr. Chien',
-      'specialist': 'dermatologist',
-      'patient': 'Tran Huynh Tan Phat',
-      'image': DImages.placeholder,
-      'date': DateTime.now(),
-      'begin': const TimeOfDay(hour: 14, minute: 0),
-      'end': const TimeOfDay(hour: 14, minute: 30),
-      'status': 'canceled'
-    },
-  ];
-
   DateTime current = DateTime.now();
   late int daySelected;
+
   @override
   void initState() {
     daySelected = 0;
@@ -104,8 +53,19 @@ class _CanceledFrameState extends State<CanceledFrame> {
                     left: dimensWidth() * 3,
                     bottom: dimensHeight() * 10),
                 child: BaseListviewHorizontal(
-                  children:
-                      state.consultations!.cancel.map((e) => CanceledCard(cancel:e)).toList(),
+                  children: state.consultations!.cancel.map((e) {
+                    DateTime date = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                        .parse(e.date!);
+                    if (DateTime(date.year, date.month) ==
+                        DateTime(
+                          current.year,
+                          current.month - daySelected,
+                        )) {
+                      return CanceledCard(cancel: e);
+                    } else {
+                      return const SizedBox();
+                    }
+                  }).toList(),
                 ),
               ),
             ],

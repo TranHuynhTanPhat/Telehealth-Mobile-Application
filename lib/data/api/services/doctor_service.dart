@@ -96,11 +96,27 @@ class DoctorService extends BaseService {
     return response.code;
   }
 
-  // Future<List<DoctorResponse>> getListDoctor() async {
-  //   final response = await get(ApiConstants.DOCTOR_LIST);
-  //   List<DoctorResponse> doctors = response.data
-  //       .map<DoctorResponse>((e) => DoctorResponse.fromMap(e))
-  //       .toList();
-  //   return doctors;
-  // }
+ Future<int?> sendOTP({required String email}) async {
+    final response = await post(
+      '${ApiConstants.DOCTOR_FORGOT_PASSWORD}/$email',isDoctor: true
+    );
+
+    return response.code;
+  }
+
+  Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    final response = await post(ApiConstants.DOCTOR_FORGOT_PASSWORD_RESET,
+        data: json.encode({
+          "email": email,
+          "otp": otp,
+          "password": password,
+          "passwordConfirm": confirmPassword
+        }), isDoctor: true);
+
+    return response.code;
+  }
 }

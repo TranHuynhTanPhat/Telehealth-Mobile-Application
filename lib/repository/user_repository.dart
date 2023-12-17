@@ -92,12 +92,15 @@ class UserRepository extends BaseRepository {
     return await _userService.sendOTP(email: email);
   }
 
- Future<int?> resetPassword(
+  Future<int?> resetPassword(
       {required String email,
       required String otp,
       required String password,
       required String confirmPassword}) async {
-    return await _userService.resetPassword(email: email, otp: otp,
-        password: password, confirmPassword: confirmPassword);
+    return await _userService.resetPassword(
+        email: email,
+        otp: otp,
+        password: password,
+        confirmPassword: confirmPassword);
   }
 }

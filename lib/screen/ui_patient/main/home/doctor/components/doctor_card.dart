@@ -75,18 +75,22 @@ class _DoctorCardState extends State<DoctorCard> {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: dimensWidth() * 4.5,
-                  backgroundImage: _image,
-                  backgroundColor: white,
-                  onBackgroundImageError: (exception, stackTrace) {
-                    logPrint(exception);
-                    setState(
-                      () {
-                        _image = AssetImage(DImages.placeholder);
-                      },
-                    );
-                  },
+                Hero(
+                  tag: widget.doctor.id!,
+                  transitionOnUserGestures: true,
+                  child: CircleAvatar(
+                    radius: dimensWidth() * 4.5,
+                    backgroundImage: _image,
+                    backgroundColor: white,
+                    onBackgroundImageError: (exception, stackTrace) {
+                      logPrint(exception);
+                      setState(
+                        () {
+                          _image = AssetImage(DImages.placeholder);
+                        },
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(
                   width: dimensWidth() * 2.5,

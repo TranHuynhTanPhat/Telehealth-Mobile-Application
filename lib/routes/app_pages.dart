@@ -30,6 +30,7 @@ const paymentMethodsName ='/payment-methods';
 const invoiceName ='/invoice';
 const formConsultationName ='/form-consultaion';
 const medicalRecordName ='/medical-record';
+const detailConsultationName ='/detail-consultation';
 
 
 const doctorName = '/doctor';

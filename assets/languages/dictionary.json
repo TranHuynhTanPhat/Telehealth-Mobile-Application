@@ -419,6 +419,10 @@
         "vi": "Y tế tổng hợp",
         "en": "General medical"
     },
+    "clinic": {
+        "vi": "Phòng khám",
+        "en": "Clinic"
+    },
     "nurse": {
         "vi": "Y tá",
         "en": "Nurse"
@@ -474,6 +478,10 @@
     "book_appointment_now": {
         "vi": "Đặt lịch khám ngay",
         "en": "Book appointment now"
+    },
+    "join_now": {
+        "vi": "Tham gia ngay",
+        "en": "Join now"
     },
     "see_all": {
         "vi": "Xem thêm",
@@ -542,6 +550,10 @@
     "confirmed": {
         "vi": "Đã xác nhận",
         "en": "Confirmed"
+    },
+    "confirm": {
+        "vi": "Xác nhận",
+        "en": "Confirm"
     },
     "finished": {
         "vi": "Đã kết thúc",
@@ -1586,5 +1598,9 @@
     "send_otp": {
         "vi": "Gửi OTP",
         "en": "Send OTP"
+    },
+    "password_incorrect": {
+        "vi": "Mật khẩu không chính xác",
+        "en": "Password incorrect"
     }
 }

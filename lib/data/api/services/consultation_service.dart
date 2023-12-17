@@ -25,6 +25,12 @@ class ConsultationService extends BaseService {
     return response.code;
   }
 
+  Future<int?> cancelConsultation({required String consultationId}) async {
+    final response = await delete('${ApiConstants.CONSULTATION}/$consultationId');
+
+    return response.code;
+  }
+
   Future<AllConsultationResponse> fetchPatientConsultation() async {
     final response = await get(ApiConstants.CONSULTATION_USER);
     final List<dynamic> oComing =

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
@@ -10,6 +9,7 @@ import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/forget_password/forgot_password_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
+import 'package:healthline/screen/change_password/change_password_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/forum/edit_post_screen.dart';
 import 'package:healthline/screen/forum/forum_screen.dart';
@@ -25,9 +25,7 @@ import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_default_schedule.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_schedule_by_day_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/account_setting_screen.dart';
-import 'package:healthline/screen/change_password/change_password_screen.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/contact_screen.dart';
-import 'package:healthline/screen/wallet/wallet_screen.dart';
 import 'package:healthline/screen/ui_patient/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_patient/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/patient_record/add_patient_record_screen.dart';
@@ -44,7 +42,9 @@ import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/medical_
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
+import 'package:healthline/screen/ui_patient/main/schedule/detail_consultation.dart';
 import 'package:healthline/screen/update/update_screen.dart';
+import 'package:healthline/screen/wallet/wallet_screen.dart';
 
 class AppRoute {
   final _vaccineRecordCubit = VaccineRecordCubit();
@@ -160,10 +160,11 @@ class AppRoute {
             ),
           );
         case forgetPasswordName:
+        bool isDoctor = settings.arguments as bool? ?? false;
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: _authenticationCubit,
-              child: const ForgotPasswordScreen(),
+              child:  ForgotPasswordScreen(isDoctor:isDoctor),
             ),
           );
 
@@ -278,7 +279,6 @@ class AppRoute {
               ),
             ),
           );
-
         case accountSettingName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
@@ -407,6 +407,16 @@ class AppRoute {
             builder: (_) => BlocProvider.value(
               value: _consultationCubit,
               child: const FormConsultationScreen(),
+            ),
+          );
+        case detailConsultationName:
+          final args = settings.arguments as String?;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: DetailConsultationScreen(
+                args: args,
+              ),
             ),
           );
       }

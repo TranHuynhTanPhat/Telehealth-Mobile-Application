@@ -16,6 +16,10 @@ class ConsultationRepository extends BaseRepository {
       {required ConsultationRequest request}) async {
     return await _consultationService.createConsultation(request: request);
   }
+  Future<int?> cancelConsultation(
+      {required String consultationId}) async {
+    return await _consultationService.cancelConsultation(consultationId: consultationId);
+  }
 
   Future<AllConsultationResponse> fetchPatientConsultation() async {
     return await _consultationService.fetchPatientConsultation();

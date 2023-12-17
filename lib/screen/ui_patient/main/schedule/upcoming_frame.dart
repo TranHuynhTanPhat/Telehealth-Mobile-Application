@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/bases/base_listview_horizontal.dart';
 import 'package:healthline/screen/widgets/date_slide.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +39,6 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              // const SlideDaysInMonth(),
               DateSlide(
                   daysLeft: 7,
                   dayPressed: (index, datetime) {
@@ -51,10 +51,6 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
               SizedBox(
                 height: dimensHeight(),
               ),
-              // ...List.generate(7, (index) {
-              //   DateTime datetime = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-              // .parse(widget.coming.date!);
-              // }),
               ...List.generate(24, (index) {
                 if (state.consultations!.coming.any(
                   (element) {
@@ -123,7 +119,16 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                                 DateTime(date.year, date.month, date.day) ==
                                     DateTime(now.year, now.month,
                                         now.day + _index)) {
-                              return UpcomingCard(coming: e);
+                              return InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  detailConsultationName,
+                                  arguments: e.toJson(),
+                                ),
+                                child: UpcomingCard(coming: e),
+                              );
                             } else {
                               return const SizedBox();
                             }
@@ -135,7 +140,6 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                 }
                 return Container();
               }),
-             
               SizedBox(
                 height: dimensHeight() * 10,
               )

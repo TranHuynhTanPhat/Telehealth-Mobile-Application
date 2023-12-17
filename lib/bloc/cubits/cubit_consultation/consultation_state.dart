@@ -57,3 +57,12 @@ final class FetchConsultationState extends ConsultationState {
       required super.patientName,
       super.error, required super.consultations});
 }
+final class CancelConsultationState extends ConsultationState {
+  CancelConsultationState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations});
+}

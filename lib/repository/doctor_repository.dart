@@ -13,7 +13,9 @@ class DoctorRepository extends BaseRepository {
   Future<DoctorResponse> fetchProfile() async {
     return await _doctorService.getProfile();
   }
-  Future<List<ConsultationInformationResponse>> fetchPatient({required String doctorId}) async {
+
+  Future<List<ConsultationInformationResponse>> fetchPatient(
+      {required String doctorId}) async {
     return await _doctorService.fetchPatient(doctorId: doctorId);
   }
 
@@ -41,10 +43,30 @@ class DoctorRepository extends BaseRepository {
     return await _doctorService.updateFixedSchedule(fixedTime);
   }
 
-  Future<DataResponse> updateScheduleByDay(List<int> workingTimes, String scheduleId) async {
+  Future<DataResponse> updateScheduleByDay(
+      List<int> workingTimes, String scheduleId) async {
     return await _doctorService.updateScheduleByDay(workingTimes, scheduleId);
   }
-  Future<int?> changePassword({required String password, required String newPassword}) async {
-    return await _doctorService.changePassword(password: password, newPassword: newPassword);
+
+  Future<int?> changePassword(
+      {required String password, required String newPassword}) async {
+    return await _doctorService.changePassword(
+        password: password, newPassword: newPassword);
+  }
+
+  Future<int?> sendOTP({required String email}) async {
+    return await _doctorService.sendOTP(email: email);
+  }
+
+  Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    return await _doctorService.resetPassword(
+        email: email,
+        otp: otp,
+        password: password,
+        confirmPassword: confirmPassword);
   }
 }

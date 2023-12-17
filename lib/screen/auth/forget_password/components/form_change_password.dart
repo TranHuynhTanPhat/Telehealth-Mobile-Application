@@ -10,10 +10,11 @@ import 'package:healthline/utils/validate.dart';
 class FormChangePassword extends StatefulWidget {
   const FormChangePassword({
     super.key,
-    required this.emailController,
+    required this.emailController, required this.isDoctor,
   });
   // final VoidCallback callback;
   final TextEditingController emailController;
+  final bool isDoctor;
 
   @override
   State<FormChangePassword> createState() => _FormChangePasswordState();
@@ -112,7 +113,7 @@ class _FormChangePasswordState extends State<FormChangePassword> {
               text: translate(context, 'change_password'),
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  context.read<AuthenticationCubit>().resetPassword(
+                  context.read<AuthenticationCubit>().resetPassword(isDoctor: widget.isDoctor,
                       email: widget.emailController.text.trim(),
                       otp: otpController.text.trim(),
                       password: passwordController.text,

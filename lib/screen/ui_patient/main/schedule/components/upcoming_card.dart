@@ -2,8 +2,10 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/date_util.dart';
@@ -143,11 +145,53 @@ class _UpcomingCardState extends State<UpcomingCard> {
               InkWell(
                 splashColor: transparent,
                 highlightColor: transparent,
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          actionsAlignment: MainAxisAlignment.spaceBetween,
+                          actions: [
+                            InkWell(
+                              splashColor: transparent,
+                              highlightColor: transparent,
+                              onTap: () => Navigator.pop(context),
+                              child: Text(
+                                translate(context, 'back'),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            InkWell(
+                              splashColor: transparent,
+                              highlightColor: transparent,
+                              onTap: () {
+                                try {
+                                  context
+                                      .read<ConsultationCubit>()
+                                      .cancelConsultation(
+                                          consultationId: widget.coming.id!);
+                                } catch (e) {
+                                  EasyLoading.showToast(
+                                      translate(context, 'failure'));
+                                }
+                              },
+                              child: Text(
+                                translate(context, 'confirm'),
+                                style: const TextStyle(color: Colors.redAccent),
+                              ),
+                            )
+                          ],
+                          title: Text(
+                              '${translate(context, 'cancel')} ${translate(context, 'appointment').toLowerCase()}'),
+                          titleTextStyle:
+                              Theme.of(context).textTheme.labelLarge,
+                        );
+                      });
+                },
                 child: FaIcon(
-                  FontAwesomeIcons.ellipsis,
+                  FontAwesomeIcons.xmark,
                   size: dimensWidth() * 2.5,
-                  color: color1F1F1F,
                 ),
               ),
             ],
@@ -166,10 +210,12 @@ class _UpcomingCardState extends State<UpcomingCard> {
             ),
           ),
           Padding(
-            padding:  EdgeInsets.only(top: dimensHeight()*2),
+            padding: EdgeInsets.only(top: dimensHeight() * 2),
             child: Text(
-              formatFullDate(context, DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-              .parse(widget.coming.date!)),
+              formatFullDate(
+                  context,
+                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                      .parse(widget.coming.date!)),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: color1F1F1F,
                   ),
