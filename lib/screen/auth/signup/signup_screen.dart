@@ -141,11 +141,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: const HeaderSignUp(),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth() * 3),
-                          child: const OptionSignUp(),
-                        ),
-                        Padding(
                           padding: EdgeInsets.only(
                               left: dimensWidth() * 3,
                               right: dimensWidth() * 3,
@@ -244,6 +239,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ],
                           ),
+                        ),
+                         Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: dimensWidth() * 3),
+                          child: const OptionSignUp(),
                         ),
                       ],
                     ),

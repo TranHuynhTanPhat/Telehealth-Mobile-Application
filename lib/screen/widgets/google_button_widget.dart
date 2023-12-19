@@ -4,8 +4,9 @@ import 'package:healthline/utils/translate.dart';
 
 class GoogleButtonWidget extends StatelessWidget {
   const GoogleButtonWidget({
-    super.key,
+    super.key, required this.onPressed,
   });
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,13 @@ class GoogleButtonWidget extends StatelessWidget {
             backgroundColor: const MaterialStatePropertyAll(colorF8F9FD),
             padding: MaterialStatePropertyAll(EdgeInsets.symmetric(
                 vertical: dimensHeight(), horizontal: dimensWidth()))),
-        onPressed: null,
+        onPressed: onPressed,
         icon: Image.asset(
           DImages.logoGoogle,
           height: dimensImage() * 3,
         ),
         label: Text(
-          translate(context, 'sign_in_with_google'),
+          "translate(context, 'sign_in_with_google')",
           style: Theme.of(context).textTheme.labelLarge,
         ));
   }

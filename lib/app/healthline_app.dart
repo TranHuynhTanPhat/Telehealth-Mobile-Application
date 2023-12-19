@@ -7,7 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_routes.dart';
-import 'package:healthline/screen/splash/splash_screen.dart';
+import 'package:healthline/test.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
 
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                   data: MediaQuery.of(context).copyWith(
                     textScaler: const TextScaler.linear(1.0),
                   ),
-                  child: const SplashScreen(),
+                  child: const GoogleSignInScreen(),
                 ),
                 theme: AppThemes.appThemeData[AppTheme.LightTheme],
                 onGenerateRoute: _router.onGeneralRoute,

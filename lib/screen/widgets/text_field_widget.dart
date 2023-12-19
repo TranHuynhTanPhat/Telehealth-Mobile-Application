@@ -68,7 +68,7 @@ class TextFieldWidget extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .bodyLarge
-          ?.copyWith(fontWeight: FontWeight.w600),
+          ?.copyWith(fontWeight: FontWeight.w500),
       keyboardType: textInputType,
       obscureText: obscureText!,
       enableSuggestions: enableSuggestions!,

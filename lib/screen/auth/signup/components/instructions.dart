@@ -134,9 +134,12 @@ class Instructions extends StatelessWidget {
             ),
           ]),
         ),
-        ElevatedButtonWidget(
-          text: translate(context, 'start'),
-          onPressed: onPressed,
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButtonWidget(
+            text: translate(context, 'start'),
+            onPressed: onPressed,
+          ),
         ),
       ],
     );
