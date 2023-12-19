@@ -2,6 +2,7 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/jitsi_service.dart';
 import 'package:intl/intl.dart';
@@ -93,46 +94,55 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
             translate(context, 'appointment'),
           ),
         ),
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.fromLTRB(
-              dimensWidth() * 3, 0, dimensWidth() * 3, dimensHeight() * 3),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.white.withOpacity(0.0), white],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            icon: const FaIcon(FontAwesomeIcons.video),
-            label: Text(translate(context, 'join_now')),
-            style: ButtonStyle(
-              foregroundColor: const MaterialStatePropertyAll(white),
-              textStyle: MaterialStatePropertyAll(Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(color: white)),
-              padding: MaterialStatePropertyAll(
-                EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 2,
-                    horizontal: dimensWidth() * 2.5),
-              ),
-              backgroundColor: const MaterialStatePropertyAll(primary),
-            ),
-            onPressed: () {
-              JitsiService.instance.join(
-                token:
-                    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS85NmUwNTkifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDIzNzQyMzgsImV4cCI6MTcwMjM3NzgzOCwibmJmIjoxNzAyMzc0MjMzLCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOnRydWUsIm91dGJvdW5kLWNhbGwiOnRydWUsInNpcC1vdXRib3VuZC1jYWxsIjp0cnVlLCJ0cmFuc2NyaXB0aW9uIjp0cnVlLCJyZWNvcmRpbmciOnRydWV9LCJ1c2VyIjp7ImlkIjoiZGM1MTZiOTgtYjBkYi00OTViLTljZmItMGQzNzdhNTM0NmQxIiwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImF2YXRhciI6IiIsImVtYWlsIjoiaGVhbHRobGluZW1hbmFnZXIyMDIzQGdtYWlsLmNvbSIsIm1vZGVyYXRvciI6ZmFsc2UsImhpZGRlbi1mcm9tLXJlY29yZGVyIjpmYWxzZX19LCJyb29tIjoiKiJ9.SeTy8xwWAtXAc6SB4_9kCMtLW5q4KivnbiMjU5loKI5Gs6ERv7Cvan1L96pKJB17Q9nz1Pcd1Q9ZPEFw-OwQt8IxjXoUisD7NOYMolL8QW1H9R4gmkUrW5gOki2gQamacZEOgqpWe1L8GoC4X4uUohzZx1t6oinJTw3nmMpPcwpZK2Sc4jOY7c30zNolE5gjY667X3E1FLO-9T3307CdOLIl0Ro-ylOy4tX4XYpfnLXYspW1-C-wlOgKIKLi33VMvU5zsW9YqLYong47iaIIIxnvOGkeKzIxyLBCyb23rBR5NBuONUCC9o2vCZLqnYJKQyxMIRy5vmITvj0jv-0bFQ",
-                roomName:
-                    "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/96e059",
-                displayName: 'Tran Huynh Tan phat',
-                urlAvatar: null,
-                email: null,
-              );
-            },
-          ),
-        ),
+        bottomNavigationBar: consultation?.status == 'confirm'
+            ? Container(
+                padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                    dimensWidth() * 3, dimensHeight() * 3),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.white.withOpacity(0.0), white],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: const FaIcon(FontAwesomeIcons.video),
+                  label: Text(translate(context, 'join_now')),
+                  style: ButtonStyle(
+                    foregroundColor: const MaterialStatePropertyAll(white),
+                    textStyle: MaterialStatePropertyAll(Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: white)),
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsets.symmetric(
+                          vertical: dimensHeight() * 2,
+                          horizontal: dimensWidth() * 2.5),
+                    ),
+                    backgroundColor: const MaterialStatePropertyAll(primary),
+                  ),
+                  onPressed: () {
+                    if (consultation?.jistiToken != null) {
+                      JitsiService.instance.join(
+                        token: consultation?.jistiToken ?? '',
+                        roomName:
+                            "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/",
+                        displayName: consultation?.medical?.fullName ??
+                            translate(context, 'undefine'),
+                        urlAvatar: CloudinaryContext.cloudinary
+                            .image(consultation?.doctor?.avatar ?? '')
+                            .toString(),
+                        email: consultation?.medical?.email ?? '',
+                      );
+                    } else {
+                      EasyLoading.showToast(
+                          translate(context, 'cant_load_data'));
+                    }
+                  },
+                ),
+              )
+            : null,
         body: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(

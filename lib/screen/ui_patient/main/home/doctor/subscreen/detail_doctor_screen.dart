@@ -41,6 +41,9 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   Widget build(BuildContext context) {
     try {
       doctor = DoctorResponse.fromJson(widget.args!);
+      context
+          .read<ConsultationCubit>()
+          .fetchFeedbackDoctor(doctorId: doctor.id!);
     } catch (e) {
       EasyLoading.showToast(translate(context, 'cant_load_data'));
       Navigator.pop(context);
@@ -304,24 +307,24 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() * 3,
-                    left: dimensWidth() * 3,
-                    right: dimensWidth() * 3),
-                child: Text(
-                  translate(context, 'working_time'),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: dimensWidth() * 3, right: dimensWidth() * 3),
-                child: Text(
-                  'Mon - Sat, 10:00 am - 07:00 pm',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //       top: dimensHeight() * 3,
+              //       left: dimensWidth() * 3,
+              //       right: dimensWidth() * 3),
+              //   child: Text(
+              //     translate(context, 'working_time'),
+              //     style: Theme.of(context).textTheme.titleLarge,
+              //   ),
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //       left: dimensWidth() * 3, right: dimensWidth() * 3),
+              //   child: Text(
+              //     'Mon - Sat, 10:00 am - 07:00 pm',
+              //     style: Theme.of(context).textTheme.bodyLarge,
+              //   ),
+              // ),
               Padding(
                 padding: EdgeInsets.only(
                     top: dimensHeight() * 3,
@@ -332,13 +335,31 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: dimensWidth() * 3, right: dimensWidth() * 3),
-                child: Text(
-                  'Mon - Sat, 10:00 am - 07:00 pm',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+              BlocBuilder<ConsultationCubit, ConsultationState>(
+                builder: (context, state) {
+                  if (state.feedbacks != null && state.feedbacks!.isNotEmpty) {
+                    return Padding(
+                        padding: EdgeInsets.only(
+                            left: dimensWidth() * 3, right: dimensWidth() * 3),
+                        child: Column(
+                          children: state.feedbacks!
+                              .map((e) => Text(
+                                    e.toJson(),
+                                  ))
+                              .toList(),
+                        ));
+                  } else {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                      child: Text(
+                        '<- ${translate(context, 'empty')} ->',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                },
               ),
               SizedBox(
                 height: dimensHeight() * 15,

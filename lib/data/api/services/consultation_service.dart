@@ -2,15 +2,17 @@ import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
+import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class ConsultationService extends BaseService {
   Future<List<int>> fetchTimeline(
       {required String id, required String date}) async {
     final response = await post(
-        '${ApiConstants.CONSULTATION_DOCTOR_SCHEDULE}/$id/schedule',
+        '${ApiConstants.CONSULTATION_DOCTOR}/$id/schedule',
         data: jsonEncode({'date': date}));
     List<int> timeline = List<int>.from(response.data);
 
@@ -26,9 +28,55 @@ class ConsultationService extends BaseService {
   }
 
   Future<int?> cancelConsultation({required String consultationId}) async {
-    final response = await delete('${ApiConstants.CONSULTATION}/$consultationId');
+    final response =
+        await delete('${ApiConstants.CONSULTATION}/$consultationId');
 
     return response.code;
+  }
+
+  Future<int?> confirmConsultation({required String consultationId}) async {
+    final response =
+        await post('${ApiConstants.CONSULTATION_DOCTOR}/$consultationId');
+
+    return response.code;
+  }
+
+  Future<int?> deleteConsultation({required String consultationId}) async {
+    final response =
+        await delete('${ApiConstants.CONSULTATION_DOCTOR}/$consultationId');
+
+    return response.code;
+  }
+
+  Future<int?> createFeeback({required FeedbackRequest request}) async {
+    final response =
+        await post(ApiConstants.CONSULTATION_FEEDBACK, data: request.toJson());
+
+    return response.code;
+  }
+
+  Future<List<FeedbackResponse>> fetchFeedbackDoctor(
+      {required String doctorId}) async {
+    final response = await get(
+      '${ApiConstants.CONSULTATION_FEEDBACK}/$doctorId/doctor',
+    );
+
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    final List<FeedbackResponse> feedbacks =
+        objects.map((e) => FeedbackResponse.fromMap(e)).toList();
+    return feedbacks;
+  }
+
+  Future<List<FeedbackResponse>> fetchFeedbackUser(
+      {required String userId}) async {
+    final response = await get(
+      '${ApiConstants.CONSULTATION_FEEDBACK}/$userId/user',
+    );
+
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    final List<FeedbackResponse> feedbacks =
+        objects.map((e) => FeedbackResponse.fromMap(e)).toList();
+    return feedbacks;
   }
 
   Future<AllConsultationResponse> fetchPatientConsultation() async {

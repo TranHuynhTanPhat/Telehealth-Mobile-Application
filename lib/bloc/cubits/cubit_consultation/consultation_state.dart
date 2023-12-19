@@ -8,6 +8,7 @@ sealed class ConsultationState {
   final String? doctorName;
   final String? patientName;
   final AllConsultationResponse? consultations;
+  final List<FeedbackResponse>? feedbacks;
 
   ConsultationState(
       {required this.blocState,
@@ -15,7 +16,7 @@ sealed class ConsultationState {
       required this.timeline,
       required this.request,
       required this.doctorName,
-      required this.patientName, required this.consultations});
+      required this.patientName, required this.consultations, required this.feedbacks});
 }
 
 final class ConsultationInitial extends ConsultationState {
@@ -25,7 +26,7 @@ final class ConsultationInitial extends ConsultationState {
       required super.timeline,
       required super.request,
       required super.doctorName,
-      required super.patientName, required super.consultations});
+      required super.patientName, required super.consultations, required super.feedbacks});
 }
 
 final class FetchTimelineState extends ConsultationState {
@@ -35,7 +36,7 @@ final class FetchTimelineState extends ConsultationState {
       required super.timeline,
       required super.request,
       required super.doctorName,
-      required super.patientName, required super.consultations});
+      required super.patientName, required super.consultations, required super.feedbacks});
 }
 
 final class CreateConsultationState extends ConsultationState {
@@ -45,7 +46,7 @@ final class CreateConsultationState extends ConsultationState {
       required super.timeline,
       required super.request,
       required super.doctorName,
-      required super.patientName, required super.consultations});
+      required super.patientName, required super.consultations, required super.feedbacks});
 }
 
 final class FetchConsultationState extends ConsultationState {
@@ -55,8 +56,9 @@ final class FetchConsultationState extends ConsultationState {
       required super.request,
       required super.doctorName,
       required super.patientName,
-      super.error, required super.consultations});
+      super.error, required super.consultations, required super.feedbacks});
 }
+
 final class CancelConsultationState extends ConsultationState {
   CancelConsultationState(
       {required super.blocState,
@@ -64,5 +66,58 @@ final class CancelConsultationState extends ConsultationState {
       required super.request,
       required super.doctorName,
       required super.patientName,
-      super.error, required super.consultations});
+      super.error, required super.consultations, required super.feedbacks});
+}
+
+final class FetchFeedbackDoctorState extends ConsultationState {
+  FetchFeedbackDoctorState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations, required super.feedbacks});
+
+}
+
+final class FetchFeedbackUserState extends ConsultationState {
+  FetchFeedbackUserState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations, required super.feedbacks});
+
+}
+
+final class ConfirmConsultationState extends ConsultationState {
+  ConfirmConsultationState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations, required super.feedbacks});
+
+}
+final class DeleteConsultationState extends ConsultationState {
+  DeleteConsultationState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations, required super.feedbacks});
+
+}
+final class CreateFeebackState extends ConsultationState {
+  CreateFeebackState(
+      {required super.blocState,
+      required super.timeline,
+      required super.request,
+      required super.doctorName,
+      required super.patientName,
+      super.error, required super.consultations, required super.feedbacks});
+
 }

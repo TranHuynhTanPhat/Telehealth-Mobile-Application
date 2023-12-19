@@ -56,9 +56,10 @@ class ApiConstants {
 
   // consultation
   static const CONSULTATION = '/consultation';
+  static const CONSULTATION_FEEDBACK = '$CONSULTATION/feedback';
   static const CONSULTATION_USER = '$CONSULTATION/user';
-  static const CONSULTATION_DOCTOR_SCHEDULE = '$CONSULTATION/doctor';
-  static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR_SCHEDULE/information';
+  static const CONSULTATION_DOCTOR = '$CONSULTATION/doctor';
+  static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR/information';
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,7 +77,6 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
 
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on Exception catch (e) {
-      // TODO
       print('exception->$e');
     }
   }
@@ -119,6 +120,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                           onPressed: () async {
                             userCredential.value = await signInWithGoogle();
                             if (userCredential.value != null)
+                              // ignore: curly_braces_in_flow_control_structures
                               print(userCredential.value.user!.email);
                           },
                         ),

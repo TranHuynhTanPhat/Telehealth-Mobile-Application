@@ -21,7 +21,7 @@ class GoogleButtonWidget extends StatelessWidget {
           height: dimensImage() * 3,
         ),
         label: Text(
-          "translate(context, 'sign_in_with_google')",
+          translate(context, 'sign_in_with_google'),
           style: Theme.of(context).textTheme.labelLarge,
         ));
   }

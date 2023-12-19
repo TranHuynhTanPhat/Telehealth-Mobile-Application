@@ -12,6 +12,7 @@ class ConsultationResponse {
   int? price;
   String? status;
   String? updatedAt;
+  String? jistiToken;
 
   ConsultationResponse(
       {this.id,
@@ -19,6 +20,7 @@ class ConsultationResponse {
       this.medical,
       this.date,
       this.expectedTime,
+      this.jistiToken,
       this.price,
       this.status,
       this.updatedAt});
@@ -40,6 +42,9 @@ class ConsultationResponse {
     }
     if (expectedTime != null) {
       result.addAll({'expected_time': expectedTime});
+    }
+    if (jistiToken != null) {
+      result.addAll({'jisti_token': jistiToken});
     }
     if (price != null) {
       result.addAll({'price': price});
@@ -63,6 +68,7 @@ class ConsultationResponse {
           map['medical'] != null ? UserResponse.fromMap(map['medical']) : null,
       date: map['date'],
       expectedTime: map['expected_time'],
+      jistiToken: map['jisti_token'],
       price: map['price']?.toInt(),
       status: map['status'],
       updatedAt: map['updated_at'],
