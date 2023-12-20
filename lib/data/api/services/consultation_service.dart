@@ -90,12 +90,12 @@ class ConsultationService extends BaseService {
     return ConsultationResponse.fromMap(response.data);
   }
 
-  Future<List<UserResponse>> fetchPatient({required String doctorId}) async {
+  Future<List<UserResponse>> fetchPatient() async {
     final response = await get(
-        '${ApiConstants.CONSULTATION_DOCTOR_INFORMATION}/$doctorId',
+        ApiConstants.CONSULTATION_DOCTOR_INFORMATION,
         isDoctor: true);
     final List<dynamic> objects =
-        json.decode(json.encode(response.data['consultaion']));
+        json.decode(json.encode(response.data['consultation']));
     final List<UserResponse> patients =
         objects.map((e) => UserResponse.fromMap(e)).toList();
     return patients;

@@ -47,7 +47,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      EasyLoading.dismiss();
+      // EasyLoading.dismiss();
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))

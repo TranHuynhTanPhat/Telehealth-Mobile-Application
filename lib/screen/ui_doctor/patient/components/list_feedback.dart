@@ -48,7 +48,9 @@ class _ListFeedbackState extends State<ListFeedback> {
                     .toList(),
               ));
         } else {
-          return Center(
+          return Container(
+            margin: EdgeInsets.only(top: dimensHeight() * 10),
+            alignment: Alignment.center,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

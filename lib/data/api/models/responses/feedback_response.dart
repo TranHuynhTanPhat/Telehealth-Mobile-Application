@@ -1,37 +1,47 @@
 import 'dart:convert';
 
 class FeedbackResponse {
-  String? feedbackId;
-  int? rated;
+  String? id;
+  String? user;
   String? feedback;
-
-  FeedbackResponse({this.feedbackId, this.rated, this.feedback});
+  int? rated;
+  FeedbackResponse({
+    this.id,
+    this.user,
+    this.feedback,
+    this.rated,
+  });
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
-    if(feedbackId != null){
-      result.addAll({'feedback_id': feedbackId});
+
+    if (id != null) {
+      result.addAll({'id': id});
     }
-    if(rated != null){
-      result.addAll({'rated': rated});
+    if (user != null) {
+      result.addAll({'user': user});
     }
-    if(feedback != null){
+    if (feedback != null) {
       result.addAll({'feedback': feedback});
     }
-  
+    if (rated != null) {
+      result.addAll({'rated': rated});
+    }
+
     return result;
   }
 
   factory FeedbackResponse.fromMap(Map<String, dynamic> map) {
     return FeedbackResponse(
-      feedbackId: map['feedback_d'],
-      rated: map['rated']?.toInt(),
+      id: map['id'],
+      user: map['user'],
       feedback: map['feedback'],
+      rated: map['rated']?.toInt(),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory FeedbackResponse.fromJson(String source) => FeedbackResponse.fromMap(json.decode(source));
+  factory FeedbackResponse.fromJson(String source) =>
+      FeedbackResponse.fromMap(json.decode(source));
 }

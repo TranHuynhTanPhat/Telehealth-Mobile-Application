@@ -47,14 +47,14 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
     }
   }
 
-  Future<void> fetchPatient({required String doctorId}) async {
+  Future<void> fetchPatient() async {
     emit(
       FetchPatientState(
           profile: state.profile, blocState: BlocState.Pending, patients: []),
     );
     try {
       List<UserResponse> patients =
-          await _consultationRepository.fetchPatient(doctorId: doctorId);
+          await _consultationRepository.fetchPatient();
       emit(FetchPatientState(
           profile: state.profile,
           blocState: BlocState.Successed,

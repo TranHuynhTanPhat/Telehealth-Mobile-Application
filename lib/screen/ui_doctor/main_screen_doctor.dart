@@ -394,8 +394,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                     if (state.profile.id != null) {
                                       context
                                           .read<DoctorProfileCubit>()
-                                          .fetchPatient(
-                                              doctorId: state.profile.id!);
+                                          .fetchPatient();
                                     }
                                     clickDrawer();
                                   });

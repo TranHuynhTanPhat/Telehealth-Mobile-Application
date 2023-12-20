@@ -34,8 +34,8 @@ class ConsultationRepository extends BaseRepository {
     return await _consultationService.fetchDoctorConsultation();
   }
 
-  Future<List<UserResponse>> fetchPatient({required String doctorId}) async {
-    return await _consultationService.fetchPatient(doctorId: doctorId);
+  Future<List<UserResponse>> fetchPatient() async {
+    return await _consultationService.fetchPatient();
   }
 
   Future<ConsultationResponse> fetchDetailDoctorConsultation(

@@ -26,9 +26,6 @@ class _PatientScreenState extends State<PatientScreen> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: dimensWidth()),
             children: [
-              Container(
-                margin: EdgeInsets.only(top: dimensHeight() * 10),
-              ),
               if (_currentIndex == PatientTabBar.Patient)
                 Padding(
                   padding: EdgeInsets.only(
