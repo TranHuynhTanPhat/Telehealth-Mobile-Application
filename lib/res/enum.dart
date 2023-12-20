@@ -22,6 +22,7 @@ enum DrawerMenu {
 enum SignUp { Instruction, Profile, Contact, Secutiry }
 
 enum ScheduleTabBar { UpComing, Completed, Canceled }
+enum PatientTabBar { Patient, Feedback }
 
 enum Gender { Male, Female }
 

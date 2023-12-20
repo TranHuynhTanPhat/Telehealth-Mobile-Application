@@ -37,5 +37,5 @@ final class FetchPatientState extends DoctorProfileState {
       required this.patients});
   final String? error;
   final BlocState blocState;
-  final List<ConsultationInformationResponse> patients;
+  final List<UserResponse> patients;
 }

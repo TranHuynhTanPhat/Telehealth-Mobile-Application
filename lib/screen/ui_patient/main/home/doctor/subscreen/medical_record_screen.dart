@@ -26,11 +26,43 @@ class MedicalRecordScreen extends StatefulWidget {
 class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   String? medicalId;
   String? patientName;
+  List<String> patientRecordIds = [];
   @override
   void initState() {
     if (!mounted) return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
     super.initState();
+  }
+
+  bool checkFileInFolder(folderRecords, key) {
+    for (var element in folderRecords) {
+      try {
+        if (element.folder == key) {
+          if (patientRecordIds.contains(element.id!)) {
+            return true;
+          }
+        }
+      } catch (e) {
+        logPrint(e);
+      }
+    }
+    return false;
+  }
+
+  void addFileInFolder(folderRecords, key) {
+    for (var element in folderRecords) {
+      try {
+        if (element.folder == key) {
+          if (patientRecordIds.contains(element.id!)) {
+            patientRecordIds.removeWhere((id) => id == element.id);
+          } else {
+            patientRecordIds.add(element.id!);
+          }
+        }
+      } catch (e) {
+        logPrint(e);
+      }
+    }
   }
 
   @override
@@ -101,6 +133,7 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                             // _payment = PaymentMethod.Momo;
                             medicalId = e.id;
                             patientName = e.fullName;
+                            patientRecordIds.clear();
                             try {
                               context
                                   .read<PatientRecordCubit>()
@@ -138,240 +171,238 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                         ),
                       )
                       .toList(),
-                  BlocBuilder<PatientRecordCubit, PatientRecordState>(
-                    builder: (context, state) {
-                      if (state is! FetchPatientRecordLoading) {
-                        List<PatientRecordResponse> fileRecords = state.records
-                            .where((element) =>
-                                element.folder == null ||
-                                element.folder == 'default')
-                            .toList();
-                        fileRecords
-                            .sort((a, b) => a.updateAt!.compareTo(b.updateAt!));
-                        List<PatientRecordResponse> folderRecords = state
-                            .records
-                            .where((element) =>
-                                element.folder != null &&
-                                element.folder != 'default')
-                            .toList();
+                  if (medicalId != null)
+                    BlocBuilder<PatientRecordCubit, PatientRecordState>(
+                      builder: (context, state) {
+                        if (state is! FetchPatientRecordLoading) {
+                          List<PatientRecordResponse> fileRecords = state
+                              .records
+                              .where((element) =>
+                                  element.folder == null ||
+                                  element.folder == 'default')
+                              .toList();
+                          fileRecords.sort(
+                              (a, b) => a.updateAt!.compareTo(b.updateAt!));
+                          List<PatientRecordResponse> folderRecords = state
+                              .records
+                              .where((element) =>
+                                  element.folder != null &&
+                                  element.folder != 'default')
+                              .toList();
 
-                        Map<String, Map<String, dynamic>> fileByFolders = {};
-                        for (var element in folderRecords) {
-                          if (fileByFolders.containsKey(element.folder)) {
-                            DateTime newDate =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                    .parse(element.updateAt!);
-                            DateTime oldDate =
-                                fileByFolders[element.folder!]!['update_at'];
-                            fileByFolders[element.folder!]!['length'] += 1;
-                            fileByFolders[element.folder!]!['update_at'] =
-                                newDate.isAfter(oldDate) ? newDate : oldDate;
-                            // fileByFolders[element.folder!]!.add(element);
-                          } else if (element.folder != null &&
-                              element.folder != 'default') {
-                            DateTime newDate =
-                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                    .parse(element.updateAt!);
-                            fileByFolders.addAll({
-                              element.folder!: {
-                                'length': 1,
-                                'update_at': newDate
-                              }
-                            });
+                          Map<String, Map<String, dynamic>> fileByFolders = {};
+                          for (var element in folderRecords) {
+                            if (fileByFolders.containsKey(element.folder)) {
+                              DateTime newDate =
+                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                      .parse(element.updateAt!);
+                              DateTime oldDate =
+                                  fileByFolders[element.folder!]!['update_at'];
+                              fileByFolders[element.folder!]!['length'] += 1;
+                              fileByFolders[element.folder!]!['update_at'] =
+                                  newDate.isAfter(oldDate) ? newDate : oldDate;
+                              // fileByFolders[element.folder!]!.add(element);
+                            } else if (element.folder != null &&
+                                element.folder != 'default') {
+                              DateTime newDate =
+                                  DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                      .parse(element.updateAt!);
+                              fileByFolders.addAll({
+                                element.folder!: {
+                                  'length': 1,
+                                  'update_at': newDate
+                                }
+                              });
+                            }
                           }
-                        }
 
-                        Map<String, int> folderNames = {'default': 5};
-                        for (var element in folderRecords) {
-                          if (folderNames.containsKey(element.folder)) {
-                            folderNames[element.folder!] =
-                                folderNames[element.folder!]! + 1;
-                          } else if (element.folder != null &&
-                              element.folder != 'default') {
-                            folderNames.addAll({element.folder!: 1});
-                          }
-                        }
-                        return Column(
-                          // scrollDirection: Axis.vertical,
-                          // padding: EdgeInsets.symmetric(
-                          //     vertical: dimensHeight(),
-                          //     horizontal: dimensWidth() * 3),
-                          children: [
-                            const Divider(
-                              thickness: 3,
-                            ),
-                            Text(
-                              translate(context, 'share_information'),
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            ...fileByFolders.entries
-                                .map(
-                                  (mapEntry) => Column(
-                                    children: [
-                                      InkWell(
-                                        borderRadius: BorderRadius.circular(
-                                            dimensWidth()),
-                                        child: GestureDetector(
-                                          // onTap: () async =>
-                                          //     _openFolder(mapEntry.key),
-                                          child: ListTile(
-                                              onTap: null,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  dimensWidth(),
+                          return Column(
+                            children: [
+                              const Divider(
+                                thickness: 3,
+                              ),
+                              Text(
+                                translate(context, 'share_information'),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              ...fileByFolders.entries
+                                  .map(
+                                    (mapEntry) => Column(
+                                      children: [
+                                        ListTile(
+                                          onTap: () {
+                                            addFileInFolder(
+                                                folderRecords, mapEntry.key);
+                                            setState(() {});
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              dimensWidth(),
+                                            ),
+                                          ),
+                                          dense: true,
+                                          visualDensity:
+                                              const VisualDensity(vertical: 0),
+                                          leading: checkFileInFolder(
+                                                  folderRecords, mapEntry.key)
+                                              ? SizedBox(
+                                                  height: 24,
+                                                  width: 24,
+                                                  child: Checkbox(
+                                                    side: const BorderSide(
+                                                        width: 1),
+                                                    value: checkFileInFolder(
+                                                        folderRecords,
+                                                        mapEntry.key),
+                                                    onChanged: (value) =>
+                                                        setState(
+                                                      () {
+                                                        addFileInFolder(
+                                                            folderRecords,
+                                                            mapEntry.key);
+                                                      },
+                                                    ),
+                                                  ),
+                                                )
+                                              : FaIcon(
+                                                  FontAwesomeIcons
+                                                      .solidFolderClosed,
+                                                  color: colorDF9F1E,
+                                                  size: dimensIcon(),
+                                                ),
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  mapEntry.key,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
                                                 ),
                                               ),
-                                              dense: true,
-                                              visualDensity:
-                                                  const VisualDensity(
-                                                      vertical: 0),
-                                              leading: FaIcon(
-                                                FontAwesomeIcons
-                                                    .solidFolderClosed,
-                                                color: colorDF9F1E,
-                                                size: dimensIcon(),
+                                            ],
+                                          ),
+                                          subtitle: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  formatFileDate(
+                                                      context,
+                                                      mapEntry
+                                                          .value['update_at']),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                          color: black26,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
                                               ),
-                                              title: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      mapEntry.key,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelLarge,
-                                                    ),
-                                                  ),
-                                                ],
+                                              Text(
+                                                '${mapEntry.value['length']} ${translate(context, 'items')}',
+                                                textAlign: TextAlign.right,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: black26,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                               ),
-                                              subtitle: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      formatFileDate(
-                                                          context,
-                                                          mapEntry.value[
-                                                              'update_at']),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.copyWith(
-                                                              color: black26,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '${mapEntry.value['length']} ${translate(context, 'items')}',
-                                                    textAlign: TextAlign.right,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                            color: black26,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                ],
-                                              )),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      const Divider(),
-                                    ],
-                                  ),
-                                )
-                                .toList(),
-                            ...fileRecords.map(
-                              (e) {
-                                String fileName =
-                                    e.record?.split('/').last ?? 'undefine';
-                                String type = fileName.split('.').last;
-                                DateTime updateAt =
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                        .parse(e.updateAt!);
-                                if (['pdf', 'gif', 'jpeg', 'jpg', 'png']
-                                    .contains(type)) {
-                                } else if ([
-                                  'doc',
-                                  'docx',
-                                  'xls',
-                                  'xlsx',
-                                  'csv',
-                                  'pps',
-                                  'ppt',
-                                  'pptx'
-                                ].contains(type)) {
-                                } else if ([
-                                  '3gp',
-                                  'asf',
-                                  'avi',
-                                  'm4u',
-                                  'm4v',
-                                  'mov',
-                                  'mp4',
-                                  'mpe',
-                                  'mpeg',
-                                  'mpg',
-                                  'mpg4',
-                                ].contains(type)) {}
-
-                                return InkWell(
-                                  borderRadius:
-                                      BorderRadius.circular(dimensWidth()),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      logPrint(e.id);
-                                    },
-                                    child: FileWidget(
-                                      extension: type,
-                                      title: fileName,
-                                      updateAt:
-                                          formatFileDate(context, updateAt),
-                                      size: e.size,
+                                        const Divider(),
+                                      ],
                                     ),
+                                  )
+                                  .toList(),
+                              ...fileRecords.map(
+                                (e) {
+                                  String fileName =
+                                      e.record?.split('/').last ?? 'undefine';
+                                  String type = fileName.split('.').last;
+                                  DateTime updateAt =
+                                      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                          .parse(e.updateAt!);
+
+                                  return FileWidget(
+                                    widget: patientRecordIds.contains(e.id)
+                                        ? SizedBox(
+                                            height: 24,
+                                            width: 24,
+                                            child: Checkbox(
+                                              side: const BorderSide(width: 1),
+                                              value: patientRecordIds
+                                                  .contains(e.id),
+                                              onChanged: (value) => setState(
+                                                () {
+                                                  patientRecordIds.removeWhere(
+                                                      (element) =>
+                                                          element == e.id);
+                                                },
+                                              ),
+                                            ),
+                                          )
+                                        : null,
+                                    onTap: () {
+                                      try {
+                                        if (patientRecordIds.contains(e.id)) {
+                                          patientRecordIds.removeWhere(
+                                              (element) => element == e.id);
+                                        } else {
+                                          patientRecordIds.add(e.id!);
+                                        }
+                                      } catch (e) {
+                                        logPrint(e);
+                                      }
+                                      setState(() {});
+                                    },
+                                    extension: type,
+                                    title: fileName,
+                                    updateAt: formatFileDate(context, updateAt),
+                                    size: e.size,
+                                  );
+                                },
+                              ).toList(),
+                              // ListFolder(fileByFolders: fileByFolders),
+                              // ListFile(fileRecords: fileRecords),
+                            ],
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              ListTile(
+                                onTap: null,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    dimensWidth(),
                                   ),
-                                );
-                              },
-                            ).toList(),
-                            // ListFolder(fileByFolders: fileByFolders),
-                            // ListFile(fileRecords: fileRecords),
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            ListTile(
-                              onTap: null,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  dimensWidth(),
                                 ),
-                              ),
-                              dense: true,
-                              visualDensity: const VisualDensity(vertical: 0),
-                              leading: ShimmerWidget.circular(
-                                height: dimensIcon(),
-                                width: dimensIcon(),
-                              ),
-                              title: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dimensHeight()),
-                                child: ShimmerWidget.rectangular(
+                                dense: true,
+                                visualDensity: const VisualDensity(vertical: 0),
+                                leading: ShimmerWidget.circular(
                                   height: dimensIcon(),
                                   width: dimensIcon(),
                                 ),
+                                title: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight()),
+                                  child: ShimmerWidget.rectangular(
+                                    height: dimensIcon(),
+                                    width: dimensIcon(),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
                 ]),
           ),
         );

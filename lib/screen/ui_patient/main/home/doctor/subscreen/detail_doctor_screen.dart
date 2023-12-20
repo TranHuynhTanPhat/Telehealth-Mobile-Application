@@ -353,7 +353,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                       padding:
                           EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
                       child: Text(
-                        '<- ${translate(context, 'empty')} ->',
+                        translate(context, 'empty'),
                         style: Theme.of(context).textTheme.bodyLarge,
                         textAlign: TextAlign.center,
                       ),

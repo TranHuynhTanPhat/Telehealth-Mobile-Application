@@ -36,6 +36,7 @@ import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vac
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_create_consultation.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_medical_declaration.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/medical_record_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
@@ -426,7 +427,7 @@ class AppRoute {
                 value: _patientRecordCubit,
               ),
             ],
-            child: const FormConsultationScreen(),
+            child: const FormMedicalDeclaration(),
           ),
         );
       case detailConsultationName:

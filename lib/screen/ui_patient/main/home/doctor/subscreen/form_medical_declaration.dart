@@ -175,7 +175,7 @@ class _FormMedicalDeclarationState extends State<FormMedicalDeclaration> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: dimensHeight() * .5),
+              padding: EdgeInsets.only(bottom: dimensHeight() * 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,

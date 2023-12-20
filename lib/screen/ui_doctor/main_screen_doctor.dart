@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
@@ -141,6 +142,19 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               }
             },
           ),
+          BlocListener<ConsultationCubit, ConsultationState>(
+              listener: (context, state) {
+            if (state is FetchFeedbackDoctorState) {
+              if (state.blocState == BlocState.Pending) {
+                EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              } else if (state.blocState == BlocState.Successed ||
+                  state.blocState == BlocState.Failed) {
+                EasyLoading.dismiss();
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(translate(context, 'cant_load_data'));
+              }
+            }
+          })
         ],
         child: AbsorbPointer(
           absorbing: onChangeToPatient,
@@ -326,7 +340,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: dimensHeight() * 2,
+                                    top: dimensHeight(),
                                     left: dimensWidth() * 2,
                                     bottom: dimensHeight()),
                                 child: Text(

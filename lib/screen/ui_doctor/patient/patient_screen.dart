@@ -1,80 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/ui_doctor/patient/components/export.dart';
 import 'package:healthline/utils/translate.dart';
 
-class PatientScreen extends StatelessWidget {
+class PatientScreen extends StatefulWidget {
   const PatientScreen({super.key});
 
+  @override
+  State<PatientScreen> createState() => _PatientScreenState();
+}
+
+class _PatientScreenState extends State<PatientScreen> {
+  PatientTabBar _currentIndex = PatientTabBar.Patient;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
       backgroundColor: white,
-      body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-        builder: (context, state) {
-          if (state is FetchPatientState && state.patients.isNotEmpty) {
-            return ListView(
-              shrinkWrap: true,
-              children: state.patients
-                  .map((e) => ExpansionTile(
-                        title: Text(
-                          e.email ?? translate(context, 'undefine'),
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        subtitle: Text(
-                          e.phone ?? translate(context, 'undefine'),
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        children: const [
-                          //   Padding(
-                          //   padding: EdgeInsets.symmetric(vertical: dimensHeight(),
-                          //       horizontal: dimensWidth() * 3),
-                          //   child: Text(e['answer']!, style: Theme.of(context).textTheme.bodyLarge,),
-                          // )
-                        ],
-                      ))
-                  .toList(),
-            );
-          } else {
-            return Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          translate(context, 'empty'),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall
-                              ?.copyWith(
-                                  color: color1F1F1F.withOpacity(.05),
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
+      body: Stack(
+        children: [
+          ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: dimensWidth()),
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: dimensHeight() * 10),
+              ),
+              if (_currentIndex == PatientTabBar.Patient)
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: dimensHeight() * 10,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3,
                   ),
-                  // SizedBox(
-                  //   height: dimensHeight() * 3,
-                  // ),
-                  FaIcon(
-                    FontAwesomeIcons.boxOpen,
-                    color: color1F1F1F.withOpacity(.05),
-                    size: dimensWidth() * 30,
+                  child: const ListPatient(),
+                )
+              else if (_currentIndex == PatientTabBar.Feedback)
+                 Padding(
+                  padding: EdgeInsets.only(
+                    top: dimensHeight() * 10,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3,
+                  ),
+                  child: const ListFeedback(),
+                )
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  white,
+                  white,
+                  white,
+                  Colors.white.withOpacity(0.0),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Container(
+              height: dimensHeight() * 8,
+              decoration: BoxDecoration(
+                color: white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(.1),
+                    blurRadius: 15,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(dimensWidth() * 3),
+              ),
+              padding: EdgeInsets.all(
+                dimensWidth(),
+              ),
+              margin: EdgeInsets.only(
+                  left: dimensWidth() * 3,
+                  right: dimensWidth() * 3,
+                  top: dimensHeight() * 2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: double.maxFinite,
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            decoration: BoxDecoration(
+                              color: _currentIndex == PatientTabBar.Patient
+                                  ? primary
+                                  : white,
+                              borderRadius:
+                                  BorderRadius.circular(dimensWidth() * 2),
+                            ),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            height: _currentIndex == PatientTabBar.Patient
+                                ? dimensWidth() * 6
+                                : 0,
+                            width: _currentIndex == PatientTabBar.Patient
+                                ? dimensWidth() * 25
+                                : 0,
+                          ),
+                        ),
+                        SizedBox(
+                          height: dimensHeight() * 6,
+                          width: double.maxFinite,
+                          child: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            enableFeedback: false,
+                            onTap: () {
+                              setState(() {
+                                _currentIndex = PatientTabBar.Patient;
+                              });
+                            },
+                            child: Center(
+                              child: Text(
+                                translate(context, 'patient'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                        color: _currentIndex ==
+                                                PatientTabBar.Patient
+                                            ? white
+                                            : black26),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            decoration: BoxDecoration(
+                              color: _currentIndex == PatientTabBar.Feedback
+                                  ? primary
+                                  : white,
+                              borderRadius:
+                                  BorderRadius.circular(dimensWidth() * 2),
+                            ),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            height: _currentIndex == PatientTabBar.Feedback
+                                ? dimensWidth() * 6
+                                : 0,
+                            width: _currentIndex == PatientTabBar.Feedback
+                                ? dimensWidth() * 25
+                                : 0,
+                          ),
+                        ),
+                        SizedBox(
+                          height: dimensHeight() * 6,
+                          width: double.infinity,
+                          child: InkWell(
+                            splashColor: transparent,
+                            highlightColor: transparent,
+                            enableFeedback: false,
+                            onTap: () {
+                              setState(() {
+                                _currentIndex = PatientTabBar.Feedback;
+                              });
+                            },
+                            child: Center(
+                              child: Text(
+                                translate(context, 'feedbacks'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                        color: _currentIndex ==
+                                                PatientTabBar.Feedback
+                                            ? white
+                                            : black26),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

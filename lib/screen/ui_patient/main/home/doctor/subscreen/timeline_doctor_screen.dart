@@ -107,7 +107,12 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                             doctorName: doctor!.fullName,
                             expectedTime: _timeSelected.join('-'),
                             discountCode: "");
-                        Navigator.pushNamed(context, medicalRecordName);
+                        Navigator.pushNamed(context, medicalRecordName)
+                            .then((value) {
+                          if (value == true) {
+                            Navigator.pop(context);
+                          }
+                        });
                       },
                     ),
                   )
@@ -140,8 +145,8 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                       child: BaseGridview(
                         radio: 3.2,
                         children: [
-                          ...state.timeline.map(
-                            (e) => InkWell(
+                          ...state.timeline.map((e) {
+                            return InkWell(
                               splashColor: transparent,
                               highlightColor: transparent,
                               onTap: () {
@@ -156,18 +161,18 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                                     } else {
                                       _timeSelected.remove(e);
                                     }
-                                  }else{
+                                  } else {
                                     _timeSelected.clear();
                                     _timeSelected.add(e);
                                   }
                                 });
                               },
                               child: ValidShift(
-                                time: convertIntToTime(e),
+                                time: convertIntToTime(e - 1),
                                 choosed: _timeSelected.contains(e),
                               ),
-                            ),
-                          ),
+                            );
+                          }),
                         ],
                       ),
                     ),

@@ -6,6 +6,7 @@ import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class ConsultationService extends BaseService {
@@ -77,6 +78,18 @@ class ConsultationService extends BaseService {
     final List<FeedbackResponse> feedbacks =
         objects.map((e) => FeedbackResponse.fromMap(e)).toList();
     return feedbacks;
+  }
+
+    Future<List<UserResponse>> fetchPatient(
+      {required String doctorId}) async {
+    final response = await get(
+        '${ApiConstants.CONSULTATION_DOCTOR_INFORMATION}/$doctorId',
+        isDoctor: true);
+    final List<dynamic> objects =
+        json.decode(json.encode(response.data['consultaion']));
+    final List<UserResponse> patients =
+        objects.map((e) => UserResponse.fromMap(e)).toList();
+    return patients;
   }
 
   Future<AllConsultationResponse> fetchPatientConsultation() async {

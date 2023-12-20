@@ -3,6 +3,7 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/consultation_service.dart';
 import 'package:healthline/repository/base_repository.dart';
 
@@ -30,6 +31,12 @@ class ConsultationRepository extends BaseRepository {
   Future<AllConsultationResponse> fetchDoctorConsultation() async {
     return await _consultationService.fetchDoctorConsultation();
   }
+
+  Future<List<UserResponse>> fetchPatient(
+      {required String doctorId}) async {
+    return await _consultationService.fetchPatient(doctorId: doctorId);
+  }
+
 
   Future<int?> confirmConsultation({required String consultationId}) async {
     return await _consultationService.confirmConsultation(
