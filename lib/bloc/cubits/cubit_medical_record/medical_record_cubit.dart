@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:healthline/data/api/models/responses/file_response.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
-import 'package:healthline/repository/file_repository.dart';
-import 'package:healthline/repository/patient_repository.dart';
-import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/repositories/file_repository.dart';
+import 'package:healthline/repositories/patient_repository.dart';
+import 'package:healthline/repositories/user_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 

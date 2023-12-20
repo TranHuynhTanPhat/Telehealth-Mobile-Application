@@ -4,7 +4,7 @@ import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/health_stat_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/services/patient_service.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 import 'package:healthline/res/style.dart';
 
 class PatientRepository extends BaseRepository {

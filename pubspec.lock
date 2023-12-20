@@ -122,7 +122,7 @@ packages:
     source: hosted
     version: "2.4.2"
   build_runner:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: build_runner
       sha256: "67d591d602906ef9201caf93452495ad1812bea2074f04e25dbd7c133785821b"
@@ -878,7 +878,7 @@ packages:
     source: hosted
     version: "1.0.4"
   mocktail:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: mocktail
       sha256: f603ebd85a576e5914870b02e5839fc5d0243b867bf710651cf239a28ebb365e

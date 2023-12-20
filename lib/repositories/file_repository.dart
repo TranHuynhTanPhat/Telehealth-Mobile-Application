@@ -3,7 +3,7 @@
 import 'package:healthline/data/api/models/requests/file_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/file_response.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 import 'package:healthline/data/api/services/file_service.dart';
 
 class FileRepository extends BaseRepository {

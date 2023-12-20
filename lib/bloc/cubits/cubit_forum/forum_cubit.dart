@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/app/app_controller.dart';
-import 'package:healthline/repository/forum_repository.dart';
+import 'package:healthline/repositories/forum_repository.dart';
 import 'package:meilisearch/meilisearch.dart';
 
 import 'package:healthline/data/api/meilisearch_manager.dart';

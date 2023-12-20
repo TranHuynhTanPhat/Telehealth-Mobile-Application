@@ -7,7 +7,7 @@ import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
-import 'package:healthline/repository/consultation_repository.dart';
+import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 

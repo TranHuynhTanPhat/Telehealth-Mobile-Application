@@ -8,9 +8,9 @@ import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
-import 'package:healthline/repository/common_repository.dart';
-import 'package:healthline/repository/doctor_repository.dart';
-import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/repositories/common_repository.dart';
+import 'package:healthline/repositories/doctor_repository.dart';
+import 'package:healthline/repositories/user_repository.dart';
 
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';

@@ -7,8 +7,8 @@ import 'package:open_document/open_document.dart';
 import 'package:open_document/open_document_exception.dart';
 
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
-import 'package:healthline/repository/file_repository.dart';
-import 'package:healthline/repository/patient_repository.dart';
+import 'package:healthline/repositories/file_repository.dart';
+import 'package:healthline/repositories/patient_repository.dart';
 import 'package:healthline/utils/log_data.dart';
 
 part 'patient_record_state.dart';

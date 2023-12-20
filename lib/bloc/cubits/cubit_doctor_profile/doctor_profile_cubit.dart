@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
-import 'package:healthline/repository/consultation_repository.dart';
+import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 
 import '../../../data/api/models/responses/file_response.dart';
-import '../../../repository/doctor_repository.dart';
-import '../../../repository/file_repository.dart';
+import '../../../repositories/doctor_repository.dart';
+import '../../../repositories/file_repository.dart';
 
 part 'doctor_profile_state.dart';
 

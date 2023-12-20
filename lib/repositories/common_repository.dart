@@ -2,7 +2,7 @@
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/services/common_service.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 
 class CommonRepository extends BaseRepository {
   final CommonService _commonService = CommonService();

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:healthline/data/api/models/requests/post_request.dart';
 import 'package:healthline/data/api/models/responses/post_response.dart';
 import 'package:healthline/data/api/services/forum_service.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 
 class ForumRepository extends BaseRepository {
   final ForumService _forumService = ForumService();

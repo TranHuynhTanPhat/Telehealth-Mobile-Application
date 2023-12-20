@@ -4,7 +4,7 @@ import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/doctor_service.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 
 class DoctorRepository extends BaseRepository {
   final DoctorService _doctorService = DoctorService();

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
-import 'package:healthline/repository/doctor_repository.dart';
+import 'package:healthline/repositories/doctor_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';

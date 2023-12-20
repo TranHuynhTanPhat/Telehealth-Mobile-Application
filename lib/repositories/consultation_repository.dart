@@ -5,7 +5,7 @@ import 'package:healthline/data/api/models/responses/all_consultation_response.d
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/consultation_service.dart';
-import 'package:healthline/repository/base_repository.dart';
+import 'package:healthline/repositories/base_repository.dart';
 
 class ConsultationRepository extends BaseRepository {
   final ConsultationService _consultationService = ConsultationService();
