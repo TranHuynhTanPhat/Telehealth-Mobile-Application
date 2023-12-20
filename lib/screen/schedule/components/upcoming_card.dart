@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/res/style.dart';
@@ -167,10 +168,17 @@ class _UpcomingCardState extends State<UpcomingCard> {
                               highlightColor: transparent,
                               onTap: () {
                                 try {
-                                  context
-                                      .read<ConsultationCubit>()
-                                      .cancelConsultation(
-                                          consultationId: widget.coming.id!);
+                                  AppController().authState ==
+                                          AuthState.PatientAuthorized
+                                      ? context
+                                          .read<ConsultationCubit>()
+                                          .cancelConsultation(
+                                              consultationId: widget.coming.id!)
+                                      : context
+                                          .read<ConsultationCubit>()
+                                          .denyConsultation(
+                                              consultationId:
+                                                  widget.coming.id!);
                                 } catch (e) {
                                   EasyLoading.showToast(
                                       translate(context, 'failure'));

@@ -31,6 +31,7 @@ const invoiceName ='/invoice';
 const formConsultationName ='/form-consultaion';
 const medicalRecordName ='/medical-record';
 const detailConsultationName ='/detail-consultation';
+const formMedicalDeclarationName ='/form-medical-declaration';
 
 
 const doctorName = '/doctor';

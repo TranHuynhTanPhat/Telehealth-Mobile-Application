@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+// import 'package:healthline/app/jitsi_service.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_doctor/overview/components/export.dart';
 import 'package:healthline/screen/widgets/file_widget.dart';
@@ -59,9 +60,20 @@ class OverviewScreen extends StatelessWidget {
                 left: dimensWidth() * 3, right: dimensWidth() * 3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: 
+              
+              [
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    // JitsiService.instance.join(
+                    //     token:
+                    //         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS8xMjM0NSJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDMwMDYzNDIsImV4cCI6MTcwMzAyNjM0MiwibmJmIjoxNzAzMDA2MzM3LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOnRydWUsIm91dGJvdW5kLWNhbGwiOnRydWUsInNpcC1vdXRib3VuZC1jYWxsIjp0cnVlLCJ0cmFuc2NyaXB0aW9uIjp0cnVlLCJyZWNvcmRpbmciOnRydWV9LCJ1c2VyIjp7ImlkIjoiZDNjYzMyMTItM2ZjOS00YWEzLWE2N2QtNDNjMTVmODFmNTU1IiwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImF2YXRhciI6IiIsImVtYWlsIjoiaGVhbHRobGluZW1hbmFnZXIyMDIzQGdtYWlsLmNvbSIsIm1vZGVyYXRvciI6ZmFsc2UsImhpZGRlbi1mcm9tLXJlY29yZGVyIjpmYWxzZX19LCJyb29tIjoiKiJ9.ATVvOJDkZs4PHbYCI0CDqsJZoCEX1SyCt05uJZjvG7lc89QwmRxAU1Ly69PSh_xDv5VHuoiZFA9ZPsMCdRQAzSzD0Hs4fXyEYedIHoL73qZX8QUJ9V6DXhUKlnZpb2iUqGzICHBJFB9da8PhbCylZuHx7S90-YkhflSw2j-dNFtQCFDQxD6tUZmxKUN_zdGGeqjVRLIzxpt8H-lRnFKdPYWWCNs_7If4KhDTrhR21oAeTND_Iwvgsq5pVhc6HSj4dSnpF42zxkPThZTvDZ-BY9sz0PPc4wsVFQTPXgq0Id56PK4KgpbVzqjFc2OdKbchbPFzGtQ_myBjv4TpdSTpxw",
+                    //     roomName:
+                    //         "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/12345",
+                    //     displayName: "healthlinemanager2023",
+                    //     urlAvatar: '',
+                    //     email: "healthlinemanager2023@gmail.com");
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       dimensWidth(),

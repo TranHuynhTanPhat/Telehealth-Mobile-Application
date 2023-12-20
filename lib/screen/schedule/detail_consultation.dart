@@ -2,18 +2,22 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/jitsi_service.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/utils/string_extensions.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/time_util.dart';
 
-import '../../../../res/style.dart';
-import '../../../../utils/log_data.dart';
-import '../../../../utils/translate.dart';
+import '../../res/style.dart';
+import '../../utils/log_data.dart';
+import '../../utils/translate.dart';
 
 class DetailConsultationScreen extends StatefulWidget {
   const DetailConsultationScreen({super.key, this.args});
@@ -94,7 +98,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
             translate(context, 'appointment'),
           ),
         ),
-        bottomNavigationBar: consultation?.status == 'confirm'
+        bottomNavigationBar: consultation?.status == 'confirmed'
             ? Container(
                 padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
                     dimensWidth() * 3, dimensHeight() * 3),
@@ -123,11 +127,11 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                     backgroundColor: const MaterialStatePropertyAll(primary),
                   ),
                   onPressed: () {
-                    if (consultation?.jistiToken != null) {
+                    // if (consultation?.jistiToken != null) {
                       JitsiService.instance.join(
                         token: consultation?.jistiToken ?? '',
                         roomName:
-                            "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/",
+                            "vpaas-magic-cookie-fd0744894f194f3ea748884f83cec195/${consultation!.id!}",
                         displayName: consultation?.medical?.fullName ??
                             translate(context, 'undefine'),
                         urlAvatar: CloudinaryContext.cloudinary
@@ -135,14 +139,90 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                             .toString(),
                         email: consultation?.medical?.email ?? '',
                       );
-                    } else {
-                      EasyLoading.showToast(
-                          translate(context, 'cant_load_data'));
-                    }
+                    // } else {
+                    //   EasyLoading.showToast(
+                    //       translate(context, 'cant_load_data'));
+                    // }
                   },
                 ),
               )
-            : null,
+            : AppController().authState == AuthState.DoctorAuthorized
+                ? Container(
+                    padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                        dimensWidth() * 3, dimensHeight() * 3),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.white.withOpacity(0.0), white],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor: const MaterialStatePropertyAll(white),
+                        textStyle: MaterialStatePropertyAll(Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: white)),
+                        padding: MaterialStatePropertyAll(
+                          EdgeInsets.symmetric(
+                              vertical: dimensHeight() * 2,
+                              horizontal: dimensWidth() * 2.5),
+                        ),
+                        backgroundColor:
+                            const MaterialStatePropertyAll(color1C6AA3),
+                      ),
+                      onPressed: () {
+                        try {
+                          context.read<ConsultationCubit>().confirmConsultation(
+                              consultationId: consultation!.id!);
+                        } catch (e) {
+                          EasyLoading.showToast(
+                              translate(context, 'cant_load_data'));
+                        }
+                      },
+                      child: Text(translate(context, 'confirm').capitalize()),
+                    ),
+                  )
+                : Container(
+                    padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                        dimensWidth() * 3, dimensHeight() * 3),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.white.withOpacity(0.0), white],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor: const MaterialStatePropertyAll(white),
+                        textStyle: MaterialStatePropertyAll(Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: white)),
+                        padding: MaterialStatePropertyAll(
+                          EdgeInsets.symmetric(
+                              vertical: dimensHeight() * 2,
+                              horizontal: dimensWidth() * 2.5),
+                        ),
+                        backgroundColor:
+                            const MaterialStatePropertyAll(Colors.redAccent),
+                      ),
+                      onPressed: () {
+                        try {
+                          context.read<ConsultationCubit>().cancelConsultation(
+                              consultationId: consultation!.id!);
+                        } catch (e) {
+                          EasyLoading.showToast(
+                              translate(context, 'cant_load_data'));
+                        }
+                      },
+                      child: Text(translate(context, 'cancel').capitalize()),
+                    ),
+                  ),
         body: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(

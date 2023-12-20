@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:open_document/open_document.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/side_menu.dart';
+import 'package:healthline/screen/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/home_screen.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/schedule_screen.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:open_document/open_document.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MainScreenPatient extends StatefulWidget {
   const MainScreenPatient({super.key});
@@ -233,9 +233,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                     itemBuilder: (context, index) => InkWell(
                       onTap: () => setState(() {
                         _currentIndex = index;
-                        if (_pageDetail[index]['title'] == 'schedule') {
-                          context.read<ConsultationCubit>().fetchConsultation();
-                        }
+                        // if (_pageDetail[index]['title'] == 'schedule') {
+                        //   context.read<ConsultationCubit>().fetchConsultation();
+                        // }
                       }),
                       splashColor: transparent,
                       highlightColor: transparent,

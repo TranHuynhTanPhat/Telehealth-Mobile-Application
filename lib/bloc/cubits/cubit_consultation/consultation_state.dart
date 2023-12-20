@@ -101,8 +101,8 @@ final class ConfirmConsultationState extends ConsultationState {
       super.error, required super.consultations, required super.feedbacks});
 
 }
-final class DeleteConsultationState extends ConsultationState {
-  DeleteConsultationState(
+final class DenyConsultationState extends ConsultationState {
+  DenyConsultationState(
       {required super.blocState,
       required super.timeline,
       required super.request,

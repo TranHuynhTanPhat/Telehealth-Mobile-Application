@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/canceled_frame.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/completed_frame.dart';
-import 'package:healthline/screen/ui_patient/main/schedule/upcoming_frame.dart';
+import 'package:healthline/screen/schedule/canceled_frame.dart';
+import 'package:healthline/screen/schedule/completed_frame.dart';
+import 'package:healthline/screen/schedule/upcoming_frame.dart';
 import 'package:healthline/utils/translate.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -21,6 +22,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     _currentIndex = ScheduleTabBar.UpComing;
+    if (!mounted) return;
+    context.read<ConsultationCubit>().fetchConsultation();
     super.initState();
   }
 
@@ -28,14 +31,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   Widget build(BuildContext context) {
     return BlocListener<ConsultationCubit, ConsultationState>(
       listener: (context, state) {
-        if (state is CancelConsultationState) {
-          if (state.blocState == BlocState.Failed) {
-            EasyLoading.showToast(translate(context, state.error));
-          } else if (state.blocState == BlocState.Successed) {
+        if (state.blocState == BlocState.Pending) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state.blocState == BlocState.Failed) {
+          EasyLoading.showToast(translate(context, state.error));
+        } else {
+          EasyLoading.dismiss();
+          if (state is CancelConsultationState ||
+              state is ConfirmConsultationState ||
+              state is DenyConsultationState) {
             EasyLoading.showToast(translate(context, 'successfully'));
+            context.read<ConsultationCubit>().fetchConsultation();
             Navigator.pop(context);
-          } else {
-            EasyLoading.show(maskType: EasyLoadingMaskType.black);
           }
         }
       },
@@ -44,22 +51,22 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         backgroundColor: white,
         extendBody: true,
         // extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          surfaceTintColor: transparent,
-          scrolledUnderElevation: 0,
-          backgroundColor: white,
-          title: Padding(
-            padding: EdgeInsets.only(left: dimensWidth()),
-            child: Text(
-              translate(context, 'my_appointments'),
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.w900),
-            ),
-          ),
-          centerTitle: false,
-        ),
+        appBar: AppController().authState == AuthState.PatientAuthorized
+            ? AppBar(
+                surfaceTintColor: transparent,
+                scrolledUnderElevation: 0,
+                backgroundColor: white,
+                title: Padding(
+                  padding: EdgeInsets.only(left: dimensWidth()),
+                  child: Text(
+                    translate(context, 'my_appointments'),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: color1F1F1F, fontWeight: FontWeight.w900),
+                  ),
+                ),
+                centerTitle: false,
+              )
+            : null,
         // body:
         // NestedScrollView(
         //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

@@ -11,6 +11,12 @@ import 'package:healthline/screen/splash/splash_screen.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
 
+
+final GlobalKey<NavigatorState>? navigatorKey =AliceInspector().dev
+                    ? AliceInspector().alice.getNavigatorKey()
+                    : GlobalKey<NavigatorState>();
+
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -71,9 +77,7 @@ class _MyAppState extends State<MyApp> {
                     AppLocalizationsSetup.localizationsDelegates,
                 locale: state.locale,
                 builder: EasyLoading.init(),
-                navigatorKey: AliceInspector().dev
-                    ? AliceInspector().alice.getNavigatorKey()
-                    : null,
+                navigatorKey: navigatorKey,
               );
             },
           ),

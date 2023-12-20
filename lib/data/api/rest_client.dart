@@ -5,15 +5,18 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/app/healthline_app.dart';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/res/enum.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
 
@@ -202,9 +205,9 @@ class RestClient {
         onError: (DioException error, handler) async {
           logPrint("ERROR");
           logPrint(error.message);
-          if (error.response?.statusCode == 401) {
-            logout();
-          }
+          // if (error.response?.statusCode == 401) {
+          //   logout();
+          // }
           // SentryLogError().additionalException("${error}REST_CLIENT");
           return handler.next(error);
         },
@@ -215,22 +218,32 @@ class RestClient {
   }
 
   Future<void> logout() async {
-    await AppStorage().clear();
-    // if (AppController.instance.authState == AuthState.AllAuthorized) {
-    //   await getDio().delete(
-    //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
-    //   await getDio().delete(
-    //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
-    // } else
-    AppController.instance.authState = AuthState.Unauthorized;
-    if (AppController.instance.authState == AuthState.DoctorAuthorized) {
-      await getDio().delete(
-          dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
-    } else {
-      await getDio().delete(
-          dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+    try {
+      await AppStorage().clear();
+      // if (AppController.instance.authState == AuthState.AllAuthorized) {
+      //   await getDio().delete(
+      //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+      //   await getDio().delete(
+      //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
+      // } else
+      AppController.instance.authState = AuthState.Unauthorized;
+      if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+        await getDio().delete(
+            dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
+      } else {
+        await getDio().delete(
+            dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+      }
+      instance.cookieJar.deleteAll();
+    } catch (e) {
+      logPrint(e);
     }
-    instance.cookieJar.deleteAll();
+    if (navigatorKey != null) {
+      // EasyLoading.showToast(translate(navigatorKey?.currentState!.context!, 'value'));
+      EasyLoading.dismiss();
+      navigatorKey?.currentState!
+          .pushNamedAndRemoveUntil(logInName, (route) => false);
+    }
   }
 
   void runHttpInspector() {

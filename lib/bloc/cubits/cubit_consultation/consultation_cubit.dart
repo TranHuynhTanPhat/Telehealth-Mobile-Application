@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
@@ -156,8 +157,13 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           feedbacks: state.feedbacks),
     );
     try {
-      AllConsultationResponse consultations =
-          await _consultationRepository.fetchPatientConsultation();
+      AllConsultationResponse? consultations;
+      if(AppController.instance.authState==AuthState.PatientAuthorized) {
+        consultations=await _consultationRepository.fetchPatientConsultation();
+      }
+      if(AppController.instance.authState==AuthState.DoctorAuthorized) {
+        consultations=await _consultationRepository.fetchDoctorConsultation();
+      }
       emit(
         FetchConsultationState(
             blocState: BlocState.Successed,
@@ -406,9 +412,9 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     }
   }
 
-  Future<void> deleteConsultation({required String consultationId}) async {
+  Future<void> denyConsultation({required String consultationId}) async {
     emit(
-      DeleteConsultationState(
+      DenyConsultationState(
           blocState: BlocState.Pending,
           timeline: [],
           request: state.request,
@@ -422,7 +428,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           consultationId: consultationId);
       if (code == 200 || code == 201) {
         emit(
-          DeleteConsultationState(
+          DenyConsultationState(
               blocState: BlocState.Successed,
               timeline: [],
               request: state.request,
@@ -434,7 +440,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       }
     } on DioException catch (e) {
       emit(
-        DeleteConsultationState(
+        DenyConsultationState(
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
@@ -446,7 +452,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       );
     } catch (e) {
       emit(
-        DeleteConsultationState(
+        DenyConsultationState(
             blocState: BlocState.Failed,
             timeline: [],
             request: state.request,

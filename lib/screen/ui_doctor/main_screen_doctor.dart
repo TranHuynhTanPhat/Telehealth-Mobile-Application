@@ -10,12 +10,12 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/drawer_label.dart';
+import 'package:healthline/screen/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/account_setting_doctor_screen.dart';
 import 'package:healthline/screen/ui_doctor/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
-import 'package:healthline/screen/ui_doctor/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
@@ -467,7 +467,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
             body: _currentPage == DrawerMenu.AccountSetting
                 ? const SettingScreen()
                 : _currentPage == DrawerMenu.Schedule
-                    ? const ScheduleDoctorScreen()
+                    ? const ScheduleScreen()
                     : _currentPage == DrawerMenu.YourShift
                         ? const ShiftScreen()
                         : _currentPage == DrawerMenu.Patient

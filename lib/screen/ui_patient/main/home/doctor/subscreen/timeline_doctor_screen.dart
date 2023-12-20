@@ -156,6 +156,9 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                                     } else {
                                       _timeSelected.remove(e);
                                     }
+                                  }else{
+                                    _timeSelected.clear();
+                                    _timeSelected.add(e);
                                   }
                                 });
                               },
