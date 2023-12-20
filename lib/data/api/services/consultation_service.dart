@@ -36,15 +36,17 @@ class ConsultationService extends BaseService {
   }
 
   Future<int?> confirmConsultation({required String consultationId}) async {
-    final response =
-        await post('${ApiConstants.CONSULTATION_DOCTOR}/$consultationId', isDoctor: true);
+    final response = await post(
+        '${ApiConstants.CONSULTATION_DOCTOR}/$consultationId',
+        isDoctor: true);
 
     return response.code;
   }
 
   Future<int?> deleteConsultation({required String consultationId}) async {
-    final response =
-        await delete('${ApiConstants.CONSULTATION_DOCTOR}/$consultationId', isDoctor: true);
+    final response = await delete(
+        '${ApiConstants.CONSULTATION_DOCTOR}/$consultationId',
+        isDoctor: true);
 
     return response.code;
   }
@@ -80,8 +82,15 @@ class ConsultationService extends BaseService {
     return feedbacks;
   }
 
-    Future<List<UserResponse>> fetchPatient(
-      {required String doctorId}) async {
+  Future<ConsultationResponse> fetchDetailDoctorConsultation(
+      {required String consultationId}) async {
+    final response = await get(
+      '${ApiConstants.CONSULTATION_DOCTOR_CONSULTATION}/$consultationId',isDoctor: true
+    );
+    return ConsultationResponse.fromMap(response.data);
+  }
+
+  Future<List<UserResponse>> fetchPatient({required String doctorId}) async {
     final response = await get(
         '${ApiConstants.CONSULTATION_DOCTOR_INFORMATION}/$doctorId',
         isDoctor: true);
@@ -110,8 +119,10 @@ class ConsultationService extends BaseService {
     return AllConsultationResponse(
         coming: coming, finish: finish, cancel: cancel);
   }
+
   Future<AllConsultationResponse> fetchDoctorConsultation() async {
-    final response = await get(ApiConstants.CONSULTATION_DOCTOR, isDoctor: true);
+    final response =
+        await get(ApiConstants.CONSULTATION_DOCTOR, isDoctor: true);
     final List<dynamic> oComing =
         json.decode(json.encode(response.data['coming']));
     final List<dynamic> oFinish =

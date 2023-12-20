@@ -19,9 +19,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           ConsultationInitial(
             blocState: BlocState.Successed,
             timeline: [],
-            request: ConsultationRequest(),
-            doctorName: null,
-            patientName: null,
             consultations: null,
             feedbacks: [],
           ),
@@ -41,9 +38,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       FetchTimelineState(
         blocState: BlocState.Pending,
         timeline: [],
-        request: state.request,
-        doctorName: state.doctorName,
-        patientName: state.patientName,
         consultations: state.consultations,
         feedbacks: state.feedbacks,
       ),
@@ -55,9 +49,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
             blocState: BlocState.Successed,
             timeline: timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -67,9 +58,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -78,9 +66,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -92,9 +77,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       CancelConsultationState(
           blocState: BlocState.Pending,
           timeline: [],
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
@@ -110,9 +92,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         CancelConsultationState(
             blocState: BlocState.Successed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: AllConsultationResponse(
                 coming: coming,
                 finish: state.consultations?.finish ?? [],
@@ -125,9 +104,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -136,9 +112,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -150,27 +123,22 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       FetchConsultationState(
           blocState: BlocState.Pending,
           timeline: [],
-          request: ConsultationRequest(),
-          doctorName: null,
-          patientName: null,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
     try {
       AllConsultationResponse? consultations;
-      if(AppController.instance.authState==AuthState.PatientAuthorized) {
-        consultations=await _consultationRepository.fetchPatientConsultation();
+      if (AppController.instance.authState == AuthState.PatientAuthorized) {
+        consultations =
+            await _consultationRepository.fetchPatientConsultation();
       }
-      if(AppController.instance.authState==AuthState.DoctorAuthorized) {
-        consultations=await _consultationRepository.fetchDoctorConsultation();
+      if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+        consultations = await _consultationRepository.fetchDoctorConsultation();
       }
       emit(
         FetchConsultationState(
             blocState: BlocState.Successed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: consultations,
             feedbacks: state.feedbacks),
       );
@@ -180,9 +148,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -191,37 +156,69 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchConsultationState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
     }
   }
 
-  Future<void> createConsultation() async {
+  Future<void> fetchDetatilDoctorConsultation({required String consultationId}) async {
+    emit(
+      FetchDetatilDoctorConsultationState(
+          blocState: BlocState.Pending,
+          timeline: state.timeline,
+          consultations: state.consultations,
+          feedbacks: state.feedbacks),
+    );
+    try {
+      ConsultationResponse? consultation=
+            await _consultationRepository.fetchDetailDoctorConsultation(consultationId: consultationId);
+      
+     
+      emit(
+        FetchDetatilDoctorConsultationState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks, detailDoctorConsultation: consultation),
+      );
+    } on DioException catch (e) {
+      emit(
+        FetchConsultationState(
+            blocState: BlocState.Failed,
+            timeline: state.timeline,
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        FetchConsultationState(
+            blocState: BlocState.Failed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<void> createConsultation(
+      {required ConsultationRequest consultation}) async {
     emit(
       CreateConsultationState(
           blocState: BlocState.Pending,
           timeline: state.timeline,
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
     try {
       int? code = await _consultationRepository.createConsultation(
-          request: state.request);
+          request: consultation);
       if (code == 200 || code == 201) {
         emit(
           CreateConsultationState(
               blocState: BlocState.Successed,
               timeline: state.timeline,
-              request: state.request,
-              doctorName: state.doctorName,
-              patientName: state.patientName,
               consultations: state.consultations,
               feedbacks: state.feedbacks),
         );
@@ -234,9 +231,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -245,9 +239,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         CreateConsultationState(
             blocState: BlocState.Failed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -262,9 +253,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       CreateFeebackState(
           blocState: BlocState.Pending,
           timeline: state.timeline,
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
@@ -277,9 +265,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           CreateFeebackState(
               blocState: BlocState.Successed,
               timeline: state.timeline,
-              request: state.request,
-              doctorName: state.doctorName,
-              patientName: state.patientName,
               consultations: state.consultations,
               feedbacks: state.feedbacks),
         );
@@ -292,9 +277,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -303,9 +285,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         CreateFeebackState(
             blocState: BlocState.Failed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -317,9 +296,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       FetchFeedbackDoctorState(
           blocState: BlocState.Pending,
           timeline: state.timeline,
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: []),
     );
@@ -330,9 +306,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchFeedbackDoctorState(
             blocState: BlocState.Successed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: feedbacks),
       );
@@ -342,9 +315,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: []),
       );
@@ -353,9 +323,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchFeedbackDoctorState(
             blocState: BlocState.Failed,
             timeline: state.timeline,
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -367,9 +334,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       FetchFeedbackUserState(
           blocState: BlocState.Pending,
           timeline: [],
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
@@ -380,9 +344,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchFeedbackUserState(
             blocState: BlocState.Successed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: feedbacks),
       );
@@ -392,9 +353,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -403,9 +361,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchFeedbackUserState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -417,9 +372,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       DenyConsultationState(
           blocState: BlocState.Pending,
           timeline: [],
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
@@ -431,9 +383,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           DenyConsultationState(
               blocState: BlocState.Successed,
               timeline: [],
-              request: state.request,
-              doctorName: state.doctorName,
-              patientName: state.patientName,
               consultations: state.consultations,
               feedbacks: state.feedbacks),
         );
@@ -444,9 +393,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -455,9 +401,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         DenyConsultationState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -469,9 +412,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
       ConfirmConsultationState(
           blocState: BlocState.Pending,
           timeline: [],
-          request: state.request,
-          doctorName: state.doctorName,
-          patientName: state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );
@@ -483,9 +423,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           ConfirmConsultationState(
               blocState: BlocState.Successed,
               timeline: [],
-              request: state.request,
-              doctorName: state.doctorName,
-              patientName: state.patientName,
               consultations: state.consultations,
               feedbacks: state.feedbacks),
         );
@@ -496,9 +433,6 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             blocState: BlocState.Failed,
             timeline: [],
             error: e.response!.data['message'].toString(),
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -507,37 +441,17 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         ConfirmConsultationState(
             blocState: BlocState.Failed,
             timeline: [],
-            request: state.request,
-            doctorName: state.doctorName,
-            patientName: state.patientName,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
     }
   }
 
-  Future<void> updateRequest(
-      {String? doctorId,
-      String? medicalRecord,
-      String? date,
-      String? expectedTime,
-      int? price,
-      String? discountCode,
-      String? patientName,
-      String? doctorName}) async {
+  Future<void> updateRequest() async {
     emit(
       ConsultationInitial(
           blocState: BlocState.Successed,
           timeline: state.timeline,
-          request: state.request.copyWith(
-              expectedTime: expectedTime,
-              doctorId: doctorId,
-              medicalRecord: medicalRecord,
-              price: price,
-              discountCode: discountCode,
-              date: date),
-          doctorName: doctorName ?? state.doctorName,
-          patientName: patientName ?? state.patientName,
           consultations: state.consultations,
           feedbacks: state.feedbacks),
     );

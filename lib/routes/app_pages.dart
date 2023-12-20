@@ -25,13 +25,14 @@ const updateHealthStatName = '/update-health-stat';
 const patientRecordName = '/patient-record';
 const addPatientRecordName = '/add-patient-record';
 const helpsName = '/helps';
-const timelineDoctorName ='/timeline-doctor';
-const paymentMethodsName ='/payment-methods';
-const invoiceName ='/invoice';
-const formConsultationName ='/form-consultaion';
-const medicalRecordName ='/medical-record';
+// const timelineDoctorName ='/timeline-doctor';
+// const paymentMethodsName ='/payment-methods';
+// const invoiceName ='/invoice';
+// const formConsultationName ='/form-consultaion';
+// const medicalRecordName ='/medical-record';
 const detailConsultationName ='/detail-consultation';
-const formMedicalDeclarationName ='/form-medical-declaration';
+const createConsultationName ='/create-consultation';
+// const formMedicalDeclarationName ='/form-medical-declaration';
 
 
 const doctorName = '/doctor';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
@@ -17,6 +18,7 @@ import 'package:healthline/screen/license/privacy_policy_screen.dart';
 import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
 import 'package:healthline/screen/news/detail_news_screen.dart';
 import 'package:healthline/screen/news/news_screen.dart';
+import 'package:healthline/screen/schedule/detail_consultation.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
 import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
@@ -34,15 +36,9 @@ import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_va
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/create_consultation_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_create_consultation.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_medical_declaration.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/medical_record_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/payment_method_screen.dart';
-import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/timeline_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
-import 'package:healthline/screen/schedule/detail_consultation.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 import 'package:healthline/screen/wallet/wallet_screen.dart';
 
@@ -370,29 +366,30 @@ class AppRoute {
         return MaterialPageRoute(
           builder: (_) => const HelpsScreen(),
         );
-      case timelineDoctorName:
+      // case timelineDoctorName:
+      // String? args = settings.arguments as String?;
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _consultationCubit,
+      //       child: TimelineDoctorScreen(args: args),
+      //     ),
+      //   );
+      // case paymentMethodsName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _consultationCubit,
+      //       child: const PaymentMethodScreen(),
+      //     ),
+      //   );
+      // case invoiceName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _consultationCubit,
+      //       child: const InvoiceScreen(),
+      //     ),
+      //   );
+      case createConsultationName:
         String? args = settings.arguments as String?;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _consultationCubit,
-            child: TimelineDoctorScreen(args: args),
-          ),
-        );
-      case paymentMethodsName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _consultationCubit,
-            child: const PaymentMethodScreen(),
-          ),
-        );
-      case invoiceName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _consultationCubit,
-            child: const InvoiceScreen(),
-          ),
-        );
-      case medicalRecordName:
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
@@ -406,17 +403,34 @@ class AppRoute {
                 value: _patientRecordCubit,
               ),
             ],
-            child: const MedicalRecordScreen(),
+            child: CreateConsultationScreen(
+              args: args,
+            ),
           ),
         );
-      case formConsultationName:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _consultationCubit,
-            child: const FormConsultationScreen(),
-          ),
-        );
-      case formMedicalDeclarationName:
+      // case formConsultationName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider.value(
+      //       value: _consultationCubit,
+      //       child: const FormConsultationScreen(),
+      //     ),
+      //   );
+      // case formMedicalDeclarationName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => MultiBlocProvider(
+      //       providers: [
+      //         BlocProvider.value(
+      //           value: _consultationCubit,
+      //         ),
+      //         BlocProvider.value(
+      //           value: _patientRecordCubit,
+      //         ),
+      //       ],
+      //       child: const FormMedicalDeclaration(),
+      //     ),
+      //   );
+      case detailConsultationName:
+        final args = settings.arguments as String?;
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
@@ -427,14 +441,6 @@ class AppRoute {
                 value: _patientRecordCubit,
               ),
             ],
-            child: const FormMedicalDeclaration(),
-          ),
-        );
-      case detailConsultationName:
-        final args = settings.arguments as String?;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: _consultationCubit,
             child: DetailConsultationScreen(
               args: args,
             ),

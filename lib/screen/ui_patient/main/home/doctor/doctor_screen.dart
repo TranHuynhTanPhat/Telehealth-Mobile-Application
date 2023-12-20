@@ -206,7 +206,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                             ),
                           )
                         : Text(
-                            translate(context, 'news'),
+                            translate(context, 'doctor'),
                           ),
                     actions: [
                       if (openSearch == false)

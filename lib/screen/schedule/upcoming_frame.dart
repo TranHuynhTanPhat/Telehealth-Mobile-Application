@@ -63,7 +63,7 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                     DateTime date = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                         .parse(element.date!);
 
-                    if (times.first ~/ 2 == index &&
+                    if ((times.first-1) ~/ 2 == index &&
                         DateTime(date.year, date.month, date.day) ==
                             DateTime(now.year, now.month, now.day + _index)) {
                       return true;
@@ -115,7 +115,7 @@ class _UpcomingFrameState extends State<UpcomingFrame> {
                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                                     .parse(e.date!);
 
-                            if (times.first ~/ 2 == index &&
+                            if ((times.first-1) ~/ 2 == index &&
                                 DateTime(date.year, date.month, date.day) ==
                                     DateTime(now.year, now.month,
                                         now.day + _index)) {

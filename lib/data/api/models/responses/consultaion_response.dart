@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 
 class ConsultationResponse {
@@ -13,6 +14,9 @@ class ConsultationResponse {
   String? status;
   String? updatedAt;
   String? jistiToken;
+  String? symptoms;
+  String? medicalHistory;
+  List<PatientRecordResponse>? patientRecords;
 
   ConsultationResponse(
       {this.id,
@@ -23,7 +27,10 @@ class ConsultationResponse {
       this.jistiToken,
       this.price,
       this.status,
-      this.updatedAt});
+      this.updatedAt,
+      this.symptoms,
+      this.medicalHistory,
+      this.patientRecords});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -55,6 +62,15 @@ class ConsultationResponse {
     if (updatedAt != null) {
       result.addAll({'updated_at': updatedAt});
     }
+    if (symptoms != null) {
+      result.addAll({'symptoms': symptoms});
+    }
+    if (medicalHistory != null) {
+      result.addAll({'medical_history': medicalHistory});
+    }
+    if (patientRecords != null) {
+      result.addAll({'patient_records': patientRecords?.map((x) => x.toMap()).toList()});
+    }
 
     return result;
   }
@@ -72,6 +88,10 @@ class ConsultationResponse {
       price: map['price']?.toInt(),
       status: map['status'],
       updatedAt: map['updated_at'],
+      symptoms: map['symptoms'],
+      medicalHistory: map['medical_history'],
+      patientRecords: map['patient_records']!= null? List<PatientRecordResponse>.from(map['patient_records']?.map((x) => PatientRecordResponse.fromMap(x)))
+          : null,
     );
   }
 

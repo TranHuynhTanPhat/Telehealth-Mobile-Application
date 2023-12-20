@@ -97,7 +97,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  bloc_test: ^9.1.5
+  # bloc_test: ^9.1.5
   flutter_launcher_icons: ^0.13.1
   alice: ^0.3.3
   build_runner: ^2.4.6

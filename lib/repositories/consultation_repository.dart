@@ -2,6 +2,7 @@
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
+import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/consultation_service.dart';
@@ -28,15 +29,20 @@ class ConsultationRepository extends BaseRepository {
   Future<AllConsultationResponse> fetchPatientConsultation() async {
     return await _consultationService.fetchPatientConsultation();
   }
+
   Future<AllConsultationResponse> fetchDoctorConsultation() async {
     return await _consultationService.fetchDoctorConsultation();
   }
 
-  Future<List<UserResponse>> fetchPatient(
-      {required String doctorId}) async {
+  Future<List<UserResponse>> fetchPatient({required String doctorId}) async {
     return await _consultationService.fetchPatient(doctorId: doctorId);
   }
 
+  Future<ConsultationResponse> fetchDetailDoctorConsultation(
+      {required String consultationId}) async {
+    return await _consultationService.fetchDetailDoctorConsultation(
+        consultationId: consultationId);
+  }
 
   Future<int?> confirmConsultation({required String consultationId}) async {
     return await _consultationService.confirmConsultation(

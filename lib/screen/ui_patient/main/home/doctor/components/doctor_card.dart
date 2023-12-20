@@ -126,10 +126,10 @@ class _DoctorCardState extends State<DoctorCard> {
                             context.read<ConsultationCubit>().fetchTimeline(
                                 doctorId: widget.doctor.id!,
                                 date:
-                                    '${dateTime.day}/${dateTime.month}/${dateTime.year}');
+                                    '${dateTime.day+1}/${dateTime.month}/${dateTime.year}');
                             Navigator.pushNamed(
                               context,
-                              timelineDoctorName,
+                              createConsultationName,
                               arguments: widget.doctor.toJson(),
                             );
                           } else {

@@ -89,10 +89,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               DateTime dateTime = DateTime.now();
               context.read<ConsultationCubit>().fetchTimeline(
                   doctorId: doctor.id!,
-                  date: '${dateTime.day}/${dateTime.month}/${dateTime.year}');
+                  date: '${dateTime.day+1}/${dateTime.month}/${dateTime.year}');
               Navigator.pushNamed(
                 context,
-                timelineDoctorName,
+                createConsultationName,
                 arguments: doctor.toJson(),
               );
             } else {

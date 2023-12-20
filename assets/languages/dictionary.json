@@ -1622,30 +1622,29 @@
     "signs_of_the_disease_appeared_recently": {
         "vi": "Dấu hiệu bệnh xuất hiện gần đây",
         "en": "Signs of the disease appeared recently"
-    }
-    ,
+    },
     "medical_history": {
         "vi": "Tiền sử bệnh",
         "en": "Medical history"
-    }
-    ,
+    },
     "please_tell_us_about_your_medical_history": {
         "vi": "Vui lòng cho chúng tôi biết về tiền sử, bệnh sử của bạn",
         "en": "Please tell us about your medical history"
-    }
-    ,
+    },
     "please_tell_us_about_your_current_health_condition": {
         "vi": "Vui lòng cho chúng tôi biết về tình trạng sức khoẻ hiện tại của bạn",
         "en": "Please tell us about your current health condition"
-    }
-    ,
+    },
     "commit_medical_declaration": {
         "vi": "Tôi cam kết thông tin trên là đúng sự thật, tôi hiểu rằng nếu cung cấp thông tin sai có thể dẫn đến hậu quả nghiêm trọng. Nếu sai tôi hoàn toàn chịu trách nhiệm trước pháp luật.",
         "en": "I commit that the above information is true. I understand that providing false information can lead to serious consequences. If I am wrong, I am fully responsible before the law."
-    }
-    ,
+    },
     "share_information": {
         "vi": "Chia sẻ thông tin",
         "en": "Share information"
+    },
+    "symptoms": {
+        "vi": "Triệu chứng",
+        "en": "Symptoms"
     }
 }

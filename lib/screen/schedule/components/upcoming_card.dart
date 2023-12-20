@@ -143,65 +143,68 @@ class _UpcomingCardState extends State<UpcomingCard> {
                   ),
                 ],
               ),
-              InkWell(
-                splashColor: transparent,
-                highlightColor: transparent,
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          actionsAlignment: MainAxisAlignment.spaceBetween,
-                          actions: [
-                            InkWell(
-                              splashColor: transparent,
-                              highlightColor: transparent,
-                              onTap: () => Navigator.pop(context),
-                              child: Text(
-                                translate(context, 'back'),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700),
+              if (widget.coming.status == "pending")
+                InkWell(
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return AlertDialog(
+                            actionsAlignment: MainAxisAlignment.spaceBetween,
+                            actions: [
+                              InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () => Navigator.pop(context),
+                                child: Text(
+                                  translate(context, 'back'),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
-                            ),
-                            InkWell(
-                              splashColor: transparent,
-                              highlightColor: transparent,
-                              onTap: () {
-                                try {
-                                  AppController().authState ==
-                                          AuthState.PatientAuthorized
-                                      ? context
-                                          .read<ConsultationCubit>()
-                                          .cancelConsultation(
-                                              consultationId: widget.coming.id!)
-                                      : context
-                                          .read<ConsultationCubit>()
-                                          .denyConsultation(
-                                              consultationId:
-                                                  widget.coming.id!);
-                                } catch (e) {
-                                  EasyLoading.showToast(
-                                      translate(context, 'failure'));
-                                }
-                              },
-                              child: Text(
-                                translate(context, 'confirm'),
-                                style: const TextStyle(color: Colors.redAccent),
-                              ),
-                            )
-                          ],
-                          title: Text(
-                              '${translate(context, 'cancel')} ${translate(context, 'appointment').toLowerCase()}'),
-                          titleTextStyle:
-                              Theme.of(context).textTheme.labelLarge,
-                        );
-                      });
-                },
-                child: FaIcon(
-                  FontAwesomeIcons.xmark,
-                  size: dimensWidth() * 2.5,
+                              InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () {
+                                  try {
+                                    AppController().authState ==
+                                            AuthState.PatientAuthorized
+                                        ? context
+                                            .read<ConsultationCubit>()
+                                            .cancelConsultation(
+                                                consultationId:
+                                                    widget.coming.id!)
+                                        : context
+                                            .read<ConsultationCubit>()
+                                            .denyConsultation(
+                                                consultationId:
+                                                    widget.coming.id!);
+                                  } catch (e) {
+                                    EasyLoading.showToast(
+                                        translate(context, 'failure'));
+                                  }
+                                },
+                                child: Text(
+                                  translate(context, 'confirm'),
+                                  style:
+                                      const TextStyle(color: Colors.redAccent),
+                                ),
+                              )
+                            ],
+                            title: Text(
+                                '${translate(context, 'cancel')} ${translate(context, 'appointment').toLowerCase()}'),
+                            titleTextStyle:
+                                Theme.of(context).textTheme.labelLarge,
+                          );
+                        });
+                  },
+                  child: FaIcon(
+                    FontAwesomeIcons.xmark,
+                    size: dimensWidth() * 2.5,
+                  ),
                 ),
-              ),
             ],
           ),
           Padding(

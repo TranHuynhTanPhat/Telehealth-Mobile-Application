@@ -7,6 +7,9 @@ class ConsultationRequest {
   String? expectedTime;
   int? price;
   String? discountCode;
+  String? symptoms;
+  String? medicalHistory;
+  List<String>? patientRecords;
 
   ConsultationRequest(
       {this.doctorId,
@@ -14,7 +17,10 @@ class ConsultationRequest {
       this.date,
       this.expectedTime,
       this.price,
-      this.discountCode});
+      this.discountCode,
+      this.symptoms,
+      this.medicalHistory,
+      this.patientRecords});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -37,6 +43,15 @@ class ConsultationRequest {
     if (discountCode != null) {
       result.addAll({'discount_code': discountCode});
     }
+    if (symptoms != null) {
+      result.addAll({'symptoms': symptoms});
+    }
+    if (medicalHistory != null) {
+      result.addAll({'medical_history': medicalHistory});
+    }
+    if (patientRecords != null) {
+      result.addAll({'patient_records': patientRecords});
+    }
 
     return result;
   }
@@ -49,6 +64,11 @@ class ConsultationRequest {
       expectedTime: map['expected_time'],
       price: map['price']?.toInt(),
       discountCode: map['discount_code'],
+      symptoms: map['symptoms'],
+      medicalHistory: map['medical_history'],
+      patientRecords: map['patient_records'] != null
+          ? List<String>.from(map['patient_records']?.map((x) => x))
+          : null,
     );
   }
 
@@ -64,6 +84,9 @@ class ConsultationRequest {
     String? expectedTime,
     int? price,
     String? discountCode,
+    String? symptoms,
+    String? medicalHistory,
+    List<String>? patientRecords,
   }) {
     return ConsultationRequest(
       doctorId: doctorId ?? this.doctorId,
@@ -72,6 +95,9 @@ class ConsultationRequest {
       expectedTime: expectedTime ?? this.expectedTime,
       price: price ?? this.price,
       discountCode: discountCode ?? this.discountCode,
+      symptoms: symptoms ?? this.symptoms,
+      medicalHistory: medicalHistory ?? this.medicalHistory,
+      patientRecords: patientRecords ?? this.patientRecords,
     );
   }
 }
