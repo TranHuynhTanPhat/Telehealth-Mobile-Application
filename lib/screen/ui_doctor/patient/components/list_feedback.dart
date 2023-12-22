@@ -1,5 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
@@ -41,11 +45,60 @@ class _ListFeedbackState extends State<ListFeedback> {
               padding: EdgeInsets.only(
                   left: dimensWidth() * 3, right: dimensWidth() * 3),
               child: Column(
-                children: state.feedbacks!
-                    .map((e) => Text(
-                          e.toJson(),
-                        ))
-                    .toList(),
+                children: state.feedbacks!.map((e) {
+                  var image;
+                  try {
+                    if (e.user?.avatar != null &&
+                        e.user?.avatar != 'default' &&
+                        e.user?.avatar != '') {
+                      image = image ??
+                          NetworkImage(
+                            CloudinaryContext.cloudinary
+                                .image(e.user?.avatar ?? '')
+                                .toString(),
+                          );
+                    } else {
+                      image = AssetImage(DImages.placeholder);
+                    }
+                  } catch (e) {
+                    logPrint(e);
+                    image = AssetImage(DImages.placeholder);
+                  }
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: image,
+                      onBackgroundImageError: (exception, stackTrace) {
+                        logPrint(exception);
+                      },
+                    ),
+                    title: Text(
+                      e.user?.fullName ?? translate(context, 'undefine'),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    subtitle: Column(children: [
+                      RatingBar.builder(
+                        ignoreGestures: true,
+                        initialRating: (e.rated ?? 0).toDouble(),
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: dimensWidth() * 2,
+                        itemBuilder: (context, _) => const FaIcon(
+                          FontAwesomeIcons.solidStar,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (double value) {},
+                      ),
+                      if (e.feedback != null)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(e.feedback!),
+                        )
+                    ]),
+                  );
+                }).toList(),
               ));
         } else {
           return Container(

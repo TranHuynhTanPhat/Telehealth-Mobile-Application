@@ -115,3 +115,14 @@ final class CreateFeebackState extends ConsultationState {
       required super.consultations,
       required super.feedbacks});
 }
+
+final class GetDasboardState extends ConsultationState {
+  GetDasboardState(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+       this.dashboard});
+  final DoctorDasboardResponse? dashboard;
+}

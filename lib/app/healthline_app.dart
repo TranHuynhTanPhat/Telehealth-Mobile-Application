@@ -8,14 +8,12 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_routes.dart';
 import 'package:healthline/screen/splash/splash_screen.dart';
-import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
 
-
-final GlobalKey<NavigatorState>? navigatorKey =AliceInspector().dev
-                    ? AliceInspector().alice.getNavigatorKey()
-                    : GlobalKey<NavigatorState>();
-
+// final GlobalKey<NavigatorState>? navigatorKey =AliceInspector().dev
+//                     ? AliceInspector().alice.getNavigatorKey()
+//                     : GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -38,14 +36,14 @@ class _MyAppState extends State<MyApp> {
     configLoading(context);
 
     late Locale locale;
-    if(Platform.localeName.contains('vi')){
+    if (Platform.localeName.contains('vi')) {
       locale = const Locale('vi');
-    }else {
+    } else {
       locale = const Locale('en');
     }
-        // Platform.localeName != 'vi_VN' || Platform.localeName != 'vi'
-        //     ? const Locale('en')
-        //     : const Locale('vi');
+    // Platform.localeName != 'vi_VN' || Platform.localeName != 'vi'
+    //     ? const Locale('en')
+    //     : const Locale('vi');
 
     return LayoutBuilder(
       builder: (context, constraints) {

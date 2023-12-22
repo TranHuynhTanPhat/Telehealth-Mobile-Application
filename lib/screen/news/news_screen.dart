@@ -169,7 +169,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                         )
                       : Text(
-                          translate(context, 'forum'),
+                          translate(context, 'news'),
                         ),
                   actions: [
                     if (openSearch == false)

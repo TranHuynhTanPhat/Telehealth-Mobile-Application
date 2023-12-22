@@ -5,6 +5,7 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
@@ -18,6 +19,13 @@ class ConsultationService extends BaseService {
     List<int> timeline = List<int>.from(response.data);
 
     return timeline;
+  }
+
+  Future<DoctorDasboardResponse> getDashboard() async {
+    final response =
+        await get(ApiConstants.CONSULTATION_DOCTOR_DASHBOARD, isDoctor: true);
+
+    return DoctorDasboardResponse.fromMap(response.data);
   }
 
   Future<int?> createConsultation(
@@ -85,15 +93,14 @@ class ConsultationService extends BaseService {
   Future<ConsultationResponse> fetchDetailDoctorConsultation(
       {required String consultationId}) async {
     final response = await get(
-      '${ApiConstants.CONSULTATION_DOCTOR_CONSULTATION}/$consultationId',isDoctor: true
-    );
+        '${ApiConstants.CONSULTATION_DOCTOR_CONSULTATION}/$consultationId',
+        isDoctor: true);
     return ConsultationResponse.fromMap(response.data);
   }
 
   Future<List<UserResponse>> fetchPatient() async {
-    final response = await get(
-        ApiConstants.CONSULTATION_DOCTOR_INFORMATION,
-        isDoctor: true);
+    final response =
+        await get(ApiConstants.CONSULTATION_DOCTOR_INFORMATION, isDoctor: true);
     final List<dynamic> objects =
         json.decode(json.encode(response.data['consultation']));
     final List<UserResponse> patients =

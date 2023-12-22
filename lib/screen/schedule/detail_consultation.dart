@@ -193,8 +193,11 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                           if (consultation?.jistiToken != null) {
                             JitsiService.instance.join(
                               token: consultation!.jistiToken!,
+                              // token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS9kM2QyOTAifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDMxNTI2OTMsImV4cCI6MTcwMzE1OTg5MywibmJmIjoxNzAzMTUyNjg4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJpZCI6ImViZmFkN2Q4LWIxOGQtNGNmMy05ZmIyLTA1NTEzMzJhOThkOCIsIm5hbWUiOiJoZWFsdGhsaW5lbWFuYWdlcjIwMjMiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20iLCJtb2RlcmF0b3IiOmZhbHNlLCJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2V9fSwicm9vbSI6IioifQ.gDts6RtXXYi6F4TeKs7YRoqKiPA1TJ8YJ8iGXRYs93byY5xCQQyWGWGdpVucfFpoq-TxSA9ZS_l0a-4mgQOwzO7PRFRoNFOJHz6AeP2DAorUGlWFzIVSDGEsa0a19DXsRJskp9g_8fc3c_dD65ToMUlXa75XDbUBLC7KFD-2N1ggUFAlcDf_p1nIITr36ynu4eOsTY_NaNMK7NVf-LieiXR_Q6HZzWzvNqbUA8BsTefM8Wl1yChndqhxI-9t2F4KNrAfXW3t1VeF9O3MXLRAUs11og3LxoAvMFa6TEz84Yu9F8HttVqdtV_PJLix2Yfpo5YvPwPJq0eJV_X98RQOUg",
                               roomName:
                                   "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
+                              // roomName:
+                              //     "${dotenv.get('ROOM_JITSI', fallback: '')}/4d_9A_4dk6aj2s5Rgye1Z",
                               displayName: consultation?.medical?.fullName ??
                                   translate(context, 'undefine'),
                               urlAvatar: CloudinaryContext.cloudinary

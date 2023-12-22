@@ -3,6 +3,7 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/consultation_service.dart';
@@ -14,6 +15,10 @@ class ConsultationRepository extends BaseRepository {
   Future<List<int>> fetchTimeline(
       {required String id, required String date}) async {
     return await _consultationService.fetchTimeline(id: id, date: date);
+  }
+  Future<DoctorDasboardResponse> getDasboard(
+     ) async {
+    return await _consultationService.getDashboard();
   }
 
   Future<int?> createConsultation(

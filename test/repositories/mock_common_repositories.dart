@@ -13,4 +13,11 @@ class MockCommonRepository extends Mock implements CommonRepository {
     return await _mockCommonService
         .loginDoctor(UserRequest(phone: phone, password: password));
   }
+  @override
+  Future<LoginResponse> loginPatient(String phone, String password) async {
+    return await _mockCommonService
+        .loginPatient(UserRequest(phone: phone, password: password));
+  }
+
+
 }

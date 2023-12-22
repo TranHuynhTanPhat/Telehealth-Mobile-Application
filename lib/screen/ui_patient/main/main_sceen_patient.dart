@@ -47,7 +47,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // EasyLoading.dismiss();
+      EasyLoading.dismiss();
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))
@@ -190,8 +190,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               }
             } else if (state is AddPatientRecordError) {
               EasyLoading.showToast(translate(context, state.message));
-            } else if (state is DeletePatientRecordError) {
-              EasyLoading.showToast(translate(context, state.message));
+            } 
+            else if (state is DeletePatientRecordError) {
+              // EasyLoading.showToast(translate(context, ''));
             }
           },
         ),

@@ -6,6 +6,7 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
@@ -66,6 +67,46 @@ class ConsultationCubit extends Cubit<ConsultationState> {
         FetchTimelineState(
             blocState: BlocState.Failed,
             timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<void> getDasboard() async {
+    emit(
+      GetDasboardState(
+        blocState: BlocState.Pending,
+        timeline: state.timeline,
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      DoctorDasboardResponse dashboard =
+          await _consultationRepository.getDasboard();
+      emit(
+        GetDasboardState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            dashboard: dashboard),
+      );
+    } on DioException catch (e) {
+      emit(
+        GetDasboardState(
+            blocState: BlocState.Failed,
+            timeline: state.timeline,
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        GetDasboardState(
+            blocState: BlocState.Failed,
+            timeline: state.timeline,
             consultations: state.consultations,
             feedbacks: state.feedbacks),
       );
@@ -162,7 +203,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     }
   }
 
-  Future<void> fetchDetatilDoctorConsultation({required String consultationId}) async {
+  Future<void> fetchDetatilDoctorConsultation(
+      {required String consultationId}) async {
     emit(
       FetchDetatilDoctorConsultationState(
           blocState: BlocState.Pending,
@@ -171,16 +213,16 @@ class ConsultationCubit extends Cubit<ConsultationState> {
           feedbacks: state.feedbacks),
     );
     try {
-      ConsultationResponse? consultation=
-            await _consultationRepository.fetchDetailDoctorConsultation(consultationId: consultationId);
-      
-     
+      ConsultationResponse? consultation = await _consultationRepository
+          .fetchDetailDoctorConsultation(consultationId: consultationId);
+
       emit(
         FetchDetatilDoctorConsultationState(
             blocState: BlocState.Successed,
             timeline: state.timeline,
             consultations: state.consultations,
-            feedbacks: state.feedbacks, detailDoctorConsultation: consultation),
+            feedbacks: state.feedbacks,
+            detailDoctorConsultation: consultation),
       );
     } on DioException catch (e) {
       emit(

@@ -238,13 +238,11 @@ class RestClient {
     } catch (e) {
       logPrint(e);
     }
-    if (navigatorKey != null) {
-      // EasyLoading.showToast(translate(navigatorKey?.currentState!.context!, 'value'));
-      EasyLoading.dismiss();
-      navigatorKey?.currentState!
-          .pushNamedAndRemoveUntil(logInName, (route) => false);
+    // EasyLoading.showToast(translate(navigatorKey?.currentState!.context!, 'value'));
+    EasyLoading.dismiss();
+    navigatorKey.currentState!
+        .pushNamedAndRemoveUntil(logInName, (route) => false);
     }
-  }
 
   void runHttpInspector() {
     AliceInspector().alice.showInspector();

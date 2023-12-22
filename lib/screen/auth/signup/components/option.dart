@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/google_button_widget.dart';
 import 'package:healthline/utils/translate.dart';
 
 class OptionSignUp extends StatelessWidget {
@@ -11,17 +10,17 @@ class OptionSignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 4,
-              right: dimensWidth() * 3,
-              left: dimensWidth() * 3),
-          child: const Divider(),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-          child:  GoogleButtonWidget(onPressed: () {  },),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(
+        //       top: dimensHeight() * 4,
+        //       right: dimensWidth() * 3,
+        //       left: dimensWidth() * 3),
+        //   child: const Divider(),
+        // ),
+        // Container(
+        //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
+        //   child:  GoogleButtonWidget(onPressed: () {  },),
+        // ),
         const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
