@@ -19,6 +19,8 @@ import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:sentry_dio/sentry_dio.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RestClient {
   static const CONNECT_TIME_OUT = 60 * 1000;
@@ -83,6 +85,8 @@ class RestClient {
     dio.interceptors.add(AliceInspector().alice.getDioInterceptor());
 
     dio.interceptors.add(CookieManager(instance.cookieJar));
+
+    dio.addSentry();
 
     if (ENABLE_LOG) {
       dio.interceptors.add(LogInterceptor(
@@ -170,8 +174,6 @@ class RestClient {
 
               return handler.next(options);
             } on DioException catch (error) {
-              logout();
-              // SentryLogError().additionalMessage(error, SentryLevel.error);
               return handler.reject(error, true);
             }
           } else {
@@ -205,10 +207,12 @@ class RestClient {
         onError: (DioException error, handler) async {
           logPrint("ERROR");
           logPrint(error.message);
-          // if (error.response?.statusCode == 401) {
-          //   logout();
-          // }
-          // SentryLogError().additionalException("${error}REST_CLIENT");
+          if (error.response?.statusCode == 401) {
+            logout();
+          }
+          Sentry.captureException(
+            "REST_CLIENT: $error",
+          );
           return handler.next(error);
         },
       ),
@@ -220,12 +224,6 @@ class RestClient {
   Future<void> logout() async {
     try {
       await AppStorage().clear();
-      // if (AppController.instance.authState == AuthState.AllAuthorized) {
-      //   await getDio().delete(
-      //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
-      //   await getDio().delete(
-      //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
-      // } else
       AppController.instance.authState = AuthState.Unauthorized;
       if (AppController.instance.authState == AuthState.DoctorAuthorized) {
         await getDio().delete(
@@ -240,9 +238,9 @@ class RestClient {
     }
     // EasyLoading.showToast(translate(navigatorKey?.currentState!.context!, 'value'));
     EasyLoading.dismiss();
-    navigatorKey.currentState!
+    navigatorKey?.currentState!
         .pushNamedAndRemoveUntil(logInName, (route) => false);
-    }
+  }
 
   void runHttpInspector() {
     AliceInspector().alice.showInspector();

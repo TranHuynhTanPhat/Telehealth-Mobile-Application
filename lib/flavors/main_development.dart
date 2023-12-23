@@ -14,17 +14,6 @@ import 'package:healthline/app/healthline_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // // Dart client
-  // IO.Socket socket = IO.io(ApiConstants.SOCKET_URL);
-  // print("CHECKKKK");
-  // print(socket.connected);
-  // socket.onConnect((_) {
-  //   print('connect');
-  //   socket.emit('msg', 'message');
-  // });
-  // socket.on('hello', (data) => print("CHEKKKKK"));
-  // socket.onDisconnect((_) => print('jdisconnect'));
-  // socket.on('fromServer', (_) => print(_));
 
   await dotenv.load();
   await AppController.instance.init();
@@ -40,6 +29,10 @@ void main() async {
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 1.0;
+
+      // The sampling rate for profiling is relative to tracesSampleRate
+      // Setting to 1.0 will profile 100% of sampled transactions:
+      options.profilesSampleRate = 1.0;
     },
     appRunner: () => runApp(const MyApp()),
   );

@@ -18,6 +18,7 @@ import 'package:healthline/screen/ui_doctor/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -467,18 +468,22 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 ),
               ),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: Container(
-              margin: EdgeInsets.only(right: dimensWidth() * 40),
-              child: IconButton(
-                onPressed: () => RestClient().runHttpInspector(),
-                padding: EdgeInsets.all(dimensWidth() * 2),
-                icon: const FaIcon(FontAwesomeIcons.bug),
-                color: white,
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(secondary)),
-              ),
-            ),
+            floatingActionButtonLocation: AliceInspector().dev
+                ? FloatingActionButtonLocation.endFloat
+                : null,
+            floatingActionButton: AliceInspector().dev
+                ? Container(
+                    margin: EdgeInsets.only(right: dimensWidth() * 40),
+                    child: IconButton(
+                      onPressed: () => RestClient().runHttpInspector(),
+                      padding: EdgeInsets.all(dimensWidth() * 2),
+                      icon: const FaIcon(FontAwesomeIcons.bug),
+                      color: white,
+                      style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(secondary)),
+                    ),
+                  )
+                : null,
             body: _currentPage == DrawerMenu.AccountSetting
                 ? const SettingScreen()
                 : _currentPage == DrawerMenu.Schedule

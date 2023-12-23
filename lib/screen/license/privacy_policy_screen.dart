@@ -26,6 +26,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 shrinkWrap: true,
                 padding: EdgeInsets.symmetric(
                   vertical: dimensHeight(),
+                  horizontal: dimensWidth()*3
                 ),
                 children: [
                   if (state.policies['value'] != null)

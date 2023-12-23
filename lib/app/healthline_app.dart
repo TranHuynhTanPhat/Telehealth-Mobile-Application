@@ -8,12 +8,14 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_routes.dart';
 import 'package:healthline/screen/splash/splash_screen.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/config_loading.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
-// final GlobalKey<NavigatorState>? navigatorKey =AliceInspector().dev
-//                     ? AliceInspector().alice.getNavigatorKey()
-//                     : GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState>? navigatorKey =AliceInspector().dev
+                    ? AliceInspector().alice.getNavigatorKey()
+                    : GlobalKey<NavigatorState>();
+// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -76,6 +78,7 @@ class _MyAppState extends State<MyApp> {
                 locale: state.locale,
                 builder: EasyLoading.init(),
                 navigatorKey: navigatorKey,
+                navigatorObservers: [SentryNavigatorObserver()],
               );
             },
           ),

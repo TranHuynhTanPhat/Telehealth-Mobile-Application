@@ -13,6 +13,7 @@ import 'package:healthline/screen/change_password/change_password_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/forum/edit_post_screen.dart';
 import 'package:healthline/screen/forum/forum_screen.dart';
+import 'package:healthline/screen/license/bug_report.dart';
 import 'package:healthline/screen/license/faqs_screen.dart';
 import 'package:healthline/screen/license/privacy_policy_screen.dart';
 import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
@@ -118,6 +119,10 @@ class AppRoute {
       case privacyPolicyName:
         return MaterialPageRoute(
           builder: (_) => const PrivacyPolicyScreen(),
+        );
+      case bugReportName:
+        return MaterialPageRoute(
+          builder: (_) => const BugReportScreen(),
         );
       case walletName:
         return MaterialPageRoute(

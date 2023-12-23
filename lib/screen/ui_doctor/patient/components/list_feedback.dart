@@ -40,6 +40,44 @@ class _ListFeedbackState extends State<ListFeedback> {
   Widget build(BuildContext context) {
     return BlocBuilder<ConsultationCubit, ConsultationState>(
       builder: (context, state) {
+        // return Column(children: [
+        //   ListTile(
+        //     leading: CircleAvatar(
+        //       backgroundImage: AssetImage(DImages.placeholder),
+        //       onBackgroundImageError: (exception, stackTrace) {
+        //         logPrint(exception);
+        //       },
+        //     ),
+        //     title: Text(
+        //       "Tran Huynh Tan Phat",
+        //       style: Theme.of(context).textTheme.labelLarge,
+        //     ),
+        //     subtitle: Column(
+        //         mainAxisAlignment: MainAxisAlignment.start,
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           RatingBar.builder(
+        //             ignoreGestures: true,
+        //             initialRating: 4,
+        //             minRating: 1,
+        //             direction: Axis.horizontal,
+        //             allowHalfRating: true,
+        //             itemCount: 5,
+        //             itemSize: dimensWidth() * 2,
+        //             itemBuilder: (context, _) => const FaIcon(
+        //               FontAwesomeIcons.solidStar,
+        //               color: Colors.amber,
+        //             ),
+        //             onRatingUpdate: (double value) {},
+        //           ),
+        //           // if (e.feedback != null)
+        //           SizedBox(
+        //             width: double.infinity,
+        //             child: Text("Bác sĩ rất tận tâm"),
+        //           )
+        //         ]),
+        //   )
+        // ]);
         if (state.feedbacks != null && state.feedbacks!.isNotEmpty) {
           return Padding(
               padding: EdgeInsets.only(

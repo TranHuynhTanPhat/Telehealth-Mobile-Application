@@ -10,6 +10,7 @@ const editPostName = '/edit-forum';
 const newsName = '/news';
 const detailNewsName = '/detail-news';
 const forgetPasswordName = '/forget-password';
+const bugReportName = '/bug-report';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";

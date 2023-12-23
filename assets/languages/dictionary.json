@@ -183,6 +183,10 @@
         "vi": "Vui lòng nhập nhiệt độ",
         "en": "Please enter temperature"
     },
+    "please_enter_feedback": {
+        "vi": "Vui lòng nhập phản hồi",
+        "en": "Please enter feedback"
+    },
     "least_8_characters_long": {
         "vi": "Ít nhất 8 kí tự",
         "en": "Least 8 characters long"
@@ -1646,5 +1650,13 @@
     "symptoms": {
         "vi": "Triệu chứng",
         "en": "Symptoms"
+    },
+    "bug_report": {
+        "vi": "Báo cáo lỗi",
+        "en": "Bug report"
+    },
+    "send": {
+        "vi": "Gửi",
+        "en": "Send"
     }
 }

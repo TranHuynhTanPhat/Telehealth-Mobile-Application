@@ -108,7 +108,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
                           return ListTile(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, detailConsultationName);
+                                context,
+                                detailConsultationName,
+                                arguments: cons.toJson(),
+                              );
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(

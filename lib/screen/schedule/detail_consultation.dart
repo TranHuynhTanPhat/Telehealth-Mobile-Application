@@ -69,585 +69,593 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      consultation = ConsultationResponse.fromJson(widget.args!);
-      if (AppController().authState == AuthState.DoctorAuthorized) {
-        context
-            .read<ConsultationCubit>()
-            .fetchDetatilDoctorConsultation(consultationId: consultation!.id!);
-      }
-    } catch (e) {
-      logPrint(e);
+    if (widget.args == null) {
+      EasyLoading.showToast(translate(context, 'cant_load_data'));
       Navigator.pop(context);
-    }
-    try {
-      if (consultation?.doctor?.avatar != null &&
-          consultation?.doctor?.avatar != 'default' &&
-          consultation?.doctor?.avatar != '') {
-        imageDoctor = imageDoctor ??
-            NetworkImage(
-              CloudinaryContext.cloudinary
-                  .image(consultation?.doctor?.avatar ?? '')
-                  .toString(),
-            );
-      } else {
+    } else {
+      try {
+        consultation = ConsultationResponse.fromJson(widget.args!);
+        if (AppController().authState == AuthState.DoctorAuthorized) {
+          context.read<ConsultationCubit>().fetchDetatilDoctorConsultation(
+              consultationId: consultation!.id!);
+        }
+      } catch (e) {
+        logPrint(e);
+        Navigator.pop(context);
+      }
+      try {
+        if (consultation?.doctor?.avatar != null &&
+            consultation?.doctor?.avatar != 'default' &&
+            consultation?.doctor?.avatar != '') {
+          imageDoctor = imageDoctor ??
+              NetworkImage(
+                CloudinaryContext.cloudinary
+                    .image(consultation?.doctor?.avatar ?? '')
+                    .toString(),
+              );
+        } else {
+          imageDoctor = AssetImage(DImages.placeholder);
+        }
+      } catch (e) {
+        logPrint(e);
         imageDoctor = AssetImage(DImages.placeholder);
       }
-    } catch (e) {
-      logPrint(e);
-      imageDoctor = AssetImage(DImages.placeholder);
-    }
-    try {
-      if (consultation?.medical?.avatar != null &&
-          consultation?.medical?.avatar != 'default' &&
-          consultation?.medical?.avatar != '') {
-        imagePatient = imagePatient ??
-            NetworkImage(
-              CloudinaryContext.cloudinary
-                  .image(consultation?.medical?.avatar ?? '')
-                  .toString(),
-            );
-      } else {
+      try {
+        if (consultation?.medical?.avatar != null &&
+            consultation?.medical?.avatar != 'default' &&
+            consultation?.medical?.avatar != '') {
+          imagePatient = imagePatient ??
+              NetworkImage(
+                CloudinaryContext.cloudinary
+                    .image(consultation?.medical?.avatar ?? '')
+                    .toString(),
+              );
+        } else {
+          imagePatient = AssetImage(DImages.placeholder);
+        }
+      } catch (e) {
+        logPrint(e);
         imagePatient = AssetImage(DImages.placeholder);
       }
-    } catch (e) {
-      logPrint(e);
-      imagePatient = AssetImage(DImages.placeholder);
-    }
-    try {
-      time = consultation?.expectedTime
-              ?.split('-')
-              .map((e) => int.parse(e))
-              .toList() ??
-          [int.parse(consultation!.expectedTime!)];
-    } catch (e) {
-      logPrint(e);
-    }
-    String expectedTime =
-        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+      try {
+        time = consultation?.expectedTime
+                ?.split('-')
+                .map((e) => int.parse(e))
+                .toList() ??
+            [int.parse(consultation!.expectedTime!)];
+      } catch (e) {
+        logPrint(e);
+      }
+      String expectedTime =
+          '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
 
-    return BlocListener<PatientRecordCubit, PatientRecordState>(
-      listener: (context, state) async {
-        if (state is OpenFileLoading) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        } else if (state is OpenFileLoaded) {
-          EasyLoading.dismiss();
-          await OpenDocument.openDocument(filePath: state.filePath);
-        } else if (state is AddPatientRecordLoaded ||
-            state is DeletePatientRecordLoaded) {
-          EasyLoading.showToast(translate(context, 'successfully'));
-        } else if (state is OpenFileError) {
-          EasyLoading.showToast(translate(context, 'cant_download'));
-          if (!await launchUrl(Uri.parse(state.url))) {
-            if (!mounted) return;
-            EasyLoading.showToast(translate(context, 'cant_open'));
+      return BlocListener<PatientRecordCubit, PatientRecordState>(
+        listener: (context, state) async {
+          if (state is OpenFileLoading) {
+            EasyLoading.show(maskType: EasyLoadingMaskType.black);
+          } else if (state is OpenFileLoaded) {
+            EasyLoading.dismiss();
+            await OpenDocument.openDocument(filePath: state.filePath);
+          } else if (state is AddPatientRecordLoaded ||
+              state is DeletePatientRecordLoaded) {
+            EasyLoading.showToast(translate(context, 'successfully'));
+          } else if (state is OpenFileError) {
+            EasyLoading.showToast(translate(context, 'cant_download'));
+            if (!await launchUrl(Uri.parse(state.url))) {
+              if (!mounted) return;
+              EasyLoading.showToast(translate(context, 'cant_open'));
+            }
+          } else if (state is AddPatientRecordError) {
+            EasyLoading.showToast(translate(context, state.message));
+          } else if (state is DeletePatientRecordError) {
+            EasyLoading.showToast(translate(context, state.message));
           }
-        } else if (state is AddPatientRecordError) {
-          EasyLoading.showToast(translate(context, state.message));
-        } else if (state is DeletePatientRecordError) {
-          EasyLoading.showToast(translate(context, state.message));
-        }
-      },
-      child: BlocBuilder<ConsultationCubit, ConsultationState>(
-        builder: (context, state) {
-          return Scaffold(
-              resizeToAvoidBottomInset: true,
-              extendBody: true,
-              backgroundColor: white,
-              appBar: AppBar(
-                title: Text(
-                  translate(context, 'appointment'),
+        },
+        child: BlocBuilder<ConsultationCubit, ConsultationState>(
+          builder: (context, state) {
+            return Scaffold(
+                resizeToAvoidBottomInset: true,
+                extendBody: true,
+                backgroundColor: white,
+                appBar: AppBar(
+                  title: Text(
+                    translate(context, 'appointment'),
+                  ),
                 ),
-              ),
-              bottomNavigationBar: consultation?.status == 'confirmed'
-                  ? Container(
-                      padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                          dimensWidth() * 3, dimensHeight() * 3),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.white.withOpacity(0.0), white],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        icon: const FaIcon(FontAwesomeIcons.video),
-                        label: Text(translate(context, 'join_now')),
-                        style: ButtonStyle(
-                          foregroundColor:
-                              const MaterialStatePropertyAll(white),
-                          textStyle: MaterialStatePropertyAll(Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(color: white)),
-                          padding: MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(
-                                vertical: dimensHeight() * 2,
-                                horizontal: dimensWidth() * 2.5),
+                bottomNavigationBar: consultation?.status == 'confirmed'
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                            dimensWidth() * 3, dimensHeight() * 3),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.white.withOpacity(0.0), white],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
                           ),
-                          backgroundColor:
-                              const MaterialStatePropertyAll(primary),
                         ),
-                        onPressed: () {
-                          if (consultation?.jistiToken != null) {
-                            JitsiService.instance.join(
-                              token: consultation!.jistiToken!,
-                              // token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS9kM2QyOTAifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDMxNTI2OTMsImV4cCI6MTcwMzE1OTg5MywibmJmIjoxNzAzMTUyNjg4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJpZCI6ImViZmFkN2Q4LWIxOGQtNGNmMy05ZmIyLTA1NTEzMzJhOThkOCIsIm5hbWUiOiJoZWFsdGhsaW5lbWFuYWdlcjIwMjMiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20iLCJtb2RlcmF0b3IiOmZhbHNlLCJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2V9fSwicm9vbSI6IioifQ.gDts6RtXXYi6F4TeKs7YRoqKiPA1TJ8YJ8iGXRYs93byY5xCQQyWGWGdpVucfFpoq-TxSA9ZS_l0a-4mgQOwzO7PRFRoNFOJHz6AeP2DAorUGlWFzIVSDGEsa0a19DXsRJskp9g_8fc3c_dD65ToMUlXa75XDbUBLC7KFD-2N1ggUFAlcDf_p1nIITr36ynu4eOsTY_NaNMK7NVf-LieiXR_Q6HZzWzvNqbUA8BsTefM8Wl1yChndqhxI-9t2F4KNrAfXW3t1VeF9O3MXLRAUs11og3LxoAvMFa6TEz84Yu9F8HttVqdtV_PJLix2Yfpo5YvPwPJq0eJV_X98RQOUg",
-                              roomName:
-                                  "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
-                              // roomName:
-                              //     "${dotenv.get('ROOM_JITSI', fallback: '')}/4d_9A_4dk6aj2s5Rgye1Z",
-                              displayName: consultation?.medical?.fullName ??
-                                  translate(context, 'undefine'),
-                              urlAvatar: CloudinaryContext.cloudinary
-                                  .image(consultation?.doctor?.avatar ?? '')
-                                  .toString(),
-                              email: consultation?.medical?.email ?? '',
-                            );
-                          } else {
-                            EasyLoading.showToast(
-                                translate(context, 'cant_load_data'));
-                          }
-                        },
-                      ),
-                    )
-                  : AppController().authState == AuthState.DoctorAuthorized
-                      ? Container(
-                          padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                              dimensWidth() * 3, dimensHeight() * 3),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.0), white],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: const FaIcon(FontAwesomeIcons.video),
+                          label: Text(translate(context, 'join_now')),
+                          style: ButtonStyle(
+                            foregroundColor:
+                                const MaterialStatePropertyAll(white),
+                            textStyle: MaterialStatePropertyAll(
+                                Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(color: white)),
+                            padding: MaterialStatePropertyAll(
+                              EdgeInsets.symmetric(
+                                  vertical: dimensHeight() * 2,
+                                  horizontal: dimensWidth() * 2.5),
                             ),
+                            backgroundColor:
+                                const MaterialStatePropertyAll(primary),
                           ),
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              foregroundColor:
-                                  const MaterialStatePropertyAll(white),
-                              textStyle: MaterialStatePropertyAll(
-                                  Theme.of(context)
-                                      .textTheme
-                                      .labelLarge
-                                      ?.copyWith(color: white)),
-                              padding: MaterialStatePropertyAll(
-                                EdgeInsets.symmetric(
-                                    vertical: dimensHeight() * 2,
-                                    horizontal: dimensWidth() * 2.5),
+                          onPressed: () {
+                            if (consultation?.jistiToken != null) {
+                              JitsiService.instance.join(
+                                token: consultation!.jistiToken!,
+                                // token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS9kM2QyOTAifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDMxNTI2OTMsImV4cCI6MTcwMzE1OTg5MywibmJmIjoxNzAzMTUyNjg4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJpZCI6ImViZmFkN2Q4LWIxOGQtNGNmMy05ZmIyLTA1NTEzMzJhOThkOCIsIm5hbWUiOiJoZWFsdGhsaW5lbWFuYWdlcjIwMjMiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20iLCJtb2RlcmF0b3IiOmZhbHNlLCJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2V9fSwicm9vbSI6IioifQ.gDts6RtXXYi6F4TeKs7YRoqKiPA1TJ8YJ8iGXRYs93byY5xCQQyWGWGdpVucfFpoq-TxSA9ZS_l0a-4mgQOwzO7PRFRoNFOJHz6AeP2DAorUGlWFzIVSDGEsa0a19DXsRJskp9g_8fc3c_dD65ToMUlXa75XDbUBLC7KFD-2N1ggUFAlcDf_p1nIITr36ynu4eOsTY_NaNMK7NVf-LieiXR_Q6HZzWzvNqbUA8BsTefM8Wl1yChndqhxI-9t2F4KNrAfXW3t1VeF9O3MXLRAUs11og3LxoAvMFa6TEz84Yu9F8HttVqdtV_PJLix2Yfpo5YvPwPJq0eJV_X98RQOUg",
+                                roomName:
+                                    "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
+                                // roomName:
+                                //     "${dotenv.get('ROOM_JITSI', fallback: '')}/4d_9A_4dk6aj2s5Rgye1Z",
+                                displayName: consultation?.medical?.fullName ??
+                                    translate(context, 'undefine'),
+                                urlAvatar: CloudinaryContext.cloudinary
+                                    .image(consultation?.doctor?.avatar ?? '')
+                                    .toString(),
+                                email: consultation?.medical?.email ?? '',
+                              );
+                            } else {
+                              EasyLoading.showToast(
+                                  translate(context, 'cant_load_data'));
+                            }
+                          },
+                        ),
+                      )
+                    : AppController().authState == AuthState.DoctorAuthorized
+                        ? Container(
+                            padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                                dimensWidth() * 3, dimensHeight() * 3),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.white.withOpacity(0.0), white],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
                               ),
-                              backgroundColor:
-                                  const MaterialStatePropertyAll(color1C6AA3),
                             ),
-                            onPressed: () {
-                              try {
-                                context
-                                    .read<ConsultationCubit>()
-                                    .confirmConsultation(
-                                        consultationId: consultation!.id!);
-                              } catch (e) {
-                                EasyLoading.showToast(
-                                    translate(context, 'cant_load_data'));
-                              }
-                            },
-                            child: Text(
-                                translate(context, 'confirm').capitalize()),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    const MaterialStatePropertyAll(white),
+                                textStyle: MaterialStatePropertyAll(
+                                    Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(color: white)),
+                                padding: MaterialStatePropertyAll(
+                                  EdgeInsets.symmetric(
+                                      vertical: dimensHeight() * 2,
+                                      horizontal: dimensWidth() * 2.5),
+                                ),
+                                backgroundColor:
+                                    const MaterialStatePropertyAll(color1C6AA3),
+                              ),
+                              onPressed: () {
+                                try {
+                                  context
+                                      .read<ConsultationCubit>()
+                                      .confirmConsultation(
+                                          consultationId: consultation!.id!);
+                                } catch (e) {
+                                  EasyLoading.showToast(
+                                      translate(context, 'cant_load_data'));
+                                }
+                              },
+                              child: Text(
+                                  translate(context, 'confirm').capitalize()),
+                            ),
+                          )
+                        : Container(
+                            padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                                dimensWidth() * 3, dimensHeight() * 3),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.white.withOpacity(0.0), white],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    const MaterialStatePropertyAll(white),
+                                textStyle: MaterialStatePropertyAll(
+                                    Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(color: white)),
+                                padding: MaterialStatePropertyAll(
+                                  EdgeInsets.symmetric(
+                                      vertical: dimensHeight() * 2,
+                                      horizontal: dimensWidth() * 2.5),
+                                ),
+                                backgroundColor: const MaterialStatePropertyAll(
+                                    Colors.redAccent),
+                              ),
+                              onPressed: () {
+                                try {
+                                  context
+                                      .read<ConsultationCubit>()
+                                      .cancelConsultation(
+                                          consultationId: consultation!.id!);
+                                } catch (e) {
+                                  EasyLoading.showToast(
+                                      translate(context, 'cant_load_data'));
+                                }
+                              },
+                              child: Text(
+                                  translate(context, 'cancel').capitalize()),
+                            ),
+                          ),
+                body: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: dimensWidth() * 3,
+                      vertical: dimensHeight() * 2),
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: dimensHeight() * 2),
+                      width: double.infinity,
+                      child: Text(
+                        formatFullDate(
+                            context,
+                            DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                .parse(consultation!.date!)),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: color1F1F1F, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: dimensHeight() * 2),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.clock,
+                                color: color1F1F1F,
+                                size: dimensWidth() * 2,
+                              ),
+                              SizedBox(
+                                width: dimensWidth(),
+                              ),
+                              Text(
+                                expectedTime,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        color: color1F1F1F,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                translate(context, consultation?.status),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                        color: color1F1F1F,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: dimensWidth(),
+                              ),
+                              consultation?.status == 'confirmed'
+                                  ? FaIcon(
+                                      FontAwesomeIcons.check,
+                                      color: color1F1F1F,
+                                      size: dimensWidth() * 2,
+                                    )
+                                  : FaIcon(
+                                      FontAwesomeIcons.arrowsRotate,
+                                      color: color1F1F1F,
+                                      size: dimensWidth() * 2,
+                                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          translate(context, 'doctor'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(color: black26),
+                        ),
+                        Expanded(
+                          child: Text(
+                            ' ---------------------------------------------------',
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: black26),
                           ),
                         )
-                      : Container(
-                          padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                              dimensWidth() * 3, dimensHeight() * 3),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: dimensImage() * 7,
+                          height: dimensImage() * 7,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.0), white],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                100,
+                              ),
+                            ),
+                            image: DecorationImage(
+                              image: imageDoctor,
+                              fit: BoxFit.cover,
+                              onError: (exception, stackTrace) {
+                                logPrint(exception);
+                                setState(() {
+                                  imageDoctor = AssetImage(DImages.placeholder);
+                                });
+                              },
                             ),
                           ),
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              foregroundColor:
-                                  const MaterialStatePropertyAll(white),
-                              textStyle: MaterialStatePropertyAll(
-                                  Theme.of(context)
+                        ),
+                        SizedBox(
+                          width: dimensWidth() * 2,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  consultation?.doctor?.fullName ??
+                                      translate(context, 'undefine'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
                                       .textTheme
                                       .labelLarge
-                                      ?.copyWith(color: white)),
-                              padding: MaterialStatePropertyAll(
-                                EdgeInsets.symmetric(
-                                    vertical: dimensHeight() * 2,
-                                    horizontal: dimensWidth() * 2.5),
+                                      ?.copyWith(
+                                          color: color1F1F1F,
+                                          fontWeight: FontWeight.w900),
+                                ),
                               ),
-                              backgroundColor: const MaterialStatePropertyAll(
-                                  Colors.redAccent),
-                            ),
-                            onPressed: () {
-                              try {
-                                context
-                                    .read<ConsultationCubit>()
-                                    .cancelConsultation(
-                                        consultationId: consultation!.id!);
-                              } catch (e) {
-                                EasyLoading.showToast(
-                                    translate(context, 'cant_load_data'));
-                              }
-                            },
-                            child:
-                                Text(translate(context, 'cancel').capitalize()),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  translate(
+                                      context,
+                                      consultation?.doctor?.specialty ??
+                                          'undefine'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(color: color1F1F1F),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-              body: ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(
-                    horizontal: dimensWidth() * 3,
-                    vertical: dimensHeight() * 2),
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: dimensHeight() * 2),
-                    width: double.infinity,
-                    child: Text(
-                      formatFullDate(
-                          context,
-                          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                              .parse(consultation!.date!)),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: color1F1F1F, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: dimensHeight() * 2),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.clock,
-                              color: color1F1F1F,
-                              size: dimensWidth() * 2,
-                            ),
-                            SizedBox(
-                              width: dimensWidth(),
-                            ),
-                            Text(
-                              expectedTime,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                      color: color1F1F1F,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              translate(context, consultation?.status),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                      color: color1F1F1F,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              width: dimensWidth(),
-                            ),
-                            consultation?.status == 'confirmed'
-                                ? FaIcon(
-                                    FontAwesomeIcons.check,
-                                    color: color1F1F1F,
-                                    size: dimensWidth() * 2,
-                                  )
-                                : FaIcon(
-                                    FontAwesomeIcons.arrowsRotate,
-                                    color: color1F1F1F,
-                                    size: dimensWidth() * 2,
-                                  ),
-                          ],
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        translate(context, 'doctor'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(color: black26),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ' ---------------------------------------------------',
-                          maxLines: 1,
-                          overflow: TextOverflow.visible,
+                    SizedBox(
+                      height: dimensHeight() * 3,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          translate(context, 'patient'),
                           style: Theme.of(context)
                               .textTheme
-                              .titleLarge
+                              .labelSmall
                               ?.copyWith(color: black26),
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: dimensImage() * 7,
-                        height: dimensImage() * 7,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              100,
-                            ),
+                        Expanded(
+                          child: Text(
+                            ' ---------------------------------------------------',
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(color: black26),
                           ),
-                          image: DecorationImage(
-                            image: imageDoctor,
-                            fit: BoxFit.cover,
-                            onError: (exception, stackTrace) {
-                              logPrint(exception);
-                              setState(() {
-                                imageDoctor = AssetImage(DImages.placeholder);
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: dimensWidth() * 2,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                consultation?.doctor?.fullName ??
-                                    translate(context, 'undefine'),
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                        color: color1F1F1F,
-                                        fontWeight: FontWeight.w900),
+                        )
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: dimensImage() * 7,
+                          height: dimensImage() * 7,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                100,
                               ),
                             ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                translate(
-                                    context,
-                                    consultation?.doctor?.specialty ??
-                                        'undefine'),
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: color1F1F1F),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 3,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        translate(context, 'patient'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(color: black26),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ' ---------------------------------------------------',
-                          maxLines: 1,
-                          overflow: TextOverflow.visible,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(color: black26),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: dimensImage() * 7,
-                        height: dimensImage() * 7,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              100,
+                            image: DecorationImage(
+                              image: imagePatient,
+                              fit: BoxFit.cover,
+                              onError: (exception, stackTrace) {
+                                logPrint(exception);
+                                setState(() {
+                                  imagePatient =
+                                      AssetImage(DImages.placeholder);
+                                });
+                              },
                             ),
                           ),
-                          image: DecorationImage(
-                            image: imagePatient,
-                            fit: BoxFit.cover,
-                            onError: (exception, stackTrace) {
-                              logPrint(exception);
-                              setState(() {
-                                imagePatient = AssetImage(DImages.placeholder);
-                              });
-                            },
+                        ),
+                        SizedBox(
+                          width: dimensWidth() * 2,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  consultation?.medical?.fullName ??
+                                      translate(context, 'undefine'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                          color: color1F1F1F,
+                                          fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: dimensWidth() * 2,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                consultation?.medical?.fullName ??
-                                    translate(context, 'undefine'),
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(
-                                        color: color1F1F1F,
-                                        fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: dimensHeight() * 2,
-                  ),
-                  if (state is FetchDetatilDoctorConsultationState &&
-                      state.blocState == BlocState.Successed &&
-                      state.detailDoctorConsultation != null) ...[
-                    Row(children: [
-                      Text(
-                        '${translate(context, 'symptoms')}: ',
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      Expanded(
-                        child: Text(
-                            state.detailDoctorConsultation?.symptoms ??
-                                translate(context, 'empty'),
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      )
-                    ]),
-                    Row(children: [
-                      Text("${translate(context, 'medical_history')}: ",
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge),
-                      Expanded(
-                        child: Text(
-                            state.detailDoctorConsultation?.medicalHistory ??
-                                translate(context, 'empty'),
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      )
-                    ]),
-                    if (state.detailDoctorConsultation?.patientRecords !=
-                        null) ...[
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          translate(context, 'patient_records'),
+                      ],
+                    ),
+                    SizedBox(
+                      height: dimensHeight() * 2,
+                    ),
+                    if (state is FetchDetatilDoctorConsultationState &&
+                        state.blocState == BlocState.Successed &&
+                        state.detailDoctorConsultation != null) ...[
+                      Row(children: [
+                        Text(
+                          '${translate(context, 'symptoms')}: ',
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
-                      ),
-                      ...state.detailDoctorConsultation!.patientRecords!.map(
-                        (e) {
-                          String fileName =
-                              e.record?.split('/').last ?? 'undefine';
-                          String type = fileName.split('.').last;
-                          DateTime updateAt =
-                              DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                  .parse(e.updateAt!);
-                          String? url;
-                          if (['pdf', 'gif', 'jpeg', 'jpg', 'png']
-                              .contains(type)) {
-                            url = CloudinaryContext.cloudinary
-                                .image('${Uri.encodeFull(e.record!)}.$type')
-                                .toString();
-                          } else if ([
-                            'doc',
-                            'docx',
-                            'xls',
-                            'xlsx',
-                            'csv',
-                            'pps',
-                            'ppt',
-                            'pptx'
-                          ].contains(type)) {
-                            url = e.record != null
-                                ? CloudinaryContext.cloudinary
-                                    .raw(Uri.encodeFull(e.record!))
-                                    .toString()
-                                : null;
-                          } else if ([
-                            '3gp',
-                            'asf',
-                            'avi',
-                            'm4u',
-                            'm4v',
-                            'mov',
-                            'mp4',
-                            'mpe',
-                            'mpeg',
-                            'mpg',
-                            'mpg4',
-                          ].contains(type)) {
-                            url = e.record != null
-                                ? CloudinaryContext.cloudinary
-                                    .video(Uri.encodeFull('${e.record!}.$type'))
-                                    .toString()
-                                : null;
-                          }
-                          return FileWidget(
-                            onTap: url != null
-                                ? () async => _openFile(url!, fileName)
-                                : () => EasyLoading.showToast(
-                                    translate(context, 'cant_download')),
-                            extension: type,
-                            title: fileName,
-                            updateAt: formatFileDate(context, updateAt),
-                            size: e.size,
-                          );
-                        },
-                      ).toList()
-                    ]
+                        Expanded(
+                          child: Text(
+                              state.detailDoctorConsultation?.symptoms ??
+                                  translate(context, 'empty'),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium),
+                        )
+                      ]),
+                      Row(children: [
+                        Text("${translate(context, 'medical_history')}: ",
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelLarge),
+                        Expanded(
+                          child: Text(
+                              state.detailDoctorConsultation?.medicalHistory ??
+                                  translate(context, 'empty'),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium),
+                        )
+                      ]),
+                      if (state.detailDoctorConsultation?.patientRecords !=
+                          null) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            translate(context, 'patient_records'),
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                        ...state.detailDoctorConsultation!.patientRecords!.map(
+                          (e) {
+                            String fileName =
+                                e.record?.split('/').last ?? 'undefine';
+                            String type = fileName.split('.').last;
+                            DateTime updateAt =
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                    .parse(e.updateAt!);
+                            String? url;
+                            if (['pdf', 'gif', 'jpeg', 'jpg', 'png']
+                                .contains(type)) {
+                              url = CloudinaryContext.cloudinary
+                                  .image('${Uri.encodeFull(e.record!)}.$type')
+                                  .toString();
+                            } else if ([
+                              'doc',
+                              'docx',
+                              'xls',
+                              'xlsx',
+                              'csv',
+                              'pps',
+                              'ppt',
+                              'pptx'
+                            ].contains(type)) {
+                              url = e.record != null
+                                  ? CloudinaryContext.cloudinary
+                                      .raw(Uri.encodeFull(e.record!))
+                                      .toString()
+                                  : null;
+                            } else if ([
+                              '3gp',
+                              'asf',
+                              'avi',
+                              'm4u',
+                              'm4v',
+                              'mov',
+                              'mp4',
+                              'mpe',
+                              'mpeg',
+                              'mpg',
+                              'mpg4',
+                            ].contains(type)) {
+                              url = e.record != null
+                                  ? CloudinaryContext.cloudinary
+                                      .video(
+                                          Uri.encodeFull('${e.record!}.$type'))
+                                      .toString()
+                                  : null;
+                            }
+                            return FileWidget(
+                              onTap: url != null
+                                  ? () async => _openFile(url!, fileName)
+                                  : () => EasyLoading.showToast(
+                                      translate(context, 'cant_download')),
+                              extension: type,
+                              title: fileName,
+                              updateAt: formatFileDate(context, updateAt),
+                              size: e.size,
+                            );
+                          },
+                        ).toList()
+                      ]
+                    ],
                   ],
-                ],
-              ));
-        },
-      ),
-    );
+                ));
+          },
+        ),
+      );
+    }
+    return const SizedBox();
   }
 }
