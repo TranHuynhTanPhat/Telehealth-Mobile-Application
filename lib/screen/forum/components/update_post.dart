@@ -100,7 +100,7 @@ class _UpdatePostState extends State<UpdatePost> {
                             context.read<ForumCubit>().editPost(
                                 idPost: widget.post.id,
                                 files: [],
-                                content: contentController.text);
+                                content: contentController.text.trim());
                           }
                         },
                         style: ButtonStyle(

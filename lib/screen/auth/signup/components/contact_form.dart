@@ -51,14 +51,14 @@ class _ContactFormState extends State<ContactForm> {
             child: TextFieldWidget(
               validate: (value) {
                 if (widget.conflictPhone != null) {
-                  if (Validate().changePhoneFormat(widget.conflictPhone!) ==
-                      Validate().changePhoneFormat(widget.controllerPhone.text)) {
+                  if (Validate().changePhoneFormat(widget.conflictPhone!.trim()) ==
+                      Validate().changePhoneFormat(widget.controllerPhone.text.trim())) {
                     return translate(
                         context, 'phone_number_has_been_registered');
                   }
                 }
                 return Validate()
-                    .validatePhone(context, widget.controllerPhone.text);
+                    .validatePhone(context, widget.controllerPhone.text.trim());
               },
               prefix: Padding(
                 padding: EdgeInsets.only(right: dimensWidth() * .5),
@@ -79,7 +79,7 @@ class _ContactFormState extends State<ContactForm> {
           Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: TextFieldWidget(
-              error: widget.conflictEmail == widget.controllerEmail.text
+              error: widget.conflictEmail == widget.controllerEmail.text.trim()
                   ? translate(context, 'email_has_been_registered')
                   : null,
               label: translate(context, 'email'),

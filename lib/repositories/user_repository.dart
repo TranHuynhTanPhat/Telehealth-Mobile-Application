@@ -83,9 +83,9 @@ class UserRepository extends BaseRepository {
   }
 
   Future<int?> changePassword(
-      {required String password, required String passwordConfirm}) async {
+      {required String password, required String newPassword}) async {
     return await _userService.changePassword(
-        password: password, passwordConfirm: passwordConfirm);
+        password: password, newPassword: newPassword);
   }
 
   Future<int?> sendOTP({required String email}) async {

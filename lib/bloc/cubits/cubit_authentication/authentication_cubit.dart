@@ -173,7 +173,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       }
       if (AppController().authState == AuthState.PatientAuthorized) {
         code = await _userRepository.changePassword(
-            password: password, passwordConfirm: newPassword);
+            password: password, newPassword: newPassword);
       }
 
       if (code == 200 || code == 201) {

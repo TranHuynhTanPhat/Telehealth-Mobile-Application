@@ -37,16 +37,24 @@ class _ForumScreenState extends State<ForumScreen> {
   void initState() {
     _searchController = TextEditingController();
     _pagingController.addPageRequestListener((pageKey) {
-      context.read<ForumCubit>().searchPost(
-            key: _searchController.text,
-            searchQuery: SearchQuery(
-                limit: 20,
-                attributesToSearchOn: ['description', 'user.full_name'],
-                sort: ['updatedAt:desc'],
-                page: pageKey + 1),
-            pageKey: pageKey,
-            callback: (news) => updateData(news: news, pageKey: pageKey),
-          );
+      if (_searchController.text.trim().isEmpty) {
+        // print(pageKey);
+        context.read<ForumCubit>().fetchPostPage(
+            pageKey: pageKey + 1,
+            limit: 20,
+            callback: (posts) => updateData(posts: posts, pageKey: pageKey));
+      } else {
+        context.read<ForumCubit>().searchPost(
+              key: _searchController.text.trim(),
+              searchQuery: SearchQuery(
+                  limit: 20,
+                  attributesToSearchOn: ['description', 'user.full_name'],
+                  sort: ['updatedAt:desc'],
+                  page: pageKey + 1),
+              pageKey: pageKey,
+              callback: (news) => updateData(posts: news, pageKey: pageKey),
+            );
+      }
     });
     if (!mounted) return;
     _pagingController.addStatusListener((status) {
@@ -85,13 +93,13 @@ class _ForumScreenState extends State<ForumScreen> {
     }
   }
 
-  void updateData({required List<PostResponse> news, required int pageKey}) {
-    final isLastPage = news.length < _pageSize;
+  void updateData({required List<PostResponse> posts, required int pageKey}) {
+    final isLastPage = posts.length < _pageSize;
     if (isLastPage) {
-      _pagingController.appendLastPage(news);
+      _pagingController.appendLastPage(posts);
     } else {
       final nextPageKey = pageKey + 1;
-      _pagingController.appendPage(news, nextPageKey);
+      _pagingController.appendPage(posts, nextPageKey);
     }
   }
 
@@ -154,7 +162,13 @@ class _ForumScreenState extends State<ForumScreen> {
                               focusedBorderColor: colorF2F5FF,
                               enabledBorderColor: colorF2F5FF,
                               controller: _searchController,
-                              onChanged: (value) => _pagingController.refresh(),
+                              onChanged: (value) {
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  if (value == _searchController.text.trim()) {
+                                    _pagingController.refresh();
+                                  }
+                                });
+                              },
                               prefixIcon: IconButton(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: dimensWidth() * 2),

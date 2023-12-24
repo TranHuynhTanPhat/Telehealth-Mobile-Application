@@ -212,7 +212,7 @@ class _LogInFormState extends State<LogInForm> {
             child: TextFieldWidget(
               validate: (value) {
                 try {
-                  if (value!.isEmpty) {
+                  if (value!.trim().isEmpty) {
                     return translate(context, 'please_enter_password');
                   }
                   return null;
@@ -279,8 +279,8 @@ class _LogInFormState extends State<LogInForm> {
                   _formKey.currentState!.save();
                   KeyboardUtil.hideKeyboard(context);
                   context.read<AuthenticationCubit>().login(
-                      Validate().changePhoneFormat(_controllerPhone.text),
-                      _controllerPassword.text,
+                      Validate().changePhoneFormat(_controllerPhone.text.trim()),
+                      _controllerPassword.text.trim(),
                       isDoctor: isDoctor,
                       isPatient: isPatient,
                       remember: remember);

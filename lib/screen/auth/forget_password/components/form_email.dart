@@ -32,7 +32,7 @@ class _FormEmailState extends State<FormEmail> {
               controller: widget.emailController,
               label: translate(context, 'email'),
               hint: 'example@gmail.com',
-              validate: (value) => Validate().validateEmail(context, value),
+              validate: (value) => Validate().validateEmail(context, value?.trim()),
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),

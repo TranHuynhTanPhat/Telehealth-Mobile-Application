@@ -79,65 +79,62 @@ class _ListFeedbackState extends State<ListFeedback> {
         //   )
         // ]);
         if (state.feedbacks != null && state.feedbacks!.isNotEmpty) {
-          return Padding(
-              padding: EdgeInsets.only(
-                  left: dimensWidth() * 3, right: dimensWidth() * 3),
-              child: Column(
-                children: state.feedbacks!.map((e) {
-                  var image;
-                  try {
-                    if (e.user?.avatar != null &&
-                        e.user?.avatar != 'default' &&
-                        e.user?.avatar != '') {
-                      image = image ??
-                          NetworkImage(
-                            CloudinaryContext.cloudinary
-                                .image(e.user?.avatar ?? '')
-                                .toString(),
-                          );
-                    } else {
-                      image = AssetImage(DImages.placeholder);
-                    }
-                  } catch (e) {
-                    logPrint(e);
-                    image = AssetImage(DImages.placeholder);
-                  }
+          return Column(
+            children: state.feedbacks!.map((e) {
+              var image;
+              try {
+                if (e.user?.avatar != null &&
+                    e.user?.avatar != 'default' &&
+                    e.user?.avatar != '') {
+                  image = image ??
+                      NetworkImage(
+                        CloudinaryContext.cloudinary
+                            .image(e.user?.avatar ?? '')
+                            .toString(),
+                      );
+                } else {
+                  image = AssetImage(DImages.placeholder);
+                }
+              } catch (e) {
+                logPrint(e);
+                image = AssetImage(DImages.placeholder);
+              }
 
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: image,
-                      onBackgroundImageError: (exception, stackTrace) {
-                        logPrint(exception);
-                      },
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: image,
+                  onBackgroundImageError: (exception, stackTrace) {
+                    logPrint(exception);
+                  },
+                ),
+                title: Text(
+                  e.user?.fullName ?? translate(context, 'undefine'),
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                subtitle: Column(children: [
+                  RatingBar.builder(
+                    ignoreGestures: true,
+                    initialRating: (e.rated ?? 0).toDouble(),
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: dimensWidth() * 2,
+                    itemBuilder: (context, _) => const FaIcon(
+                      FontAwesomeIcons.solidStar,
+                      color: Colors.amber,
                     ),
-                    title: Text(
-                      e.user?.fullName ?? translate(context, 'undefine'),
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    subtitle: Column(children: [
-                      RatingBar.builder(
-                        ignoreGestures: true,
-                        initialRating: (e.rated ?? 0).toDouble(),
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemSize: dimensWidth() * 2,
-                        itemBuilder: (context, _) => const FaIcon(
-                          FontAwesomeIcons.solidStar,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (double value) {},
-                      ),
-                      if (e.feedback != null)
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text(e.feedback!),
-                        )
-                    ]),
-                  );
-                }).toList(),
-              ));
+                    onRatingUpdate: (double value) {},
+                  ),
+                  if (e.feedback != null)
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(e.feedback!),
+                    )
+                ]),
+              );
+            }).toList(),
+          );
         } else {
           return Container(
             margin: EdgeInsets.only(top: dimensHeight() * 10),

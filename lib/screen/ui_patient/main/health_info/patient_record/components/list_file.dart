@@ -96,7 +96,7 @@ class _ListFileState extends State<ListFile> {
         children: widget.fileRecords.map(
       (e) {
         String fileName = e.record?.split('/').last ?? 'undefine';
-        String type = fileName.split('.').last;
+        String type = fileName.split('.').last.toLowerCase();
         DateTime updateAt =
             DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(e.updateAt!);
         String? url;

@@ -6,6 +6,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/signup/components/exports.dart';
 import 'package:healthline/utils/keyboard.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:healthline/utils/validate.dart';
 
@@ -106,16 +107,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 EasyLoading.showToast(translate(context, 'success_register'));
                 Navigator.pushReplacementNamed(context, logInName);
               } else if (state.blocState == BlocState.Failed) {
-                if (state.error == 'phone_number_has_been_registered') {
-                  setState(() {
-                    step = SignUp.Contact;
-                    conflictPhone = _controllerPhone.text;
-                  });
-                } else if (state.error == "email_has_been_registered") {
-                  setState(() {
-                    step = SignUp.Contact;
-                    confictEmail = _controllerEmail.text;
-                  });
+                try {
+                  if (state.error!
+                      .contains('phone_number_has_been_registered')) {
+                    setState(() {
+                      step = SignUp.Contact;
+                      conflictPhone = _controllerPhone.text.trim();
+                    });
+                  }
+                  if (state.error!.contains("email_has_been_registered")) {
+                    setState(() {
+                      step = SignUp.Contact;
+                      confictEmail = _controllerEmail.text.trim();
+                    });
+                  }
+                } catch (e) {
+                  logPrint(e);
                 }
                 EasyLoading.showToast(translate(context, state.error));
               }
@@ -213,15 +220,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     context
                                         .read<AuthenticationCubit>()
                                         .registerAccount(
-                                          _controllerFullName.text,
+                                          _controllerFullName.text.trim(),
                                           Validate().changePhoneFormat(
-                                              _controllerPhone.text),
-                                          _controllerEmail.text,
-                                          _controllerPassword.text,
-                                          _controllerConfirmPassword.text,
+                                              _controllerPhone.text.trim()),
+                                          _controllerEmail.text.trim(),
+                                          _controllerPassword.text.trim(),
+                                          _controllerConfirmPassword.text.trim(),
                                           _gender!,
-                                          _controllerBirthday.text,
-                                          _controllerAddress.text,
+                                          _controllerBirthday.text.trim(),
+                                          _controllerAddress.text.trim(),
                                         );
                                   },
                                   formKey: _formKeySecurity,
@@ -240,7 +247,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ],
                           ),
                         ),
-                         Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: dimensWidth() * 3),
                           child: const OptionSignUp(),

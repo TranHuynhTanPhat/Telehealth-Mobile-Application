@@ -97,10 +97,10 @@ class _BugReportScreenState extends State<BugReportScreen> {
                               ),
                               child: TextFieldWidget(
                                 validate: (value) {
-                                  if (_controllerFullName.text == '') {
+                                  if (_controllerFullName.text.trim() == '') {
                                     return translate(
                                         context, 'please_enter_full_name');
-                                  } else if (_controllerFullName.text
+                                  } else if (_controllerFullName.text.trim()
                                           .split(' ')
                                           .length <
                                       2) {
@@ -121,7 +121,7 @@ class _BugReportScreenState extends State<BugReportScreen> {
                                   EdgeInsets.only(bottom: dimensHeight() * 2),
                               child: TextFieldWidget(
                                 validate: (value) {
-                                  if (_controllerFeedback.text == '') {
+                                  if (_controllerFeedback.text.trim() == '') {
                                     return translate(
                                         context, 'please_enter_feedback');
                                   }
@@ -165,9 +165,9 @@ class _BugReportScreenState extends State<BugReportScreen> {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
                                       licenseCubit.reportBugState(
-                                          email: _controllerEmail.text,
-                                          fullName: _controllerFullName.text,
-                                          feedback: _controllerFeedback.text);
+                                          email: _controllerEmail.text.trim(),
+                                          fullName: _controllerFullName.text.trim(),
+                                          feedback: _controllerFeedback.text.trim());
                                     }
                                   },
                                 ),

@@ -74,16 +74,16 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                   .toString(),
             )
         : AssetImage(DImages.placeholder);
-    _controllerFullName.text = _controllerFullName.text == ''
+    _controllerFullName.text = _controllerFullName.text.trim() == ''
         ? translate(context, widget._subUser.fullName!)
-        : _controllerFullName.text;
-    _controllerRelationship.text = _controllerRelationship.text == '' &&
+        : _controllerFullName.text.trim();
+    _controllerRelationship.text = _controllerRelationship.text.trim() == '' &&
             widget._subUser.relationship != null
         ? translate(context, widget._subUser.relationship!.name.toLowerCase())
-        : _controllerRelationship.text;
+        : _controllerRelationship.text.trim();
     _controllerGender.text = _controllerGender.text == ''
         ? translate(context, widget._subUser.gender!.toLowerCase())
-        : _controllerGender.text;
+        : _controllerGender.text.trim();
     if (_controllerBirthday.text == '') {
       DateTime date = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
           .parse(widget._subUser.dateOfBirth!);
@@ -91,7 +91,7 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
     }
     _controllerAddress.text = _controllerAddress.text == ''
         ? widget._subUser.address!
-        : _controllerAddress.text;
+        : _controllerAddress.text.trim();
     gender = gender ?? widget._subUser.gender!;
     if (widget._subUser.relationship != null) {
       relationship = relationship ?? widget._subUser.relationship!.name;
@@ -482,11 +482,11 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
                                               .read<MedicalRecordCubit>()
                                               .updateSubUser(
                                                 _file?.path,
-                                                _controllerFullName.text,
-                                                _controllerBirthday.text,
+                                                _controllerFullName.text.trim(),
+                                                _controllerBirthday.text.trim(),
                                                 gender!,
                                                 relationship,
-                                                _controllerAddress.text,
+                                                _controllerAddress.text.trim(),
                                               );
                                         }
                                       },

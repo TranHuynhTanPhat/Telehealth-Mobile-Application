@@ -29,205 +29,151 @@ class HealthStat extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'full_name')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               // if (state.subUsers.isNotEmpty)
-                Expanded(
-                  child: Text(
-                    fullName ??
-                        translate(
-                            context, 'undefine'),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium,
-                  ),
-                )
+              Expanded(
+                child: Text(
+                  fullName ?? translate(context, 'undefine'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              )
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
-          child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${translate(context, 'relationship')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
-              ),
-              // if (state.subUsers.isNotEmpty)
+        if (relationship != null)
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: dimensHeight()),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${translate(context, 'relationship')}: ',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                // if (state.subUsers.isNotEmpty)
                 Expanded(
                   child: Text(
-                    translate(
-                        context,
-                        relationship != null
-                            ? relationship
-                                ?.toLowerCase()
-                            : ''),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium,
+                    translate(context, relationship?.toLowerCase()),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 )
-            ],
+              ],
+            ),
           ),
-        ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'heart_rate')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   '$heartRate bpm',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'blood_group')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   bloodGroup,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'height')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   '$height m',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'weight')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   '$weight Kg',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'BMI')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   '${double.parse(
                     bmi.toStringAsFixed(2),
                   )} ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight()),
+          padding: EdgeInsets.symmetric(vertical: dimensHeight()),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${translate(context, 'temperature')}: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
                 child: Text(
                   '$temperature °C',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               )
             ],

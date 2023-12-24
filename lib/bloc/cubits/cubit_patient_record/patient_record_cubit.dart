@@ -105,11 +105,13 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(DeletePatientRecordLoaded(
           records: response, medicalId: state.medicalId));
     } on DioException catch (e) {
+      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
           message: e.response!.data['message'].toString()));
     } catch (e) {
+      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
@@ -165,7 +167,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       String filePath = "$path/$fileName";
 
       final isCheck = await OpenDocument.checkDocument(filePath: filePath);
-      logPrint("CHECKKK $isCheck");
+      
       if (!isCheck) {
         filePath =
             await _fileRepository.downloadFile(filePath: filePath, url: url);

@@ -187,9 +187,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               }
             } else if (state is AddPatientRecordError) {
               EasyLoading.showToast(translate(context, state.message));
-            } 
-            else if (state is DeletePatientRecordError) {
-              // EasyLoading.showToast(translate(context, ''));
+            } else if (state is DeletePatientRecordError) {
+              // if(state.blo)
+              EasyLoading.showToast(translate(context, state.message));
             }
           },
         ),

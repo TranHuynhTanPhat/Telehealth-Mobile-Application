@@ -79,8 +79,8 @@ class _FormMedicalDeclarationState extends State<FormMedicalDeclaration> {
                       text: translate(context, 'book_appointment_now'),
                       onPressed: () {
                         widget.callback(
-                            symptoms: _symptomsController.text,
-                            medicalHistory: _medicalHisController.text);
+                            symptoms: _symptomsController.text.trim(),
+                            medicalHistory: _medicalHisController.text.trim());
                         widget.nextPage();
         
                         // context.read<ConsultationCubit>().updateRequest(

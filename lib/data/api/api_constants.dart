@@ -54,6 +54,8 @@ class ApiConstants {
   static const _FORUM = '/health-forum';
   static const FORUM_POST = '$_FORUM/posts';
 
+
+
   // consultation
   static const CONSULTATION = '/consultation';
   static const CONSULTATION_FEEDBACK = '$CONSULTATION/feedback';

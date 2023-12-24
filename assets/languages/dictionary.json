@@ -1658,5 +1658,9 @@
     "send": {
         "vi": "Gửi",
         "en": "Send"
+    },
+    "special_characters": {
+        "vi": "Kí tự đặc biệt",
+        "en": "Special character"
     }
 }

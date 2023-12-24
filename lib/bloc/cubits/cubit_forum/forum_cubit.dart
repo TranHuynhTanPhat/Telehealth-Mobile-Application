@@ -44,6 +44,17 @@ class ForumCubit extends Cubit<ForumState> {
           (e) => PostResponse.fromMap(e),
         ),
       );
+      List<String> ids = [];
+      for (var element in posts) {
+        try {
+          ids.add(element.id!);
+        } catch (e) {
+          logPrint(e);
+        }
+      }
+      posts = await _forumRepository.fetchPostIds(
+          ids: ids,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       callback(posts);
       emit(
         SearchPostState(
@@ -56,6 +67,43 @@ class ForumCubit extends Cubit<ForumState> {
       logPrint(error);
       emit(
         SearchPostState(
+            error: error.toString(),
+            blocState: BlocState.Failed,
+            pageKey: pageKey,
+            comments: state.comments,
+            currentPost: state.currentPost),
+      );
+    }
+  }
+
+  Future<void> fetchPostPage(
+      {required int pageKey,
+      required int limit,
+      required Function(List<PostResponse>) callback}) async {
+    emit(
+      FetchPostState(
+          blocState: BlocState.Pending,
+          pageKey: pageKey,
+          comments: [],
+          currentPost: null),
+    );
+    try {
+      List<PostResponse> posts = await _forumRepository.fetchPostPage(
+          pageKey: pageKey,
+          limit: limit,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
+      callback(posts);
+      emit(
+        FetchPostState(
+            blocState: BlocState.Successed,
+            pageKey: pageKey,
+            comments: state.comments,
+            currentPost: state.currentPost),
+      );
+    } catch (error) {
+      logPrint(error);
+      emit(
+        FetchPostState(
             error: error.toString(),
             blocState: BlocState.Failed,
             pageKey: pageKey,
@@ -196,6 +244,7 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
+      // files.forEach((element) {print(element?.path);});
       int? code = await _forumRepository.editPost(
           idPost: idPost,
           content: content,
@@ -232,7 +281,9 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.likePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
+      int? code = await _forumRepository.likePost(
+          idPost: idPost,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           LikePostState(
@@ -272,7 +323,9 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.unlikePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
+      int? code = await _forumRepository.unlikePost(
+          idPost: idPost,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           UnlikePostState(
@@ -312,7 +365,9 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments),
     );
     try {
-      int? code = await _forumRepository.deletePost(idPost: idPost, isDoctor:AppController().authState==AuthState.DoctorAuthorized);
+      int? code = await _forumRepository.deletePost(
+          idPost: idPost,
+          isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
         emit(
           DeletePostState(
