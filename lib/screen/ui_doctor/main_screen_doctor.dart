@@ -46,8 +46,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
       EasyLoading.dismiss();
     });
     context.read<DoctorProfileCubit>().fetchProfile();
-    context.read<ConsultationCubit>().fetchConsultation();
-    context.read<ConsultationCubit>().getDasboard();
+   
     _image = null;
   }
 

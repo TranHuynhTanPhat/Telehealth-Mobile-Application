@@ -7,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
+import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/file_widget.dart';
+import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/app/app_controller.dart';
@@ -65,6 +68,95 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
             .openFile(url: url, fileName: fileName);
       }
     }
+  }
+
+  Future<bool?> showBottomSheetFeedback(BuildContext context,
+      {required String feedbackId}) {
+    double rating = 1;
+    TextEditingController feedbackController = TextEditingController();
+
+    return showModalBottomSheet<bool>(
+      context: context,
+      barrierColor: black26,
+      elevation: 0,
+      isScrollControlled: true,
+      backgroundColor: transparent,
+      builder: (BuildContext contextBottomSheet) {
+        return Wrap(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+              padding: EdgeInsets.symmetric(
+                  horizontal: dimensWidth() * 3, vertical: dimensHeight() * 3),
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.circular(dimensWidth() * 3),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      translate(context, 'feedbacks'),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: dimensHeight()),
+                    width: double.infinity,
+                    child: TextFieldWidget(
+                        controller: feedbackController,
+                        textInputType: const TextInputType.numberWithOptions(),
+                        label: translate(context, 'feedbacks'),
+                        validate: (value) => null),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: dimensHeight() * 2),
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    child: RatingBar.builder(
+                      ignoreGestures: false,
+                      initialRating: (rating).toDouble(),
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: false,
+                      itemCount: 5,
+                      itemSize: dimensWidth() * 3,
+                      itemPadding: EdgeInsets.all(dimensWidth()),
+                      itemBuilder: (context, _) => const FaIcon(
+                        FontAwesomeIcons.solidStar,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (double value) {
+                        rating = value;
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: dimensHeight() * 2),
+                    width: double.infinity,
+                    child: ElevatedButtonWidget(
+                      text: translate(context, 'send'),
+                      onPressed: () {
+                        context.read<ConsultationCubit>().createFeedback(
+                              feedbackId: feedbackId,
+                              rating: (rating).toInt(),
+                              feedback: feedbackController.text.trim(),
+                            );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -162,149 +254,163 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                     translate(context, 'appointment'),
                   ),
                 ),
-                bottomNavigationBar: consultation?.status == 'confirmed'
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                            dimensWidth() * 3, dimensHeight() * 3),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.white.withOpacity(0.0), white],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          icon: const FaIcon(FontAwesomeIcons.video),
-                          label: Text(translate(context, 'join_now')),
-                          style: ButtonStyle(
-                            foregroundColor:
-                                const MaterialStatePropertyAll(white),
-                            textStyle: MaterialStatePropertyAll(
-                                Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(color: white)),
-                            padding: MaterialStatePropertyAll(
-                              EdgeInsets.symmetric(
-                                  vertical: dimensHeight() * 2,
-                                  horizontal: dimensWidth() * 2.5),
+                bottomNavigationBar: AbsorbPointer(
+                  absorbing: state.blocState == BlocState.Pending,
+                  child: consultation?.status == 'confirmed'
+                      ? Container(
+                          padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                              dimensWidth() * 3, dimensHeight() * 3),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.white.withOpacity(0.0), white],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
                             ),
-                            backgroundColor:
-                                const MaterialStatePropertyAll(primary),
                           ),
-                          onPressed: () {
-                            if (consultation?.jistiToken != null) {
-                              JitsiService.instance.join(
-                                token: consultation!.jistiToken!,
-                                // token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InZwYWFzLW1hZ2ljLWNvb2tpZS1mZDA3NDQ4OTRmMTk0ZjNlYTc0ODg4NGY4M2NlYzE5NS9kM2QyOTAifQ.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDMxNTI2OTMsImV4cCI6MTcwMzE1OTg5MywibmJmIjoxNzAzMTUyNjg4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJpZCI6ImViZmFkN2Q4LWIxOGQtNGNmMy05ZmIyLTA1NTEzMzJhOThkOCIsIm5hbWUiOiJoZWFsdGhsaW5lbWFuYWdlcjIwMjMiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20iLCJtb2RlcmF0b3IiOmZhbHNlLCJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2V9fSwicm9vbSI6IioifQ.gDts6RtXXYi6F4TeKs7YRoqKiPA1TJ8YJ8iGXRYs93byY5xCQQyWGWGdpVucfFpoq-TxSA9ZS_l0a-4mgQOwzO7PRFRoNFOJHz6AeP2DAorUGlWFzIVSDGEsa0a19DXsRJskp9g_8fc3c_dD65ToMUlXa75XDbUBLC7KFD-2N1ggUFAlcDf_p1nIITr36ynu4eOsTY_NaNMK7NVf-LieiXR_Q6HZzWzvNqbUA8BsTefM8Wl1yChndqhxI-9t2F4KNrAfXW3t1VeF9O3MXLRAUs11og3LxoAvMFa6TEz84Yu9F8HttVqdtV_PJLix2Yfpo5YvPwPJq0eJV_X98RQOUg",
-                                roomName:
-                                    "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
-                                // roomName:
-                                //     "${dotenv.get('ROOM_JITSI', fallback: '')}/4d_9A_4dk6aj2s5Rgye1Z",
-                                displayName: consultation?.medical?.fullName ??
-                                    translate(context, 'undefine'),
-                                urlAvatar: CloudinaryContext.cloudinary
-                                    .image(consultation?.doctor?.avatar ?? '')
-                                    .toString(),
-                                email: consultation?.medical?.email ?? '',
-                              );
-                            } else {
-                              EasyLoading.showToast(
-                                  translate(context, 'cant_load_data'));
-                            }
-                          },
-                        ),
-                      )
-                    : AppController().authState == AuthState.DoctorAuthorized
-                        ? Container(
-                            padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                                dimensWidth() * 3, dimensHeight() * 3),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Colors.white.withOpacity(0.0), white],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            icon: const FaIcon(FontAwesomeIcons.video),
+                            label: Text(translate(context, 'join_now')),
+                            style: ButtonStyle(
+                              foregroundColor:
+                                  const MaterialStatePropertyAll(white),
+                              textStyle: MaterialStatePropertyAll(
+                                  Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(color: white)),
+                              padding: MaterialStatePropertyAll(
+                                EdgeInsets.symmetric(
+                                    vertical: dimensHeight() * 2,
+                                    horizontal: dimensWidth() * 2.5),
                               ),
+                              backgroundColor:
+                                  const MaterialStatePropertyAll(primary),
                             ),
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                foregroundColor:
-                                    const MaterialStatePropertyAll(white),
-                                textStyle: MaterialStatePropertyAll(
-                                    Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(color: white)),
-                                padding: MaterialStatePropertyAll(
-                                  EdgeInsets.symmetric(
-                                      vertical: dimensHeight() * 2,
-                                      horizontal: dimensWidth() * 2.5),
+                            onPressed: () async {
+                              if (consultation?.jistiToken != null) {
+                                await JitsiService.instance.join(
+                                  // token: consultation!.jistiToken!,
+                                  token:
+                                      "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUvMzNhNzE4LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDM1MjcxOTQsImV4cCI6MTcwMzUzNDM5NCwibmJmIjoxNzAzNTI3MTg5LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2UsIm1vZGVyYXRvciI6dHJ1ZSwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImlkIjoiZ29vZ2xlLW9hdXRoMnwxMDU2NjI0NTIyMjQxNTUyNTc1MTQiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20ifX0sInJvb20iOiIqIn0.YWwmM6uribUGzj-diw56NjjOfnJSVySbrCDlowcPWvABzd5fWjcJud6cJhBgSXIBD1Mv6vRNvRvs9jXeUaZCnE16rzAJh3BNi0Zdq4PUfETMe9P_mtAnnulPEwapRX7lWJZbJ4blZUFKdc_F3vrq5NQpD0IViRY_qMrhAs_CUl3WeUvA62l2fbYqVpWO2qybMDdapMF-F3y7F0QyatMt2RNFNK_RqI3xSgTaKZGzTE7Lu7eOc3_fDXcnLLxd8C9A0zj-9K_c0iC_ehYrZsViBFb42ZHkDkUQrNu3R2EQdTJsbeuweIDtw94ieW8dJi8mUuYRcROPeowXBKyfqg7O6Q",
+                                  roomName:
+                                      "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
+                                  // roomName:
+                                  //     "${dotenv.get('ROOM_JITSI', fallback: '')}/4d_9A_4dk6aj2s5Rgye1Z",
+                                  displayName:
+                                      consultation?.medical?.fullName ??
+                                          translate(context, 'undefine'),
+                                  urlAvatar: CloudinaryContext.cloudinary
+                                      .image(consultation?.doctor?.avatar ?? '')
+                                      .toString(),
+                                  email: consultation?.medical?.email ?? '',
+                                );
+                              } else {
+                                EasyLoading.showToast(
+                                    translate(context, 'cant_load_data'));
+                              }
+                              // showBottomSheetFeedback(context);
+                            },
+                          ),
+                        )
+                      : AppController().authState == AuthState.DoctorAuthorized
+                          ? Container(
+                              padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                                  dimensWidth() * 3, dimensHeight() * 3),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.0),
+                                    white
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
                                 ),
-                                backgroundColor:
-                                    const MaterialStatePropertyAll(color1C6AA3),
                               ),
-                              onPressed: () {
-                                try {
-                                  context
-                                      .read<ConsultationCubit>()
-                                      .confirmConsultation(
-                                          consultationId: consultation!.id!);
-                                } catch (e) {
-                                  EasyLoading.showToast(
-                                      translate(context, 'cant_load_data'));
-                                }
-                              },
-                              child: Text(
-                                  translate(context, 'confirm').capitalize()),
-                            ),
-                          )
-                        : Container(
-                            padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
-                                dimensWidth() * 3, dimensHeight() * 3),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Colors.white.withOpacity(0.0), white],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                            ),
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                foregroundColor:
-                                    const MaterialStatePropertyAll(white),
-                                textStyle: MaterialStatePropertyAll(
-                                    Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(color: white)),
-                                padding: MaterialStatePropertyAll(
-                                  EdgeInsets.symmetric(
-                                      vertical: dimensHeight() * 2,
-                                      horizontal: dimensWidth() * 2.5),
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  foregroundColor:
+                                      const MaterialStatePropertyAll(white),
+                                  textStyle: MaterialStatePropertyAll(
+                                      Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: white)),
+                                  padding: MaterialStatePropertyAll(
+                                    EdgeInsets.symmetric(
+                                        vertical: dimensHeight() * 2,
+                                        horizontal: dimensWidth() * 2.5),
+                                  ),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          color1C6AA3),
                                 ),
-                                backgroundColor: const MaterialStatePropertyAll(
-                                    Colors.redAccent),
+                                onPressed: () {
+                                  try {
+                                    context
+                                        .read<ConsultationCubit>()
+                                        .confirmConsultation(
+                                            consultationId: consultation!.id!);
+                                  } catch (e) {
+                                    EasyLoading.showToast(
+                                        translate(context, 'cant_load_data'));
+                                  }
+                                },
+                                child: Text(
+                                    translate(context, 'confirm').capitalize()),
                               ),
-                              onPressed: () {
-                                try {
-                                  context
-                                      .read<ConsultationCubit>()
-                                      .cancelConsultation(
-                                          consultationId: consultation!.id!);
-                                } catch (e) {
-                                  EasyLoading.showToast(
-                                      translate(context, 'cant_load_data'));
-                                }
-                              },
-                              child: Text(
-                                  translate(context, 'cancel').capitalize()),
+                            )
+                          : Container(
+                              padding: EdgeInsets.fromLTRB(dimensWidth() * 3, 0,
+                                  dimensWidth() * 3, dimensHeight() * 3),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.0),
+                                    white
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  foregroundColor:
+                                      const MaterialStatePropertyAll(white),
+                                  textStyle: MaterialStatePropertyAll(
+                                      Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: white)),
+                                  padding: MaterialStatePropertyAll(
+                                    EdgeInsets.symmetric(
+                                        vertical: dimensHeight() * 2,
+                                        horizontal: dimensWidth() * 2.5),
+                                  ),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.redAccent),
+                                ),
+                                onPressed: () {
+                                  try {
+                                    context
+                                        .read<ConsultationCubit>()
+                                        .cancelConsultation(
+                                            consultationId: consultation!.id!);
+                                  } catch (e) {
+                                    EasyLoading.showToast(
+                                        translate(context, 'cant_load_data'));
+                                  }
+                                },
+                                child: Text(
+                                    translate(context, 'cancel').capitalize()),
+                              ),
                             ),
-                          ),
+                ),
                 body: ListView(
-                  shrinkWrap: true,
+                  // shrinkWrap: true,
                   padding: EdgeInsets.symmetric(
                       horizontal: dimensWidth() * 3,
                       vertical: dimensHeight() * 2),
@@ -591,7 +697,8 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                           (e) {
                             String fileName =
                                 e.record?.split('/').last ?? 'undefine';
-                            String type = fileName.split('.').last;
+                            String type =
+                                fileName.split('.').last.toLowerCase();
                             DateTime updateAt =
                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                                     .parse(e.updateAt!);

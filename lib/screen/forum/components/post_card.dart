@@ -17,6 +17,7 @@ import 'package:healthline/screen/forum/components/exports.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
@@ -24,8 +25,10 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/translate.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key, required this.post});
+  const PostCard(
+      {super.key, required this.post, required this.pagingController});
   final PostResponse post;
+  final PagingController pagingController;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -169,7 +172,11 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                       onTap: () {
-                        showBottomSheetPost(context);
+                        showBottomSheetPost(context).then((value) {
+                          if (value == true) {
+                            widget.pagingController.refresh();
+                          }
+                        });
                       },
                     ),
                   ),
@@ -380,8 +387,8 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Future<void> showBottomSheetPost(BuildContext context) {
-    return showModalBottomSheet<void>(
+  Future<bool?> showBottomSheetPost(BuildContext context) {
+    return showModalBottomSheet<bool>(
       context: context,
       barrierColor: black26,
       elevation: 0,
@@ -393,7 +400,7 @@ class _PostCardState extends State<PostCard> {
           listener: (context, state) {
             if (state is DeletePostState) {
               if (state.blocState == BlocState.Successed) {
-                Navigator.pop(context);
+                Navigator.pop(context, true);
               }
             }
           },
@@ -406,13 +413,13 @@ class _PostCardState extends State<PostCard> {
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: BorderRadius.circular(dimensWidth() * 3),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(.1),
-                    spreadRadius: dimensWidth() * .4,
-                    blurRadius: dimensWidth() * .4,
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.grey.withOpacity(.1),
+                //     spreadRadius: dimensWidth() * .4,
+                //     blurRadius: dimensWidth() * .4,
+                //   ),
+                // ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -439,7 +446,7 @@ class _PostCardState extends State<PostCard> {
                                       arguments: widget.post.toJson())
                                   .then((value) {
                                 if (value == true) {
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, true);
                                 }
                               });
                             }

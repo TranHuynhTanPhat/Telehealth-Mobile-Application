@@ -207,9 +207,9 @@ class RestClient {
         onError: (DioException error, handler) async {
           logPrint("ERROR");
           logPrint(error.message);
-          if (error.response?.statusCode == 401) {
-            logout();
-          }
+          // if (error.response?.statusCode == 401) {
+          //   logout();
+          // }
           Sentry.captureException(
             "REST_CLIENT: $error",
           );

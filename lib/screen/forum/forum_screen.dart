@@ -260,7 +260,7 @@ class _ForumScreenState extends State<ForumScreen> {
                     builderDelegate: PagedChildBuilderDelegate<PostResponse>(
                         itemBuilder: (context, item, index) {
                       return PostCard(
-                        post: item,
+                        post: item, pagingController: _pagingController,
                       );
                     }),
                   ),

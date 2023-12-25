@@ -123,6 +123,6 @@ final class GetDasboardState extends ConsultationState {
       super.error,
       required super.consultations,
       required super.feedbacks,
-       this.dashboard});
+      this.dashboard});
   final DoctorDasboardResponse? dashboard;
 }

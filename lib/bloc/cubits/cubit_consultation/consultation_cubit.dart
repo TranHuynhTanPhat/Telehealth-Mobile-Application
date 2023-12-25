@@ -489,13 +489,13 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     }
   }
 
-  Future<void> updateRequest() async {
-    emit(
-      ConsultationInitial(
-          blocState: BlocState.Successed,
-          timeline: state.timeline,
-          consultations: state.consultations,
-          feedbacks: state.feedbacks),
-    );
-  }
+  // Future<void> updateRequest() async {
+  //   emit(
+  //     ConsultationInitial(
+  //         blocState: BlocState.Successed,
+  //         timeline: state.timeline,
+  //         consultations: state.consultations,
+  //         feedbacks: state.feedbacks),
+  //   );
+  // }
 }

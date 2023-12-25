@@ -24,6 +24,9 @@ class _ListSubUserState extends State<ListSubUser> {
     final medicalRecordCubit = context.read<MedicalRecordCubit>();
     await showModalBottomSheet(
       // barrierDismissible: true,
+      barrierColor: black26,
+      backgroundColor: transparent,
+      elevation: 0,
       isScrollControlled: true,
       useSafeArea: true,
       context: context,
@@ -41,7 +44,10 @@ class _ListSubUserState extends State<ListSubUser> {
 
   Future<void> showDialogInput(BuildContext context) async {
     final medicalRecordCubit = context.read<MedicalRecordCubit>();
-     await showModalBottomSheet(
+    await showModalBottomSheet(
+        barrierColor: black26,
+        backgroundColor: transparent,
+        elevation: 0,
         isScrollControlled: true,
         useSafeArea: true,
         context: context,

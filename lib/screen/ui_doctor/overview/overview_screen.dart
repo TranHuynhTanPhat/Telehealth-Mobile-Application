@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
@@ -6,9 +9,11 @@ import 'package:healthline/data/api/models/responses/doctor_dasboard_response.da
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_doctor/overview/components/export.dart';
+import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:intl/intl.dart';
 
 class OverviewScreen extends StatefulWidget {
   const OverviewScreen({super.key});
@@ -19,6 +24,14 @@ class OverviewScreen extends StatefulWidget {
 
 class _OverviewScreenState extends State<OverviewScreen> {
   DoctorDasboardResponse? dashboard;
+  @override
+  void initState() {
+    if (!mounted) return;
+    context.read<ConsultationCubit>().fetchConsultation();
+    context.read<ConsultationCubit>().getDasboard();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ConsultationCubit, ConsultationState>(
@@ -84,11 +97,14 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     state.consultations!.coming.isNotEmpty)
                   Padding(
                     padding: EdgeInsets.only(
-                        left: dimensWidth() * 3, right: dimensWidth() * 3),
+                      left: dimensWidth(),
+                      right: dimensWidth(),
+                    ),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: state.consultations!.coming.map((cons) {
                           List<int> time = [];
+                          var imagePatient;
                           try {
                             time = cons.expectedTime
                                     ?.split('-')
@@ -98,49 +114,89 @@ class _OverviewScreenState extends State<OverviewScreen> {
                           } catch (e) {
                             logPrint(e);
                           }
-                          String? expectedTime;
                           try {
-                            expectedTime =
-                                '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+                            if (cons.medical?.avatar != null &&
+                                cons.medical?.avatar != 'default' &&
+                                cons.medical?.avatar != '') {
+                              imagePatient = imagePatient ??
+                                  NetworkImage(
+                                    CloudinaryContext.cloudinary
+                                        .image(cons.medical?.avatar ?? '')
+                                        .toString(),
+                                  );
+                            } else {
+                              imagePatient = AssetImage(DImages.placeholder);
+                            }
                           } catch (e) {
                             logPrint(e);
+                            imagePatient = AssetImage(DImages.placeholder);
                           }
-                          return ListTile(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                detailConsultationName,
-                                arguments: cons.toJson(),
-                              );
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                dimensWidth(),
-                              ),
-                            ),
-                            dense: true,
-                            visualDensity: const VisualDensity(vertical: 0),
-                            leading: CircleAvatar(
-                              backgroundImage: AssetImage(DImages.placeholder),
-                              radius: dimensWidth() * 3,
-                            ),
-                            title: Text(
-                              '${translate(context, "symptoms")}: ${translate(context, cons.symptoms ?? "undefine")}',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  cons.medical!.fullName ??
-                                      translate(context, 'undefine'),
-                                  style: Theme.of(context).textTheme.labelLarge,
+
+                          DateTime from =
+                              DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                  .parse(cons.date!);
+                          from = DateTime(
+                              from.year,
+                              from.month,
+                              from.day,
+                              (time.first - 1) ~/ 2,
+                              (time.first - 1) % 2 == 1 ? 30 : 0);
+                          // String? expectedTime;
+                          // try {
+                          //   expectedTime =
+                          '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+                          // } catch (e) {
+                          //   logPrint(e);
+                          // }
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: dimensHeight()),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  detailConsultationName,
+                                  arguments: cons.toJson(),
+                                );
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  dimensWidth(),
                                 ),
-                              ],
-                            ),
-                            trailing: Text(
-                              expectedTime ?? "--:--",
-                              style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              dense: true,
+                              visualDensity: const VisualDensity(vertical: 0),
+                              leading: CircleAvatar(
+                                backgroundImage: imagePatient,
+                                onBackgroundImageError:
+                                    (exception, stackTrace) =>
+                                        logPrint(exception),
+                                radius: dimensWidth() * 3,
+                              ),
+                              title: Text(
+                                cons.medical!.fullName ??
+                                    translate(context, 'undefine'),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    translate(
+                                        context, cons.status ?? 'undefine'),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                              trailing: Text(
+                                // expectedTime ?? "--:--",
+                                daysBetween(
+                                  context,
+                                  DateTime.now(),
+                                  from,
+                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ),
                           );
                         }).toList()),

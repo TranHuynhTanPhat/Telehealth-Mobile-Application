@@ -157,7 +157,7 @@ class _ListPatientState extends State<ListPatient> {
                   padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
                   child: Text(
                     e.fullName ?? translate(context, 'undefine'),
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
                 leading: CircleAvatar(

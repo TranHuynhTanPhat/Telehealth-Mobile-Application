@@ -135,7 +135,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
         String publicId = element.record!.split('/').last;
         String filePath = "$path/$publicId";
         final isCheck = await OpenDocument.checkDocument(filePath: filePath);
-        _patientRepository.deletePatientRecord([element.id!]);
+        // _patientRepository.deletePatientFolderRecord([element.id!]);
 
         if (isCheck) {
           File(filePath).deleteSync();

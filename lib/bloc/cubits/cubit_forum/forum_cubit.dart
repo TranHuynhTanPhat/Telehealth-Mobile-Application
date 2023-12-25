@@ -251,6 +251,7 @@ class ForumCubit extends Cubit<ForumState> {
           files: files,
           isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
+        
         emit(
           EditPostState(
               blocState: BlocState.Successed,

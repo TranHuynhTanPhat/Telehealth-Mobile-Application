@@ -89,7 +89,8 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               DateTime dateTime = DateTime.now();
               context.read<ConsultationCubit>().fetchTimeline(
                   doctorId: doctor.id!,
-                  date: '${dateTime.day+1}/${dateTime.month}/${dateTime.year}');
+                  date:
+                      '${dateTime.day + 1}/${dateTime.month}/${dateTime.year}');
               Navigator.pushNamed(
                 context,
                 createConsultationName,
@@ -111,24 +112,6 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
           stretch: true,
           pinned: true,
           backgroundColor: white,
-          // leading: Container(
-          //     margin: EdgeInsets.all(dimensWidth()),
-          //     alignment: Alignment.center,
-          //     child: ElevatedButton(
-          //       // splashColor: transparent,
-          //       // highlightColor: transparent,
-          //       style: ButtonStyle(
-          //           backgroundColor: const MaterialStatePropertyAll(white),
-          //           padding: MaterialStatePropertyAll(
-          //               EdgeInsets.all(dimensWidth()))),
-          //       onPressed: () {
-          //         Navigator.pop(context, false);
-          //       },
-          //       child: const FaIcon(
-          //         FontAwesomeIcons.angleLeft,
-          //         color: color1F1F1F,
-          //       ),
-          //     )),
           expandedHeight: MediaQuery.of(context).size.height * 0.3,
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [StretchMode.zoomBackground],
@@ -175,11 +158,6 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     tileMode: TileMode.clamp),
-                // color: white,
-                // borderRadius: BorderRadius.only(
-                //   topLeft: Radius.circular(dimensWidth() * 3),
-                //   topRight: Radius.circular(dimensWidth() * 3),
-                // ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -212,44 +190,6 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
         SliverList(
           delegate: SliverChildListDelegate(
             [
-              //  ListView(
-              // shrinkWrap: true,
-              // scrollDirection: Axis.vertical,
-              // padding: EdgeInsets.only(
-              //     bottom: dimensHeight() * 2,
-              //     left: dimensWidth() * 3,
-              //     right: dimensWidth() * 3),
-              // children: [
-              // Padding(
-              //   padding:  EdgeInsets.only(
-              //     left: dimensWidth() * 3,
-              //     right: dimensWidth() * 3),
-              //   child: Row(
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       Expanded(
-              //         child: Text(
-              //           doctor.fullName ?? translate(context, 'undefine'),
-              //           maxLines: 2,
-              //           overflow: TextOverflow.fade,
-              //           style: Theme.of(context)
-              //               .textTheme
-              //               .headlineMedium
-              //               ?.copyWith(fontWeight: FontWeight.bold),
-              //         ),
-              //       ),
-              //       Text(
-              //         "${convertToVND(doctor.feePerMinutes ?? 0)}/${translate(context, 'minute')}",
-              //         maxLines: 2,
-              //         overflow: TextOverflow.fade,
-              //         style: Theme.of(context)
-              //             .textTheme
-              //             .bodyLarge
-              //             ?.copyWith(color: secondary),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: dimensHeight(), horizontal: dimensWidth() * 3),
@@ -307,24 +247,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       top: dimensHeight() * 3,
-              //       left: dimensWidth() * 3,
-              //       right: dimensWidth() * 3),
-              //   child: Text(
-              //     translate(context, 'working_time'),
-              //     style: Theme.of(context).textTheme.titleLarge,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       left: dimensWidth() * 3, right: dimensWidth() * 3),
-              //   child: Text(
-              //     'Mon - Sat, 10:00 am - 07:00 pm',
-              //     style: Theme.of(context).textTheme.bodyLarge,
-              //   ),
-              // ),
+
               Padding(
                 padding: EdgeInsets.only(
                     top: dimensHeight() * 3,
@@ -338,16 +261,64 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               BlocBuilder<ConsultationCubit, ConsultationState>(
                 builder: (context, state) {
                   if (state.feedbacks != null && state.feedbacks!.isNotEmpty) {
-                    return Padding(
-                        padding: EdgeInsets.only(
-                            left: dimensWidth() * 3, right: dimensWidth() * 3),
-                        child: Column(
-                          children: state.feedbacks!
-                              .map((e) => Text(
-                                    e.toJson(),
-                                  ))
-                              .toList(),
-                        ));
+                    return Column(
+                      children: state.feedbacks!.map((e) {
+                        var image;
+                        try {
+                          if (e.user?.avatar != null &&
+                              e.user?.avatar != 'default' &&
+                              e.user?.avatar != '') {
+                            image = image ??
+                                NetworkImage(
+                                  CloudinaryContext.cloudinary
+                                      .image(e.user?.avatar ?? '')
+                                      .toString(),
+                                );
+                          } else {
+                            image = AssetImage(DImages.placeholder);
+                          }
+                        } catch (e) {
+                          logPrint(e);
+                          image = AssetImage(DImages.placeholder);
+                        }
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: image,
+                            onBackgroundImageError: (exception, stackTrace) {
+                              logPrint(exception);
+                            },
+                          ),
+                          title: Text(
+                            e.user?.fullName ?? translate(context, 'undefine'),
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RatingBar.builder(
+                                  ignoreGestures: true,
+                                  initialRating: (e.rated ?? 0).toDouble(),
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: dimensWidth() * 2,
+                                  itemBuilder: (context, _) => const FaIcon(
+                                    FontAwesomeIcons.solidStar,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (double value) {},
+                                ),
+                                if (e.feedback != null)
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(e.feedback!),
+                                  )
+                              ]),
+                        );
+                      }).toList(),
+                    );
                   } else {
                     return Padding(
                       padding:

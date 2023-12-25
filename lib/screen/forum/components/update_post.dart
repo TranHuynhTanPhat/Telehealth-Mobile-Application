@@ -112,6 +112,16 @@ class _UpdatePostState extends State<UpdatePost> {
                           ),
                           backgroundColor:
                               const MaterialStatePropertyAll(primary),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.hovered) ||
+                                  states.contains(MaterialState.pressed)) {
+                                return white.withOpacity(.3); //<-- SEE HERE
+                              }
+                              return null; // Defer to the widget's default.
+                            },
+                          ),
                         ),
                         child: Text(
                           translate(context, 'update'),

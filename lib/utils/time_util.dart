@@ -1,6 +1,6 @@
 String convertIntToTime(int number) {
   if (number < 0) {
-    return "00:00";
+    return "0:00";
   }
   int hour = number ~/ 2;
 

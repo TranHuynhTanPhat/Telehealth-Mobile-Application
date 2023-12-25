@@ -37,7 +37,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
           translate(context, 'edit_content'),
         ),
         centerTitle: true,
-        // leading: cancelButton(context),
       ),
       body: BlocListener<ForumCubit, ForumState>(
         listener: (context, state) {

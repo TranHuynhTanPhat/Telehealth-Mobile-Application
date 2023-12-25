@@ -109,29 +109,32 @@ class _ListFeedbackState extends State<ListFeedback> {
                 ),
                 title: Text(
                   e.user?.fullName ?? translate(context, 'undefine'),
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
-                subtitle: Column(children: [
-                  RatingBar.builder(
-                    ignoreGestures: true,
-                    initialRating: (e.rated ?? 0).toDouble(),
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: dimensWidth() * 2,
-                    itemBuilder: (context, _) => const FaIcon(
-                      FontAwesomeIcons.solidStar,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (double value) {},
-                  ),
-                  if (e.feedback != null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(e.feedback!),
-                    )
-                ]),
+                subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RatingBar.builder(
+                        ignoreGestures: true,
+                        initialRating: (e.rated ?? 0).toDouble(),
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: dimensWidth() * 2,
+                        itemBuilder: (context, _) => const FaIcon(
+                          FontAwesomeIcons.solidStar,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (double value) {},
+                      ),
+                      if (e.feedback != null)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(e.feedback!),
+                        )
+                    ]),
               );
             }).toList(),
           );

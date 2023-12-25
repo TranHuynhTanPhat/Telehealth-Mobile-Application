@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -15,8 +17,6 @@ class PhotoGallery extends StatefulWidget {
 }
 
 class _PhotoGalleryState extends State<PhotoGallery> {
-  // ignore: prefer_typing_uninitialized_variables
-  var image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +32,8 @@ class _PhotoGalleryState extends State<PhotoGallery> {
           backgroundDecoration: const BoxDecoration(color: white),
           scrollPhysics: const BouncingScrollPhysics(),
           builder: (BuildContext context, int index) {
+            var image;
+
             try {
               if (widget.galleryItems[index] != 'default' &&
                   widget.galleryItems[index] != '') {
@@ -50,7 +52,7 @@ class _PhotoGalleryState extends State<PhotoGallery> {
             }
             return PhotoViewGalleryPageOptions(
               imageProvider: image,
-              initialScale: PhotoViewComputedScale.contained*.8,
+              initialScale: PhotoViewComputedScale.contained * .8,
               // heroAttributes: PhotoViewHeroAttributes(tag: widget.galleryItems[index]),
             );
           },
@@ -74,6 +76,5 @@ class _PhotoGalleryState extends State<PhotoGallery> {
         ),
       ),
     );
-  
   }
 }
