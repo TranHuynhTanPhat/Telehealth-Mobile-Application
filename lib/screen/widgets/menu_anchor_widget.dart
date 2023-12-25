@@ -50,6 +50,7 @@ class MenuAnchorWidget extends StatelessWidget {
             }
             return null;
           },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           suffixIcon: const IconButton(
               onPressed: null, icon: FaIcon(FontAwesomeIcons.caretDown)),
         );

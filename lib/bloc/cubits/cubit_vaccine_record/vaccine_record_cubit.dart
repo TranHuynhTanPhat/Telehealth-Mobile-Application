@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/injected_vaccination_response.dart';
 import 'package:healthline/data/api/models/responses/vaccination_response.dart';
-import 'package:healthline/repository/vaccination_repository.dart';
+import 'package:healthline/repositories/vaccination_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';

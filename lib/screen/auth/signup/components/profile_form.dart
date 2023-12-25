@@ -61,9 +61,9 @@ class _ProfileFormState extends State<ProfileForm> {
             padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: TextFieldWidget(
               validate: (value) {
-                if (widget.controllerFullName.text == '') {
+                if (widget.controllerFullName.text.trim() == '') {
                   return translate(context, 'please_enter_full_name');
-                } else if (widget.controllerFullName.text.split(' ').length <
+                } else if (widget.controllerFullName.text.trim().split(' ').length <
                     2) {
                   return translate(context,
                       'full_name_must_be_longer_than_or_equal_to_2_characters');
@@ -84,9 +84,9 @@ class _ProfileFormState extends State<ProfileForm> {
                     initialEntryMode: DatePickerEntryMode.calendarOnly,
                     initialDatePickerMode: DatePickerMode.day,
                     context: context,
-                    initialDate: widget.controllerBirthday.text.isNotEmpty
+                    initialDate: widget.controllerBirthday.text.trim().isNotEmpty
                         ? DateFormat('dd/MM/yyyy')
-                            .parse(widget.controllerBirthday.text)
+                            .parse(widget.controllerBirthday.text.trim())
                         : DateTime.now(),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now());

@@ -25,33 +25,37 @@ class ServiceCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(
             left: index == 0 ? dimensWidth() * 3 : dimensWidth(),
-            right: index == services.length - 1
-                ? dimensWidth() * 3
-                : dimensWidth()),
+            right:
+                index == services.length - 1 ? dimensWidth() * 3 : dimensWidth()),
         width: dimensWidth() * 11,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: dimensWidth() * 9,
-              height: dimensWidth() * 9,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: services[index]['color'].withOpacity(.4),
-                  borderRadius: BorderRadius.circular(dimensWidth() * 2)),
-              child: FaIcon(
-                services[index]['icon'],
-                size: dimensWidth() * 4,
-                color: services[index]['color'],
+        height: dimensWidth() * 12,
+        child:  Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: dimensWidth() * 9,
+                height: dimensWidth() * 9,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: services[index]['color'].withOpacity(.4),
+                    borderRadius: BorderRadius.circular(dimensWidth() * 2)),
+                child: FaIcon(
+                  services[index]['icon'],
+                  size: dimensWidth() * 4,
+                  color: services[index]['color'],
+                ),
               ),
-            ),
-            Expanded(
-                child: Text(
-              translate(context, services[index]['name']),
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelSmall,
-            ))
-          ],
+              SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    translate(context, services[index]['name']),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ))
+            ],
+          
         ),
       ),
     );

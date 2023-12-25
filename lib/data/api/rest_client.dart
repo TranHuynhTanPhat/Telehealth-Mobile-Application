@@ -5,17 +5,22 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/app/healthline_app.dart';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/res/enum.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:sentry_dio/sentry_dio.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RestClient {
   static const CONNECT_TIME_OUT = 60 * 1000;
@@ -80,6 +85,8 @@ class RestClient {
     dio.interceptors.add(AliceInspector().alice.getDioInterceptor());
 
     dio.interceptors.add(CookieManager(instance.cookieJar));
+
+    dio.addSentry();
 
     if (ENABLE_LOG) {
       dio.interceptors.add(LogInterceptor(
@@ -167,8 +174,6 @@ class RestClient {
 
               return handler.next(options);
             } on DioException catch (error) {
-              logout();
-              // SentryLogError().additionalMessage(error, SentryLevel.error);
               return handler.reject(error, true);
             }
           } else {
@@ -202,10 +207,12 @@ class RestClient {
         onError: (DioException error, handler) async {
           logPrint("ERROR");
           logPrint(error.message);
-          if (error.response?.statusCode == 401) {
-            logout();
-          }
-          // SentryLogError().additionalException("${error}REST_CLIENT");
+          // if (error.response?.statusCode == 401) {
+          //   logout();
+          // }
+          Sentry.captureException(
+            "REST_CLIENT: $error",
+          );
           return handler.next(error);
         },
       ),
@@ -215,22 +222,24 @@ class RestClient {
   }
 
   Future<void> logout() async {
-    await AppStorage().clear();
-    // if (AppController.instance.authState == AuthState.AllAuthorized) {
-    //   await getDio().delete(
-    //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
-    //   await getDio().delete(
-    //       dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
-    // } else
-    AppController.instance.authState = AuthState.Unauthorized;
-    if (AppController.instance.authState == AuthState.DoctorAuthorized) {
-      await getDio().delete(
-          dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
-    } else {
-      await getDio().delete(
-          dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+    try {
+      await AppStorage().clear();
+      AppController.instance.authState = AuthState.Unauthorized;
+      if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+        await getDio().delete(
+            dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
+      } else {
+        await getDio().delete(
+            dotenv.get('BASE_URL', fallback: '') + ApiConstants.USER_LOG_OUT);
+      }
+      instance.cookieJar.deleteAll();
+    } catch (e) {
+      logPrint(e);
     }
-    instance.cookieJar.deleteAll();
+    // EasyLoading.showToast(translate(navigatorKey?.currentState!.context!, 'value'));
+    EasyLoading.dismiss();
+    navigatorKey?.currentState!
+        .pushNamedAndRemoveUntil(logInName, (route) => false);
   }
 
   void runHttpInspector() {

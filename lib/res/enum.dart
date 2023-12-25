@@ -23,6 +23,10 @@ enum SignUp { Instruction, Profile, Contact, Secutiry }
 
 enum ScheduleTabBar { UpComing, Completed, Canceled }
 
+enum PatientTabBar { Patient, Feedback }
+
+enum CreateConsultation {TimeLine, MedicalRecord, FormMedicalDelaration, PaymentMethod, Invoice}
+
 enum Gender { Male, Female }
 
 enum Role { Patient, Doctor }

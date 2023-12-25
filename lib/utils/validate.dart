@@ -67,7 +67,7 @@ class Validate {
     if (phone.characters.first == '0') {
       phone = phone.replaceFirst('0', '');
     }
-    
+
     if (uppercase.hasMatch(phone) ||
         lowercase.hasMatch(phone) ||
         special.hasMatch(phone) ||
@@ -82,5 +82,16 @@ class Validate {
       phone = phone.replaceFirst('0', '');
     }
     return '+84$phone';
+  }
+
+  String? validateSpecialCharacter(BuildContext context, String value) {
+    // Biểu thức chính quy để kiểm tra ký tự đặc biệt
+    RegExp specialCharRegex = RegExp(r'[!@#%^&*(),.?":{}|<>]');
+
+    // Kiểm tra xem chuỗi có chứa ký tự đặc biệt hay không
+    if (specialCharRegex.hasMatch(value)) {
+      return translate(context, 'special_characters');
+    }
+    return null;
   }
 }

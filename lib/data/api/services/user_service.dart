@@ -52,11 +52,11 @@ class UserService extends BaseService {
   }
 
   Future<int?> changePassword(
-      {required String password, required String passwordConfirm}) async {
+      {required String password, required String newPassword}) async {
     final response = await patch(
       ApiConstants.USER_PASSWORD,
       data: json.encode(
-        {"password": password, "passwordConfirm": passwordConfirm},
+        {"password": password, "newPassword": newPassword},
       ),
     );
 

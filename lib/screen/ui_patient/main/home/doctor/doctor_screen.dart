@@ -47,7 +47,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     _searchController = TextEditingController();
     _pagingController.addPageRequestListener((pageKey) {
       context.read<DoctorCubit>().searchDoctor(
-            key: _searchController.text,
+            key: _searchController.text.trim(),
             searchQuery: SearchQuery(
                 limit: 20,
                 attributesToSearchOn: ['full_name'],
@@ -206,7 +206,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                             ),
                           )
                         : Text(
-                            translate(context, 'news'),
+                            translate(context, 'doctor'),
                           ),
                     actions: [
                       if (openSearch == false)

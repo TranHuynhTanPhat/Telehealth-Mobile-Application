@@ -8,12 +8,15 @@ class FileWidget extends StatelessWidget {
       required this.title,
       required this.extension,
       this.updateAt,
-      this.size});
+      this.size,
+      this.onTap,
+      this.widget});
   final String title;
-  // final FaIcon icon;
   final String extension;
   final String? updateAt;
   final String? size;
+  final VoidCallback? onTap;
+  final Widget? widget;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class FileWidget extends StatelessWidget {
                             );
     }
     return ListTile(
-      onTap: null,
+      onTap: onTap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           dimensWidth(),
@@ -98,12 +101,13 @@ class FileWidget extends StatelessWidget {
       ),
       dense: true,
       visualDensity: const VisualDensity(vertical: 0),
-      leading: icon,
+      leading: widget ?? icon,
 
       title: Row(
         children: [
           Expanded(
-            child: Text( title,
+            child: Text(
+              title,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style: Theme.of(context).textTheme.labelLarge,
@@ -113,7 +117,7 @@ class FileWidget extends StatelessWidget {
       ),
       subtitle: updateAt != null || size != null
           ? Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: Text(

@@ -58,7 +58,7 @@ class _PasswordFormState extends State<PasswordForm> {
             child: TextFieldWidget(
               validate: (value) {
                 return Validate()
-                    .validatePassword(context, widget.controllerPassword.text);
+                    .validatePassword(context, widget.controllerPassword.text.trim());
               },
               controller: widget.controllerPassword,
               label: translate(context, 'password'),
@@ -81,8 +81,8 @@ class _PasswordFormState extends State<PasswordForm> {
           Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 2),
             child: TextFieldWidget(
-              validate: (value) => widget.controllerPassword.text ==
-                      widget.controllerConfirmPassword.text
+              validate: (value) => widget.controllerPassword.text.trim() ==
+                      widget.controllerConfirmPassword.text.trim()
                   ? null
                   : translate(context, 'password_must_be_same_as_above'),
               controller: widget.controllerConfirmPassword,

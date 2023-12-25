@@ -65,9 +65,12 @@ class _ListFileState extends State<ListFile> {
 
   Future<void> _openFile(String url, String fileName) async {
     if (Platform.isAndroid) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
+
+      var status1 = await Permission.storage.status;
+      var status2 = await Permission.photos.status;
+      if (!status1.isGranted && !status2.isGranted) {
         await Permission.storage.request();
+        await Permission.photos.request();
       } else {
         if (!mounted) return;
         context
@@ -93,7 +96,7 @@ class _ListFileState extends State<ListFile> {
         children: widget.fileRecords.map(
       (e) {
         String fileName = e.record?.split('/').last ?? 'undefine';
-        String type = fileName.split('.').last;
+        String type = fileName.split('.').last.toLowerCase();
         DateTime updateAt =
             DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(e.updateAt!);
         String? url;

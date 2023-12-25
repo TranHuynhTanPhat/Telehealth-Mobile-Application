@@ -88,7 +88,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                 .value;
           }
 
-          _controllerBloodGroup.text = _controllerBloodGroup.text != ''
+          _controllerBloodGroup.text = _controllerBloodGroup.text.trim() != ''
               ? _controllerBloodGroup.text
               : bloodIndex == 0
                   ? 'A'
@@ -99,7 +99,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           : bloodIndex == 3
                               ? 'AB'
                               : '--';
-          _controllerHeartRate.text = _controllerHeartRate.text == ''
+          _controllerHeartRate.text = _controllerHeartRate.text.trim() == ''
               ? translate(
                   context,
                   state.stats
@@ -110,8 +110,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           .value
                           ?.toString() ??
                       '')
-              : _controllerHeartRate.text;
-          _controllerHeight.text = _controllerHeight.text == ''
+              : _controllerHeartRate.text.trim();
+          _controllerHeight.text = _controllerHeight.text.trim() == ''
               ? translate(
                   context,
                   state.stats
@@ -122,8 +122,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           .value
                           ?.toString() ??
                       '')
-              : _controllerHeight.text;
-          _controllerWeight.text = _controllerWeight.text == ''
+              : _controllerHeight.text.trim();
+          _controllerWeight.text = _controllerWeight.text.trim() == ''
               ? translate(
                   context,
                   state.stats
@@ -134,8 +134,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           .value
                           ?.toString() ??
                       '')
-              : _controllerWeight.text;
-          _controllerHead.text = _controllerHead.text == ''
+              : _controllerWeight.text.trim();
+          _controllerHead.text = _controllerHead.text.trim() == ''
               ? translate(
                   context,
                   state.stats
@@ -147,8 +147,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           .value
                           ?.toString() ??
                       '')
-              : _controllerHead.text;
-          _controllerTemperature.text = _controllerTemperature.text == ''
+              : _controllerHead.text.trim();
+          _controllerTemperature.text = _controllerTemperature.text.trim() == ''
               ? translate(
                   context,
                   state.stats
@@ -159,7 +159,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                           .value
                           ?.toString() ??
                       '')
-              : _controllerTemperature.text;
+              : _controllerTemperature.text.trim();
           return PopScope(
             canPop: true,
             onPopInvoked: (value) {
@@ -224,72 +224,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                         ),
                                       )
                                       .toList(),
-                                )
-                                // MenuAnchor(
-                                //   style: MenuStyle(
-                                //     elevation: const MaterialStatePropertyAll(10),
-                                //     // shadowColor: MaterialStatePropertyAll(black26),
-                                //     shape: MaterialStateProperty.all<
-                                //         RoundedRectangleBorder>(
-                                //       RoundedRectangleBorder(
-                                //         borderRadius: BorderRadius.circular(
-                                //             dimensWidth() * 3),
-                                //       ),
-                                //     ),
-                                //     backgroundColor:
-                                //         const MaterialStatePropertyAll(white),
-                                //     surfaceTintColor:
-                                //         const MaterialStatePropertyAll(white),
-                                //     padding: MaterialStatePropertyAll(
-                                //         EdgeInsets.symmetric(
-                                //             horizontal: dimensWidth() * 2,
-                                //             vertical: dimensHeight())),
-                                //   ),
-                                //   builder: (BuildContext context,
-                                //       MenuController controller, Widget? child) {
-                                //     return TextFieldWidget(
-                                //       onTap: () {
-                                //         if (controller.isOpen) {
-                                //           controller.close();
-                                //         } else {
-                                //           controller.open();
-                                //         }
-                                //       },
-                                //       readOnly: true,
-                                //       label: translate(context, 'blood_group'),
-                                //       controller: _controllerBloodGroup,
-                                //       validate: (value) {
-                                //         if (value!.isEmpty) {
-                                //           return translate(
-                                //               context, 'please_choose');
-                                //         }
-                                //         return null;
-                                //       },
-                                //       suffixIcon: const IconButton(
-                                //           onPressed: null,
-                                //           icon:
-                                //               FaIcon(FontAwesomeIcons.caretDown)),
-                                //     );
-                                //   },
-                                //   menuChildren: bloodGroup
-                                //       .map(
-                                //         (e) => MenuItemButton(
-                                //           style: const ButtonStyle(
-                                //             backgroundColor:
-                                //                 MaterialStatePropertyAll(white),
-                                //           ),
-                                //           onPressed: () => setState(() {
-                                //             _controllerBloodGroup.text =
-                                //                 translate(context, e);
-                                //           }),
-                                //           child: Text(
-                                //             translate(context, e),
-                                //           ),
-                                //         ),
-                                //       )
-                                //       .toList(),
-                                // ),
-                                ),
+                                )),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: dimensHeight()),
@@ -298,9 +233,10 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                   try {
                                     if (value!.isEmpty) {
                                       return translate(
-                                          context, 'please_enter_weight');
+                                          context, 'please_enter_heart_rate');
                                     }
-                                    if (num.parse(value) <= 0) {
+                                    if (num.parse(value) <= 30 ||
+                                        num.parse(value) >= 160) {
                                       return translate(
                                           context, 'invalid_heart_rate');
                                     }
@@ -315,6 +251,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                 label: translate(context, 'heart_rate'),
                                 suffix: const Text('bpm'),
                                 textInputType: TextInputType.number,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
                               ),
                             ),
                             if (age != null && age! <= 3)
@@ -323,27 +261,29 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                     vertical: dimensHeight()),
                                 child: TextFieldWidget(
                                   validate: (value) {
-                                    // try {
-                                    //   if (value!.isEmpty) {
-                                    //     return translate(context,
-                                    //         'please_enter_head_circumference');
-                                    //   }
-                                    //   if (num.parse(value) <= 0) {
-                                    //     return translate(context,
-                                    //         'invalid_head_circumference');
-                                    //   }
-                                    //   return null;
-                                    // } catch (e) {
-                                    //   return translate(
-                                    //       context, 'invalid_head_circumference');
-                                    // }
-                                    return null;
+                                    try {
+                                      if (value!.isEmpty) {
+                                        return translate(context,
+                                            'please_enter_head_circumference');
+                                      }
+                                      if (num.parse(value) <= 10 ||
+                                          num.parse(value) >= 100) {
+                                        return translate(context,
+                                            'invalid_head_circumference');
+                                      }
+                                      return null;
+                                    } catch (e) {
+                                      return translate(context,
+                                          'invalid_head_circumference');
+                                    }
                                   },
                                   controller: _controllerHead,
                                   label:
                                       translate(context, 'head_circumference'),
                                   suffix: const Text('cm'),
                                   textInputType: TextInputType.number,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
                                 ),
                               ),
                             Padding(
@@ -356,7 +296,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                       return translate(
                                           context, 'please_enter_temperature');
                                     }
-                                    if (num.parse(value) <= 0) {
+                                    if (num.parse(value) <= 36 ||
+                                        num.parse(value) > 38) {
                                       return translate(
                                           context, 'invalid_temperature');
                                     }
@@ -370,9 +311,13 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                 label: translate(context, 'temperature'),
                                 suffix: const Text('cm'),
                                 textInputType: TextInputType.number,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
                               ),
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: Padding(
@@ -385,7 +330,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                             return translate(
                                                 context, 'please_enter_height');
                                           }
-                                          if (num.parse(value) <= 0) {
+                                          if (num.parse(value) <= 0 ||
+                                              num.parse(value) > 300) {
                                             return translate(
                                                 context, 'invalid_height');
                                           }
@@ -399,6 +345,8 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                       label: translate(context, 'height'),
                                       suffix: const Text('cm'),
                                       textInputType: TextInputType.number,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                   ),
                                 ),
@@ -416,10 +364,12 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                             return translate(
                                                 context, 'please_enter_weight');
                                           }
-                                          if (num.parse(value) <= 0) {
+                                          if (num.parse(value) <= 0 ||
+                                              num.parse(value) > 300) {
                                             return translate(
                                                 context, 'invalid_weight');
                                           }
+
                                           return null;
                                         } catch (e) {
                                           return translate(
@@ -430,12 +380,16 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                       label: translate(context, 'weight'),
                                       suffix: const Text('Kg'),
                                       textInputType: TextInputType.number,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: Padding(
@@ -456,25 +410,27 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                                           element.id ==
                                                           state.currentId)
                                                       .id!,
-                                                  _controllerBloodGroup.text,
-                                                  num
-                                                          .tryParse(
-                                                              _controllerHeartRate
-                                                                  .text) ??
+                                                  _controllerBloodGroup.text
+                                                      .trim(),
+                                                  num.tryParse(_controllerHeartRate
+                                                          .text
+                                                          .trim()) ??
                                                       0,
                                                   num.tryParse(_controllerHeight
-                                                          .text) ??
+                                                          .text
+                                                          .trim()) ??
                                                       0,
-                                                  num
-                                                          .tryParse(_controllerWeight
-                                                              .text) ??
+                                                  num.tryParse(_controllerWeight.text
+                                                          .trim()) ??
                                                       0,
                                                   num.tryParse(_controllerHead
-                                                          .text) ??
+                                                          .text
+                                                          .trim()) ??
                                                       0,
                                                   num.tryParse(
                                                           _controllerTemperature
-                                                              .text) ??
+                                                              .text
+                                                              .trim()) ??
                                                       0);
                                         }
                                       },

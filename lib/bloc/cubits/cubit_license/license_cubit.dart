@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'license_state.dart';
 
@@ -86,6 +87,29 @@ class LicenseCubit extends Cubit<LicenseState> {
     } catch (e) {
       logPrint(e);
       emit(TermAndConditionState(blocState: BlocState.Failed, content: []));
+    }
+  }
+
+  Future<void> reportBugState(
+      {required String email,
+      required String fullName,
+      required String feedback}) async {
+    emit(BugReportState(blocState: BlocState.Pending));
+    // String filename = "faq";
+    try {
+      SentryId sentryId = await Sentry.captureMessage("Bug Report");
+      final userFeedback = SentryUserFeedback(
+        eventId: sentryId,
+        comments: feedback,
+        email: email,
+        name: fullName,
+      );
+
+      Sentry.captureUserFeedback(userFeedback);
+      emit(BugReportState(blocState: BlocState.Successed));
+    } catch (e) {
+      logPrint(e);
+      emit(BugReportState(blocState: BlocState.Failed));
     }
   }
 }

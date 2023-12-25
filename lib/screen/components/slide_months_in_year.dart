@@ -42,10 +42,6 @@ class _SlideMonthsInYearState extends State<SlideMonthsInYear> {
                       widget.daySelected,
                       DateTime(widget.current.year - 1, 12),
                     ),
-                    // setState(() {
-                    //   widget.current = DateTime(widget.current.year - 1, 12);
-                    //   _daySelected = 0;
-                    // }),
                     child: FaIcon(
                       FontAwesomeIcons.chevronLeft,
                       size: dimensIcon() * .6,

@@ -8,9 +8,10 @@ import 'package:healthline/utils/translate.dart';
 import 'package:healthline/utils/validate.dart';
 
 class FormEmail extends StatefulWidget {
-  const FormEmail({super.key, required this.emailController});
+  const FormEmail(
+      {super.key, required this.emailController, required this.isDoctor});
   final TextEditingController emailController;
-
+  final bool isDoctor;
 
   @override
   State<FormEmail> createState() => _FormEmailState();
@@ -31,7 +32,7 @@ class _FormEmailState extends State<FormEmail> {
               controller: widget.emailController,
               label: translate(context, 'email'),
               hint: 'example@gmail.com',
-              validate: (value) => Validate().validateEmail(context, value),
+              validate: (value) => Validate().validateEmail(context, value?.trim()),
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
@@ -41,7 +42,9 @@ class _FormEmailState extends State<FormEmail> {
                 text: translate(context, 'send_otp'),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    context.read<AuthenticationCubit>().sendOTP(email: widget.emailController.text.trim());
+                    context.read<AuthenticationCubit>().sendOTP(
+                        email: widget.emailController.text.trim(),
+                        isDoctor: widget.isDoctor);
                   }
                 }),
           )

@@ -22,5 +22,9 @@ final class PrivacyPolicyState extends LicenseState {
 
 final class TermAndConditionState extends LicenseState {
   TermAndConditionState({required super.blocState, required this.content});
- List< Map<String, String>> content;
+  List<Map<String, String>> content;
+}
+
+final class BugReportState extends LicenseState {
+  BugReportState({required super.blocState});
 }

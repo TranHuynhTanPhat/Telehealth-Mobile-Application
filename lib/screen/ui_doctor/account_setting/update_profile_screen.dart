@@ -74,10 +74,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           ),
           body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
             builder: (context, state) {
-              _controllerEmail.text = _controllerEmail.text.isEmpty
+              _controllerEmail.text = _controllerEmail.text.trim().isEmpty
                   ? state.profile.email ?? ''
                   : _controllerEmail.text;
-              _controllerBio.text = _controllerBio.text.isEmpty
+              _controllerBio.text = _controllerBio.text.trim().isEmpty
                   ? state.profile.biography ?? ''
                   : _controllerBio.text;
               try {
@@ -186,12 +186,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   String? email;
                                   String? bio;
                                   if (state.profile.email !=
-                                      _controllerEmail.text) {
-                                    email = _controllerEmail.text;
+                                      _controllerEmail.text.trim()) {
+                                    email = _controllerEmail.text.trim();
                                   }
                                   if (state.profile.biography !=
-                                      _controllerBio.text) {
-                                    bio = _controllerBio.text;
+                                      _controllerBio.text.trim()) {
+                                    bio = _controllerBio.text.trim();
                                   }
                                   context
                                       .read<DoctorProfileCubit>()

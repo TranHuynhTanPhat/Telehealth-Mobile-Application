@@ -1,14 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/data/api/models/responses/consultaion_infomation_response.dart';
+
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
+import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 
 import '../../../data/api/models/responses/file_response.dart';
-import '../../../repository/doctor_repository.dart';
-import '../../../repository/file_repository.dart';
+import '../../../repositories/doctor_repository.dart';
+import '../../../repositories/file_repository.dart';
 
 part 'doctor_profile_state.dart';
 
@@ -16,6 +18,7 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
   DoctorProfileCubit() : super(DoctorProfileInitial(profile: DoctorResponse()));
   final DoctorRepository _doctorRepository = DoctorRepository();
   final FileRepository _fileRepository = FileRepository();
+  final ConsultationRepository _consultationRepository = ConsultationRepository();
 
   Future<void> fetchProfile() async {
     emit(
@@ -44,14 +47,14 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
     }
   }
 
-  Future<void> fetchPatient({required String doctorId}) async {
+  Future<void> fetchPatient() async {
     emit(
       FetchPatientState(
           profile: state.profile, blocState: BlocState.Pending, patients: []),
     );
     try {
-      List<ConsultationInformationResponse> patients =
-          await _doctorRepository.fetchPatient(doctorId: doctorId);
+      List<UserResponse> patients =
+          await _consultationRepository.fetchPatient();
       emit(FetchPatientState(
           profile: state.profile,
           blocState: BlocState.Successed,

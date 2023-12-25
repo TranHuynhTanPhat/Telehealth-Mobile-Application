@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/data/api/exceptions/api_exception.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
@@ -7,7 +6,7 @@ import 'package:healthline/utils/log_data.dart';
 
 /// Request require Cookie => baseUrl + path
 abstract class BaseService {
-  final String baseUrl = dotenv.get('BASE_URL', fallback: '');
+  // final String baseUrl = dotenv.get('BASE_URL', fallback: '');
   Future<DataResponse> get(String path,
       {data, Map<String, dynamic>? params, bool isDoctor = false}) async {
     // ignore: prefer_typing_uninitialized_variables

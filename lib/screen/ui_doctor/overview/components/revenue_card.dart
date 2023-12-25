@@ -7,8 +7,9 @@ import 'package:healthline/utils/translate.dart';
 
 class RevenueCard extends StatelessWidget {
   const RevenueCard({
-    super.key,
+    super.key, required this.money,
   });
+  final int money;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class RevenueCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '2,000,000,000',
+                          "$money",
                           textAlign: TextAlign.right,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

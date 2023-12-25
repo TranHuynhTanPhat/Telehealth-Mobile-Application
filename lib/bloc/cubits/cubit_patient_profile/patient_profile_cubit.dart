@@ -2,7 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
-import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/repositories/user_repository.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 

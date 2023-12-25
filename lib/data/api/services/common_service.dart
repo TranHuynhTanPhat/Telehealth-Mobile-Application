@@ -12,12 +12,12 @@ class CommonService extends BaseService {
   }
 
   Future<void> refreshTokenPatient() async {
-    await post(baseUrl + ApiConstants.USER_REFRESH_TOKEN);
+    await post(ApiConstants.USER_REFRESH_TOKEN);
   }
 
   Future<void> logoutPatient() async {
     RestClient().logout();
-    await delete(baseUrl + ApiConstants.USER_LOG_OUT);
+    await delete(ApiConstants.USER_LOG_OUT);
   }
 
   Future<LoginResponse> loginDoctor(UserRequest request) async {
@@ -27,6 +27,6 @@ class CommonService extends BaseService {
   }
 
   Future<void> refreshTokenDoctor() async {
-    await post(baseUrl + ApiConstants.DOCTOR_REFRESH_TOKEN);
+    await post(ApiConstants.DOCTOR_REFRESH_TOKEN);
   }
 }

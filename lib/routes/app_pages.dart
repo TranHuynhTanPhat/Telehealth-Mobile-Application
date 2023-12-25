@@ -10,6 +10,7 @@ const editPostName = '/edit-forum';
 const newsName = '/news';
 const detailNewsName = '/detail-news';
 const forgetPasswordName = '/forget-password';
+const bugReportName = '/bug-report';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";
@@ -25,11 +26,14 @@ const updateHealthStatName = '/update-health-stat';
 const patientRecordName = '/patient-record';
 const addPatientRecordName = '/add-patient-record';
 const helpsName = '/helps';
-const timelineDoctorName ='/timeline-doctor';
-const paymentMethodsName ='/payment-methods';
-const invoiceName ='/invoice';
-const formConsultationName ='/form-consultaion';
-const medicalRecordName ='/medical-record';
+// const timelineDoctorName ='/timeline-doctor';
+// const paymentMethodsName ='/payment-methods';
+// const invoiceName ='/invoice';
+// const formConsultationName ='/form-consultaion';
+// const medicalRecordName ='/medical-record';
+const detailConsultationName ='/detail-consultation';
+const createConsultationName ='/create-consultation';
+// const formMedicalDeclarationName ='/form-medical-declaration';
 
 
 const doctorName = '/doctor';

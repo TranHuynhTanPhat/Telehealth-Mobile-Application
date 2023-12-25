@@ -74,7 +74,7 @@ class _CreateCommentState extends State<CreateComment> {
                   _commentController.text = '';
                 }
               },
-              child: _commentController.text.isNotEmpty
+              child: _commentController.text.trim().isNotEmpty
                   ? FaIcon(
                       FontAwesomeIcons.solidPaperPlane,
                       color: primary,

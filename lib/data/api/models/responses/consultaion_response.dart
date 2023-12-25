@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 
 class ConsultationResponse {
@@ -12,6 +13,10 @@ class ConsultationResponse {
   int? price;
   String? status;
   String? updatedAt;
+  String? jistiToken;
+  String? symptoms;
+  String? medicalHistory;
+  List<PatientRecordResponse>? patientRecords;
 
   ConsultationResponse(
       {this.id,
@@ -19,9 +24,13 @@ class ConsultationResponse {
       this.medical,
       this.date,
       this.expectedTime,
+      this.jistiToken,
       this.price,
       this.status,
-      this.updatedAt});
+      this.updatedAt,
+      this.symptoms,
+      this.medicalHistory,
+      this.patientRecords});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -41,6 +50,9 @@ class ConsultationResponse {
     if (expectedTime != null) {
       result.addAll({'expected_time': expectedTime});
     }
+    if (jistiToken != null) {
+      result.addAll({'jisti_token': jistiToken});
+    }
     if (price != null) {
       result.addAll({'price': price});
     }
@@ -49,6 +61,15 @@ class ConsultationResponse {
     }
     if (updatedAt != null) {
       result.addAll({'updated_at': updatedAt});
+    }
+    if (symptoms != null) {
+      result.addAll({'symptoms': symptoms});
+    }
+    if (medicalHistory != null) {
+      result.addAll({'medical_history': medicalHistory});
+    }
+    if (patientRecords != null) {
+      result.addAll({'patient_records': patientRecords?.map((x) => x.toMap()).toList()});
     }
 
     return result;
@@ -63,9 +84,14 @@ class ConsultationResponse {
           map['medical'] != null ? UserResponse.fromMap(map['medical']) : null,
       date: map['date'],
       expectedTime: map['expected_time'],
+      jistiToken: map['jisti_token'],
       price: map['price']?.toInt(),
       status: map['status'],
       updatedAt: map['updated_at'],
+      symptoms: map['symptoms'],
+      medicalHistory: map['medical_history'],
+      patientRecords: map['patient_records']!= null? List<PatientRecordResponse>.from(map['patient_records']?.map((x) => PatientRecordResponse.fromMap(x)))
+          : null,
     );
   }
 

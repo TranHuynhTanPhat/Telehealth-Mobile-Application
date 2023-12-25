@@ -55,7 +55,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 33
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -102,6 +102,14 @@ android {
             } 
         }
     }
+    // signingConfigs {
+    //     debug {
+    //         storeFile file("../debug.keystore")
+    //         storePassword "android"
+    //         keyAlias "androiddebugkey"
+    //         keyPassword "android"
+    //     }
+    // }
 }
 
 flutter {

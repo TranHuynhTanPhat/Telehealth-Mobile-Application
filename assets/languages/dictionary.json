@@ -183,6 +183,10 @@
         "vi": "Vui lòng nhập nhiệt độ",
         "en": "Please enter temperature"
     },
+    "please_enter_feedback": {
+        "vi": "Vui lòng nhập phản hồi",
+        "en": "Please enter feedback"
+    },
     "least_8_characters_long": {
         "vi": "Ít nhất 8 kí tự",
         "en": "Least 8 characters long"
@@ -419,6 +423,10 @@
         "vi": "Y tế tổng hợp",
         "en": "General medical"
     },
+    "clinic": {
+        "vi": "Phòng khám",
+        "en": "Clinic"
+    },
     "nurse": {
         "vi": "Y tá",
         "en": "Nurse"
@@ -474,6 +482,10 @@
     "book_appointment_now": {
         "vi": "Đặt lịch khám ngay",
         "en": "Book appointment now"
+    },
+    "join_now": {
+        "vi": "Tham gia ngay",
+        "en": "Join now"
     },
     "see_all": {
         "vi": "Xem thêm",
@@ -543,6 +555,10 @@
         "vi": "Đã xác nhận",
         "en": "Confirmed"
     },
+    "confirm": {
+        "vi": "Xác nhận",
+        "en": "Confirm"
+    },
     "finished": {
         "vi": "Đã kết thúc",
         "en": "Finished"
@@ -550,6 +566,10 @@
     "denied": {
         "vi": "Đã bị từ chối",
         "en": "Denied"
+    },
+    "deny": {
+        "vi": "Từ chối",
+        "en": "Deny"
     },
     "detail": {
         "vi": "Chi tiết",
@@ -1586,5 +1606,61 @@
     "send_otp": {
         "vi": "Gửi OTP",
         "en": "Send OTP"
+    },
+    "password_incorrect": {
+        "vi": "Mật khẩu không chính xác",
+        "en": "Password incorrect"
+    },
+    "can_not_denied_because_status_is_not_pending": {
+        "vi": "Không thể từ chối vì không phải trạng thái đang xử lý",
+        "en": "Can't denied because status is not pending"
+    },
+    "medical_declaration": {
+        "vi": "Tờ khai y tế",
+        "en": "Medical declaration"
+    },
+    "personal_information_of_the_declarant": {
+        "vi": "Thông tin cá nhân của người khai báo",
+        "en": "Personal information of the declarant"
+    },
+    "signs_of_the_disease_appeared_recently": {
+        "vi": "Dấu hiệu bệnh xuất hiện gần đây",
+        "en": "Signs of the disease appeared recently"
+    },
+    "medical_history": {
+        "vi": "Tiền sử bệnh",
+        "en": "Medical history"
+    },
+    "please_tell_us_about_your_medical_history": {
+        "vi": "Vui lòng cho chúng tôi biết về tiền sử, bệnh sử của bạn",
+        "en": "Please tell us about your medical history"
+    },
+    "please_tell_us_about_your_current_health_condition": {
+        "vi": "Vui lòng cho chúng tôi biết về tình trạng sức khoẻ hiện tại của bạn",
+        "en": "Please tell us about your current health condition"
+    },
+    "commit_medical_declaration": {
+        "vi": "Tôi cam kết thông tin trên là đúng sự thật, tôi hiểu rằng nếu cung cấp thông tin sai có thể dẫn đến hậu quả nghiêm trọng. Nếu sai tôi hoàn toàn chịu trách nhiệm trước pháp luật.",
+        "en": "I commit that the above information is true. I understand that providing false information can lead to serious consequences. If I am wrong, I am fully responsible before the law."
+    },
+    "share_information": {
+        "vi": "Chia sẻ thông tin",
+        "en": "Share information"
+    },
+    "symptoms": {
+        "vi": "Triệu chứng",
+        "en": "Symptoms"
+    },
+    "bug_report": {
+        "vi": "Báo cáo lỗi",
+        "en": "Bug report"
+    },
+    "send": {
+        "vi": "Gửi",
+        "en": "Send"
+    },
+    "special_characters": {
+        "vi": "Kí tự đặc biệt",
+        "en": "Special character"
     }
 }
