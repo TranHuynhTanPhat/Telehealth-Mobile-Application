@@ -6,7 +6,6 @@ import 'package:healthline/data/api/models/responses/post_response.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/forum/components/update_post.dart';
-import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -38,7 +37,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
           translate(context, 'edit_content'),
         ),
         centerTitle: true,
-        leading: cancelButton(context),
+        // leading: cancelButton(context),
       ),
       body: BlocListener<ForumCubit, ForumState>(
         listener: (context, state) {

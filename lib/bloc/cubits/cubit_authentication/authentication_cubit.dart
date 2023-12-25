@@ -89,6 +89,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         AppController.instance.authState = AuthState.DoctorAuthorized;
       }
       AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
+      SocketManager.instance.close();
       SocketManager.instance.init();
       emit(LoginState(blocState: BlocState.Successed));
     } on DioException catch (e) {

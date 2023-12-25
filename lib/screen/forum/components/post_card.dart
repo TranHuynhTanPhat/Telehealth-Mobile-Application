@@ -12,6 +12,7 @@ import 'package:healthline/data/api/models/responses/post_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/components/photo_gallery.dart';
 import 'package:healthline/screen/forum/components/exports.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/utils/date_util.dart';
@@ -168,92 +169,7 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                       onTap: () {
-                        showModalBottomSheet<void>(
-                          context: context,
-                          builder: (BuildContext contextBottomSheet) {
-                            return BlocListener<ForumCubit, ForumState>(
-                              bloc: context.read<ForumCubit>(),
-                              listener: (context, state) {
-                                if (state is DeletePostState) {
-                                  if (state.blocState == BlocState.Successed) {
-                                    Navigator.pop(context);
-                                  }
-                                }
-                              },
-                              child: SizedBox(
-                                height: 150,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: dimensWidth() * 3),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: ElevatedButtonWidget(
-                                                text: translate(
-                                                    context, 'edit_content'),
-                                                onPressed: () {
-                                                  if (widget.post.id == null) {
-                                                    EasyLoading.showToast(
-                                                        translate(context,
-                                                            'cant_load_data'));
-                                                  } else {
-                                                    Navigator.pushNamed(context,
-                                                            editPostName,
-                                                            arguments: widget
-                                                                .post
-                                                                .toJson())
-                                                        .then((value) {
-                                                      if (value == true) {
-                                                        Navigator.pop(context);
-                                                      }
-                                                    });
-                                                  }
-                                                }),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextButton(
-                                              onPressed: () {
-                                                try {
-                                                  context
-                                                      .read<ForumCubit>()
-                                                      .deletePost(
-                                                          idPost:
-                                                              widget.post.id!);
-                                                } catch (e) {
-                                                  logPrint(e);
-                                                  EasyLoading.showToast(
-                                                      translate(context,
-                                                          'cant_load_data'));
-                                                }
-                                              },
-                                              child: Text(
-                                                  translate(context, 'delete'),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .labelLarge
-                                                      ?.copyWith(
-                                                          color: Colors
-                                                              .redAccent)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        showBottomSheetPost(context);
                       },
                     ),
                   ),
@@ -316,14 +232,31 @@ class _PostCardState extends State<PostCard> {
                                     logPrint(e);
                                     images[index] = DImages.placeholder;
                                   }
-                                  return Image.network(
-                                    images[index]!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      logPrint(error);
-                                      return Image.asset(DImages.placeholder,
-                                          fit: BoxFit.cover);
+                                  return InkWell(
+                                    onTap: () {
+                                      if (widget.post.photo != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PhotoGallery(
+                                                galleryItems:
+                                                    widget.post.photo!),
+                                          ),
+                                        );
+                                      }
                                     },
+                                    splashColor: transparent,
+                                    highlightColor: transparent,
+                                    child: Image.network(
+                                      images[index]!,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        logPrint(error);
+                                        return Image.asset(DImages.placeholder,
+                                            fit: BoxFit.cover);
+                                      },
+                                    ),
                                   );
                                 }),
                           ),
@@ -392,65 +325,6 @@ class _PostCardState extends State<PostCard> {
                             color: black26,
                           ),
                   ),
-                  //  ElevatedButton(
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       like = !like;
-                  //     });
-                  //   },
-                  //   style: ButtonStyle(
-                  //     elevation: const MaterialStatePropertyAll(0),
-                  //     overlayColor:
-                  //         MaterialStatePropertyAll(Colors.pink.shade50),
-                  //     backgroundColor:
-                  //         const MaterialStatePropertyAll(colorF4F4F4),
-                  //     shape: MaterialStatePropertyAll(
-                  //       RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(
-                  //           dimensWidth(),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Expanded(
-                  //         flex: 1,
-                  //         child: Align(
-                  //           alignment: Alignment.centerRight,
-                  //           child: like
-                  //               ? FaIcon(
-                  //                   FontAwesomeIcons.solidHeart,
-                  //                   size: dimensIcon() * .7,
-                  //                   color: Colors.redAccent,
-                  //                 )
-                  //               : FaIcon(
-                  //                   FontAwesomeIcons.heart,
-                  //                   size: dimensIcon() * .7,
-                  //                   color: black26,
-                  //                 ),
-                  //         ),
-                  //       ),
-                  //       SizedBox(
-                  //         width: dimensWidth(),
-                  //       ),
-                  //       Expanded(
-                  //         flex: 2,
-                  //         child: Text(
-                  //           translate(context, 'like'),
-                  //           overflow: TextOverflow.ellipsis,
-                  //           style: Theme.of(context)
-                  //               .textTheme
-                  //               .labelLarge
-                  //               ?.copyWith(
-                  //                   color: like ? Colors.redAccent : black26),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(
                     width: dimensWidth() * 3,
                   ),
@@ -476,52 +350,6 @@ class _PostCardState extends State<PostCard> {
                       color: black26,
                     ),
                   ),
-                  // ElevatedButton(
-                  //   onPressed: () {},
-                  //   style: ButtonStyle(
-                  //     elevation: const MaterialStatePropertyAll(0),
-                  //     backgroundColor:
-                  //         const MaterialStatePropertyAll(colorF4F4F4),
-                  //     shape: MaterialStatePropertyAll(
-                  //       RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(
-                  //           dimensWidth(),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Expanded(
-                  //         flex: 1,
-                  //         child: Align(
-                  //           alignment: Alignment.centerRight,
-                  //           child: FaIcon(
-                  //             FontAwesomeIcons.comment,
-                  //             size: dimensIcon() * .7,
-                  //             color: black26,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       SizedBox(
-                  //         width: dimensWidth(),
-                  //       ),
-                  //       Expanded(
-                  //         flex: 2,
-                  //         child: Text(
-                  //           translate(context, 'comment'),
-                  //           overflow: TextOverflow.ellipsis,
-                  //           style: Theme.of(context)
-                  //               .textTheme
-                  //               .labelLarge
-                  //               ?.copyWith(color: black26),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -547,6 +375,115 @@ class _PostCardState extends State<PostCard> {
                 focusNode: focus,
               ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> showBottomSheetPost(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      barrierColor: black26,
+      elevation: 0,
+      isScrollControlled: true,
+      backgroundColor: transparent,
+      builder: (BuildContext contextBottomSheet) {
+        return BlocListener<ForumCubit, ForumState>(
+          bloc: context.read<ForumCubit>(),
+          listener: (context, state) {
+            if (state is DeletePostState) {
+              if (state.blocState == BlocState.Successed) {
+                Navigator.pop(context);
+              }
+            }
+          },
+          child: Wrap(children: [
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+              padding: EdgeInsets.symmetric(
+                  horizontal: dimensWidth() * 3, vertical: dimensHeight() * 3),
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.circular(dimensWidth() * 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(.1),
+                    spreadRadius: dimensWidth() * .4,
+                    blurRadius: dimensWidth() * .4,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton.icon(
+                          style: ButtonStyle(
+                            padding: MaterialStatePropertyAll(
+                              EdgeInsets.symmetric(
+                                  vertical: dimensHeight() * 2,
+                                  horizontal: dimensWidth() * 2.5),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (widget.post.id == null) {
+                              EasyLoading.showToast(
+                                  translate(context, 'cant_load_data'));
+                            } else {
+                              Navigator.pushNamed(context, editPostName,
+                                      arguments: widget.post.toJson())
+                                  .then((value) {
+                                if (value == true) {
+                                  Navigator.pop(context);
+                                }
+                              });
+                            }
+                          },
+                          icon: const FaIcon(
+                            FontAwesomeIcons.penToSquare,
+                            color: color1F1F1F,
+                          ),
+                          label: Text(
+                            translate(context, 'edit_content'),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: dimensHeight() * 3,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButtonWidget(
+                          text: translate(context, 'delete'),
+                          color: Colors.redAccent,
+                          onPressed: () {
+                            try {
+                              context
+                                  .read<ForumCubit>()
+                                  .deletePost(idPost: widget.post.id!);
+                            } catch (e) {
+                              logPrint(e);
+                              EasyLoading.showToast(
+                                  translate(context, 'cant_load_data'));
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ]),
         );
       },
     );
