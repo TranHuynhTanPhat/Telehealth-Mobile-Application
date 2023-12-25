@@ -81,25 +81,29 @@ class _MainNewsPostState extends State<MainNewsPost> {
         ),
         child: Column(
           children: [
-            Container(
-              height: dimensHeight() * 20,
-              width: double.infinity,
-              margin: EdgeInsets.only(
-                bottom: dimensHeight() * 2,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  dimensWidth() * 2,
+            Hero(
+              tag: widget.news.id!,
+              transitionOnUserGestures: true,
+              child: Container(
+                height: dimensHeight() * 20,
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  bottom: dimensHeight() * 2,
                 ),
-                image: DecorationImage(
-                  image: image,
-                  fit: BoxFit.cover,
-                  onError: (exception, stackTrace) => {
-                    logPrint(exception),
-                    setState(() {
-                      image = AssetImage(DImages.placeholder);
-                    }),
-                  },
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    dimensWidth() * 2,
+                  ),
+                  image: DecorationImage(
+                    image: image,
+                    fit: BoxFit.cover,
+                    onError: (exception, stackTrace) => {
+                      logPrint(exception),
+                      setState(() {
+                        image = AssetImage(DImages.placeholder);
+                      }),
+                    },
+                  ),
                 ),
               ),
             ),

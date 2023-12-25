@@ -82,8 +82,9 @@ class _EditContactFormState extends State<EditContactForm> {
               child: TextFieldWidget(
                 readOnly: true,
                 validate: (value) {
-                  return Validate()
-                      .validatePhone(context, _controllerPhone.text);
+                  // return Validate()
+                  //     .validatePhone(context, _controllerPhone.text);
+                  return null;
                 },
                 prefix: Padding(
                   padding: EdgeInsets.only(right: dimensWidth() * .5),
@@ -244,13 +245,13 @@ class _EditContactFormState extends State<EditContactForm> {
                 width: double.infinity,
                 child: ElevatedButtonWidget(
                   text: translate(context, 'update_information'),
-                  onPressed: _controllerEmail.text != state.profile.email
+                  onPressed: _controllerEmail.text.trim() != state.profile.email
                       ? () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             context
                                 .read<PatientProfileCubit>()
-                                .updateEmail(_controllerEmail.text);
+                                .updateEmail(_controllerEmail.text.trim());
                           }
                         }
                       : null,

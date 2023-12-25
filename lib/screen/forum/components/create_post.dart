@@ -56,101 +56,106 @@ class _CreatePostState extends State<CreatePost> {
                   maxLine: 3,
                   fillColor: colorF2F5FF,
                   filled: true,
+                  onChanged: (p0) => setState(() {}),
                   focusedBorderColor: colorF2F5FF,
                   enabledBorderColor: colorF2F5FF,
                   hint: translate(context, 'whats_the_problem_with_you'),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  color: colorF2F5FF,
-                  borderRadius: BorderRadius.circular(180),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () async {
-                          KeyboardUtil.hideKeyboard(context);
-                          _files = await FilePickerCustom().getImages();
-                          setState(() {});
-                        },
-                        child: _files.isEmpty
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.photoFilm,
-                                    size: dimensIcon() * .5,
-                                    color: color1F1F1F,
-                                  ),
-                                  SizedBox(
-                                    width: dimensWidth(),
-                                  ),
-                                  Text(
-                                    translate(context, 'attach'),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  ),
-                                ],
-                              )
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      '${_files.length} ${translate(context, 'files')} ${translate(context, 'attach').toLowerCase()}',
+              if (_textEdittingController.text.trim().isNotEmpty)
+                Container(
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: colorF2F5FF,
+                    borderRadius: BorderRadius.circular(180),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            KeyboardUtil.hideKeyboard(context);
+                            _files = await FilePickerCustom().getImages();
+                            setState(() {});
+                          },
+                          child: _files.isEmpty
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.photoFilm,
+                                      size: dimensIcon() * .5,
+                                      color: color1F1F1F,
+                                    ),
+                                    SizedBox(
+                                      width: dimensWidth(),
+                                    ),
+                                    Text(
+                                      translate(context, 'attach'),
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${_files.length} ${translate(context, 'files')} ${translate(context, 'attach').toLowerCase()}',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          KeyboardUtil.hideKeyboard(context);
-                          if (_textEdittingController.text.trim().isNotEmpty) {
-                            context.read<ForumCubit>().editPost(
-                                files: _files,
-                                content: _textEdittingController.text);
-                          }
-                        },
-                        style: ButtonStyle(
-                          elevation: const MaterialStatePropertyAll(0),
-                          padding: MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(
-                                vertical: dimensHeight(),
-                                horizontal: dimensWidth() * 2.5),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            KeyboardUtil.hideKeyboard(context);
+                            if (_textEdittingController.text
+                                .trim()
+                                .isNotEmpty) {
+                              context.read<ForumCubit>().editPost(
+                                  files: _files,
+                                  content: _textEdittingController.text.trim());
+                            }
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            padding: MaterialStatePropertyAll(
+                              EdgeInsets.symmetric(
+                                  vertical: dimensHeight(),
+                                  horizontal: dimensWidth() * 2.5),
+                            ),
+                            backgroundColor:
+                                const MaterialStatePropertyAll(primary),
                           ),
-                          backgroundColor:
-                              const MaterialStatePropertyAll(primary),
+                          child: Text(
+                            translate(context, 'post'),
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: white),
+                          ),
                         ),
-                        child: Text(
-                          translate(context, 'post'),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(color: white),
-                        ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         );

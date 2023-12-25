@@ -12,13 +12,19 @@ class OptionSignUp extends StatelessWidget {
       children: [
         // Padding(
         //   padding: EdgeInsets.only(
+        //       top: dimensHeight() * 4,
         //       right: dimensWidth() * 3,
         //       left: dimensWidth() * 3),
         //   child: const Divider(),
         // ),
+        // Container(
+        //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
+        //   child:  GoogleButtonWidget(onPressed: () {  },),
+        // ),
+        const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               " ${translate(context, 'already_have_an_account')} ",

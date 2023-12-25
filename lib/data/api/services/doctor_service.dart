@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/consultaion_infomation_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
@@ -72,35 +71,38 @@ class DoctorService extends BaseService {
     return response;
   }
 
-  Future<List<ConsultationInformationResponse>> fetchPatient(
-      {required String doctorId}) async {
-    final response = await get(
-        '${ApiConstants.CONSULTATION_DOCTOR_INFORMATION}/$doctorId',
-        isDoctor: true);
-    final List<dynamic> objects =
-        json.decode(json.encode(response.data['consultaion']));
-    final List<ConsultationInformationResponse> patients =
-        objects.map((e) => ConsultationInformationResponse.fromMap(e)).toList();
-    return patients;
-  }
-
   Future<int?> changePassword(
       {required String password, required String newPassword}) async {
-    final response = await patch(
-      ApiConstants.DOCTOR_PASSWORD,
-      data: json.encode(
-        {"password": password, "new_password": newPassword},
-      ),isDoctor: true
-    );
+    final response = await patch(ApiConstants.DOCTOR_PASSWORD,
+        data: json.encode(
+          {"password": password, "new_password": newPassword},
+        ),
+        isDoctor: true);
 
     return response.code;
   }
 
-  // Future<List<DoctorResponse>> getListDoctor() async {
-  //   final response = await get(ApiConstants.DOCTOR_LIST);
-  //   List<DoctorResponse> doctors = response.data
-  //       .map<DoctorResponse>((e) => DoctorResponse.fromMap(e))
-  //       .toList();
-  //   return doctors;
-  // }
+  Future<int?> sendOTP({required String email}) async {
+    final response = await post('${ApiConstants.DOCTOR_FORGOT_PASSWORD}/$email',
+        isDoctor: true);
+
+    return response.code;
+  }
+
+  Future<int?> resetPassword(
+      {required String email,
+      required String otp,
+      required String password,
+      required String confirmPassword}) async {
+    final response = await post(ApiConstants.DOCTOR_FORGOT_PASSWORD_RESET,
+        data: json.encode({
+          "email": email,
+          "otp": otp,
+          "password": password,
+          "passwordConfirm": confirmPassword
+        }),
+        isDoctor: true);
+
+    return response.code;
+  }
 }

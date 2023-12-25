@@ -10,18 +10,18 @@ class OptionLogIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-              top: dimensHeight() * 4,
-              right: dimensWidth() * 3,
-              left: dimensWidth() * 3),
-          child: const Divider(),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(
+        //       top: dimensHeight() * 4,
+        //       right: dimensWidth() * 3,
+        //       left: dimensWidth() * 3),
+        //   child: const Divider(),
+        // ),
         // Container(
         //   padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 9),
-        //   child: const GoogleButtonWidget(),
+        //   child:  GoogleButtonWidget(onPressed: () {  },),
         // ),
-        // const Divider(),
+        const Divider(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

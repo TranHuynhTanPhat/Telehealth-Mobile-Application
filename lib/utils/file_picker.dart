@@ -25,6 +25,7 @@ class FilePickerCustom {
     // while in iOS is the photos permission
     if (Platform.isAndroid) {
       result = await Permission.storage.request();
+      result = await Permission.mediaLibrary.request();
     } else {
       result = await Permission.photos.request();
     }
@@ -136,4 +137,5 @@ class FilePickerCustom {
     }
     return null;
   }
+  
 }

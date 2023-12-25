@@ -16,6 +16,7 @@ class ListVaccination extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 200),
       children: [
         ExpansionPanelRadio(
+            canTapOnHeader: true,
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
                 title: Text(
@@ -28,8 +29,9 @@ class ListVaccination extends StatelessWidget {
               animationDuration: const Duration(milliseconds: 200),
               children: [
                 ...diseaseAdult.map(
-                  (e) => ExpansionPanelRadio(
+                      (e) => ExpansionPanelRadio(
                     value: e,
+                    canTapOnHeader: true,
                     headerBuilder: ((context, isExpanded) => ListTile(
                           title: Text(
                             translate(
@@ -53,13 +55,13 @@ class ListVaccination extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.only(top: dimensHeight()),
                                   child: Text(
-                                    '${translate(context, 'schedule')}:',
+                                            '${translate(context, 'schedule')}:',
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
-                                ),
-                                ...item.schedule.map(
-                                  (schedule) => Column(
+                                        ),
+                                        ...item.schedule.map(
+                                              (schedule) => Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -73,28 +75,29 @@ class ListVaccination extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            left: dimensWidth()),
-                                        child: Text(
-                                            '${translate(context, 'days_from_last_dose')}: ${translate(context, schedule.daysFromLastDose.toString())}'),
-                                      ),
-                                    ],
+                                                        left: dimensWidth()),
+                                                    child: Text(
+                                                        '${translate(context, 'days_from_last_dose')}: ${translate(context, schedule.daysFromLastDose.toString())}'),
+                                                  ),
+                                                ],
+                                              ),
+                                        ),
+                                        const Divider(
+                                          color: black26,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(
-                                  color: black26,
-                                )
-                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
                 ),
               ],
             ),
             value: 1),
         ExpansionPanelRadio(
+            canTapOnHeader: true,
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
                 title: Text(
@@ -107,7 +110,8 @@ class ListVaccination extends StatelessWidget {
               animationDuration: const Duration(milliseconds: 200),
               children: [
                 ...diseaseChild.map(
-                  (e) => ExpansionPanelRadio(
+                      (e) => ExpansionPanelRadio(
+                    canTapOnHeader: true,
                     value: e,
                     headerBuilder: ((context, isExpanded) => ListTile(
                           title: Text(
@@ -120,7 +124,7 @@ class ListVaccination extends StatelessWidget {
                     body: Column(
                       children: [
                         ...e.vaccinations.map(
-                          (item) => ListTile(
+                              (item) => ListTile(
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -134,13 +138,13 @@ class ListVaccination extends StatelessWidget {
                                   child: Text(
                                     '${translate(context, 'schedule')}:',
                                     style:
-                                        Theme.of(context).textTheme.labelLarge,
+                                    Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ),
                                 ...item.schedule.map(
-                                  (schedule) => Column(
+                                      (schedule) => Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                           '${translate(context, 'dose')}: ${schedule.dose.toString()}'),

@@ -19,14 +19,14 @@ class JitsiService {
 
   join(
       {required String token,
-      required String roomName,
+      required String? roomName,
       required String? displayName,
       required String? urlAvatar,
       required String? email}) async {
     var options = JitsiMeetConferenceOptions(
       serverURL: "https://8x8.vc",
       token: token,
-      room: roomName,
+      room: roomName ?? 'Healthline',
       configOverrides: {
         "startWithAudioMuted": false,
         "startWithVideoMuted": false,
@@ -91,7 +91,7 @@ class JitsiService {
         logPrint("readyToClose");
       },
     );
-    await _jitsiMeetPlugin.join(options, listener);
+    return await _jitsiMeetPlugin.join(options, listener);
   }
 
   // hangUp() async {
@@ -133,26 +133,26 @@ class JitsiService {
   //   });
   // }
 
-  openChat() async {
-    await _jitsiMeetPlugin.openChat();
-  }
+  // openChat() async {
+  //   await _jitsiMeetPlugin.openChat();
+  // }
 
-  sendChatMessage() async {
-    var a = await _jitsiMeetPlugin.sendChatMessage(message: "HEY1");
-    logPrint("$a");
+  // sendChatMessage() async {
+  //   var a = await _jitsiMeetPlugin.sendChatMessage(message: "HEY1");
+  //   logPrint("$a");
 
-    for (var p in participants) {
-      a = await _jitsiMeetPlugin.sendChatMessage(to: p, message: "HEY2");
-      logPrint("$a");
-    }
-  }
+  //   for (var p in participants) {
+  //     a = await _jitsiMeetPlugin.sendChatMessage(to: p, message: "HEY2");
+  //     logPrint("$a");
+  //   }
+  // }
 
-  closeChat() async {
-    await _jitsiMeetPlugin.closeChat();
-  }
+  // closeChat() async {
+  //   await _jitsiMeetPlugin.closeChat();
+  // }
 
-  retrieveParticipantsInfo() async {
-    var a = await _jitsiMeetPlugin.retrieveParticipantsInfo();
-    logPrint("$a");
-  }
+  // retrieveParticipantsInfo() async {
+  //   var a = await _jitsiMeetPlugin.retrieveParticipantsInfo();
+  //   logPrint("$a");
+  // }
 }

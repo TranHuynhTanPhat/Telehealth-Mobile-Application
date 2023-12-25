@@ -38,8 +38,8 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
   }
 
   bool checkValid() {
-    return _controllerDisease.text.isNotEmpty &&
-            _controllerDayOfLastDose.text.isNotEmpty
+    return _controllerDisease.text.trim().isNotEmpty &&
+            _controllerDayOfLastDose.text.trim().isNotEmpty
         ? true
         : false;
   }
@@ -90,7 +90,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                             .createVaccinationRecordState(
                                 state.vaccinations[_index!].id!,
                                 _currentStep + 1,
-                                _controllerDayOfLastDose.text),
+                                _controllerDayOfLastDose.text.trim()),
                         child: saveButton(context),
                       ),
                     )

@@ -1,12 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../../utils/time_util.dart';
 
 class ScheduleCard extends StatelessWidget {
-  const ScheduleCard({super.key, required this.object});
-  final Map<String, dynamic> object;
+  const ScheduleCard({super.key, required this.consultation});
+
+  final ConsultationResponse consultation;
+
   @override
   Widget build(BuildContext context) {
+    DateTime? date;
+    List<int> time = [];
+    try {
+      date =
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(consultation.date!);
+    } catch (e) {
+      logPrint(e);
+    }
+    try {
+      time = consultation.expectedTime
+              ?.split('-')
+              .map((e) => int.parse(e))
+              .toList() ??
+          [int.parse(consultation.expectedTime!)];
+    } catch (e) {
+      logPrint(e);
+    }
+    String expectedTime =
+        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
     return Container(
       padding: EdgeInsets.all(dimensWidth() * 2),
       decoration: BoxDecoration(
@@ -26,14 +52,14 @@ class ScheduleCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      object['date'].month.toString(),
+                      date?.day.toString() ?? '--',
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
                           color: secondary, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      object['date'].day.toString(),
+                      date?.month.toString() ?? '--',
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           color: secondary, fontWeight: FontWeight.w400),
                     ),
@@ -54,7 +80,7 @@ class ScheduleCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      object['time'].format(context).toString(),
+                      expectedTime,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
@@ -63,7 +89,7 @@ class ScheduleCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      object['dr'],
+                      consultation.doctor?.fullName??translate(context, 'undefine'),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: secondary, fontWeight: FontWeight.w600),
@@ -71,7 +97,7 @@ class ScheduleCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      translate(context,object['description']),
+                      translate(context,consultation.doctor?.specialty??'undefine'),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme

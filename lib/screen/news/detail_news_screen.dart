@@ -84,25 +84,28 @@ class _DetailNewsScreenState extends State<DetailNewsScreen> {
           horizontal: dimensWidth() * 3,
         ),
         children: [
-          Container(
-            height: dimensHeight() * 30,
-            width: double.infinity,
-            margin: EdgeInsets.only(
-              bottom: dimensHeight() * 2,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                dimensWidth() * 2,
-              ),
-              image: DecorationImage(
-                image: image,
-                fit: BoxFit.cover,
-                onError: (exception, stackTrace) => {
-                  logPrint(exception),
-                  setState(() {
-                    image = AssetImage(DImages.placeholder);
-                  }),
-                },
+          Hero(
+            tag: news.id!,
+            transitionOnUserGestures: true,
+            child: Container(
+              height: dimensHeight() * 30,
+              width: double.infinity,
+              margin: EdgeInsets.only(bottom: dimensWidth() * 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  dimensWidth() * 2,
+                ),
+                image: DecorationImage(
+                  image: image,
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) => {
+                    logPrint(exception),
+                    logPrint(stackTrace),
+                    setState(() {
+                      image = AssetImage(DImages.placeholder);
+                    }),
+                  },
+                ),
               ),
             ),
           ),

@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/utils/currency_util.dart';
+import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class InvoiceScreen extends StatefulWidget {
-  const InvoiceScreen({super.key});
-
+  const InvoiceScreen(
+      {super.key,
+      required this.previousPage,
+      required this.request,
+      this.doctorName,
+      this.patientName});
+  final VoidCallback previousPage;
+  final ConsultationRequest request;
+  final String? doctorName;
+  final String? patientName;
   @override
   State<InvoiceScreen> createState() => _InvoiceScreenState();
 }
@@ -13,35 +28,55 @@ class InvoiceScreen extends StatefulWidget {
 class _InvoiceScreenState extends State<InvoiceScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: white,
-      extendBody: true,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.fromLTRB(
-            dimensWidth() * 10, 0, dimensWidth() * 10, dimensHeight() * 3),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white.withOpacity(0.0), white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+    List<int> time = [];
+    try {
+      time = widget.request.expectedTime
+              ?.split('-')
+              .map((e) => int.parse(e))
+              .toList() ??
+          [int.parse(widget.request.expectedTime!)];
+    } catch (e) {
+      EasyLoading.showToast(translate(context, 'failure'));
+    }
+    String expectedTime =
+        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => widget.previousPage(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: white,
+        extendBody: true,
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.fromLTRB(
+              dimensWidth() * 10, 0, dimensWidth() * 10, dimensHeight() * 3),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.white.withOpacity(0.0), white],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: ElevatedButtonWidget(
+              text: translate(context, 'payment'),
+              onPressed: () {
+                // Navigator.pushNamed(context, invoiceName);
+                // state is CreateConsultationState &&
+                //         state.blocState == BlocState.Successed
+                //     ? Navigator.pushNamedAndRemoveUntil(
+                //         context, mainScreenPatientName, (route) => false)
+                // :
+                context
+                    .read<ConsultationCubit>()
+                    .createConsultation(consultation: widget.request);
+              }),
+        ),
+        appBar: AppBar(
+          title: Text(
+            translate(context, 'appointment_information'),
           ),
         ),
-        child: ElevatedButtonWidget(
-            text: translate(context, 'payment'),
-            onPressed: () {
-              // Navigator.pushNamed(context, invoiceName);
-            }),
-      ),
-      appBar: AppBar(
-        title: Text(
-          translate(context, 'invoice'),
-        ),
-      ),
-      body: AbsorbPointer(
-        // absorbing: state is FetchScheduleLoading && state.schedules.isEmpty,
-        absorbing: false,
-        child: ListView(
+        body: ListView(
           padding: EdgeInsets.symmetric(
               vertical: dimensHeight(), horizontal: dimensWidth() * 3),
           children: [
@@ -56,21 +91,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${translate(context, 'invoice_code')}: ',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      Expanded(
-                        child: Text(
-                          "DJFKSDLJFK",
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: dimensHeight() * .5,
                   ),
@@ -83,7 +103,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "24/11/2023",
+                          formatDayMonthYear(context, DateTime.now()),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
@@ -99,7 +119,25 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "Lê Đình Trường",
+                          widget.doctorName ?? translate(context, 'undefine'),
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: dimensHeight() * .5,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${translate(context, 'patient')}: ',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      Expanded(
+                        child: Text(
+                          widget.patientName ?? translate(context, 'undefine'),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
@@ -117,7 +155,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "12/01/2023",
+                          widget.request.date ?? translate(context, 'undefine'),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
@@ -135,28 +173,32 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       ),
                       Expanded(
                         child: Text(
-                          "11:00 AM",
+                          expectedTime,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                     ],
                   ),
-                  const Divider(),
+                  const Divider(
+                    thickness: 3,
+                    color: black26,
+                  ),
                   SizedBox(
                     height: dimensHeight() * .5,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        '${translate(context, 'total')}: ',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
                       Expanded(
                         child: Text(
-                          "200.000",
-                          style: Theme.of(context).textTheme.titleSmall,
+                          '${translate(context, 'total')}: ',
+                          style: Theme.of(context).textTheme.labelLarge,
+                          textAlign: TextAlign.right,
                         ),
+                      ),
+                      Text(
+                        convertToVND(widget.request.price!),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
                   ),

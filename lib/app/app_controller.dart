@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/api/meilisearch_manager.dart';
 import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
+import 'package:healthline/firebase_options.dart';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -45,7 +47,7 @@ class AppController {
 
   /// Initialize AppController
   init() async {
-    await Future.wait([setupSystem()]);
+    await Future.wait([setupSystem(), setupFirebase()]);
     await initAuth();
     await PushNotificationManager.instance.init();
     MeiliSearchManager().init();
@@ -74,6 +76,12 @@ class AppController {
     CloudinaryContext.cloudinary =
         Cloudinary.fromStringUrl(dotenv.get('CLOUDINARY_URL'));
     CloudinaryContext.cloudinary.config.urlConfig.secure = true;
+  }
+
+  Future<void> setupFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 
   /// Check Authorization

@@ -35,7 +35,7 @@ class _NewsScreenState extends State<NewsScreen> {
     _searchController = TextEditingController();
     _pagingController.addPageRequestListener((pageKey) {
       context.read<NewsCubit>().searchNews(
-            key: _searchController.text,
+            key: _searchController.text.trim(),
             searchQuery: SearchQuery(
               limit: 20,
               attributesToSearchOn: ['title', 'content'],
@@ -151,7 +151,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 splashColor: transparent,
                                 highlightColor: transparent,
                                 onTap: () {
-                                  if (_searchController.text.isNotEmpty) {
+                                  if (_searchController.text.trim().isNotEmpty) {
                                     _searchController.text = '';
                                     _pagingController.refresh();
                                   } else {
@@ -169,7 +169,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                         )
                       : Text(
-                          translate(context, 'forum'),
+                          translate(context, 'news'),
                         ),
                   actions: [
                     if (openSearch == false)

@@ -41,18 +41,18 @@ class _UpdateVaccinationScreenState extends State<UpdateVaccinationScreen> {
   }
 
   bool checkValid() {
-    return _controllerDisease.text.isNotEmpty &&
-            _controllerDayOfLastDose.text.isNotEmpty
+    return _controllerDisease.text.trim().isNotEmpty &&
+            _controllerDayOfLastDose.text.trim().isNotEmpty
         ? true
         : false;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_controllerDayOfLastDose.text.isEmpty) {
+    if (_controllerDayOfLastDose.text.trim().isEmpty) {
       _controllerDayOfLastDose.text = widget.vaccineRecord.date!;
     }
-    if (_controllerDisease.text.isEmpty) {
+    if (_controllerDisease.text.trim().isEmpty) {
       _controllerDisease.text =
           translate(context, widget.vaccineRecord.vaccine!.disease!);
     }

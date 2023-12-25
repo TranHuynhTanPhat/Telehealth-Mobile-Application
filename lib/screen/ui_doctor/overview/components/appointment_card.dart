@@ -8,7 +8,10 @@ import 'package:healthline/utils/translate.dart';
 class AppointmentCard extends StatelessWidget {
   const AppointmentCard({
     super.key,
+    required this.countConsul,
   });
+
+  final int countConsul;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,9 @@ class AppointmentCard extends StatelessWidget {
               vertical: dimensWidth() * 3,
             ),
             decoration: BoxDecoration(
-                color: color1C6AA3.withOpacity(.2),
-                borderRadius: BorderRadius.circular(dimensWidth() * 2),),
+              color: color1C6AA3.withOpacity(.2),
+              borderRadius: BorderRadius.circular(dimensWidth() * 2),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,13 +75,13 @@ class AppointmentCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       FaIcon(
+                      FaIcon(
                         FontAwesomeIcons.arrowTrendUp,
                         color: Colors.green,
                         size: dimensIcon(),
                       ),
                       Text(
-                        '2,000',
+                        "$countConsul",
                         textAlign: TextAlign.right,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -7,8 +7,8 @@ import 'package:open_document/open_document.dart';
 import 'package:open_document/open_document_exception.dart';
 
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
-import 'package:healthline/repository/file_repository.dart';
-import 'package:healthline/repository/patient_repository.dart';
+import 'package:healthline/repositories/file_repository.dart';
+import 'package:healthline/repositories/patient_repository.dart';
 import 'package:healthline/utils/log_data.dart';
 
 part 'patient_record_state.dart';
@@ -64,7 +64,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(AddPatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
-          message:e.response!.data['message'].toString()));
+          message: e.response!.data['message'].toString()));
     } catch (e) {
       emit(AddPatientRecordError(
           records: state.records,
@@ -105,11 +105,13 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(DeletePatientRecordLoaded(
           records: response, medicalId: state.medicalId));
     } on DioException catch (e) {
+      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
           message: e.response!.data['message'].toString()));
     } catch (e) {
+      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
@@ -121,8 +123,8 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
     emit(DeletePatientRecordLoading(
         records: state.records, medicalId: state.medicalId));
     try {
-      await _fileRepository.deleteFolderPatient(medicalId:state.medicalId!, folderName: folderName);
-
+      await _fileRepository.deleteFolderPatient(
+          medicalId: state.medicalId!, folderName: folderName);
 
       final path = await OpenDocument.getPathDocument();
 
@@ -133,7 +135,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
         String publicId = element.record!.split('/').last;
         String filePath = "$path/$publicId";
         final isCheck = await OpenDocument.checkDocument(filePath: filePath);
-        _patientRepository.deletePatientRecord([element.id!]);
+        // _patientRepository.deletePatientFolderRecord([element.id!]);
 
         if (isCheck) {
           File(filePath).deleteSync();
@@ -165,6 +167,7 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       String filePath = "$path/$fileName";
 
       final isCheck = await OpenDocument.checkDocument(filePath: filePath);
+      
       if (!isCheck) {
         filePath =
             await _fileRepository.downloadFile(filePath: filePath, url: url);

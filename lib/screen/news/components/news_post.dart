@@ -79,26 +79,50 @@ class _NewsPostState extends State<NewsPost> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: dimensWidth() * 10,
-              width: dimensWidth() * 10,
-              margin: EdgeInsets.only(right: dimensWidth() * 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  dimensWidth() * 2,
-                ),
-                image: DecorationImage(
-                  image: image,
-                  fit: BoxFit.cover,
-                  onError: (exception, stackTrace) => {
-                    logPrint(exception),
-                    setState(() {
-                      image = AssetImage(DImages.placeholder);
-                    }),
-                  },
+            Hero(
+              tag: widget.news.id!,
+              transitionOnUserGestures: true,
+              child: Container(
+                height: dimensWidth() * 10,
+                width: dimensWidth() * 10,
+                margin: EdgeInsets.only(right: dimensWidth() * 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    dimensWidth() * 2,
+                  ),
+                  image: DecorationImage(
+                    image: image,
+                    fit: BoxFit.cover,
+                    onError: (exception, stackTrace) => {
+                      logPrint(exception),
+                      setState(() {
+                        image = AssetImage(DImages.placeholder);
+                      }),
+                    },
+                  ),
                 ),
               ),
             ),
+            // Container(
+            //   height: dimensWidth() * 10,
+            //   width: dimensWidth() * 10,
+            //   margin: EdgeInsets.only(right: dimensWidth() * 2),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(
+            //       dimensWidth() * 2,
+            //     ),
+            //     image: DecorationImage(
+            //       image: image,
+            //       fit: BoxFit.cover,
+            //       onError: (exception, stackTrace) => {
+            //         logPrint(exception),
+            //         setState(() {
+            //           image = AssetImage(DImages.placeholder);
+            //         }),
+            //       },
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Column(
                 children: [

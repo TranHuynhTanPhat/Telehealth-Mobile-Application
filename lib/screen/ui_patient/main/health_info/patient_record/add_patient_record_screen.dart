@@ -337,9 +337,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
                                                               white)),
                                                   onPressed: () => setState(() {
                                                     _controllerfolderNames
-                                                            .text =
-                                                        translate(context,
-                                                            e.toLowerCase());
+                                                        .text = e;
                                                   }),
                                                   child: Row(
                                                     children: [

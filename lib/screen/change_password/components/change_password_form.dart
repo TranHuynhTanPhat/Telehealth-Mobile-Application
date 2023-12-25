@@ -72,8 +72,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 return Validate().validatePassword(
                     context, _controllerNewPassword.text.trim());
               },
-              onChanged: (value) => _controllerNewPassword.text =
-                  _controllerNewPassword.text.trim(),
+              // onChanged: (value) => _controllerNewPassword.text =
+              //     _controllerNewPassword.text.trim(),
               controller: _controllerNewPassword,
               label: translate(context, 'new_password'),
               obscureText: !showPassword,
@@ -100,8 +100,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                   ? null
                   : translate(context, 'password_must_be_same_as_above'),
               controller: _controllerConfirmNewPassword,
-              onChanged: (value) => _controllerConfirmNewPassword.text =
-                  _controllerConfirmNewPassword.text.trim(),
+              // onChanged: (value) => _controllerConfirmNewPassword.text =
+              //     _controllerConfirmNewPassword.text.trim(),
               label: translate(context, 'confirm_new_password'),
               obscureText: !showPassword,
               suffixIcon: IconButton(

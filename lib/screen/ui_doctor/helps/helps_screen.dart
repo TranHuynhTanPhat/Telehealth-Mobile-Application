@@ -109,6 +109,33 @@ class HelpsScreen extends StatelessWidget {
                   trailing: FaIcon(FontAwesomeIcons.chevronRight,
                       size: dimensIcon() * .5),
                 ),
+                const Divider(),
+                ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(context, privacyPolicyName);
+                  },
+                  dense: true,
+                  visualDensity: const VisualDensity(vertical: 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      dimensWidth(),
+                    ),
+                  ),
+                  title: Text(
+                    translate(context, 'bug_report'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: color1F1F1F),
+                  ),
+                  leading: FaIcon(
+                    FontAwesomeIcons.comments,
+                    size: dimensIcon() * .7,
+                    color: color1F1F1F,
+                  ),
+                  trailing: FaIcon(FontAwesomeIcons.chevronRight,
+                      size: dimensIcon() * .5),
+                ),
               ],
             ),
           ),

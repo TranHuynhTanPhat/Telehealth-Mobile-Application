@@ -8,9 +8,9 @@ import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
-import 'package:healthline/repository/common_repository.dart';
-import 'package:healthline/repository/doctor_repository.dart';
-import 'package:healthline/repository/user_repository.dart';
+import 'package:healthline/repositories/common_repository.dart';
+import 'package:healthline/repositories/doctor_repository.dart';
+import 'package:healthline/repositories/user_repository.dart';
 
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -27,7 +27,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   @override
   void onChange(Change<AuthenticationState> change) {
     super.onChange(change);
-    logPrint(change);
+    logPrint(change.currentState);
   }
 
   Future<void> registerAccount(
@@ -89,6 +89,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         AppController.instance.authState = AuthState.DoctorAuthorized;
       }
       AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
+      SocketManager.instance.close();
       SocketManager.instance.init();
       emit(LoginState(blocState: BlocState.Successed));
     } on DioException catch (e) {
@@ -173,7 +174,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       }
       if (AppController().authState == AuthState.PatientAuthorized) {
         code = await _userRepository.changePassword(
-            password: password, passwordConfirm: newPassword);
+            password: password, newPassword: newPassword);
       }
 
       if (code == 200 || code == 201) {
@@ -202,17 +203,19 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     emit(ResetPasswordState(blocState: BlocState.Pending));
     try {
       int? code;
-      // if (AppController().authState == AuthState.DoctorAuthorized) {
-      //   code = await _doctorRepository.changePassword(
-      //       password: password, newPassword: newPassword);
-      // }
-      // if (AppController().authState == AuthState.PatientAuthorized) {
-      code = await _userRepository.resetPassword(
-          password: password,
-          confirmPassword: confirmPassword,
-          email: email,
-          otp: otp);
-      // }
+      if (isDoctor) {
+        code = await _doctorRepository.resetPassword(
+            password: password,
+            confirmPassword: confirmPassword,
+            email: email,
+            otp: otp);
+      } else {
+        code = await _userRepository.resetPassword(
+            password: password,
+            confirmPassword: confirmPassword,
+            email: email,
+            otp: otp);
+      }
 
       if (code == 200 || code == 201) {
         emit(ResetPasswordState(blocState: BlocState.Successed));
@@ -230,20 +233,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  Future<void> sendOTP(
-      {required String email,
-      }) async {
+  Future<void> sendOTP({required String email, bool isDoctor = false}) async {
     emit(SendOTPState(blocState: BlocState.Pending));
     try {
       int? code;
-      // if (AppController().authState == AuthState.DoctorAuthorized) {
-      //   code = await _doctorRepository.changePassword(
-      //       password: password, newPassword: newPassword);
-      // }
-      // if (AppController().authState == AuthState.PatientAuthorized) {
-      code = await _userRepository.sendOTP(
-          email: email);
-      // }
+      if (isDoctor) {
+        code = await _doctorRepository.sendOTP(email: email);
+      } else {
+        code = await _userRepository.sendOTP(email: email);
+      }
 
       if (code == 200 || code == 201) {
         emit(SendOTPState(blocState: BlocState.Successed));
@@ -256,8 +254,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           error: e.response!.data['message'].toString()));
     } catch (e) {
       logPrint(e);
-      emit(
-          SendOTPState(blocState: BlocState.Failed, error: e.toString()));
+      emit(SendOTPState(blocState: BlocState.Failed, error: e.toString()));
     }
   }
 }

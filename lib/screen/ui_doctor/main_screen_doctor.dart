@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/rest_client.dart';
@@ -10,13 +11,14 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/drawer_label.dart';
+import 'package:healthline/screen/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/account_setting_doctor_screen.dart';
 import 'package:healthline/screen/ui_doctor/application_setting/application_setting_screen.dart';
 import 'package:healthline/screen/ui_doctor/helps/helps_screen.dart';
 import 'package:healthline/screen/ui_doctor/overview/overview_screen.dart';
 import 'package:healthline/screen/ui_doctor/patient/patient_screen.dart';
-import 'package:healthline/screen/ui_doctor/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -44,6 +46,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
       EasyLoading.dismiss();
     });
     context.read<DoctorProfileCubit>().fetchProfile();
+   
     _image = null;
   }
 
@@ -141,6 +144,19 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               }
             },
           ),
+          BlocListener<ConsultationCubit, ConsultationState>(
+              listener: (context, state) {
+            if (state is FetchFeedbackDoctorState) {
+              if (state.blocState == BlocState.Pending) {
+                EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              } else if (state.blocState == BlocState.Successed ||
+                  state.blocState == BlocState.Failed) {
+                EasyLoading.dismiss();
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(translate(context, 'cant_load_data'));
+              }
+            }
+          })
         ],
         child: AbsorbPointer(
           absorbing: onChangeToPatient,
@@ -326,7 +342,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: dimensHeight() * 2,
+                                    top: dimensHeight(),
                                     left: dimensWidth() * 2,
                                     bottom: dimensHeight()),
                                 child: Text(
@@ -380,8 +396,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                     if (state.profile.id != null) {
                                       context
                                           .read<DoctorProfileCubit>()
-                                          .fetchPatient(
-                                              doctorId: state.profile.id!);
+                                          .fetchPatient();
                                     }
                                     clickDrawer();
                                   });
@@ -452,22 +467,26 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                 ),
               ),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: Container(
-              margin: EdgeInsets.only(right: dimensWidth() * 40),
-              child: IconButton(
-                onPressed: () => RestClient().runHttpInspector(),
-                padding: EdgeInsets.all(dimensWidth() * 2),
-                icon: const FaIcon(FontAwesomeIcons.bug),
-                color: white,
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(secondary)),
-              ),
-            ),
+            floatingActionButtonLocation: AliceInspector().dev
+                ? FloatingActionButtonLocation.endFloat
+                : null,
+            floatingActionButton: AliceInspector().dev
+                ? Container(
+                    margin: EdgeInsets.only(right: dimensWidth() * 40),
+                    child: IconButton(
+                      onPressed: () => RestClient().runHttpInspector(),
+                      padding: EdgeInsets.all(dimensWidth() * 2),
+                      icon: const FaIcon(FontAwesomeIcons.bug),
+                      color: white,
+                      style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(secondary)),
+                    ),
+                  )
+                : null,
             body: _currentPage == DrawerMenu.AccountSetting
                 ? const SettingScreen()
                 : _currentPage == DrawerMenu.Schedule
-                    ? const ScheduleDoctorScreen()
+                    ? const ScheduleScreen()
                     : _currentPage == DrawerMenu.YourShift
                         ? const ShiftScreen()
                         : _currentPage == DrawerMenu.Patient

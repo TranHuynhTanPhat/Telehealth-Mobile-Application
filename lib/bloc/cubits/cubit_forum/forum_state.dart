@@ -32,6 +32,15 @@ final class SearchPostState extends ForumState {
       required super.currentPost});
   int pageKey;
 }
+final class FetchPostState extends ForumState {
+  FetchPostState(
+      {required super.blocState,
+      super.error,
+      required this.pageKey,
+      required super.comments,
+      required super.currentPost});
+  int pageKey;
+}
 
 final class FetchCommentState extends ForumState {
   FetchCommentState(

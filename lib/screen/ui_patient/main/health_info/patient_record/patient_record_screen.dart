@@ -169,13 +169,4 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
       },
     );
   }
-  // _pushScreen() async {
-  //   String name = await OpenDocument.getNameFolder();
-
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (context) => MyFilesScreen(filePath: name),
-  //     ),
-  //   );
-  // }
 }
