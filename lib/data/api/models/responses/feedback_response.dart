@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:healthline/data/api/models/responses/comment_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 
 class FeedbackResponse {
   String? id;
@@ -36,7 +36,7 @@ class FeedbackResponse {
   factory FeedbackResponse.fromMap(Map<String, dynamic> map) {
     return FeedbackResponse(
       id: map['id'],
-      user: UserResponse.fromMap(map['user']),
+      user: map['user'] != null ? UserResponse.fromMap(map['user']) : null,
       feedback: map['feedback'],
       rated: map['rated']?.toInt(),
       createdAt: map['created_at'],

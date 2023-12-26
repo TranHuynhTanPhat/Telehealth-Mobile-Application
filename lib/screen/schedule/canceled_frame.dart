@@ -17,11 +17,11 @@ class CanceledFrame extends StatefulWidget {
 
 class _CanceledFrameState extends State<CanceledFrame> {
   DateTime current = DateTime.now();
-  late int daySelected;
+  late int monthSelected;
 
   @override
   void initState() {
-    daySelected = 0;
+    monthSelected = 0;
     super.initState();
   }
 
@@ -38,10 +38,10 @@ class _CanceledFrameState extends State<CanceledFrame> {
             children: [
               SlideMonthsInYear(
                 current: current,
-                daySelected: daySelected,
+                daySelected: monthSelected,
                 callBack: (index, date) {
                   setState(() {
-                    daySelected = index;
+                    monthSelected = index;
                     current = date;
                   });
                 },
@@ -59,7 +59,7 @@ class _CanceledFrameState extends State<CanceledFrame> {
                     if (DateTime(date.year, date.month) ==
                         DateTime(
                           current.year,
-                          current.month - daySelected,
+                          current.month - monthSelected,
                         )) {
                       return CanceledCard(cancel: e);
                     } else {
