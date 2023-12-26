@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 
@@ -16,6 +17,7 @@ class ConsultationResponse {
   String? jistiToken;
   String? symptoms;
   String? medicalHistory;
+  FeedbackResponse? feedback;
   List<PatientRecordResponse>? patientRecords;
 
   ConsultationResponse(
@@ -30,7 +32,7 @@ class ConsultationResponse {
       this.updatedAt,
       this.symptoms,
       this.medicalHistory,
-      this.patientRecords});
+      this.patientRecords, this.feedback});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -71,6 +73,9 @@ class ConsultationResponse {
     if (patientRecords != null) {
       result.addAll({'patient_records': patientRecords?.map((x) => x.toMap()).toList()});
     }
+    if (feedback != null) {
+      result.addAll({'feedback': feedback!.toMap()});
+    }
 
     return result;
   }
@@ -82,6 +87,8 @@ class ConsultationResponse {
           map['doctor'] != null ? DoctorResponse.fromMap(map['doctor']) : null,
       medical:
           map['medical'] != null ? UserResponse.fromMap(map['medical']) : null,
+      feedback:
+          map['feedback'] != null ? FeedbackResponse.fromMap(map['feedback']) : null,
       date: map['date'],
       expectedTime: map['expected_time'],
       jistiToken: map['jisti_token'],
