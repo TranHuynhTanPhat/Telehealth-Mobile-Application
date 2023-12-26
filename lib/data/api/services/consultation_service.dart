@@ -95,7 +95,10 @@ class ConsultationService extends BaseService {
     final response = await get(
         '${ApiConstants.CONSULTATION_DOCTOR_CONSULTATION}/$consultationId',
         isDoctor: true);
-    return ConsultationResponse.fromMap(response.data);
+    ConsultationResponse res = response.data != null
+        ? ConsultationResponse.fromMap(response.data)
+        : ConsultationResponse();
+    return res;
   }
 
   Future<List<UserResponse>> fetchPatient() async {

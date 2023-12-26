@@ -161,9 +161,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                 state is NoChange) {
               EasyLoading.showToast(translate(context, 'successfully'));
             } else if (state is UpdateSubUserFailure) {
-              EasyLoading.showToast(translate(context, state.message));
+              EasyLoading.showToast(translate(context, state.message.toLowerCase()));
             } else if (state is DeleteSubUserFailure) {
-              EasyLoading.showToast(translate(context, state.message));
+              EasyLoading.showToast(translate(context, state.message.toLowerCase()));
             }
           },
         ),
