@@ -230,17 +230,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .titleLarge
                                 ?.copyWith(color: color1F1F1F),
                           ),
-                          InkWell(
-                            child: Text(
-                              translate(context, 'see_all'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                      color: primary,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                          // InkWell(
+                          //   child: Text(
+                          //     translate(context, 'see_all'),
+                          //     style: Theme.of(context)
+                          //         .textTheme
+                          //         .bodyMedium
+                          //         ?.copyWith(
+                          //             color: primary,
+                          //             fontWeight: FontWeight.bold),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

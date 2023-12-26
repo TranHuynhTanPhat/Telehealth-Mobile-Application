@@ -8,7 +8,10 @@ import 'package:healthline/utils/translate.dart';
 class ReportCard extends StatelessWidget {
   const ReportCard({
     super.key,
+    this.badFeedback,
   });
+
+  final int? badFeedback;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class ReportCard extends StatelessWidget {
                       size: dimensIcon(),
                     ),
                     Text(
-                      '5',
+                      "${badFeedback ?? 0}",
                       textAlign: TextAlign.right,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

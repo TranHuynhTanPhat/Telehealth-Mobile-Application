@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:intl/intl.dart';
 
 class AddVaccinationScreen extends StatefulWidget {
   const AddVaccinationScreen({super.key});
@@ -78,7 +78,7 @@ class _AddVaccinationScreenState extends State<AddVaccinationScreen> {
                   translate(context, 'add_vaccination'),
                 ),
                 centerTitle: true,
-                leading: cancelButton(context),
+                // leading: cancelButton(context),
                 actions: [
                   if (checkValid())
                     Padding(

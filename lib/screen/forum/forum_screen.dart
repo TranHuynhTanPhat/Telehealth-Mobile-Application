@@ -118,6 +118,7 @@ class _ForumScreenState extends State<ForumScreen> {
           } else if (state is EditPostState) {
             if (state.blocState == BlocState.Successed) {
               EasyLoading.showToast(translate(context, 'successfully'));
+              _pagingController.refresh();
             } else if (state.blocState == BlocState.Failed) {
               EasyLoading.showToast(translate(context, state.error));
             }
@@ -252,7 +253,9 @@ class _ForumScreenState extends State<ForumScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: dimensWidth() * 3,
                             vertical: dimensHeight()),
-                        child: const CreatePost(),
+                        child: CreatePost(
+                          pagingController: _pagingController,
+                        ),
                       ),
                     ),
                   PagedSliverList<int, PostResponse>(
@@ -260,7 +263,8 @@ class _ForumScreenState extends State<ForumScreen> {
                     builderDelegate: PagedChildBuilderDelegate<PostResponse>(
                         itemBuilder: (context, item, index) {
                       return PostCard(
-                        post: item, pagingController: _pagingController,
+                        post: item,
+                        pagingController: _pagingController,
                       );
                     }),
                   ),

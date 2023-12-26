@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:intl/intl.dart';
 
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
-import 'package:healthline/utils/file_picker.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -100,56 +99,56 @@ class _SubUserInputDialogState extends State<SubUserInputDialog> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: dimensHeight()),
-                                  child: _file != null
-                                      ? CircleAvatar(
-                                          radius: dimensWidth() * 5,
-                                          backgroundColor: primary,
-                                          backgroundImage: FileImage(_file!),
-                                          onBackgroundImageError:
-                                              (exception, stackTrace) =>
-                                                  AssetImage(DImages.placeholder),
-                                          child: InkWell(
-                                            splashColor: transparent,
-                                            highlightColor: transparent,
-                                            onTap: () async {
-                                              _file = await FilePickerCustom()
-                                                  .getImage();
-                                              setState(() {});
-                                            },
-                                            child: FaIcon(
-                                              FontAwesomeIcons.circlePlus,
-                                              color: black26,
-                                              size: dimensIcon(),
-                                            ),
-                                          ),
-                                        )
-                                      : CircleAvatar(
-                                          radius: dimensWidth() * 5,
-                                          backgroundColor: primary,
-                                          backgroundImage:
-                                              AssetImage(DImages.placeholder),
-                                          onBackgroundImageError:
-                                              (exception, stackTrace) =>
-                                                  AssetImage(DImages.placeholder),
-                                          child: InkWell(
-                                            splashColor: transparent,
-                                            highlightColor: transparent,
-                                            onTap: () async {
-                                              _file = await FilePickerCustom()
-                                                  .getImage();
-                                              setState(() {});
-                                            },
-                                            child: FaIcon(
-                                              FontAwesomeIcons.circlePlus,
-                                              color: black26,
-                                              size: dimensIcon(),
-                                            ),
-                                          ),
-                                        ),
-                                ),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(
+                                //       vertical: dimensHeight()),
+                                //   child: _file != null
+                                //       ? CircleAvatar(
+                                //           radius: dimensWidth() * 5,
+                                //           backgroundColor: primary,
+                                //           backgroundImage: FileImage(_file!),
+                                //           onBackgroundImageError:
+                                //               (exception, stackTrace) =>
+                                //                   AssetImage(DImages.placeholder),
+                                //           child: InkWell(
+                                //             splashColor: transparent,
+                                //             highlightColor: transparent,
+                                //             onTap: () async {
+                                //               _file = await FilePickerCustom()
+                                //                   .getImage();
+                                //               setState(() {});
+                                //             },
+                                //             child: FaIcon(
+                                //               FontAwesomeIcons.circlePlus,
+                                //               color: black26,
+                                //               size: dimensIcon(),
+                                //             ),
+                                //           ),
+                                //         )
+                                //       : CircleAvatar(
+                                //           radius: dimensWidth() * 5,
+                                //           backgroundColor: primary,
+                                //           backgroundImage:
+                                //               AssetImage(DImages.placeholder),
+                                //           onBackgroundImageError:
+                                //               (exception, stackTrace) =>
+                                //                   AssetImage(DImages.placeholder),
+                                //           child: InkWell(
+                                //             splashColor: transparent,
+                                //             highlightColor: transparent,
+                                //             onTap: () async {
+                                //               _file = await FilePickerCustom()
+                                //                   .getImage();
+                                //               setState(() {});
+                                //             },
+                                //             child: FaIcon(
+                                //               FontAwesomeIcons.circlePlus,
+                                //               color: black26,
+                                //               size: dimensIcon(),
+                                //             ),
+                                //           ),
+                                //         ),
+                                // ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: dimensHeight()),

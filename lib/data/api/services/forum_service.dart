@@ -62,7 +62,7 @@ class ForumService extends BaseService {
   Future<int?> unlikePost(
       {required String idPost, bool isDoctor = false}) async {
     final response = await patch('${ApiConstants.FORUM_POST}/$idPost/unlike',
-        isDoctor: true);
+        isDoctor: isDoctor);
     return response.code;
   }
 

@@ -112,7 +112,7 @@ class HelpsScreen extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, privacyPolicyName);
+                    Navigator.pushNamed(context, bugReportName);
                   },
                   dense: true,
                   visualDensity: const VisualDensity(vertical: 0),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
-import './components/export.dart';
-import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
+
+import './components/export.dart';
 
 class ChangePassword extends StatelessWidget {
   const ChangePassword({super.key});
@@ -24,7 +25,7 @@ class ChangePassword extends StatelessWidget {
             translate(context, 'change_password'),
           ),
           leadingWidth: dimensWidth() * 10,
-          leading: cancelButton(context),
+          // leading: cancelButton(context),
         ),
         body: SafeArea(
           bottom: true,

@@ -72,7 +72,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                       items: [
                         RevenueCard(money: dashboard!.money!),
                         AppointmentCard(countConsul: dashboard!.countConsul!),
-                        // ReportCard(),
+                         ReportCard(badFeedback: dashboard!.badFeedback!),
                       ],
                       options: CarouselOptions(
                           autoPlay: true,

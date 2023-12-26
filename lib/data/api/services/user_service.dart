@@ -56,7 +56,7 @@ class UserService extends BaseService {
     final response = await patch(
       ApiConstants.USER_PASSWORD,
       data: json.encode(
-        {"password": password, "newPassword": newPassword},
+        {"password": password, "new_password": newPassword},
       ),
     );
 

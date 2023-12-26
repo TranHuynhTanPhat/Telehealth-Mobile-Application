@@ -45,10 +45,29 @@ class _PostCardState extends State<PostCard> {
   bool like = false;
   String? timeBetween;
 
+  bool showAll = false;
+
   @override
   void initState() {
     image = null;
     images = [];
+    try {
+      if (AppController.instance.authState == AuthState.PatientAuthorized) {
+        LoginResponse response = LoginResponse.fromJson(
+            AppStorage().getString(key: DataConstants.PATIENT)!);
+        uid = response.id;
+      } else if (AppController.instance.authState ==
+          AuthState.DoctorAuthorized) {
+        LoginResponse response = LoginResponse.fromJson(
+            AppStorage().getString(key: DataConstants.DOCTOR)!);
+        uid = response.id;
+      }
+    } catch (e) {
+      logPrint(e);
+    }
+    if (widget.post.likes!.contains(uid)) {
+      like = true;
+    }
     _preloadPageController = PreloadPageController(initialPage: 0);
     _currentIndex = 0;
     super.initState();
@@ -64,20 +83,7 @@ class _PostCardState extends State<PostCard> {
     } catch (e) {
       logPrint(e);
     }
-    try {
-      if (AppController.instance.authState == AuthState.PatientAuthorized) {
-        LoginResponse response = LoginResponse.fromJson(
-            AppStorage().getString(key: DataConstants.PATIENT)!);
-        uid = response.id;
-      } else if (AppController.instance.authState ==
-          AuthState.DoctorAuthorized) {
-        LoginResponse response = LoginResponse.fromJson(
-            AppStorage().getString(key: DataConstants.DOCTOR)!);
-        uid = response.id;
-      }
-    } catch (e) {
-      logPrint(e);
-    }
+    
     try {
       if (widget.post.user?.avatar != null &&
           widget.post.user?.avatar != 'default' &&
@@ -109,9 +115,7 @@ class _PostCardState extends State<PostCard> {
       logPrint(e);
     }
 
-    if (widget.post.likes!.contains(uid)) {
-      like = true;
-    }
+    
     return BlocBuilder<ForumCubit, ForumState>(
       builder: (context, state) {
         return Column(
@@ -188,11 +192,23 @@ class _PostCardState extends State<PostCard> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.post.description ?? translate(context, 'undefine'),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    child: InkWell(
+                      splashColor: transparent,
+                      highlightColor: transparent,
+                      onTap: () {
+                        setState(() {
+                          showAll = !showAll;
+                        });
+                      },
+                      child: Text(
+                        widget.post.description ??
+                            translate(context, 'undefine'),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        maxLines: showAll ? null : 2,
+                        overflow: showAll
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],
