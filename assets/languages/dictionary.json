@@ -1255,6 +1255,14 @@
         "vi": "Nhận xét",
         "en": "Feedbacks"
     },
+    "feedback": {
+        "vi": "Đánh giá",
+        "en": "Feedback"
+    },
+    "feedback_successfully": {
+        "vi": "Đánh giá thành công",
+        "en": "Feedback successfully"
+    },
     "working_time": {
         "vi": "Thời gian làm việc",
         "en": "Working time"

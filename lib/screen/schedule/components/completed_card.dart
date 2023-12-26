@@ -2,10 +2,16 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/time_util.dart';
@@ -27,6 +33,116 @@ class _CompletedCardState extends State<CompletedCard> {
   void initState() {
     image = null;
     super.initState();
+  }
+
+  Future<bool?> showBottomSheetFeedback(BuildContext context,
+      {required String feedbackId}) {
+    double rating = 1;
+    TextEditingController feedbackController = TextEditingController();
+
+    return showModalBottomSheet<bool>(
+      context: context,
+      barrierColor: black26,
+      elevation: 0,
+      isScrollControlled: true,
+      backgroundColor: transparent,
+      builder: (BuildContext contextBottomSheet) {
+        return BlocListener<ConsultationCubit, ConsultationState>(
+          listener: (context, state) {
+            if (state is CreateFeebackState) {
+              if (state.blocState == BlocState.Successed) {
+                Navigator.pop(context);
+              }
+            }
+          },
+          child: BlocBuilder<ConsultationCubit, ConsultationState>(
+            builder: (context, state) {
+              return AbsorbPointer(
+                absorbing: state is CreateFeebackState &&
+                    state.blocState == BlocState.Pending,
+                child: Wrap(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight() * 3),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(dimensWidth() * 3),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              translate(context, 'feedbacks'),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: dimensHeight()),
+                            width: double.infinity,
+                            child: TextFieldWidget(
+                                controller: feedbackController,
+                                textInputType:
+                                    const TextInputType.numberWithOptions(),
+                                label: translate(context, 'feedbacks'),
+                                validate: (value) => null),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: dimensHeight() * 2),
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            child: RatingBar.builder(
+                              ignoreGestures: false,
+                              initialRating: (rating).toDouble(),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemCount: 5,
+                              itemSize: dimensWidth() * 3,
+                              itemPadding: EdgeInsets.all(dimensWidth()),
+                              itemBuilder: (context, _) => const FaIcon(
+                                FontAwesomeIcons.solidStar,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (double value) {
+                                rating = value;
+                              },
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: dimensHeight() * 2),
+                            width: double.infinity,
+                            child: ElevatedButtonWidget(
+                              text: translate(context, 'send'),
+                              onPressed: () {
+                                context
+                                    .read<ConsultationCubit>()
+                                    .createFeedback(
+                                      feedbackId: feedbackId,
+                                      rating: (rating).toInt(),
+                                      feedback: feedbackController.text.trim(),
+                                    );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -57,8 +173,13 @@ class _CompletedCardState extends State<CompletedCard> {
     } catch (e) {
       EasyLoading.showToast(translate(context, 'failure'));
     }
-    String expectedTime =
-        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+    String? expectedTime;
+    try {
+      expectedTime =
+          '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+    } catch (e) {
+      logPrint(e);
+    }
 
     return Container(
       margin: EdgeInsets.only(top: dimensHeight() * 2),
@@ -133,18 +254,24 @@ class _CompletedCardState extends State<CompletedCard> {
                   ],
                 ),
               ),
-              InkWell(
-                splashColor: transparent,
-                highlightColor: transparent,
-                onTap: () {},
-                child: Text(
-                  translate(context, 'detail'),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: primary,
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic),
+              if (widget.finish.feedback?.rated == null &&
+                  widget.finish.feedback?.id != null &&
+                  AppController().authState == AuthState.PatientAuthorized)
+                InkWell(
+                  splashColor: transparent,
+                  highlightColor: transparent,
+                  onTap: () {
+                    showBottomSheetFeedback(context,
+                        feedbackId: widget.finish.feedback!.id!);
+                  },
+                  child: Text(
+                    translate(context, 'feedback'),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: primary,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic),
+                  ),
                 ),
-              ),
             ],
           ),
           Padding(
@@ -174,13 +301,12 @@ class _CompletedCardState extends State<CompletedCard> {
               SizedBox(
                 width: dimensWidth(),
               ),
-              Text(
-                expectedTime,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: color1F1F1F, fontWeight: FontWeight.bold),
-              ),
+              if (expectedTime != null)
+                Text(
+                  expectedTime,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: color1F1F1F, fontWeight: FontWeight.bold),
+                ),
               const Spacer(),
               Row(
                 children: [
