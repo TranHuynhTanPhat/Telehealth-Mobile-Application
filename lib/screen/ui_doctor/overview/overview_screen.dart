@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/res/style.dart';
@@ -72,7 +73,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                       items: [
                         RevenueCard(money: dashboard!.money!),
                         AppointmentCard(countConsul: dashboard!.countConsul!),
-                         ReportCard(badFeedback: dashboard!.badFeedback!),
+                        ReportCard(badFeedback: dashboard!.badFeedback!),
                       ],
                       options: CarouselOptions(
                           autoPlay: true,
@@ -200,7 +201,43 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             ),
                           );
                         }).toList()),
-                  ),
+                  )
+                else
+                  Container(
+                    margin: EdgeInsets.only(top: dimensHeight() * 10),
+                    alignment: Alignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                translate(context, 'empty'),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                        color: color1F1F1F.withOpacity(.05),
+                                        fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // SizedBox(
+                        //   height: dimensHeight() * 3,
+                        // ),
+                        FaIcon(
+                          FontAwesomeIcons.boxOpen,
+                          color: color1F1F1F.withOpacity(.05),
+                          size: dimensWidth() * 30,
+                        ),
+                      ],
+                    ),
+                  )
                 // Padding(
                 //   padding: EdgeInsets.symmetric(
                 //       horizontal: dimensWidth() * 3,

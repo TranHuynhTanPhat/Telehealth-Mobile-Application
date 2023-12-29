@@ -93,6 +93,9 @@ class FilePickerCustom {
     if (result != null) {
       if (allowMultiple) {
         List<File> files = result.paths.map((path) => File(path!)).toList();
+        while (files.length > 5) {
+          files.removeLast();
+        }
         return files;
       }
       final file = File(result.files.single.path!);
@@ -107,9 +110,9 @@ class FilePickerCustom {
         allowedExtensions: [
           'doc',
           'docx',
-          'xls',
-          'xlsx',
-          'csv',
+          // 'xls',
+          // 'xlsx',
+          // 'csv',
           'pdf',
           'gif',
           'jpeg',
@@ -126,9 +129,9 @@ class FilePickerCustom {
           'mpeg',
           'mpg',
           'mpg4',
-          'pps',
-          'ppt',
-          'pptx'
+          // 'pps',
+          // 'ppt',
+          // 'pptx'
         ],
         allowMultiple: false);
 
@@ -137,5 +140,4 @@ class FilePickerCustom {
     }
     return null;
   }
-  
 }

@@ -79,7 +79,8 @@ class AppRoute {
 
   Route? onGeneralRoute(RouteSettings settings) {
     if (AppController.instance.authState == AuthState.DoctorAuthorized ||
-        AppController.instance.authState == AuthState.PatientAuthorized) {
+        AppController.instance.authState == AuthState.PatientAuthorized ||
+        AppController.instance.authState == AuthState.Unauthorized) {
       switch (settings.name) {
         case forumName:
           return MaterialPageRoute(
@@ -88,15 +89,7 @@ class AppRoute {
               child: const ForumScreen(),
             ),
           );
-        case editPostName:
-          final args = settings.arguments as String?;
 
-          return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _forumCubit,
-              child: EditPostScreen(args: args),
-            ),
-          );
         case newsName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
@@ -120,6 +113,20 @@ class AppRoute {
         case privacyPolicyName:
           return MaterialPageRoute(
             builder: (_) => const PrivacyPolicyScreen(),
+          );
+      }
+    }
+    if (AppController.instance.authState == AuthState.DoctorAuthorized ||
+        AppController.instance.authState == AuthState.PatientAuthorized) {
+      switch (settings.name) {
+        case editPostName:
+          final args = settings.arguments as String?;
+
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _forumCubit,
+              child: EditPostScreen(args: args),
+            ),
           );
         case bugReportName:
           return MaterialPageRoute(
@@ -163,6 +170,10 @@ class AppRoute {
               ),
             ),
           );
+        case updateName:
+          return MaterialPageRoute(
+            builder: (_) => const UpdateScreen(),
+          );
       }
     }
     if (AppController.instance.authState == AuthState.Unauthorized) {
@@ -187,8 +198,8 @@ class AppRoute {
             ),
           );
 
-        // default:
-        case logInName:
+        default:
+          // case logInName:
           return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: _authenticationCubit,
@@ -320,10 +331,7 @@ class AppRoute {
               child: const ContactScreen(),
             ),
           );
-        case updateName:
-          return MaterialPageRoute(
-            builder: (_) => const UpdateScreen(),
-          );
+
         case vaccinationName:
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
