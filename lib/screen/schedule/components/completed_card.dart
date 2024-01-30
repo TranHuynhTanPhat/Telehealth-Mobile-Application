@@ -47,15 +47,20 @@ class _CompletedCardState extends State<CompletedCard> {
       isScrollControlled: true,
       backgroundColor: transparent,
       builder: (BuildContext contextBottomSheet) {
+        // print(context.read<ConsultationCubit>());
+        ConsultationCubit consultationCubit = context.read<ConsultationCubit>();
+
         return BlocListener<ConsultationCubit, ConsultationState>(
+          bloc: consultationCubit,
           listener: (context, state) {
             if (state is CreateFeebackState) {
               if (state.blocState == BlocState.Successed) {
-                Navigator.pop(context);
+                Navigator.pop(context, true);
               }
             }
           },
           child: BlocBuilder<ConsultationCubit, ConsultationState>(
+            bloc: consultationCubit,
             builder: (context, state) {
               return AbsorbPointer(
                 absorbing: state is CreateFeebackState &&
@@ -122,13 +127,11 @@ class _CompletedCardState extends State<CompletedCard> {
                             child: ElevatedButtonWidget(
                               text: translate(context, 'send'),
                               onPressed: () {
-                                context
-                                    .read<ConsultationCubit>()
-                                    .createFeedback(
-                                      feedbackId: feedbackId,
-                                      rating: (rating).toInt(),
-                                      feedback: feedbackController.text.trim(),
-                                    );
+                                consultationCubit.createFeedback(
+                                  feedbackId: feedbackId,
+                                  rating: (rating).toInt(),
+                                  feedback: feedbackController.text.trim(),
+                                );
                               },
                             ),
                           )
@@ -206,7 +209,7 @@ class _CompletedCardState extends State<CompletedCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${translate(context, 'dr')}. ${translate(context, widget.finish.doctor?.fullName)}",
+                            " ${translate(context, widget.finish.doctor?.fullName)}",
                             overflow: TextOverflow.visible,
                             style: Theme.of(context)
                                 .textTheme
@@ -262,7 +265,12 @@ class _CompletedCardState extends State<CompletedCard> {
                   highlightColor: transparent,
                   onTap: () {
                     showBottomSheetFeedback(context,
-                        feedbackId: widget.finish.feedback!.id!);
+                            feedbackId: widget.finish.feedback!.id!)
+                        .then((value) {
+                      if (value == true) {
+                        context.read<ConsultationCubit>().fetchConsultation();
+                      }
+                    });
                   },
                   child: Text(
                     translate(context, 'feedback'),

@@ -65,12 +65,11 @@ class _ListFileState extends State<ListFile> {
 
   Future<void> _openFile(String url, String fileName) async {
     if (Platform.isAndroid) {
-
       var status1 = await Permission.storage.status;
-      var status2 = await Permission.photos.status;
+      var status2 = await Permission.mediaLibrary.status;
       if (!status1.isGranted && !status2.isGranted) {
         await Permission.storage.request();
-        await Permission.photos.request();
+        await Permission.mediaLibrary.request();
       } else {
         if (!mounted) return;
         context

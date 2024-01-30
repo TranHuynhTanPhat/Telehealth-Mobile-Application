@@ -34,6 +34,7 @@ class FileService extends BaseService {
 
   Future<FileResponse> uploadRecordPatient(
       String medicalId, FileRequest request) async {
+    
     FormData formData = FormData.fromMap({
       "medicalId": medicalId,
       "file": await MultipartFile.fromFile(

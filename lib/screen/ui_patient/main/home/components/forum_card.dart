@@ -26,15 +26,15 @@ class ForumCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                translate(context,'forum'),
+                translate(context, 'forum'),
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall
                     ?.copyWith(color: secondary, fontWeight: FontWeight.bold),
               ),
               Text(
-                translate(context,'share_experiences_and_get_advice_from_healthLines_community'),
-
+                translate(context,
+                    'share_experiences_and_get_advice_from_healthLines_community'),
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall

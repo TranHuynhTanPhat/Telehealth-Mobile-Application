@@ -20,7 +20,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
-import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -68,7 +67,6 @@ class AppController {
     );
     HydratedBloc.storage = storage;
     await AppStorage().init();
-    await DbManager().init();
   }
 
   /// Set up Cloudinary

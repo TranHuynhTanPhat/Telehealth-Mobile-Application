@@ -133,7 +133,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                   state is UpdateScheduleByDayState) {
                 if (state.blocState == BlocState.Successed) {
                   EasyLoading.showToast(translate(context, 'successfully'));
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 } else if (state.blocState == BlocState.Failed) {
                   EasyLoading.showToast(translate(context, state.error));
                 }

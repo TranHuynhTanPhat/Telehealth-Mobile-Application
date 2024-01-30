@@ -45,9 +45,11 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
 
   Future<void> _openFile(String url, String fileName) async {
     if (Platform.isAndroid) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
+      var status1 = await Permission.storage.status;
+      var status2 = await Permission.mediaLibrary.status;
+      if (!status1.isGranted && !status2.isGranted) {
         await Permission.storage.request();
+        await Permission.photos.request();
       } else {
         if (!mounted) return;
         context
@@ -200,7 +202,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                                 await JitsiService.instance.join(
                                   token: consultation!.jistiToken!,
                                   // token:
-                                  //     "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUvMzNhNzE4LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDM1MjcxOTQsImV4cCI6MTcwMzUzNDM5NCwibmJmIjoxNzAzNTI3MTg5LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2UsIm1vZGVyYXRvciI6dHJ1ZSwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImlkIjoiZ29vZ2xlLW9hdXRoMnwxMDU2NjI0NTIyMjQxNTUyNTc1MTQiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20ifX0sInJvb20iOiIqIn0.YWwmM6uribUGzj-diw56NjjOfnJSVySbrCDlowcPWvABzd5fWjcJud6cJhBgSXIBD1Mv6vRNvRvs9jXeUaZCnE16rzAJh3BNi0Zdq4PUfETMe9P_mtAnnulPEwapRX7lWJZbJ4blZUFKdc_F3vrq5NQpD0IViRY_qMrhAs_CUl3WeUvA62l2fbYqVpWO2qybMDdapMF-F3y7F0QyatMt2RNFNK_RqI3xSgTaKZGzTE7Lu7eOc3_fDXcnLLxd8C9A0zj-9K_c0iC_ehYrZsViBFb42ZHkDkUQrNu3R2EQdTJsbeuweIDtw94ieW8dJi8mUuYRcROPeowXBKyfqg7O6Q",
+                                  //     "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUvMzNhNzE4LVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MDM4NzgxMTAsImV4cCI6MTcwMzg4NTMxMCwibmJmIjoxNzAzODc4MTA1LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZmQwNzQ0ODk0ZjE5NGYzZWE3NDg4ODRmODNjZWMxOTUiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOnRydWUsIm91dGJvdW5kLWNhbGwiOnRydWUsInNpcC1vdXRib3VuZC1jYWxsIjpmYWxzZSwidHJhbnNjcmlwdGlvbiI6dHJ1ZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2UsIm1vZGVyYXRvciI6dHJ1ZSwibmFtZSI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyMyIsImlkIjoiZ29vZ2xlLW9hdXRoMnwxMDU2NjI0NTIyMjQxNTUyNTc1MTQiLCJhdmF0YXIiOiIiLCJlbWFpbCI6ImhlYWx0aGxpbmVtYW5hZ2VyMjAyM0BnbWFpbC5jb20ifX0sInJvb20iOiIqIn0.l4zgt_PgUGMEKinDgsSNM1ghgXQb1KoA5h9EqStDvU-_5yZcXBFpxoNrYdk_7TvEYWSEJjsFPNWF4soF0lKWF7skWSYoN0II3xVcJV8lidy3WfFwuxFVDew_fIDsy3kyKSOqbtbsSFOcZuBXhmgCbbOkLQ8wuwrVDq6dgpGEdXBFjkuGbIHG6e1GK34s-9qiUO3QsA7Rvq1dJXkPqBvuf6V8oTMs--pPBPdAnx5bmBb82DQ3BwnolOfuoDKPWXfNbRRsSupYDmnHBeTRGaXqTztkzuhiL_RDQf6BQOauE98sCFfHRkdiB5AMbxlBQxihRQJyjrJ7zhMgSHZJ6gtMxA",
                                   roomName:
                                       "${dotenv.get('ROOM_JITSI', fallback: '')}/${consultation!.id!}",
                                   // roomName:
@@ -651,6 +653,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                                       .toString()
                                   : null;
                             }
+
                             return FileWidget(
                               onTap: url != null
                                   ? () async => _openFile(url!, fileName)

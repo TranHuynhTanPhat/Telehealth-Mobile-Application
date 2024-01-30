@@ -63,7 +63,6 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
         symptoms: symptoms,
         medicalHistory: medicalHistory,
         patientRecords: patientRecords);
-  
   }
 
   @override
@@ -96,7 +95,8 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
           } else if (state.blocState == BlocState.Pending) {
             EasyLoading.show(maskType: EasyLoadingMaskType.black);
           }
-        } else if (state.blocState == BlocState.Failed) {
+        }
+        if (state.blocState == BlocState.Failed) {
           EasyLoading.showToast(translate(context, state.error));
         }
       },

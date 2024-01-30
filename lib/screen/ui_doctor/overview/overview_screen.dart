@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
@@ -42,6 +43,18 @@ class _OverviewScreenState extends State<OverviewScreen> {
           setState(() {
             dashboard = state.dashboard;
           });
+        } else if (state is CancelConsultationState ||
+            state is ConfirmConsultationState ||
+            state is DenyConsultationState) {
+          if (state.blocState == BlocState.Pending) {
+            EasyLoading.show(maskType: EasyLoadingMaskType.black);
+          } else if (state.blocState == BlocState.Failed) {
+            EasyLoading.showToast(translate(context, state.error));
+          } else {
+            EasyLoading.showToast(translate(context, 'successfully'));
+            context.read<ConsultationCubit>().fetchConsultation();
+            Navigator.pop(context);
+          }
         }
       },
       child: BlocBuilder<ConsultationCubit, ConsultationState>(

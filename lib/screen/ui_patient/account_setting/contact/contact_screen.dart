@@ -7,7 +7,6 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/ui_patient/account_setting/contact/components/export.dart';
-import 'package:healthline/screen/widgets/cancel_button.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -55,7 +54,7 @@ class _ContactScreenState extends State<ContactScreen> {
               translate(context, 'edit_contact_info'),
             ),
             leadingWidth: dimensWidth() * 10,
-            leading: cancelButton(context),
+            // leading: cancelButton(context),
           ),
           body: BlocBuilder<PatientProfileCubit, PatientProfileState>(
             builder: (context, state) {

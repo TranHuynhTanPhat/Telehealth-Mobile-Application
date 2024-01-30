@@ -129,7 +129,10 @@ class RestClient {
               !options.path.contains(ApiConstants.USER_REFRESH_TOKEN) &&
               !options.path.contains(ApiConstants.USER_LOG_IN) &&
               !options.path.contains(ApiConstants.USER_LOG_OUT) &&
-              !options.path.contains(ApiConstants.USER)) {
+              !options.path.contains(ApiConstants.USER) &&
+              !options.path.contains(ApiConstants.DOCTOR_REFRESH_TOKEN) &&
+              !options.path.contains(ApiConstants.DOCTOR_LOG_IN) &&
+              !options.path.contains(ApiConstants.DOCTOR_LOG_OUT)) {
             try {
               /// refresh token if success continue
               /// else logout

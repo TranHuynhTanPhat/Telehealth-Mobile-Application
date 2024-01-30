@@ -68,10 +68,14 @@ class _EditContactFormState extends State<EditContactForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<PatientProfileCubit, PatientProfileState>(
         builder: (context, state) {
-      state.profile.phone != null
-          ? _controllerPhone.text = state.profile.phone!.replaceFirst('+84', '')
-          : '';
-      _controllerEmail.text = state.profile.email ?? '';
+      if (state is FetchContactState &&
+          state.blocState == BlocState.Successed) {
+        state.profile.phone != null
+            ? _controllerPhone.text =
+                state.profile.phone!.replaceFirst('+84', '')
+            : '';
+        _controllerEmail.text = state.profile.email ?? '';
+      }
       return Form(
         key: _formKey,
         child: Column(
@@ -244,18 +248,21 @@ class _EditContactFormState extends State<EditContactForm> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButtonWidget(
-                  text: translate(context, 'update_information'),
-                  onPressed: _controllerEmail.text.trim() != state.profile.email
-                      ? () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            context
-                                .read<PatientProfileCubit>()
-                                .updateEmail(_controllerEmail.text.trim());
-                          }
+                    text: translate(context, 'update_information'),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (_controllerEmail.text.trim() !=
+                            state.profile.email) {
+                          _formKey.currentState!.save();
+
+                          context
+                              .read<PatientProfileCubit>()
+                              .updateEmail(_controllerEmail.text.trim());
                         }
-                      : null,
-                ),
+                      }
+                    }
+                    // : null,
+                    ),
               ),
             ),
           ],

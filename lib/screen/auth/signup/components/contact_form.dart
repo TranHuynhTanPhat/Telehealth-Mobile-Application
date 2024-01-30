@@ -51,8 +51,10 @@ class _ContactFormState extends State<ContactForm> {
             child: TextFieldWidget(
               validate: (value) {
                 if (widget.conflictPhone != null) {
-                  if (Validate().changePhoneFormat(widget.conflictPhone!.trim()) ==
-                      Validate().changePhoneFormat(widget.controllerPhone.text.trim())) {
+                  if (Validate()
+                          .changePhoneFormat(widget.conflictPhone!.trim()) ==
+                      Validate().changePhoneFormat(
+                          widget.controllerPhone.text.trim())) {
                     return translate(
                         context, 'phone_number_has_been_registered');
                   }
@@ -79,13 +81,19 @@ class _ContactFormState extends State<ContactForm> {
           Padding(
             padding: EdgeInsets.only(bottom: dimensHeight() * 3),
             child: TextFieldWidget(
-              error: widget.conflictEmail == widget.controllerEmail.text.trim()
-                  ? translate(context, 'email_has_been_registered')
-                  : null,
+              // error: widget.conflictEmail == widget.controllerEmail.text.trim()
+              //     ? translate(context, 'email_has_been_registered')
+              //     : null,
               label: translate(context, 'email'),
               hint: translate(context, 'ex_email'),
               controller: widget.controllerEmail,
-              validate: (value) => Validate().validateEmail(context, value),
+              validate: (value) {
+                if (widget.conflictEmail == value) {
+                  return translate(context, 'email_has_been_registered');
+                } else {
+                  return Validate().validateEmail(context, value);
+                }
+              },
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),

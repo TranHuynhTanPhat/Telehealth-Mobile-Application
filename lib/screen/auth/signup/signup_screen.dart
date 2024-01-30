@@ -112,13 +112,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .contains('phone_number_has_been_registered')) {
                     setState(() {
                       step = SignUp.Contact;
-                      conflictPhone = _controllerPhone.text.trim();
+                      conflictPhone ??= _controllerPhone.text.trim();
                     });
                   }
                   if (state.error!.contains("email_has_been_registered")) {
                     setState(() {
                       step = SignUp.Contact;
-                      confictEmail = _controllerEmail.text.trim();
+                      confictEmail ??= _controllerEmail.text.trim();
                     });
                   }
                 } catch (e) {

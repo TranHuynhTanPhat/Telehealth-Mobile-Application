@@ -262,7 +262,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                 builder: (context, state) {
                   if (state.feedbacks != null && state.feedbacks!.isNotEmpty) {
                     return Column(
-                      children: state.feedbacks!.map((e) {
+                      children: state.feedbacks!
+                          .where((element) =>
+                              element.rated != null && element.rated! > 0)
+                          .map((e) {
                         var image;
                         try {
                           if (e.user?.avatar != null &&

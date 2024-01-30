@@ -134,15 +134,15 @@ class _UpdateDefaultScheduleScreenState
         title: Text(
           translate(context, 'update_fixed_schedule'),
         ),
-        leading: Center(
-            child: InkWell(
-          splashColor: transparent,
-          highlightColor: transparent,
-          onTap: () {
-            Navigator.pop(context, false);
-          },
-          child: const FaIcon(FontAwesomeIcons.angleLeft),
-        )),
+        // leading: Center(
+        //     child: InkWell(
+        //   splashColor: transparent,
+        //   highlightColor: transparent,
+        //   onTap: () {
+        //     Navigator.pop(context, false);
+        //   },
+        //   child: const FaIcon(FontAwesomeIcons.angleLeft),
+        // )),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: dimensWidth() * 2),
@@ -158,11 +158,11 @@ class _UpdateDefaultScheduleScreenState
       ),
       body: BlocListener<DoctorScheduleCubit, DoctorScheduleState>(
         listener: (context, state) {
-          if (state is UpdateFixedScheduleState) {
-            if (state.blocState == BlocState.Successed) {
-              Navigator.pop(context, true);
-            }
-          }
+          // if (state is UpdateFixedScheduleState) {
+          //   if (state.blocState == BlocState.Successed) {
+          //     Navigator.pop(context, true);
+          //   }
+          // }
         },
         child: BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
           builder: (context, state) {
@@ -315,14 +315,14 @@ class _UpdateDefaultScheduleScreenState
                                                                         [index]
                                                                     .text =
                                                                 convertIntToTime(
-                                                                    e - 1);
+                                                                    e );
 
                                                             end[_currentStep]
                                                                 [index] = e - 1;
                                                           }),
                                                           child: Text(
                                                             convertIntToTime(
-                                                                e - 1),
+                                                                e),
                                                           ),
                                                         ),
                                                       )
