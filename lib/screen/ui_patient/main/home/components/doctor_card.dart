@@ -49,8 +49,12 @@ class _DoctorCardState extends State<DoctorCard> {
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
-      onTap: () => Navigator.pushNamed(context, detailDoctorName,arguments: widget.doctor.toJson()),
+      onTap: () => Navigator.pushNamed(context, detailDoctorName,
+          arguments: widget.doctor.toJson()),
       child: Container(
+        width: dimensWidth() * 20,
+        height: dimensHeight() * 27,
+        margin: EdgeInsets.only(right: dimensWidth() * 2),
         decoration: BoxDecoration(
           color: white,
           borderRadius: BorderRadius.circular(dimensWidth() * 2),
@@ -133,7 +137,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             onRatingUpdate: (double value) {},
                           ),
                           Text(
-                            widget.doctor.ratings.toString(),
+                            "${widget.doctor.ratings?.toStringAsFixed(1) ?? 0}",
                             style: Theme.of(context).textTheme.bodySmall,
                           )
                         ],

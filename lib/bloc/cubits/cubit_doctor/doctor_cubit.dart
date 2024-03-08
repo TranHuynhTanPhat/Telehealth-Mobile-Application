@@ -1,5 +1,8 @@
 // ignore: depend_on_referenced_packages
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:meilisearch/meilisearch.dart';
 
@@ -31,13 +34,18 @@ class DoctorCubit extends Cubit<DoctorState> {
           pageKey: pageKey),
     );
     try {
-      meiliSearchManager.index(uid: 'doctors');
-      var result = await meiliSearchManager.search(key, searchQuery);
-      List<DoctorResponse> doctors = List<DoctorResponse>.from(
-        result.hits.map(
-          (e) => DoctorResponse.fromMap(e),
-        ),
-      );
+      // meiliSearchManager.index(uid: 'doctors');
+      // var result = await meiliSearchManager.search(key, searchQuery);
+      String jsonString =
+          await rootBundle.loadString('assets/virtual_data/doctor.json');
+      dynamic list = json.decode(jsonString);
+      List<DoctorResponse> doctors =
+          list.map<DoctorResponse>((e) => DoctorResponse.fromMap(e)).toList();
+      // List<DoctorResponse> doctors = List<DoctorResponse>.from(
+      //   listMap.map(
+      //     (e) => DoctorResponse.fromMap(e),
+      //   ),
+      // );
       callback(doctors);
       emit(
         SearchDoctorState(

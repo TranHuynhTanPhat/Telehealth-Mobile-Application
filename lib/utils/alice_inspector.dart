@@ -6,7 +6,7 @@ class AliceInspector {
   final Alice _alice = Alice(
     showNotification: false,
     showInspectorOnShake: false,
-    darkTheme: false,
+    // darkTheme: false,
     maxCallsCount: 1000,
   );
   Alice get alice => _alice;

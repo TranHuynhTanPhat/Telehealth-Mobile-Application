@@ -308,20 +308,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   );
                 } else if (state.blocState == BlocState.Successed) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: dimensWidth() * 2,
-                        horizontal: dimensWidth() * 3),
-                    child: BaseGridview(radio: 0.8, children: [
-                      ...state.doctors
-                          .map(
-                            (e) => DoctorCard(
-                              doctor: e,
-                            ),
-                          )
-                          .toList(),
-                    ]),
+                  return SizedBox(
+                    height: dimensHeight()*30,
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      // reverse: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensWidth() * 2),
+                      children: [
+                        ...state.doctors.getRange(0, 10)
+                            .map(
+                              (e) => DoctorCard(
+                                doctor: e,
+                              ),
+                            )
+                            .toList(),
+                      ],
+                    ),
                   );
+
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(
+                  //       vertical: dimensWidth() * 2,
+                  //       horizontal: dimensWidth() * 3),
+                  //   child: BaseGridview(radio: 0.8, children: [
+                  //     ...state.doctors
+                  //         .map(
+                  //           (e) => DoctorCard(
+                  //             doctor: e,
+                  //           ),
+                  //         )
+                  //         .toList(),
+                  //   ]),
+                  // );
                 } else {
                   return const SizedBox();
                 }

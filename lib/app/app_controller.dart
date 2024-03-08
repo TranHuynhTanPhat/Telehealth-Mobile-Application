@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/api/meilisearch_manager.dart';
-import 'package:healthline/data/api/socket_manager.dart';
+// import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/firebase_options.dart';
 
@@ -20,7 +20,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
-import 'package:healthline/data/storage/db/db_manager.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -51,7 +50,7 @@ class AppController {
     await initAuth();
     await PushNotificationManager.instance.init();
     MeiliSearchManager().init();
-    authState != AuthState.Unauthorized ? SocketManager.instance.init() : null;
+    // authState != AuthState.Unauthorized ? SocketManager.instance.init() : null;
     setupCloudinary();
   }
 
@@ -68,7 +67,7 @@ class AppController {
     );
     HydratedBloc.storage = storage;
     await AppStorage().init();
-    await DbManager().init();
+    // await DbManager().init();
   }
 
   /// Set up Cloudinary
@@ -161,6 +160,6 @@ class AppController {
   }
 
   void close() {
-    SocketManager.instance.close();
+    // SocketManager.instance.close();
   }
 }

@@ -185,10 +185,11 @@ class _LogInFormState extends State<LogInForm> {
               bottom: dimensHeight() * 3,
             ),
             child: TextFieldWidget(
-              validate: (value) {
-                String? error = Validate().validatePhone(context, value!);
-                return error;
-              },
+              // validate: (value) {
+              //   String? error = Validate().validatePhone(context, value!);
+              //   return error;
+              // },
+              validate: (value)=>null,
               controller: _controllerPhone,
               prefix: Padding(
                 padding: EdgeInsets.only(right: dimensWidth() * .5),
@@ -202,7 +203,7 @@ class _LogInFormState extends State<LogInForm> {
               ),
               label: translate(context, 'phone'),
               textInputType: TextInputType.phone,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+              // autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           Padding(
@@ -210,16 +211,17 @@ class _LogInFormState extends State<LogInForm> {
               bottom: dimensHeight() * 3,
             ),
             child: TextFieldWidget(
-              validate: (value) {
-                try {
-                  if (value!.trim().isEmpty) {
-                    return translate(context, 'please_enter_password');
-                  }
-                  return null;
-                } catch (e) {
-                  return translate(context, 'please_enter_password');
-                }
-              },
+              // validate: (value) {
+              //   try {
+              //     if (value!.trim().isEmpty) {
+              //       return translate(context, 'please_enter_password');
+              //     }
+              //     return null;
+              //   } catch (e) {
+              //     return translate(context, 'please_enter_password');
+              //   }
+              // },
+              validate: (value)=> null,
               controller: _controllerPassword,
               label: translate(context, 'password'),
               obscureText: !showPassword,
