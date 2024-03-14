@@ -453,7 +453,7 @@ class PushNotificationManager {
               AndroidFlutterLocalNotificationsPlugin>();
 
       final bool? grantedNotificationPermission =
-          await androidImplementation?.requestNotificationsPermission();
+          await androidImplementation?.areNotificationsEnabled();
       return grantedNotificationPermission ?? false;
     }
     return false;
