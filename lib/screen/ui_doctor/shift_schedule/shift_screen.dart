@@ -261,10 +261,9 @@ class _ShiftScreenState extends State<ShiftScreen> {
                               .workingTimes!
                               .map(
                                 (e) => ValidShift(
-                                  time: convertIntToTime(((e) ?? 0) - 1),
+                                  time: convertIntToTime(((e) ?? 0)),
                                 ),
-                              )
-                              .toList(),
+                              ),
                         ],
                       ),
                     ),

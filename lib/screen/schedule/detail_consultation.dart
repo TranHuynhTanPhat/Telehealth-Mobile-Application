@@ -129,7 +129,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
         logPrint(e);
       }
       String expectedTime =
-          '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+          '${convertIntToTime(time.first)} - ${convertIntToTime(time.last+1)}';
 
       return BlocListener<PatientRecordCubit, PatientRecordState>(
         listener: (context, state) async {

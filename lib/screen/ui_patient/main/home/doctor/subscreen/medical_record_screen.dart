@@ -259,104 +259,99 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                   translate(context, 'share_information'),
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
-                                ...fileByFolders.entries
-                                    .map(
-                                      (mapEntry) => Column(
-                                        children: [
-                                          ListTile(
-                                            onTap: () {
-                                              addFileInFolder(
-                                                  folderRecords, mapEntry.key);
-                                              setState(() {});
-                                            },
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                dimensWidth(),
+                                ...fileByFolders.entries.map(
+                                  (mapEntry) => Column(
+                                    children: [
+                                      ListTile(
+                                        onTap: () {
+                                          addFileInFolder(
+                                              folderRecords, mapEntry.key);
+                                          setState(() {});
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            dimensWidth(),
+                                          ),
+                                        ),
+                                        dense: true,
+                                        visualDensity:
+                                            const VisualDensity(vertical: 0),
+                                        leading: checkFileInFolder(
+                                                folderRecords, mapEntry.key)
+                                            ? SizedBox(
+                                                height: 24,
+                                                width: 24,
+                                                child: Checkbox(
+                                                  side: const BorderSide(
+                                                      width: 1),
+                                                  value: checkFileInFolder(
+                                                      folderRecords,
+                                                      mapEntry.key),
+                                                  onChanged: (value) =>
+                                                      setState(
+                                                    () {
+                                                      addFileInFolder(
+                                                          folderRecords,
+                                                          mapEntry.key);
+                                                    },
+                                                  ),
+                                                ),
+                                              )
+                                            : FaIcon(
+                                                FontAwesomeIcons
+                                                    .solidFolderClosed,
+                                                color: colorDF9F1E,
+                                                size: dimensIcon(),
+                                              ),
+                                        title: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                mapEntry.key,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge,
                                               ),
                                             ),
-                                            dense: true,
-                                            visualDensity: const VisualDensity(
-                                                vertical: 0),
-                                            leading: checkFileInFolder(
-                                                    folderRecords, mapEntry.key)
-                                                ? SizedBox(
-                                                    height: 24,
-                                                    width: 24,
-                                                    child: Checkbox(
-                                                      side: const BorderSide(
-                                                          width: 1),
-                                                      value: checkFileInFolder(
-                                                          folderRecords,
-                                                          mapEntry.key),
-                                                      onChanged: (value) =>
-                                                          setState(
-                                                        () {
-                                                          addFileInFolder(
-                                                              folderRecords,
-                                                              mapEntry.key);
-                                                        },
-                                                      ),
-                                                    ),
-                                                  )
-                                                : FaIcon(
-                                                    FontAwesomeIcons
-                                                        .solidFolderClosed,
-                                                    color: colorDF9F1E,
-                                                    size: dimensIcon(),
-                                                  ),
-                                            title: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    mapEntry.key,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .labelLarge,
-                                                  ),
-                                                ),
-                                              ],
+                                          ],
+                                        ),
+                                        subtitle: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                formatFileDate(
+                                                    context,
+                                                    mapEntry
+                                                        .value['update_at']),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: black26,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
                                             ),
-                                            subtitle: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    formatFileDate(
-                                                        context,
-                                                        mapEntry.value[
-                                                            'update_at']),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                            color: black26,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${mapEntry.value['length']} ${translate(context, 'items')}',
-                                                  textAlign: TextAlign.right,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                          color: black26,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                              ],
+                                            Text(
+                                              '${mapEntry.value['length']} ${translate(context, 'items')}',
+                                              textAlign: TextAlign.right,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: black26,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                             ),
-                                          ),
-                                          const Divider(),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    )
-                                    .toList(),
+                                      const Divider(),
+                                    ],
+                                  ),
+                                ),
                                 ...fileRecords.map(
                                   (e) {
                                     String fileName =

@@ -127,22 +127,22 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           ),
           BlocListener<DoctorScheduleCubit, DoctorScheduleState>(
             listener: (context, state) {
-              if (state.blocState == BlocState.Pending) {
-                EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state is UpdateFixedScheduleState ||
-                  state is UpdateScheduleByDayState) {
-                if (state.blocState == BlocState.Successed) {
-                  EasyLoading.showToast(translate(context, 'successfully'));
-                  Navigator.pop(context, true);
-                } else if (state.blocState == BlocState.Failed) {
-                  EasyLoading.showToast(translate(context, state.error));
-                }
-              } else if (state.blocState == BlocState.Successed ||
-                  state.blocState == BlocState.Failed) {
-                EasyLoading.dismiss();
-              } else if (state.blocState == BlocState.Failed) {
-                EasyLoading.showToast(translate(context, 'cant_load_data'));
-              }
+              // if (state.blocState == BlocState.Pending) {
+              //   EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              // } else if (state is UpdateFixedScheduleState ||
+              //     state is UpdateScheduleByDayState) {
+              //   if (state.blocState == BlocState.Successed) {
+              //     EasyLoading.showToast(translate(context, 'successfully'));
+              //     Navigator.pop(context, true);
+              //   } else if (state.blocState == BlocState.Failed) {
+              //     EasyLoading.showToast(translate(context, state.error));
+              //   }
+              // } else if (state.blocState == BlocState.Successed ||
+              //     state.blocState == BlocState.Failed) {
+              //   EasyLoading.dismiss();
+              // } else if (state.blocState == BlocState.Failed) {
+              //   EasyLoading.showToast(translate(context, 'cant_load_data'));
+              // }
             },
           ),
           BlocListener<ConsultationCubit, ConsultationState>(

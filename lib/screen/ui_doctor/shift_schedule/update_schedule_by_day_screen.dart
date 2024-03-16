@@ -174,12 +174,12 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                                       ),
                                       onPressed: () => setState(() {
                                         controllerBegin[index].text =
-                                            convertIntToTime(e);
+                                            convertIntToTime(e-1);
 
-                                        begin[index] = e;
+                                        begin[index] = e-1;
                                       }),
                                       child: Text(
-                                        convertIntToTime(e),
+                                        convertIntToTime(e-1),
                                       ),
                                     ),
                                   )
@@ -292,12 +292,12 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                                       ),
                                       onPressed: () => setState(() {
                                         controllerEnd[index].text =
-                                            convertIntToTime(e);
+                                            convertIntToTime(e-1);
 
-                                        end[index] = e;
+                                        end[index] = e-1;
                                       }),
                                       child: Text(
-                                        convertIntToTime(e),
+                                        convertIntToTime(e-1),
                                       ),
                                     ),
                                   )

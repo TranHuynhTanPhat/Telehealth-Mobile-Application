@@ -39,7 +39,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       EasyLoading.showToast(translate(context, 'failure'));
     }
     String expectedTime =
-        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+        '${convertIntToTime(time.first)} - ${convertIntToTime(time.last + 1)}';
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => widget.previousPage(),

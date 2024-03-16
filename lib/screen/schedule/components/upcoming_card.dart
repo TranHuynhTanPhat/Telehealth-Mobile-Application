@@ -62,7 +62,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
       EasyLoading.showToast(translate(context, 'failure'));
     }
     String expectedTime =
-        '${convertIntToTime(time.first - 1)} - ${convertIntToTime(time.last)}';
+        '${convertIntToTime(time.first)} - ${convertIntToTime(time.last + 1)}';
 
     return Container(
       margin: EdgeInsets.only(top: dimensHeight() * 2),

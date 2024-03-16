@@ -37,7 +37,7 @@ class TimelineDoctorScreen extends StatefulWidget {
 }
 
 class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
-  final List<int> time = List<int>.generate(48, (i) => i + 1);
+  // final List<int> time = List<int>.generate(48, (i) => i + 1);
 
   late int _daySelected;
   final List<int> _timeSelected = [];
@@ -154,7 +154,7 @@ class _TimelineDoctorScreenState extends State<TimelineDoctorScreen> {
                               });
                             },
                             child: ValidShift(
-                              time: convertIntToTime(e - 1),
+                              time: convertIntToTime(e),
                               choosed: _timeSelected.contains(e),
                             ),
                           );
