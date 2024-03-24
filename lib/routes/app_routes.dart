@@ -11,6 +11,8 @@ import 'package:healthline/screen/auth/forget_password/forgot_password_screen.da
 import 'package:healthline/screen/auth/login/login_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/change_password/change_password_screen.dart';
+import 'package:healthline/screen/chat/components/chat_box_screen.dart';
+import 'package:healthline/screen/chat/components/chat_screen.dart';
 import 'package:healthline/screen/error/error_screen.dart';
 import 'package:healthline/screen/forum/edit_post_screen.dart';
 import 'package:healthline/screen/forum/forum_screen.dart';
@@ -113,6 +115,14 @@ class AppRoute {
         case privacyPolicyName:
           return MaterialPageRoute(
             builder: (_) => const PrivacyPolicyScreen(),
+          );
+        case chatName:
+          return MaterialPageRoute(
+            builder: (_) => const ChatScreen(),
+          );
+        case chatBoxName:
+          return MaterialPageRoute(
+            builder: (_) => const ChatBoxScreen(),
           );
       }
     }

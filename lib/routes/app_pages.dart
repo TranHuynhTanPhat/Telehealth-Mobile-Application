@@ -11,6 +11,8 @@ const newsName = '/news';
 const detailNewsName = '/detail-news';
 const forgetPasswordName = '/forget-password';
 const bugReportName = '/bug-report';
+const chatName = '/chat';
+const chatBoxName = '/chat-box';
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";

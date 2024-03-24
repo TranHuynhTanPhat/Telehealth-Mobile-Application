@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/data/api/rest_client.dart';
-import 'package:healthline/utils/alice_inspector.dart';
 import 'package:open_document/open_document.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/components/badge_notification.dart';
 import 'package:healthline/screen/components/side_menu.dart';
@@ -19,7 +18,7 @@ import 'package:healthline/screen/schedule/schedule_screen.dart';
 import 'package:healthline/screen/ui_patient/main/health_info/healthinfo_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/home_screen.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
-// import 'package:healthline/utils/alice_inspector.dart';
+import 'package:healthline/utils/alice_inspector.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -47,8 +46,47 @@ class _MainScreenPatientState extends State<MainScreenPatient>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       EasyLoading.dismiss();
+      await showDialog<String>(
+        context: context,
+        barrierColor: black26,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: Colors.transparent,
+          contentPadding: EdgeInsets.zero,
+          elevation: 0,
+          content: Stack(
+            children: [
+              Positioned(
+                right: 0,
+                top: 0,
+                child: IconButton(
+                    style: const ButtonStyle(
+                        padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Container(
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: white),
+                      // padding: EdgeInsets.all(dimensWidth()/2),
+                      height: dimensIcon(),
+                      width: dimensIcon(),
+                      alignment: Alignment.center,
+                      child: FaIcon(
+                        FontAwesomeIcons.xmark,
+                        size: dimensIcon() / 2,
+                      ),
+                    )),
+              ),
+              SizedBox(
+                height: dimensHeight() * 40,
+                child: Center(child: Image.asset(DImages.placeholder)),
+              ),
+            ],
+          ),
+        ),
+      );
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))
@@ -65,6 +103,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
     );
     if (!mounted) return;
     context.read<MedicalRecordCubit>().fetchMedicalRecord();
+
     super.initState();
   }
 
@@ -161,9 +200,11 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                 state is NoChange) {
               EasyLoading.showToast(translate(context, 'successfully'));
             } else if (state is UpdateSubUserFailure) {
-              EasyLoading.showToast(translate(context, state.message.toLowerCase()));
+              EasyLoading.showToast(
+                  translate(context, state.message.toLowerCase()));
             } else if (state is DeleteSubUserFailure) {
-              EasyLoading.showToast(translate(context, state.message.toLowerCase()));
+              EasyLoading.showToast(
+                  translate(context, state.message.toLowerCase()));
             }
           },
         ),
