@@ -316,8 +316,15 @@ class AppRoute {
         case detailDoctorName:
           final args = settings.arguments as String?;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _consultationCubit,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _doctorCubit,
+                ),
+              ],
               child: DetailDoctorScreen(
                 args: args,
               ),

@@ -495,6 +495,18 @@
         "vi": "Bác sĩ hàng đầu",
         "en": "Top doctors"
     },
+    "recently": {
+        "vi": "Gần đây",
+        "en": "Recently"
+    },
+    "favorite_doctors": {
+        "vi": "Bác sĩ yêu thích",
+        "en": "Favorite doctors"
+    },
+    "suggestion_for_you": {
+        "vi": "Gợi ý cho bạn",
+        "en": "Suggestion for you"
+    },
     "consult_doctors": {
         "vi": "Tham khảo ý kiến bác sĩ",
         "en": "Consult doctors"

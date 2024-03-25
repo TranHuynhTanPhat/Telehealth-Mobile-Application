@@ -1,18 +1,18 @@
 // ignore: depend_on_referenced_packages
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:healthline/utils/log_data.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meilisearch/meilisearch.dart';
 
 import 'package:healthline/data/api/meilisearch_manager.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/enum.dart';
+import 'package:healthline/utils/log_data.dart';
 
 part 'doctor_state.dart';
 
-class DoctorCubit extends Cubit<DoctorState> {
+class DoctorCubit extends HydratedCubit<DoctorState> {
   DoctorCubit()
       : super(
           DoctorInitial(
@@ -31,7 +31,7 @@ class DoctorCubit extends Cubit<DoctorState> {
       SearchDoctorState(
           doctors: state.doctors,
           blocState: BlocState.Pending,
-          pageKey: pageKey),
+          pageKey: pageKey,),
     );
     try {
       // meiliSearchManager.index(uid: 'doctors');
@@ -49,7 +49,9 @@ class DoctorCubit extends Cubit<DoctorState> {
       callback(doctors);
       emit(
         SearchDoctorState(
-            doctors: doctors, blocState: BlocState.Successed, pageKey: pageKey),
+            doctors: doctors,
+            blocState: BlocState.Successed,
+            pageKey: pageKey,),
       );
     } catch (error) {
       logPrint(error);
@@ -58,9 +60,19 @@ class DoctorCubit extends Cubit<DoctorState> {
             error: error.toString(),
             doctors: state.doctors,
             blocState: BlocState.Failed,
-            pageKey: pageKey),
+            pageKey: pageKey,),
       );
     }
+  }
+
+  @override
+  DoctorState? fromJson(Map<String, dynamic> json) {
+    return DoctorState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(DoctorState state) {
+    return state.toMap();
   }
   // Future<void> fetchDoctors() async {
   //   emit(FetchDoctorsLoading(doctors: state.doctors));

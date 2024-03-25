@@ -12,7 +12,7 @@ class BaseGridview extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: dimensWidth()*2,
-      crossAxisSpacing: dimensHeight()*2,
+      crossAxisSpacing: dimensHeight()*3,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       scrollDirection: Axis.vertical,

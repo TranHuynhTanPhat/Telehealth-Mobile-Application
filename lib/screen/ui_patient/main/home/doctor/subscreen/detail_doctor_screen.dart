@@ -7,10 +7,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
+import 'package:healthline/screen/bases/base_gridview.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/components/doctor_card.dart';
+
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/currency_util.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
@@ -190,44 +195,65 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
         SliverList(
           delegate: SliverChildListDelegate(
             [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight(), horizontal: dimensWidth() * 3),
-                child: Text(
-                  translate(context, doctor.specialty ?? 'undefine'),
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: dimensWidth() * 3, right: dimensWidth() * 3),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RatingBar.builder(
-                      ignoreGestures: true,
-                      initialRating: doctor.ratings ?? 0,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: dimensWidth() * 2,
-                      itemBuilder: (context, _) => const FaIcon(
-                        FontAwesomeIcons.solidStar,
-                        color: Colors.amber,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(dimensWidth() * 3,
+                            dimensHeight(), 0, dimensHeight()),
+                        child: Text(
+                          translate(context, doctor.specialty ?? 'undefine'),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ),
-                      onRatingUpdate: (double value) {},
+                      Padding(
+                        padding: EdgeInsets.only(left: dimensWidth() * 3),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RatingBar.builder(
+                              ignoreGestures: true,
+                              initialRating: doctor.ratings ?? 0,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: dimensWidth() * 2,
+                              itemBuilder: (context, _) => const FaIcon(
+                                FontAwesomeIcons.solidStar,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (double value) {},
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: dimensWidth()),
+                              child: Text(
+                                // "3.5 (+800 ${translate(context, 'feedbacks')})",
+                                "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: dimensWidth() * 3),
+                    child: InkWell(
+                      onTap: () {},
+                      child: FaIcon(
+                        FontAwesomeIcons.bookmark,
+                        size: dimensIcon() / 2,
+                      ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: dimensWidth()),
-                      child: Text(
-                        // "3.5 (+800 ${translate(context, 'feedbacks')})",
-                        "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -335,9 +361,95 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   }
                 },
               ),
-              SizedBox(
-                height: dimensHeight() * 15,
-              )
+              Padding(
+                padding: EdgeInsets.only(
+                    top: dimensHeight() * 4,
+                    left: dimensWidth() * 3,
+                    right: dimensWidth() * 3),
+                child: Row(
+                  children: [
+                    Text(
+                      translate(context, 'suggestion_for_you'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: color1F1F1F),
+                    ),
+                    // InkWell(
+                    //   onTap: () => Navigator.pushNamed(context, doctorName),
+                    //   child: Text(
+                    //     translate(context, 'see_all'),
+                    //     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    //           color: primary,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+              BlocBuilder<DoctorCubit, DoctorState>(
+                builder: (context, state) {
+                  if (state.blocState == BlocState.Pending) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.only(top: dimensWidth() * 3),
+                          child: const LinearProgressIndicator(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: dimensWidth() * 2,
+                              horizontal: dimensWidth() * 3),
+                          child: BaseGridview(
+                            radio: 0.3,
+                            children: [buildShimmer(), buildShimmer()],
+                          ),
+                        )
+                      ],
+                    );
+                  } else if (state.blocState == BlocState.Successed) {
+                    // return SizedBox(
+                    //   height: dimensHeight() * 30,
+                    //   child: ListView(
+                    //     shrinkWrap: true,
+                    //     scrollDirection: Axis.horizontal,
+                    //     // reverse: true,
+                    //     physics: const AlwaysScrollableScrollPhysics(),
+                    //     padding: EdgeInsets.symmetric(
+                    //         horizontal: dimensWidth() * 3,
+                    //         vertical: dimensWidth() * 2),
+                    //     children: [
+                    //       ...state.doctors.getRange(0, 10).map(
+                    //             (e) => DoctorCard(
+                    //               doctor: e,
+                    //             ),
+                    //           ),
+                    //     ],
+                    //   ),
+                    // );
+
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                      child: BaseGridview(radio: 0.8, children: [
+                        ...state.doctors.map(
+                          (e) => DoctorCard(
+                            doctor: e,
+                          ),
+                        ),
+                      ]),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+              // SizedBox(
+              //   height: dimensHeight() * 15,
+              // )
               //   ],
               // ),
             ],
@@ -346,6 +458,73 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
       ]),
     );
   }
+
+  Widget buildShimmer() => Container(
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: BorderRadius.circular(dimensWidth() * 2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(.1),
+              spreadRadius: dimensWidth() * .4,
+              blurRadius: dimensWidth() * .4,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 6,
+              child: ShimmerWidget.rectangular(
+                height: double.maxFinite,
+                shapeBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(dimensWidth() * 2),
+                  topRight: Radius.circular(dimensWidth() * 2),
+                )),
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: dimensWidth(), horizontal: dimensWidth() * 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: ShimmerWidget.rectangular(
+                        height: dimensHeight() * .5,
+                        width: dimensWidth() * 14,
+                      ),
+                    ),
+                    SizedBox(
+                      height: dimensHeight(),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: ShimmerWidget.rectangular(
+                        height: double.maxFinite,
+                        width: dimensWidth() * 10,
+                      ),
+                    ),
+                    SizedBox(
+                      height: dimensHeight(),
+                    ),
+                    const Expanded(
+                      flex: 3,
+                      child:
+                          ShimmerWidget.rectangular(height: double.maxFinite),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   // ListView shimmerBuilder() {
   //   return ListView(

@@ -309,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else if (state.blocState == BlocState.Successed) {
                   return SizedBox(
-                    height: dimensHeight()*30,
+                    height: dimensHeight() * 30,
                     child: ListView(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
@@ -319,13 +319,102 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: dimensWidth() * 3,
                           vertical: dimensWidth() * 2),
                       children: [
-                        ...state.doctors.getRange(0, 10)
-                            .map(
+                        ...state.doctors.getRange(0, 10).map(
                               (e) => DoctorCard(
                                 doctor: e,
                               ),
-                            )
-                            .toList(),
+                            ),
+                      ],
+                    ),
+                  );
+
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(
+                  //       vertical: dimensWidth() * 2,
+                  //       horizontal: dimensWidth() * 3),
+                  //   child: BaseGridview(radio: 0.8, children: [
+                  //     ...state.doctors
+                  //         .map(
+                  //           (e) => DoctorCard(
+                  //             doctor: e,
+                  //           ),
+                  //         )
+                  //         .toList(),
+                  //   ]),
+                  // );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: dimensHeight() * 4,
+                  left: dimensWidth() * 3,
+                  right: dimensWidth() * 3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    translate(context, 'recently'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: color1F1F1F),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.pushNamed(context, doctorName),
+                    child: Text(
+                      translate(context, 'see_all'),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            BlocBuilder<DoctorCubit, DoctorState>(
+              builder: (context, state) {
+                if (state.blocState == BlocState.Pending) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(top: dimensWidth() * 3),
+                        child: const LinearProgressIndicator(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: dimensWidth() * 2,
+                            horizontal: dimensWidth() * 3),
+                        child: BaseGridview(
+                          radio: 0.8,
+                          children: [buildShimmer(), buildShimmer()],
+                        ),
+                      )
+                    ],
+                  );
+                } else if (state.blocState == BlocState.Successed) {
+                  return SizedBox(
+                    height: dimensHeight() * 30,
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      // reverse: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensWidth() * 2),
+                      children: [
+                        ...state.doctors.getRange(0, 10).map(
+                              (e) => DoctorCard(
+                                doctor: e,
+                              ),
+                            ),
                       ],
                     ),
                   );
