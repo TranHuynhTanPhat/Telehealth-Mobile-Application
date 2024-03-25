@@ -2,8 +2,10 @@
 
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -49,8 +51,11 @@ class _DoctorCardState extends State<DoctorCard> {
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
-      onTap: () => Navigator.pushNamed(context, detailDoctorName,
-          arguments: widget.doctor.toJson()),
+      onTap: () {
+        Navigator.pushNamed(context, detailDoctorName,
+            arguments: widget.doctor.toJson());
+        context.read<DoctorCubit>().addRecentDoctor(widget.doctor);
+      },
       child: Container(
         width: dimensWidth() * 20,
         height: dimensHeight() * 27,

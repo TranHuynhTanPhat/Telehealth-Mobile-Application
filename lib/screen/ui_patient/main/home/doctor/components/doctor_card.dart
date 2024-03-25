@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
@@ -53,8 +54,12 @@ class _DoctorCardState extends State<DoctorCard> {
     return InkWell(
       splashColor: transparent,
       highlightColor: transparent,
-      onTap: () => Navigator.pushNamed(context, detailDoctorName,
-          arguments: widget.doctor.toJson()),
+      onTap: () {
+        Navigator.pushNamed(context, detailDoctorName,
+          arguments: widget.doctor.toJson());
+        context.read<DoctorCubit>().addRecentDoctor(widget.doctor);
+
+      },
       child: Container(
         padding: EdgeInsets.all(dimensWidth() * 2),
         decoration: BoxDecoration(

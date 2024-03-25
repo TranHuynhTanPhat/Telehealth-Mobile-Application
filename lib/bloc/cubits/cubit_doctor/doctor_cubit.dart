@@ -15,7 +15,7 @@ part 'doctor_state.dart';
 class DoctorCubit extends HydratedCubit<DoctorState> {
   DoctorCubit()
       : super(
-          DoctorInitial(
+          const DoctorState(
             doctors: [],
             blocState: BlocState.Successed,
           ),
@@ -31,7 +31,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
       SearchDoctorState(
           doctors: state.doctors,
           blocState: BlocState.Pending,
-          pageKey: pageKey,),
+          pageKey: pageKey,
+          recentDoctors: state.recentDoctors),
     );
     try {
       // meiliSearchManager.index(uid: 'doctors');
@@ -51,7 +52,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
         SearchDoctorState(
             doctors: doctors,
             blocState: BlocState.Successed,
-            pageKey: pageKey,),
+            pageKey: pageKey,
+            recentDoctors: state.recentDoctors),
       );
     } catch (error) {
       logPrint(error);
@@ -60,9 +62,32 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             error: error.toString(),
             doctors: state.doctors,
             blocState: BlocState.Failed,
-            pageKey: pageKey,),
+            pageKey: pageKey,
+            recentDoctors: state.recentDoctors),
       );
     }
+  }
+
+  Future<void> addRecentDoctor(DoctorResponse doctor) async {
+    List<DoctorResponse> recentDrs = state.recentDoctors.toList();
+
+    if (recentDrs.where((element) => element.id == doctor.id).isEmpty) {
+      recentDrs.add(doctor);
+    }
+    try {
+      if (recentDrs.length > 10) {
+        recentDrs =
+            recentDrs.getRange(1, recentDrs.length).map((e) => e).toList();
+      }
+    } catch (e) {
+      logPrint("$e");
+    }
+
+    emit(DoctorState(
+        blocState: state.blocState,
+        doctors: state.doctors,
+        error: state.error,
+        recentDoctors: recentDrs));
   }
 
   @override

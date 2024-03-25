@@ -4,4 +4,5 @@ export 'package:healthline/screen/ui_patient/main/home/components/upcoming_appoi
 export 'package:healthline/screen/ui_patient/main/home/components/doctor_card.dart';
 export 'package:healthline/screen/ui_patient/main/home/components/service_card.dart';
 export 'package:healthline/screen/ui_patient/main/home/components/schedule_card.dart';
+export 'recent_doctor_card.dart';
 

@@ -34,6 +34,7 @@ class DetailDoctorScreen extends StatefulWidget {
 class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   var _image;
   late DoctorResponse doctor;
+  bool marked = false;
 
   @override
   void initState() {
@@ -246,10 +247,17 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                   Padding(
                     padding: EdgeInsets.only(right: dimensWidth() * 3),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          marked = !marked;
+                        });
+                      },
                       child: FaIcon(
-                        FontAwesomeIcons.bookmark,
+                        marked
+                            ? FontAwesomeIcons.solidBookmark
+                            : FontAwesomeIcons.bookmark,
                         size: dimensIcon() / 2,
+                        color: marked ? Colors.orangeAccent : null,
                       ),
                     ),
                   )
