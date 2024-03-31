@@ -1,9 +1,15 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/wallet/components/exports.dart';
+import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/utils/currency_util.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -33,252 +39,370 @@ class _WalletScreenState extends State<WalletScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          translate(context, 'wallet'),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight() * 2, horizontal: dimensWidth() * 3),
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (AppController().authState == AuthState.DoctorAuthorized)
-                const WalletCardDoctor(),
-              if (AppController().authState == AuthState.PatientAuthorized)
-                const WalletCardPatient(),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       top: dimensHeight() * 4, bottom: dimensHeight() * 1.5),
-              //   child: Text(
-              //     translate(context, 'recharge_withdraw'),
-              //     style: Theme.of(context).textTheme.titleLarge,
-              //   ),
-              // ),
-              
-              // InkWell(
-              //   splashColor: transparent,
-              //   highlightColor: transparent,
-              //   onTap: () {
-              //     showModalBottomSheet(
-              //         context: context,
-              //         isScrollControlled: true,
-              //         useSafeArea: true,
-              //         builder: (BuildContext contextBottomSheet) {
-              //           return Container(
-              //             height: dimensHeight() * 60,
-              //             padding: EdgeInsets.only(
-              //                 top: dimensHeight() * 3,
-              //                 bottom: MediaQuery.of(context).viewInsets.bottom +
-              //                     dimensHeight() * 3),
-              //             child: Column(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               crossAxisAlignment: CrossAxisAlignment.end,
-              //               children: [
-              //                 TabBar(
-              //                   isScrollable: false,
-              //                   splashBorderRadius:
-              //                       BorderRadius.circular(dimensWidth() * 3),
-              //                   splashFactory: InkRipple.splashFactory,
-              //                   indicatorPadding:
-              //                       EdgeInsets.only(bottom: dimensWidth() * .5),
-              //                   indicatorColor: primary,
-              //                   labelStyle:
-              //                       Theme.of(context).textTheme.titleSmall,
-              //                   labelColor: primary,
-              //                   unselectedLabelColor: black26,
-              //                   controller: tabController,
-              //                   tabs: [
-              //                     Tab(
-              //                       text: translate(context, 'recharge'),
-              //                     ),
-              //                     Tab(
-              //                       text: translate(context, 'withdraw'),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 Expanded(
-              //                   child: TabBarView(
-              //                     controller: tabController,
-              //                     children: [
-              //                       Container(
-              //                         alignment: Alignment.center,
-              //                         padding: EdgeInsets.symmetric(
-              //                             vertical: dimensHeight() * 3,
-              //                             horizontal: dimensWidth() * 3),
-              //                         child: Form(
-              //                           child: Column(
-              //                             children: [
-              //                               TextFieldWidget(
-              //                                 validate: (value) {
-              //                                   try {
-              //                                     if (num.parse(value!) <
-              //                                         10000) {
-              //                                       return '${translate(context, 'amount_to_top_up')} ${translate(context, 'must_be_greater_than_or_equal_to')}10.000₫';
-              //                                     } else {
-              //                                       throw 'error';
-              //                                     }
-              //                                   } catch (error) {
-              //                                     return null;
-              //                                   }
-              //                                 },
-              //                                 controller: _controller,
-              //                                 label: translate(
-              //                                     context, 'amount_to_top_up'),
-              //                                 hint: '0',
-              //                                 suffix: Padding(
-              //                                   padding: EdgeInsets.only(
-              //                                       right: dimensWidth() * .5),
-              //                                   child: Text(
-              //                                     '₫',
-              //                                     style: Theme.of(context)
-              //                                         .textTheme
-              //                                         .bodyLarge
-              //                                         ?.copyWith(
-              //                                             fontWeight:
-              //                                                 FontWeight.bold),
-              //                                   ),
-              //                                 ),
-              //                                 textInputType:
-              //                                     TextInputType.number,
-              //                                 autovalidateMode: AutovalidateMode
-              //                                     .onUserInteraction,
-              //                               ),
-              //                               SizedBox(
-              //                                 height: dimensHeight(),
-              //                               ),
-              //                               SizedBox(
-              //                                 width: double.infinity,
-              //                                 child: ElevatedButtonWidget(
-              //                                     text: translate(
-              //                                         context, 'recharge'),
-              //                                     onPressed: () {}),
-              //                               )
-              //                             ],
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         alignment: Alignment.center,
-              //                         padding: EdgeInsets.symmetric(
-              //                             vertical: dimensHeight() * 3,
-              //                             horizontal: dimensWidth() * 3),
-              //                         child: Form(
-              //                           child: Column(
-              //                             children: [
-              //                               TextFieldWidget(
-              //                                 validate: (value) {
-              //                                   try {
-              //                                     if (num.parse(value!) <
-              //                                         10000) {
-              //                                       return '${translate(context, 'amount_to_withdraw')} ${translate(context, 'must_be_greater_than_or_equal_to')}10.000₫';
-              //                                     } else {
-              //                                       throw 'error';
-              //                                     }
-              //                                   } catch (error) {
-              //                                     return null;
-              //                                   }
-              //                                 },
-              //                                 controller: _controller,
-              //                                 label: translate(
-              //                                     context, 'amount_to_top_up'),
-              //                                 hint: '0',
-              //                                 suffix: Padding(
-              //                                   padding: EdgeInsets.only(
-              //                                       right: dimensWidth() * .5),
-              //                                   child: Text(
-              //                                     '₫',
-              //                                     style: Theme.of(context)
-              //                                         .textTheme
-              //                                         .bodyLarge
-              //                                         ?.copyWith(
-              //                                             fontWeight:
-              //                                                 FontWeight.bold),
-              //                                   ),
-              //                                 ),
-              //                                 textInputType:
-              //                                     TextInputType.number,
-              //                                 autovalidateMode: AutovalidateMode
-              //                                     .onUserInteraction,
-              //                               ),
-              //                               SizedBox(
-              //                                 height: dimensHeight(),
-              //                               ),
-              //                               SizedBox(
-              //                                 width: double.infinity,
-              //                                 child: ElevatedButtonWidget(
-              //                                     text: translate(
-              //                                         context, 'withdraw'),
-              //                                     onPressed: () {}),
-              //                               )
-              //                             ],
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           );
-              //         });
-              //   },
-              //   child: OptionCard(
-              //     name: '${translate(context, 'wallet')} Momo',
-              //     description:
-              //         translate(context, 'recharge_via_momo_application'),
-              //     icon: SizedBox(
-              //       width: dimensIcon(),
-              //       height: dimensIcon(),
-              //       child: Image.asset(
-              //         DImages.mono,
-              //         fit: BoxFit.cover,
-              //         scale: 1,
-              //         width: dimensIcon(),
-              //         height: dimensIcon(),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       top: dimensHeight() * 4,),
-              //   child: Text(
-              //     translate(context, 'transaction_history'),
-              //     style: Theme.of(context).textTheme.titleLarge,
-              //   ),
-              // ),
-              // TabBar(
-              //   controller: tabController,
-              //   tabs: const [
-              //     Tab(
-              //       icon: Icon(Icons.cloud_outlined),
-              //     ),
-              //     Tab(
-              //       icon: Icon(Icons.beach_access_sharp),
-              //     ),
-              //   ],
-              // ),
-              // Expanded(
-              //   child: TabBarView(
-              //     controller: tabController,
-              //     children: const <Widget>[
-              //       Center(
-              //         child: Text("It's cloudy here"),
-              //       ),
-              //       Center(
-              //         child: Text("It's rainy here"),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ],
+      body: CustomScrollView(shrinkWrap: true, slivers: [
+        SliverAppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: true,
+          title: Text(translate(context, 'budget')),
+          foregroundColor: white,
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: const [StretchMode.zoomBackground],
+            background: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [primary, color9D4B6C],
+                  stops: [0, 1],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+            ),
           ),
         ),
+        if (AppController().authState == AuthState.DoctorAuthorized)
+          const WalletCardDoctor(),
+        if (AppController().authState == AuthState.PatientAuthorized)
+          const WalletCardPatient(),
+        SliverAppBar(
+          automaticallyImplyLeading: false,
+          pinned: true,
+          floating: false,
+          toolbarHeight: dimensHeight() * 3,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    translate(context, 'transaction_history'),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  TabBar(
+                    controller: tabController,
+                    tabs: [
+                      Tab(
+                        text: translate(context, "booking_history"),
+                      ),
+                      Tab(
+                        text: translate(context, 'cash_flow'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      const Column(
+                        children: [const TransactionHistoryCard()],
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                        child: Column(
+                          children: [
+                            const BarChartWidget(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Text("Tổng chi tiêu"),
+                                Text(
+                                  convertToVND(10),
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Text("So với tháng trước"),
+                                Text(
+                                  "10%",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(color: Colors.red),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+class BarChartWidget extends StatelessWidget {
+  const BarChartWidget({
+    super.key,
+  });
+  BarTouchData get barTouchData => BarTouchData(
+        enabled: false,
+        touchTooltipData: BarTouchTooltipData(
+          getTooltipColor: (group) => Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 0,
+          getTooltipItem: (
+            BarChartGroupData group,
+            int groupIndex,
+            BarChartRodData rod,
+            int rodIndex,
+          ) {
+            return BarTooltipItem(
+              rod.toY.round().toString(),
+              const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
+      );
+  Widget getTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: black26,
+      fontWeight: FontWeight.normal,
+      fontSize: 10,
+    );
+    String text;
+    switch (value.toInt()) {
+      case 0:
+        text = 'Mn';
+        break;
+      case 1:
+        text = 'Te';
+        break;
+      case 2:
+        text = 'Wd';
+        break;
+      case 3:
+        text = 'Tu';
+        break;
+      case 4:
+        text = 'Fr';
+        break;
+
+      default:
+        text = '';
+        break;
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
+    );
+  }
+
+  Widget leftTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: black26,
+      fontWeight: FontWeight.normal,
+      fontSize: 10,
+    );
+    String text;
+    if (value == 0) {
+      text = '1K';
+    } else if (value == 5) {
+      text = '5K';
+    } else if (value == 10) {
+      text = '10K';
+    } else if (value == 15) {
+      text = '15K';
+    } else if (value == 20) {
+      text = '20K';
+    } else {
+      return Container();
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 40,
+            getTitlesWidget: getTitles,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 28,
+            interval: 1,
+            getTitlesWidget: leftTitles,
+          ),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) => Container(),
+          ),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+  FlBorderData get borderData => FlBorderData(
+        show: true,
+        border: const Border(
+          right: BorderSide.none,
+          top: BorderSide.none,
+          bottom: BorderSide(width: 1),
+          left: BorderSide(width: 1),
+        ),
+      );
+
+  List<BarChartGroupData> get barGroups => [
+        BarChartGroupData(
+          x: 0,
+          barRods: [
+            BarChartRodData(
+                toY: 8,
+                color: colorF2F5FF,
+                width: dimensWidth() * 4,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth()),
+                    topRight: Radius.circular(dimensWidth()))),
+          ],
+          // showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 1,
+          barRods: [
+            BarChartRodData(
+                toY: 10,
+                color: colorF2F5FF,
+                width: dimensWidth() * 4,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth()),
+                    topRight: Radius.circular(dimensWidth()))),
+          ],
+          // showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 2,
+          barRods: [
+            BarChartRodData(
+                toY: 14,
+                color: colorF2F5FF,
+                width: dimensWidth() * 4,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth()),
+                    topRight: Radius.circular(dimensWidth()))),
+          ],
+          // showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 3,
+          barRods: [
+            BarChartRodData(
+                toY: 15,
+                color: colorF2F5FF,
+                width: dimensWidth() * 4,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth()),
+                    topRight: Radius.circular(dimensWidth()))),
+          ],
+          // showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 4,
+          barRods: [
+            BarChartRodData(
+                toY: 13,
+                color: Colors.deepOrange,
+                width: dimensWidth() * 4,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(dimensWidth()),
+                    topRight: Radius.circular(dimensWidth()))),
+          ],
+          showingTooltipIndicators: [0],
+        ),
+      ];
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.6,
+      child: BarChart(
+        BarChartData(
+          barTouchData: barTouchData,
+          titlesData: titlesData,
+          borderData: borderData,
+          barGroups: barGroups,
+          gridData: const FlGridData(show: false),
+          alignment: BarChartAlignment.spaceAround,
+          maxY: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class TransactionHistoryCard extends StatelessWidget {
+  const TransactionHistoryCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: primary,
+        backgroundImage: AssetImage(DImages.placeholder),
+        radius: dimensHeight() * 3,
+        onBackgroundImageError: (exception, stackTrace) {
+          logPrint(exception);
+        },
+      ),
+      title: Text(
+        "${translate(context, "make_an_appointment_with")}Dr. John",
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      subtitle: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "12:56 - 32/03/2024",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          Text(
+            convertToVND(10),
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }

@@ -867,6 +867,22 @@
         "vi": "Thẻ dịch vụ",
         "en": "Service card"
     },
+    "reward_points": {
+        "vi": "Điểm thưởng",
+        "en": "Reward points"
+    },
+    "budget": {
+        "vi": "Ngân sách",
+        "en": "Budget"
+    },
+    "your_balance": {
+        "vi": "Số dư",
+        "en": "Your balance"
+    },
+    "transaction_history": {
+        "vi": "Lịch sử giao dịch",
+        "en": "Transaction history"
+    },
     "transfer_money_through_banks": {
         "vi": "Chuyển tiền qua ngân hàng",
         "en": "Transfer money through banks"
@@ -875,9 +891,21 @@
         "vi": "Chuyển tiền qua thẻ Visa, Master hoặc thẻ ngân hàng",
         "en": "Transfer money via visa, master or bank card"
     },
+    "booking_history": {
+        "vi": "Lịch sử đặt lịch",
+        "en": "Booking history"
+    },
+    "cash_flow": {
+        "vi": "Dòng tiền",
+        "en": "Cash flow"
+    },
     "recharge_via_momo_application": {
         "vi": "Nạp tiền qua ứng dụng Momo",
         "en": "Recharge via Momo application"
+    },
+    "make_an_appointment_with": {
+        "vi": "Đặt hẹn với",
+        "en": "Make an appointment with"
     },
     "age": {
         "vi": "Tuổi",
@@ -1431,6 +1459,10 @@
         "vi": "Phòng khám của tôi",
         "en": "My clinic"
     },
+    "wish_list": {
+        "vi": "Quan tâm",
+        "en": "wish_list"
+    },
     "start": {
         "vi": "Bắt đầu",
         "en": "Start"
@@ -1694,5 +1726,9 @@
     "email_has_been_registered": {
         "vi": "Email đã được đăng ký",
         "en": "Email has been registered"
+    },
+    "cant_be_done": {
+        "vi": "Không thể hoàn thành",
+        "en": "Can't be done"
     }
 }

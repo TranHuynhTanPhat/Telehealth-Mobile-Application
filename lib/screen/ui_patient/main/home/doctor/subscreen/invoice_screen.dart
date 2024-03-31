@@ -26,6 +26,7 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
+  bool _usePoints = false;
   @override
   Widget build(BuildContext context) {
     List<int> time = [];
@@ -178,6 +179,18 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  ListTile(
+                    title: Text(translate(context, 'Diem thuong')),
+                    leading: Radio<bool>(
+                      value: true,
+                      groupValue: _usePoints,
+                      onChanged: (value) => setState(
+                        () {
+                          _usePoints = !_usePoints;
+                        },
+                      ),
+                    ),
                   ),
                   const Divider(
                     thickness: 3,

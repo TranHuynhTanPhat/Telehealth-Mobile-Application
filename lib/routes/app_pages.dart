@@ -36,6 +36,7 @@ const helpsName = '/helps';
 const detailConsultationName ='/detail-consultation';
 const createConsultationName ='/create-consultation';
 // const formMedicalDeclarationName ='/form-medical-declaration';
+const wishListName = '/wish_list';
 
 
 const doctorName = '/doctor';

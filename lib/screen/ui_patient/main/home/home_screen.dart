@@ -308,6 +308,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   );
                 } else if (state.blocState == BlocState.Successed) {
+                  int max = state.doctors.length;
+                  if (max > 15) {
+                    max = 15;
+                  }
                   return SizedBox(
                     height: dimensHeight() * 30,
                     child: ListView(
@@ -319,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: dimensWidth() * 3,
                           vertical: dimensWidth() * 2),
                       children: [
-                        ...state.doctors.getRange(0, 15).map(
+                        ...state.doctors.getRange(0, max).map(
                               (e) => DoctorCard(
                                 doctor: e,
                               ),
@@ -409,14 +413,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.symmetric(
                             vertical: dimensWidth() * 2,
                             horizontal: dimensWidth() * 3),
-                        child: BaseGridview(radio: 0.8, reserve: true, children: [
-                          ...state.recentDoctors
-                              .map(
-                                (e) => RecentDoctorCard(
-                                  doctor: e,
-                                ),
-                              )
-                              ,
+                        child:
+                            BaseGridview(radio: 0.8, reserve: true, children: [
+                          ...state.recentDoctors.map(
+                            (e) => RecentDoctorCard(
+                              doctor: e,
+                            ),
+                          ),
                         ]),
                       )
                     ],

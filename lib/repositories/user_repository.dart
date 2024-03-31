@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/user_service.dart';
 import 'package:healthline/repositories/base_repository.dart';
@@ -102,5 +103,13 @@ class UserRepository extends BaseRepository {
         otp: otp,
         password: password,
         confirmPassword: confirmPassword);
+  }
+
+  Future<int?> addWishList({required String doctorId}) async {
+    return await _userService.addWishList(doctorid: doctorId);
+  }
+
+  Future<List<DoctorResponse>>getWishList() async{
+    return await _userService.getWishList();
   }
 }

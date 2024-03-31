@@ -40,6 +40,7 @@ import 'package:healthline/screen/ui_patient/main/health_info/vaccination/add_va
 import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/list_wish_screen/list_wish_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/create_consultation_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
@@ -311,6 +312,20 @@ class AppRoute {
                 ),
               ],
               child: const DoctorScreen(),
+            ),
+          );
+        case wishListName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _doctorCubit,
+                ),
+                // BlocProvider.value(
+                //   value: _consultationCubit,
+                // ),
+              ],
+              child: const ListWishScreen(),
             ),
           );
         case detailDoctorName:

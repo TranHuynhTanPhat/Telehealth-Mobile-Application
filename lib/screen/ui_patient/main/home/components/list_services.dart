@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';
-import 'package:healthline/utils/translate.dart';
 
 class ListServices extends StatefulWidget {
   const ListServices({
@@ -21,9 +19,9 @@ class _ListServicesState extends State<ListServices> {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> services = [
       {
-        'name': 'clinic',
-        'color': color009DC7,
-        'icon': FontAwesomeIcons.houseMedical,
+        'name': 'wish_list',
+        'color': colorDF9F1E,
+        'icon': FontAwesomeIcons.bookmark,
       },
       {
         'name': 'doctor',
@@ -32,7 +30,7 @@ class _ListServicesState extends State<ListServices> {
       },
       {
         'name': 'vaccination',
-        'color': colorDF9F1E,
+        'color': color009DC7,
         'icon': FontAwesomeIcons.syringe,
       },
       {
@@ -48,9 +46,8 @@ class _ListServicesState extends State<ListServices> {
           ServiceCard(
             services: services,
             index: 0,
-            press: () async {
-              EasyLoading.showToast(translate(context, 'coming_soon'));
-
+            press: () {
+              Navigator.pushNamed(context, wishListName);
               // PushNotificationManager().display(
               //   context,
               //   RemoteMessage(

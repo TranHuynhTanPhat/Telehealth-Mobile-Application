@@ -15,73 +15,161 @@ class WalletCardPatient extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PatientProfileCubit, PatientProfileState>(
       builder: (context, state) {
-        return Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-              vertical: dimensHeight() * 4, horizontal: dimensWidth() * 2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(dimensWidth() * 3),
-            gradient: const LinearGradient(
-              colors: [primary, color9D4B6C],
-              stops: [0, 1],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+        return SliverAppBar(
+          expandedHeight: dimensHeight() * 12,
+          collapsedHeight: dimensHeight() * 10,
+          automaticallyImplyLeading: false,
+          pinned: true,
+          floating: false,
+          flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            double top = constraints.biggest.height;
+            return FlexibleSpaceBar(
+              background: Column(
                 children: [
-                  FaIcon(
-                    FontAwesomeIcons.hospital,
-                    size: dimensIcon() * .5,
-                    color: white,
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [primary, color9D4B6C],
+                          stops: [0, 1],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(
-                    width: dimensWidth() * .5,
-                  ),
-                  Text(
-                    translate(context, 'Healthline'),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: white, fontWeight: FontWeight.w400, height: 0),
-                  ),
+                  Expanded(
+                    child: Container(
+                      color: white,
+                    ),
+                  )
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: dimensHeight() , bottom: dimensHeight() * 5),
-                child: Text(
-                  state.profile.fullName ?? "",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: white, fontWeight: FontWeight.w900),
+              centerTitle: true,
+              title: Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: dimensWidth() * 2,
+                    vertical: dimensHeight() * 0.5),
+                padding: EdgeInsets.symmetric(
+                  horizontal: dimensWidth(),
+                  vertical: dimensHeight(),
+                ),
+                width: double.infinity,
+                height: dimensHeight() * 8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(dimensWidth() * 2),
+                  color: white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(.1),
+                      blurRadius: 15,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Visibility(
+                            visible: top < 135,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: dimensWidth(),
+                              ),
+                              child: const FaIcon(
+                                FontAwesomeIcons.wallet,
+                                color: color9D4B6C,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  translate(context, 'your_balance'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: black26,
+                                      ),
+                                ),
+                                Text(
+                                  convertToVND(state.profile.accountBalance ?? 0),
+                                  softWrap: true,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                          color: color1F1F1F,
+                                          overflow: TextOverflow.ellipsis),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const VerticalDivider(thickness: 2,),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Visibility(
+                            visible: top < 135,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: dimensWidth(),
+                              ),
+                              child: const FaIcon(
+                                FontAwesomeIcons.award,
+                                color: color9D4B6C,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  translate(context, 'reward_points'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: black26,
+                                      ),
+                                ),
+                                Text(
+                                  "${state.profile.point ?? 0}",
+                                  softWrap: true,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                          color: color1F1F1F,
+                                          overflow: TextOverflow.ellipsis),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.wallet,
-                    size: dimensIcon() * 1,
-                    color: white,
-                  ),
-                  Text(
-                    convertToVND(state.profile.accountBalance ?? 0),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: white, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              )
-            ],
-          ),
+            );
+          }),
         );
       },
     );

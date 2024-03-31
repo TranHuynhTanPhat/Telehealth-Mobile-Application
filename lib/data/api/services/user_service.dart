@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -53,12 +54,10 @@ class UserService extends BaseService {
 
   Future<int?> changePassword(
       {required String password, required String newPassword}) async {
-    final response = await patch(
-      ApiConstants.USER_PASSWORD,
-      data: json.encode(
-        {"password": password, "new_password": newPassword},
-      ),
+    var jsonRequest = json.encode(
+      {"password": password, "new_password": newPassword},
     );
+    final response = await patch(ApiConstants.USER_PASSWORD, data: jsonRequest);
 
     return response.code;
   }
@@ -76,14 +75,34 @@ class UserService extends BaseService {
       required String otp,
       required String password,
       required String confirmPassword}) async {
-    final response = await post(ApiConstants.USER_FORGOT_PASSWORD_RESET,
-        data: json.encode({
-          "email": email,
-          "otp": otp,
-          "password": password,
-          "passwordConfirm": confirmPassword
-        }));
+    var jsonRequest = json.encode({
+      "email": email,
+      "otp": otp,
+      "password": password,
+      "passwordConfirm": confirmPassword
+    });
+
+    final response =
+        await post(ApiConstants.USER_FORGOT_PASSWORD_RESET, data: jsonRequest);
 
     return response.code;
+  }
+
+  Future<int?> addWishList({required String doctorid}) async {
+    var jsonRequest = json.encode(
+      {"doctorId": doctorid},
+    );
+
+    final response = await post(ApiConstants.USER_WISH_LIST, data: jsonRequest);
+
+    return response.code;
+  }
+
+  Future<List<DoctorResponse>> getWishList() async {
+    final response = await get(ApiConstants.USER_WISH_LIST);
+    List<DoctorResponse> doctorResponse = response.data
+        .map<DoctorResponse>((e) => DoctorResponse.fromMap(e))
+        .toList();
+    return doctorResponse;
   }
 }
