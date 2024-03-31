@@ -15,7 +15,7 @@ class UserResponse {
   String? email;
   int? accountBalance;
   int? point;
-  // List<String>? wishList;
+  List<String>? wishList;
   UserResponse({
     this.id,
     this.fullName,
@@ -29,7 +29,7 @@ class UserResponse {
     this.email,
     this.accountBalance,
     this.point,
-    // this.wishList,
+    this.wishList,
   });
 
   Map<String, dynamic> toMap() {
@@ -71,9 +71,9 @@ class UserResponse {
     if (point != null) {
       result.addAll({'point': point});
     }
-    // if (wishList != null) {
-    //   result.addAll({'wish_list': wishList});
-    // }
+    if (wishList != null) {
+      result.addAll({'wish_list': wishList});
+    }
 
     return result;
   }
@@ -94,7 +94,8 @@ class UserResponse {
       phone: map['phone'],
       accountBalance: map['account_balance'],
       point: map['point'],
-      // wishList: List<String>.from(map['wish_list']),
+      wishList:
+          map['wish_list'] != null ? List<String>.from(map['wish_list']) : null,
     );
   }
 
@@ -116,7 +117,7 @@ class UserResponse {
     String? email,
     int? accountBalance,
     int? point,
-    // List<String>? wishList,
+    List<String>? wishList,
   }) {
     return UserResponse(
       id: id ?? this.id,

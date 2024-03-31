@@ -149,16 +149,16 @@ class WalletCardPatient extends StatelessWidget {
                                         color: black26,
                                       ),
                                 ),
-                                Text(
-                                  "${state.profile.point ?? 0}",
-                                  softWrap: true,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(
-                                          color: color1F1F1F,
-                                          overflow: TextOverflow.ellipsis),
-                                ),
+                                // Text(
+                                //   "${state.profile.point ?? 0}",
+                                //   softWrap: true,
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .labelSmall
+                                //       ?.copyWith(
+                                //           color: color1F1F1F,
+                                //           overflow: TextOverflow.ellipsis),
+                                // ),
                               ],
                             ),
                           ),

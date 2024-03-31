@@ -184,13 +184,14 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
               : state.currentId));
       await fetchStats();
     } on DioException catch (e) {
-      logPrint(e);
+      // print(e);
       emit(FetchSubUserError(
         stats: state.stats,
         subUsers: state.subUsers,
         currentId: state.currentId,
       ));
     } catch (e) {
+      print(e);
       emit(FetchSubUserError(
         stats: state.stats,
         subUsers: state.subUsers,
