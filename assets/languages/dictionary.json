@@ -475,6 +475,14 @@
         "vi": "Cuộc hẹn sắp tới",
         "en": "Upcoming appointments"
     },
+    "new_customer": {
+        "vi": "Khách hàng mới",
+        "en": "New customer"
+    },
+    "loyal_customer": {
+        "vi": "Khách hàng trung thành",
+        "en": "Loyal customer"
+    },
     "coming_soon": {
         "vi": "Sắp hoàn thành",
         "en": "Coming soon"
@@ -582,6 +590,10 @@
     "deny": {
         "vi": "Từ chối",
         "en": "Deny"
+    },
+    "revenue_chart": {
+        "vi": "Biểu đồ doanh thu",
+        "en": "Revenue chart"
     },
     "detail": {
         "vi": "Chi tiết",
@@ -712,8 +724,52 @@
         "en": "Medical record"
     },
     "revenue": {
-        "vi": "Thu nhập",
+        "vi": "Doanh thu thực",
         "en": "Revenue"
+    },
+    "type_of_service": {
+        "vi": "Loại hình dịch vụ",
+        "en": "Type of service"
+    },
+    "quantity": {
+        "vi": "Số lượng",
+        "en": "Quantity"
+    },
+    "sales": {
+        "vi": "Doanh thu",
+        "en": "Sales"
+    },
+    "cancel_appointment": {
+        "vi": "Huỷ lịch hẹn",
+        "en": "Cancel appointment"
+    },
+    "discount": {
+        "vi": "Giảm giá",
+        "en": "Discount"
+    },
+    "discount_code": {
+        "vi": "Mã giảm giá",
+        "en": "Discount code"
+    },
+    "not_found_discount": {
+        "vi": "Không tìm thấy mã",
+        "en": "Not found discount"
+    },
+    "total_medical_examination_fee": {
+        "vi": "Tổng tiền khám",
+        "en": "Total medical examination fee"
+    },
+    "total_discount": {
+        "vi": "Tổng giảm giá",
+        "en": "Total discount"
+    },
+    "total": {
+        "vi": "Tổng",
+        "en": "Total"
+    },
+    "online_medical_examination": {
+        "vi": "Khám bệnh trực tuyến",
+        "en": "Online medical examination"
     },
     "reported": {
         "vi": "Bị tố cáo",
@@ -1558,10 +1614,6 @@
     "created_at": {
         "vi": "Ngày tạo",
         "en": "Created at"
-    },
-    "total": {
-        "vi": "Tổng cộng",
-        "en": "Total"
     },
     "payment": {
         "vi": "Thanh toán",

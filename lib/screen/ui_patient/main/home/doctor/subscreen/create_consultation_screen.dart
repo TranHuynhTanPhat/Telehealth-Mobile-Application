@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_patient_profile/patient_profile_cubit.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/res/enum.dart';
-import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_medical_declaration.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/medical_record_screen.dart';
@@ -30,10 +30,14 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
   DoctorResponse? doctor;
   late ConsultationRequest request;
   String? patientName;
+  int? patientAge;
   String? doctorName;
   @override
   void initState() {
     request = ConsultationRequest();
+    if(!mounted)return;
+    context.read<PatientProfileCubit>().fetProfile();
+
     super.initState();
   }
 
@@ -48,7 +52,9 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
     String? symptoms,
     String? medicalHistory,
     List<String>? patientRecords,
+    int? age,
   }) {
+    patientAge = age ?? patientAge;
     this.patientName = patientName ?? this.patientName;
     this.doctorName = doctorName ?? this.doctorName;
     request = request.copyWith(
@@ -90,8 +96,9 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
         if (state is CreateConsultationState) {
           if (state.blocState == BlocState.Successed) {
             EasyLoading.showToast(translate(context, "successfully"));
-            Navigator.pushNamedAndRemoveUntil(
-                context, mainScreenPatientName, (route) => false);
+            // Navigator.pushNamedAndRemoveUntil(
+            //     context, mainScreenPatientName, (route) => false);
+            Navigator.pop(context, true);
           } else if (state.blocState == BlocState.Pending) {
             EasyLoading.show(maskType: EasyLoadingMaskType.black);
           }
@@ -100,138 +107,145 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
           EasyLoading.showToast(translate(context, state.error));
         }
       },
-      child: BlocBuilder<ConsultationCubit, ConsultationState>(
+      child: BlocBuilder<PatientProfileCubit, PatientProfileState>(
         builder: (context, state) {
-          if (_index == CreateConsultation.TimeLine) {
-            return TimelineDoctorScreen(
-              doctor: doctor!,
-              callback: (
-                      {date,
-                      discountCode,
-                      doctorId,
-                      doctorName,
-                      expectedTime,
-                      medicalHistory,
-                      medicalRecord,
-                      patientName,
-                      patientRecords,
-                      symptoms}) =>
-                  updateRequest(
-                      date: date,
-                      discountCode: discountCode,
-                      doctorId: doctorId,
-                      medicalRecord: medicalRecord,
-                      expectedTime: expectedTime,
-                      patientName: patientName,
-                      doctorName: doctorName,
-                      symptoms: symptoms,
-                      medicalHistory: medicalHistory,
-                      patientRecords: patientRecords),
-              nextPage: () {
-                setState(() {
-                  _index = CreateConsultation.MedicalRecord;
-                });
-              },
-            );
-          } else if (_index == CreateConsultation.MedicalRecord) {
-            return MedicalRecordScreen(
-              callback: (
-                      {date,
-                      discountCode,
-                      doctorId,
-                      doctorName,
-                      expectedTime,
-                      medicalHistory,
-                      medicalRecord,
-                      patientName,
-                      patientRecords,
-                      symptoms}) =>
-                  updateRequest(
-                      date: date,
-                      discountCode: discountCode,
-                      doctorId: doctorId,
-                      medicalRecord: medicalRecord,
-                      expectedTime: expectedTime,
-                      patientName: patientName,
-                      doctorName: doctorName,
-                      symptoms: symptoms,
-                      medicalHistory: medicalHistory,
-                      patientRecords: patientRecords),
-              nextPage: () {
-                setState(() {
-                  _index = CreateConsultation.FormMedicalDelaration;
-                });
-              },
-              previousPage: () {
-                setState(() {
-                  _index = CreateConsultation.TimeLine;
-                });
-              },
-            );
-          } else if (_index == CreateConsultation.FormMedicalDelaration) {
-            return FormMedicalDeclaration(
-              callback: (
-                      {date,
-                      discountCode,
-                      doctorId,
-                      doctorName,
-                      expectedTime,
-                      medicalHistory,
-                      medicalRecord,
-                      patientName,
-                      patientRecords,
-                      symptoms}) =>
-                  updateRequest(
-                      date: date,
-                      discountCode: discountCode,
-                      doctorId: doctorId,
-                      medicalRecord: medicalRecord,
-                      expectedTime: expectedTime,
-                      patientName: patientName,
-                      doctorName: doctorName,
-                      symptoms: symptoms,
-                      medicalHistory: medicalHistory,
-                      patientRecords: patientRecords),
-              nextPage: () {
-                setState(() {
-                  _index = CreateConsultation.PaymentMethod;
-                });
-              },
-              previousPage: () {
-                setState(() {
-                  _index = CreateConsultation.MedicalRecord;
-                });
-              },
-              patientName: patientName,
-            );
-          } else if (_index == CreateConsultation.PaymentMethod) {
-            return PaymentMethodScreen(
-              callback: (payment) {
-                _paymentMethod = payment;
-              },
-              nextPage: () {
-                setState(() {
-                  _index = CreateConsultation.Invoice;
-                });
-              },
-              previousPage: () {
-                setState(() {
-                  _index = CreateConsultation.FormMedicalDelaration;
-                });
-              },
-            );
-          } else {
-            return InvoiceScreen(
-              previousPage: () {
-                setState(() {
-                  _index = CreateConsultation.PaymentMethod;
-                });
-              },
-              request: request,
-              patientName: patientName,
-              doctorName: doctorName,
-            );
-          }
+          return BlocBuilder<ConsultationCubit, ConsultationState>(
+            builder: (context, state) {
+              if (_index == CreateConsultation.TimeLine) {
+                return TimelineDoctorScreen(
+                  doctor: doctor!,
+                  callback: (
+                          {date,
+                          discountCode,
+                          doctorId,
+                          doctorName,
+                          expectedTime,
+                          medicalHistory,
+                          medicalRecord,
+                          patientName,
+                          patientRecords,
+                          symptoms}) =>
+                      updateRequest(
+                          date: date,
+                          discountCode: discountCode,
+                          doctorId: doctorId,
+                          medicalRecord: medicalRecord,
+                          expectedTime: expectedTime,
+                          patientName: patientName,
+                          doctorName: doctorName,
+                          symptoms: symptoms,
+                          medicalHistory: medicalHistory,
+                          patientRecords: patientRecords),
+                  nextPage: () {
+                    setState(() {
+                      _index = CreateConsultation.MedicalRecord;
+                    });
+                  },
+                );
+              } else if (_index == CreateConsultation.MedicalRecord) {
+                return MedicalRecordScreen(
+                  callback: (
+                          {date,
+                          discountCode,
+                          doctorId,
+                          doctorName,
+                          expectedTime,
+                          medicalHistory,
+                          medicalRecord,
+                          patientName,
+                          patientRecords,
+                          symptoms,
+                          age}) =>
+                      updateRequest(
+                          date: date,
+                          discountCode: discountCode,
+                          doctorId: doctorId,
+                          medicalRecord: medicalRecord,
+                          expectedTime: expectedTime,
+                          patientName: patientName,
+                          doctorName: doctorName,
+                          symptoms: symptoms,
+                          medicalHistory: medicalHistory,
+                          patientRecords: patientRecords,
+                          age: age),
+                  nextPage: () {
+                    setState(() {
+                      _index = CreateConsultation.FormMedicalDelaration;
+                    });
+                  },
+                  previousPage: () {
+                    setState(() {
+                      _index = CreateConsultation.TimeLine;
+                    });
+                  },
+                );
+              } else if (_index == CreateConsultation.FormMedicalDelaration) {
+                return FormMedicalDeclaration(
+                  callback: (
+                          {date,
+                          discountCode,
+                          doctorId,
+                          doctorName,
+                          expectedTime,
+                          medicalHistory,
+                          medicalRecord,
+                          patientName,
+                          patientRecords,
+                          symptoms}) =>
+                      updateRequest(
+                          date: date,
+                          discountCode: discountCode,
+                          doctorId: doctorId,
+                          medicalRecord: medicalRecord,
+                          expectedTime: expectedTime,
+                          patientName: patientName,
+                          doctorName: doctorName,
+                          symptoms: symptoms,
+                          medicalHistory: medicalHistory,
+                          patientRecords: patientRecords),
+                  nextPage: () {
+                    setState(() {
+                      _index = CreateConsultation.PaymentMethod;
+                    });
+                  },
+                  previousPage: () {
+                    setState(() {
+                      _index = CreateConsultation.MedicalRecord;
+                    });
+                  },
+                  patientName: patientName,
+                );
+              } else if (_index == CreateConsultation.PaymentMethod) {
+                return PaymentMethodScreen(
+                  callback: (payment) {
+                    _paymentMethod = payment;
+                  },
+                  nextPage: () {
+                    setState(() {
+                      _index = CreateConsultation.Invoice;
+                    });
+                  },
+                  previousPage: () {
+                    setState(() {
+                      _index = CreateConsultation.FormMedicalDelaration;
+                    });
+                  },
+                );
+              } else {
+                return InvoiceScreen(
+                  previousPage: () {
+                    setState(() {
+                      _index = CreateConsultation.PaymentMethod;
+                    });
+                  },
+                  request: request,
+                  patientName: patientName,
+                  patientAge: patientAge,
+                  doctor: doctor!,
+                );
+              }
+            },
+          );
         },
       ),
     );

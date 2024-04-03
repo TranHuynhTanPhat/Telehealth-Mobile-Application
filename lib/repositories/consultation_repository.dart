@@ -3,8 +3,11 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/money_chart_response.dart';
+import 'package:healthline/data/api/models/responses/statistic_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/consultation_service.dart';
 import 'package:healthline/repositories/base_repository.dart';
@@ -12,12 +15,29 @@ import 'package:healthline/repositories/base_repository.dart';
 class ConsultationRepository extends BaseRepository {
   final ConsultationService _consultationService = ConsultationService();
 
+  Future<DiscountResponse> checkDiscount({required String code}) async {
+    return await _consultationService.checkDiscount(code: code);
+  }
+  Future<List<UserResponse>> getFamiliarCustomer({required bool isDoctor}) async {
+    return await _consultationService.getFamiliarCustomer(isDoctor:isDoctor);
+  }
+  Future<List<UserResponse>> getNewCustomer({required bool isDoctor}) async {
+    return await _consultationService.getNewCustomer(isDoctor:isDoctor);
+  }
+  Future<StatisticResponse> fetchStatisticTable({required bool isDoctor}) async {
+    return await _consultationService.fetchStatisticTable(isDoctor:isDoctor);
+  }
+
+  Future<MoneyChartResponse> moneyChart({required int year, required bool isDoctor}) async {
+    return await _consultationService.moneyChart(year: year, isDoctor: isDoctor);
+  }
+
   Future<List<int>> fetchTimeline(
       {required String id, required String date}) async {
     return await _consultationService.fetchTimeline(id: id, date: date);
   }
-  Future<DoctorDasboardResponse> getDasboard(
-     ) async {
+
+  Future<DoctorDasboardResponse> getDasboard() async {
     return await _consultationService.getDashboard();
   }
 

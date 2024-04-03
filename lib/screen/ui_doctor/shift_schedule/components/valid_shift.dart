@@ -4,10 +4,10 @@ import 'package:healthline/res/style.dart';
 
 class ValidShift extends StatelessWidget {
   const ValidShift({
-    Key? key,
+    super.key,
     required this.time,
     this.choosed = false,
-  }) : super(key: key);
+  });
   final String time;
   final bool choosed;
 

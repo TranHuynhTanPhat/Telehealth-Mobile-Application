@@ -126,3 +126,47 @@ final class GetDasboardState extends ConsultationState {
       this.dashboard});
   final DoctorDasboardResponse? dashboard;
 }
+
+final class FetchMoneyChartState extends ConsultationState {
+  FetchMoneyChartState(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+      this.data});
+  final MoneyChartResponse? data;
+}
+
+final class FetchStatisticTableState extends ConsultationState {
+  FetchStatisticTableState(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+      this.data});
+  final StatisticResponse? data;
+}
+
+final class GetFamiliarCustomer extends ConsultationState {
+  GetFamiliarCustomer(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+      this.data});
+  final List<UserResponse>? data;
+}
+
+final class GetNewCustomer extends ConsultationState {
+  GetNewCustomer(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+      this.data});
+  final List<UserResponse>? data;
+}

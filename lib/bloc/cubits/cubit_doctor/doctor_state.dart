@@ -20,9 +20,11 @@ class DoctorState {
     final result = <String, dynamic>{};
 
     // result.addAll({'doctors': doctors.map((x) => x.toMap()).toList()});
-    result.addAll(
+    // if(recentDoctors!=[]) {
+      result.addAll(
         {'recentDoctors': recentDoctors.map((x) => x.toMap()).toList()});
-    result.addAll({'wishDoctos': wishDoctors});
+    // }
+    // result.addAll({'wishDoctos': wishDoctors});
     // result.addAll({'blocState': blocState.toMap()});
     // if(error != null){
     //   result.addAll({'error': error});
@@ -39,11 +41,7 @@ class DoctorState {
           (x) => DoctorResponse.fromMap(x),
         ),
       ),
-      wishDoctors: List<DoctorResponse>.from(
-        map['wishDoctors']?.map(
-          (x) => DoctorResponse.fromMap(x),
-        ),
-      ),
+      wishDoctors: [],
       blocState: BlocState.Successed,
       error: null,
       pageKey: 0,

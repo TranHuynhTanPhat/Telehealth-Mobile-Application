@@ -6,11 +6,11 @@ import 'package:healthline/utils/translate.dart';
 
 class ServiceCard extends StatelessWidget {
   const ServiceCard({
-    Key? key,
+    super.key,
     required this.services,
     required this.index,
     required this.press,
-  }) : super(key: key);
+  });
 
   final List<Map<String, dynamic>> services;
   final int index;

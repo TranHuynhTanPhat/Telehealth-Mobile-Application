@@ -54,7 +54,7 @@ class RevenueCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        translate(context, 'revenue'),
+                        translate(context, 'sales'),
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     )

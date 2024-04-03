@@ -138,7 +138,7 @@ class _ListSubUserState extends State<ListSubUser> {
                       const SizedBox(),
                   ],
                 );
-              }).toList(),
+              }),
           ],
         );
       },

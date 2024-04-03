@@ -1,3 +1,9 @@
 export './revenue_card.dart';
 export './appointment_card.dart';
 export './report_card.dart';
+export 'short_new_patient.dart';
+export 'short_patient.dart';
+export 'upcoming_appointment.dart';
+export 'overview.dart';
+export 'revenue_chart.dart';
+export 'statistic_table.dart';

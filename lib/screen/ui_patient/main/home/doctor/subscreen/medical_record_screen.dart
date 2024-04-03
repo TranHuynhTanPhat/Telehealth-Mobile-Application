@@ -33,6 +33,7 @@ class MedicalRecordScreen extends StatefulWidget {
     String? symptoms,
     String? medicalHistory,
     List<String>? patientRecords,
+    int? age,
   }) callback;
 
   @override
@@ -42,6 +43,7 @@ class MedicalRecordScreen extends StatefulWidget {
 class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   String? medicalId;
   String? patientName;
+  int? age;
   List<String> patientRecordIds = [];
   @override
   void initState() {
@@ -109,7 +111,8 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                           widget.callback(
                               medicalRecord: medicalId,
                               patientName: patientName,
-                              patientRecords: patientRecordIds);
+                              patientRecords: patientRecordIds,
+                              age: age);
                           widget.nextPage();
 
                           // context.read<ConsultationCubit>().updateRequest(
@@ -138,33 +141,63 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                   padding: EdgeInsets.symmetric(
                       vertical: dimensHeight(), horizontal: dimensWidth() * 3),
                   children: [
-                    ...state.subUsers
-                        .map(
-                          (e) => ListTile(
-                            title: Text(
-                              e.fullName ?? translate(context, 'undefine'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                            subtitle: Text(
-                              "${translate(context, 'relationship')}: ${translate(context, e.relationship?.name.toLowerCase() ?? 'you')}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                dimensWidth(),
-                              ),
-                            ),
-                            onTap: () => setState(() {
-                              // _payment = PaymentMethod.Momo;
-                              medicalId = e.id;
+                    ...state.subUsers.map(
+                      (e) => ListTile(
+                        title: Text(
+                          e.fullName ?? translate(context, 'undefine'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: color1F1F1F),
+                        ),
+                        subtitle: Text(
+                          "${translate(context, 'relationship')}: ${translate(context, e.relationship?.name.toLowerCase() ?? 'you')}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: color1F1F1F),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            dimensWidth(),
+                          ),
+                        ),
+                        onTap: () => setState(() {
+                          // _payment = PaymentMethod.Momo;
+                          medicalId = e.id;
+                          patientName = e.fullName;
+                          patientRecordIds.clear();
+                          try {
+
+                            age = calculateAge(
+                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                    .parse(e.dateOfBirth!));
+                          } catch (e) {
+                            logPrint(e);
+                          }
+                          try {
+                            context
+                                .read<PatientRecordCubit>()
+                                .fetchPatientRecord(medicalId!);
+                          } catch (e) {
+                            EasyLoading.showToast(
+                                translate(context, 'cant_load_data'));
+                          }
+                        }),
+                        dense: true,
+                        visualDensity: const VisualDensity(vertical: 0),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth(),
+                          vertical: dimensHeight(),
+                        ),
+                        trailing: Radio<String>(
+                          value: e.id!,
+                          groupValue: medicalId,
+                          onChanged: (String? value) {
+                            setState(() {
+                              // _payment = value ?? PaymentMethod.None;
+                              medicalId = value;
                               patientName = e.fullName;
-                              patientRecordIds.clear();
                               try {
                                 context
                                     .read<PatientRecordCubit>()
@@ -173,35 +206,11 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                 EasyLoading.showToast(
                                     translate(context, 'cant_load_data'));
                               }
-                            }),
-                            dense: true,
-                            visualDensity: const VisualDensity(vertical: 0),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: dimensWidth(),
-                              vertical: dimensHeight(),
-                            ),
-                            trailing: Radio<String>(
-                              value: e.id!,
-                              groupValue: medicalId,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  // _payment = value ?? PaymentMethod.None;
-                                  medicalId = value;
-                                  patientName = e.fullName;
-                                  try {
-                                    context
-                                        .read<PatientRecordCubit>()
-                                        .fetchPatientRecord(medicalId!);
-                                  } catch (e) {
-                                    EasyLoading.showToast(
-                                        translate(context, 'cant_load_data'));
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                     if (medicalId != null)
                       BlocBuilder<PatientRecordCubit, PatientRecordState>(
                         builder: (context, state) {
@@ -403,10 +412,10 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       size: e.size,
                                     );
                                   },
-                                ).toList(),
+                                ),
                                 SizedBox(
                                   height: dimensHeight() * 10,
-                                )
+                                ),
                                 // ListFolder(fileByFolders: fileByFolders),
                                 // ListFile(fileRecords: fileRecords),
                               ],

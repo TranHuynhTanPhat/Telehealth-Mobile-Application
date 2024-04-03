@@ -115,7 +115,11 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     context,
                     createConsultationName,
                     arguments: doctor.toJson(),
-                  );
+                  ).then((value) {
+                    if(value==true){
+                      context.read<ConsultationCubit>().fetchConsultation();
+                    }
+                  });
                 } else {
                   EasyLoading.showToast(translate(context, 'cant_load_data'));
                   Navigator.pop(context);
@@ -267,7 +271,6 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                           padding: EdgeInsets.only(right: dimensWidth() * 3),
                           child: InkWell(
                             onTap: () {
-                              print(doctor.id);
                               if (doctor.id == null) {
                                 EasyLoading.showToast(
                                     translate(context, 'cant_be_done'));

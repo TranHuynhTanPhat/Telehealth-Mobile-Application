@@ -71,7 +71,7 @@ class _ChatBoxScreenState extends State<ChatBoxScreen> {
           reverse: true,
           shrinkWrap: false,
           children: [
-            Container(child: Text("Message")),
+            const Text("Message"),
             SizedBox(
               height: dimensHeight() * 3,
             )

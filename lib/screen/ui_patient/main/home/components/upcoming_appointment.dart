@@ -25,12 +25,14 @@ class UpcomingApointment extends StatelessWidget {
               ))
           .toList(),
       options: CarouselOptions(
-          autoPlay: false,
+          autoPlay: true,
           aspectRatio: 3,
           enlargeCenterPage: true,
           viewportFraction: 0.8,
           reverse: false,
-          enlargeStrategy: CenterPageEnlargeStrategy.scale),
+          enlargeStrategy: CenterPageEnlargeStrategy.scale,
+          enableInfiniteScroll: false),
+          
     );
   }
 }

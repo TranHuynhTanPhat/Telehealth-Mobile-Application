@@ -465,6 +465,9 @@ class AppRoute {
                 BlocProvider.value(
                   value: _patientRecordCubit,
                 ),
+                BlocProvider.value(
+                  value: _patientProfileCubit,
+                ),
               ],
               child: CreateConsultationScreen(
                 args: args,

@@ -62,39 +62,41 @@ class _FormMedicalDeclarationState extends State<FormMedicalDeclaration> {
               translate(context, 'medical_declaration'),
             ),
           ),
-          bottomNavigationBar: _symptomsController.text.trim().isNotEmpty &&
-                  _medicalHisController.text.trim().isNotEmpty &&
-                  commit
-              ? Container(
-                  padding: EdgeInsets.fromLTRB(dimensWidth() * 10, 0,
-                      dimensWidth() * 10, dimensHeight() * 3),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.white.withOpacity(0.0), white],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: ElevatedButtonWidget(
-                      text: translate(context, 'book_appointment_now'),
-                      onPressed: () {
-                        widget.callback(
-                            symptoms: _symptomsController.text.trim(),
-                            medicalHistory: _medicalHisController.text.trim());
-                        widget.nextPage();
-        
-                        // context.read<ConsultationCubit>().updateRequest(
-                        //     symptoms: _symptomsController.text,
-                        //     medicalHistory: _medicalHisController.text);
-                        // Navigator.pushNamed(context, paymentMethodsName)
-                        //     .then((value) {
-                        //   if (value == true) {
-                        //     Navigator.pop(context, true);
-                        //   }
-                        // });
-                      }),
-                )
-              : null,
+          bottomNavigationBar:
+              // _symptomsController.text.trim().isNotEmpty &&
+              //         _medicalHisController.text.trim().isNotEmpty &&
+              //         commit
+              //     ?
+              Container(
+            padding: EdgeInsets.fromLTRB(
+                dimensWidth() * 10, 0, dimensWidth() * 10, dimensHeight() * 3),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.white.withOpacity(0.0), white],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: ElevatedButtonWidget(
+                text: translate(context, 'book_appointment_now'),
+                onPressed: () {
+                  widget.callback(
+                      symptoms: _symptomsController.text.trim(),
+                      medicalHistory: _medicalHisController.text.trim());
+                  widget.nextPage();
+
+                  // context.read<ConsultationCubit>().updateRequest(
+                  //     symptoms: _symptomsController.text,
+                  //     medicalHistory: _medicalHisController.text);
+                  // Navigator.pushNamed(context, paymentMethodsName)
+                  //     .then((value) {
+                  //   if (value == true) {
+                  //     Navigator.pop(context, true);
+                  //   }
+                  // });
+                }),
+          ),
+          // : null,
           body: BlocBuilder<ConsultationCubit, ConsultationState>(
             builder: (context, state) {
               return ListView(
@@ -129,7 +131,8 @@ class _FormMedicalDeclarationState extends State<FormMedicalDeclaration> {
                         ),
                         Expanded(
                           child: Text(
-                            widget.patientName ?? translate(context, 'undefine'),
+                            widget.patientName ??
+                                translate(context, 'undefine'),
                             style: Theme.of(context).textTheme.bodyLarge,
                             overflow: TextOverflow.visible,
                           ),

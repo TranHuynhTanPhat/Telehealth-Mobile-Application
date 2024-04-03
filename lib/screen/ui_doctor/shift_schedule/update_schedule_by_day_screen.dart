@@ -61,6 +61,8 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(begin);
+    // logPrint(end);
     return BlocBuilder<DoctorScheduleCubit, DoctorScheduleState>(
       builder: (context, state) {
         return Scaffold(
@@ -82,11 +84,14 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
 
                     for (int i = 0; i < countInputTimes; i++) {
                       if (begin[i] != -1 && end[i] != -1) {
-                        for (int b = begin[i]; b < end[i]; b++) {
+                        for (int b = begin[i]; b <= end[i]; b++) {
                           workingTimes.add(b);
                         }
                       }
                     }
+                    // print(begin);
+                    // print(end);
+                    // print(workingTimes);
 
                     context
                         .read<DoctorScheduleCubit>()
@@ -135,7 +140,7 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
             ],
           ),
           body: ListView(
-            // shrinkWrap: true,
+            shrinkWrap: true,
             scrollDirection: Axis.vertical,
             padding: EdgeInsets.fromLTRB(dimensWidth() * 3, dimensHeight() * 2,
                 dimensWidth() * 3, dimensHeight() * 15),
@@ -157,6 +162,7 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                               textEditingController: controllerBegin[index],
                               menuChildren: time
                                   .where((element) {
+                                    // print(element);
                                     if (index > 0) {
                                       if (end[index - 1] < element) {
                                         return true;
@@ -174,12 +180,11 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                                       ),
                                       onPressed: () => setState(() {
                                         controllerBegin[index].text =
-                                            convertIntToTime(e-1);
-
-                                        begin[index] = e-1;
+                                            convertIntToTime(e);
+                                        begin[index] = e;
                                       }),
                                       child: Text(
-                                        convertIntToTime(e-1),
+                                        convertIntToTime(e),
                                       ),
                                     ),
                                   )
@@ -279,7 +284,7 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                               textEditingController: controllerEnd[index],
                               menuChildren: time
                                   .where((element) {
-                                    if (begin[index] < element) {
+                                    if (begin[index] <= element) {
                                       return true;
                                     }
                                     return false;
@@ -292,12 +297,12 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                                       ),
                                       onPressed: () => setState(() {
                                         controllerEnd[index].text =
-                                            convertIntToTime(e-1);
+                                            convertIntToTime(e + 1);
 
-                                        end[index] = e-1;
+                                        end[index] = e;
                                       }),
                                       child: Text(
-                                        convertIntToTime(e-1),
+                                        convertIntToTime(e + 1),
                                       ),
                                     ),
                                   )

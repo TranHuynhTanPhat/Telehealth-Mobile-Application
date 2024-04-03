@@ -6,7 +6,6 @@ import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/menu_anchor_widget.dart';
 import 'package:healthline/screen/widgets/save_button.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -21,7 +20,7 @@ class UpdateDefaultScheduleScreen extends StatefulWidget {
 class _UpdateDefaultScheduleScreenState
     extends State<UpdateDefaultScheduleScreen> {
   List<List<int>> schedules = List.generate(7, (index) => []);
-  List<int> time = List<int>.generate(48, (i) => i + 1);
+  List<int> time = List<int>.generate(48, (i) => i);
   int _currentStep = 0;
 
   List<int> countInputTimes = List.generate(7, (index) => 1);
@@ -62,6 +61,7 @@ class _UpdateDefaultScheduleScreenState
   }
 
   void updateFixedSchedule() {
+    // print(schedules);
     context.read<DoctorScheduleCubit>().updateFixedSchedule(schedules);
   }
 
@@ -150,8 +150,9 @@ class _UpdateDefaultScheduleScreenState
             child: InkWell(
               borderRadius: BorderRadius.circular(180),
               onTap: () {
+                updateWorkingTime();
                 updateFixedSchedule();
-                // updateWorkingTime();
+
                 // logPrint(begin);
                 // logPrint(end);
                 // for (var element in schedules) {
@@ -242,8 +243,8 @@ class _UpdateDefaultScheduleScreenState
                                                       .where((element) {
                                                         if (index > 0) {
                                                           if (end[_currentStep]
-                                                                  [index - 1] <
-                                                              element - 1) {
+                                                                  [index-1] <
+                                                              element) {
                                                             return true;
                                                           } else {
                                                             return false;
@@ -265,16 +266,16 @@ class _UpdateDefaultScheduleScreenState
                                                                         [index]
                                                                     .text =
                                                                 convertIntToTime(
-                                                                    e - 1);
+                                                                    e );
 
                                                             begin[_currentStep]
-                                                                [index] = e - 1;
-                                                            logPrint(begin);
-                                                            logPrint(end);
+                                                                [index] = e ;
+                                                            // logPrint(begin);
+                                                            // logPrint(end);
                                                           }),
                                                           child: Text(
                                                             convertIntToTime(
-                                                                e - 1),
+                                                                e ),
                                                           ),
                                                         ),
                                                       )
@@ -305,8 +306,8 @@ class _UpdateDefaultScheduleScreenState
                                                   menuChildren: time
                                                       .where((element) {
                                                         if (begin[_currentStep]
-                                                                [index] <
-                                                            element - 1) {
+                                                                [index] <=
+                                                            element ) {
                                                           return true;
                                                         }
                                                         return false;
@@ -325,14 +326,14 @@ class _UpdateDefaultScheduleScreenState
                                                                         [index]
                                                                     .text =
                                                                 convertIntToTime(
-                                                                    e - 1);
+                                                                    e +1);
 
                                                             end[_currentStep]
-                                                                [index] = e - 1;
+                                                                [index] = e;
                                                           }),
                                                           child: Text(
                                                             convertIntToTime(
-                                                                e - 1),
+                                                                e +1),
                                                           ),
                                                         ),
                                                       )

@@ -1,8 +1,6 @@
 // ignore: depend_on_referenced_packages
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:healthline/repositories/user_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meilisearch/meilisearch.dart';
@@ -25,6 +23,16 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
         );
   final MeiliSearchManager meiliSearchManager = MeiliSearchManager.instance;
   final UserRepository _userRepository = UserRepository();
+
+  @override
+  void onChange(Change<DoctorState> change) {
+    super.onChange(change);
+    logPrint("$change ${change.currentState.blocState.name}");
+  }
+
+  // Future<void> resetRecentDoctor() async {
+  //   await HydratedBloc.storage.clear();
+  // }
 
   Future<void> searchDoctor(
       {required String key,

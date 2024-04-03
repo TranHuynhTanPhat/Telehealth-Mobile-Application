@@ -54,7 +54,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 
 class GoogleSignInScreen extends StatefulWidget {
-  const GoogleSignInScreen({Key? key}) : super(key: key);
+  const GoogleSignInScreen({super.key});
 
   @override
   State<GoogleSignInScreen> createState() => _GoogleSignInScreenState();

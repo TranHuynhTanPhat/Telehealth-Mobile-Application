@@ -5,9 +5,14 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
+
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/money_chart_response.dart';
+import 'package:healthline/data/api/models/responses/statistic_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -31,6 +36,209 @@ class ConsultationCubit extends Cubit<ConsultationState> {
   void onChange(Change<ConsultationState> change) {
     super.onChange(change);
     logPrint(change);
+  }
+
+  Future<void> fetchStatisticTable() async {
+    emit(
+      FetchStatisticTableState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      StatisticResponse dis =
+          await _consultationRepository.fetchStatisticTable(isDoctor: true);
+      emit(
+        FetchStatisticTableState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: dis),
+      );
+    } on DioException catch (e) {
+      emit(
+        FetchStatisticTableState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        FetchStatisticTableState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<void> getFamiliarCustomer() async {
+    emit(
+      GetFamiliarCustomer(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      List<UserResponse> users =
+          await _consultationRepository.getFamiliarCustomer(isDoctor: true);
+      emit(
+        GetFamiliarCustomer(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: users),
+      );
+    } on DioException catch (e) {
+      emit(
+        GetFamiliarCustomer(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        GetFamiliarCustomer(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<void> getNewCustomer() async {
+    emit(
+      GetNewCustomer(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      List<UserResponse> users =
+          await _consultationRepository.getNewCustomer(isDoctor: true);
+      emit(
+        GetNewCustomer(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: users),
+      );
+    } on DioException catch (e) {
+      emit(
+        GetNewCustomer(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        GetNewCustomer(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<DiscountResponse?> checkDiscount({required String code}) async {
+    emit(
+      FetchTimelineState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      DiscountResponse dis =
+          await _consultationRepository.checkDiscount(code: code);
+      emit(
+        FetchTimelineState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+      return dis;
+    } on DioException catch (e) {
+      emit(
+        FetchTimelineState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        FetchTimelineState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+    return null;
+  }
+
+  Future<void> moneyChart({required int year}) async {
+    emit(
+      FetchMoneyChartState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      MoneyChartResponse data =
+          await _consultationRepository.moneyChart(year: year, isDoctor: true);
+      emit(
+        FetchMoneyChartState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: data),
+      );
+    } on DioException catch (e) {
+      emit(
+        FetchMoneyChartState(
+          blocState: BlocState.Failed,
+          timeline: [],
+          error: e.response!.data['message'].toString(),
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    } catch (e) {
+      emit(
+        FetchMoneyChartState(
+          blocState: BlocState.Failed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    }
   }
 
   Future<void> fetchTimeline(

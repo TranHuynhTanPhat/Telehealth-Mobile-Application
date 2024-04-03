@@ -5,12 +5,56 @@ import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/money_chart_response.dart';
+import 'package:healthline/data/api/models/responses/statistic_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class ConsultationService extends BaseService {
+  Future<DiscountResponse> checkDiscount({required String code}) async {
+    final response = await get("${ApiConstants.CONSULTATION_DISCOUNT}/$code");
+    return DiscountResponse.fromMap(response.data);
+  }
+
+  Future<List<UserResponse>> getFamiliarCustomer(
+      {required bool isDoctor}) async {
+    final response = await get(
+        ApiConstants.CONSULTATION_DOCTOR_FAMILIAR_CUSTOMER,
+        isDoctor: isDoctor);
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    final List<UserResponse> users =
+        objects.map((e) => UserResponse.fromMap(e)).toList();
+    return users;
+  }
+  Future<List<UserResponse>> getNewCustomer(
+      {required bool isDoctor}) async {
+    final response = await get(
+        ApiConstants.CONSULTATION_DOCTOR_NEW_CUSTOMER,
+        isDoctor: isDoctor);
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    final List<UserResponse> users =
+        objects.map((e) => UserResponse.fromMap(e)).toList();
+    return users;
+  }
+
+  Future<StatisticResponse> fetchStatisticTable(
+      {required bool isDoctor}) async {
+    final response = await get(ApiConstants.CONSULTATION_DOCTOR_STATISTIC_TABLE,
+        isDoctor: isDoctor);
+    return StatisticResponse.fromMap(response.data);
+  }
+
+  Future<MoneyChartResponse> moneyChart(
+      {required int year, required bool isDoctor}) async {
+    final response = await get(
+        "${ApiConstants.CONSULTATION_DOCTOR_MONEY_CHART}/$year",
+        isDoctor: isDoctor);
+    return MoneyChartResponse.fromMap(response.data);
+  }
+
   Future<List<int>> fetchTimeline(
       {required String id, required String date}) async {
     final response = await post(

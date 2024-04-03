@@ -60,9 +60,14 @@ class ApiConstants {
 
   // consultation
   static const CONSULTATION = '/consultation';
+  static const CONSULTATION_DISCOUNT = '$CONSULTATION/discount';
   static const CONSULTATION_FEEDBACK = '$CONSULTATION/feedback';
   static const CONSULTATION_USER = '$CONSULTATION/user';
   static const CONSULTATION_DOCTOR = '$CONSULTATION/doctor';
+  static const CONSULTATION_DOCTOR_FAMILIAR_CUSTOMER = '$CONSULTATION_DOCTOR/familiar-customers';
+  static const CONSULTATION_DOCTOR_NEW_CUSTOMER = '$CONSULTATION_DOCTOR/new-customers';
+  static const CONSULTATION_DOCTOR_STATISTIC_TABLE = '$CONSULTATION_DOCTOR/statistic-table';
+  static const CONSULTATION_DOCTOR_MONEY_CHART = '$CONSULTATION_DOCTOR/money-chart';
   static const CONSULTATION_DOCTOR_CONSULTATION = '$CONSULTATION_DOCTOR/consultation';
   static const CONSULTATION_DOCTOR_DASHBOARD = '$CONSULTATION_DOCTOR/doctor/dashboard';
   static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR/information';

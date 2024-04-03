@@ -9,7 +9,7 @@ import 'package:healthline/utils/validate.dart';
 
 class PasswordForm extends StatefulWidget {
   const PasswordForm({
-    Key? key,
+    super.key,
     required this.backPressed,
     required this.createAccountPressed,
     required this.formKey,
@@ -17,7 +17,7 @@ class PasswordForm extends StatefulWidget {
     required this.controllerConfirmPassword,
     required this.agreeTermsAndConditions,
     required this.agreeTermsAndConditionsPressed,
-  }) : super(key: key);
+  });
 
   final Function() backPressed;
   final Function() createAccountPressed;

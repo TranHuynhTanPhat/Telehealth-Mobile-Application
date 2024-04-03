@@ -665,7 +665,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                               size: e.size,
                             );
                           },
-                        ).toList()
+                        )
                       ]
                     ],
                   ],
