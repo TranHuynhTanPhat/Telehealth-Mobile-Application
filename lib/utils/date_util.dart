@@ -66,8 +66,12 @@ DateTime? convertStringToDateTime(String? dateString) {
   if (dateString == null) {
     return null;
   }
-  DateTime dateTime = DateTime.parse(dateString);
-  return dateTime;
+  try {
+    DateTime dateTime = DateTime.parse(dateString);
+    return dateTime;
+  } catch (e) {
+    return null;
+  }
 }
 
 calculateAge(DateTime birthDate) {
@@ -117,6 +121,42 @@ String daysBetween(BuildContext context, DateTime from, DateTime to) {
             return '1 ${translate(context, 'year_ago')}';
           } else {
             return '$year ${translate(context, 'years_ago')}';
+          }
+        }
+      }
+    }
+  }
+}
+String timeComing(BuildContext context, DateTime from, DateTime to) {
+  Duration duration = from.difference(to);
+  if (duration.inHours == 0 &&
+      (duration.inMinutes == 0 || duration.inMinutes == 1)) {
+    return "1 ${translate(context, 'minute_left')}";
+  } else if (duration.inHours == 0) {
+    return '${duration.inMinutes} ${translate(context, 'minutes_left')}';
+  } else {
+    if (duration.inHours == 1) {
+      return '1 ${translate(context, 'hour_left')}';
+    } else if (duration.inHours < 24) {
+      return '${duration.inHours} ${translate(context, 'hours_left')}';
+    } else {
+      int day = (duration.inHours / 24).round();
+      if (day == 1) {
+        return '1 ${translate(context, 'day_left')}';
+      } else if (day < 28) {
+        return '$day ${translate(context, 'days_left')}';
+      } else {
+        int month = (day / 30).round();
+        if (month == 1) {
+          return '1 ${translate(context, 'month_left')}';
+        } else if (day < 365) {
+          return '$month ${translate(context, 'months_left')}';
+        } else {
+          int year = (day / 365).round();
+          if (year == 1) {
+            return '1 ${translate(context, 'year_left')}';
+          } else {
+            return '$year ${translate(context, 'years_left')}';
           }
         }
       }

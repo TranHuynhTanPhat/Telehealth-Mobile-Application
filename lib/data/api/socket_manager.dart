@@ -17,11 +17,11 @@ class SocketManager {
 
   void init() {
     String? jwtToken;
-    if (AppController.instance.authState == AuthState.PatientAuthorized) {
+    if (AppController().authState == AuthState.PatientAuthorized) {
       LoginResponse response = LoginResponse.fromJson(
           AppStorage().getString(key: DataConstants.PATIENT)!);
       jwtToken = response.jwtToken;
-    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+    } else if (AppController().authState == AuthState.DoctorAuthorized) {
       LoginResponse response = LoginResponse.fromJson(
           AppStorage().getString(key: DataConstants.DOCTOR)!);
       jwtToken = response.jwtToken;

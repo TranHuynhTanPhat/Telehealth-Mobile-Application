@@ -54,7 +54,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
       //     list.map<DoctorResponse>((e) => DoctorResponse.fromMap(e)).toList();
 
       meiliSearchManager.index(uid: 'doctors');
-      var result = await meiliSearchManager.search(key, searchQuery);
+      var result = await meiliSearchManager.search(
+          key, searchQuery);
       List<DoctorResponse> doctors = List<DoctorResponse>.from(
         result.hits.map(
           (e) => DoctorResponse.fromMap(e),

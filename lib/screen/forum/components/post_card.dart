@@ -52,11 +52,11 @@ class _PostCardState extends State<PostCard> {
     image = null;
     images = [];
     try {
-      if (AppController.instance.authState == AuthState.PatientAuthorized) {
+      if (AppController().authState == AuthState.PatientAuthorized) {
         LoginResponse response = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.PATIENT)!);
         uid = response.id;
-      } else if (AppController.instance.authState ==
+      } else if (AppController().authState ==
           AuthState.DoctorAuthorized) {
         LoginResponse response = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.DOCTOR)!);

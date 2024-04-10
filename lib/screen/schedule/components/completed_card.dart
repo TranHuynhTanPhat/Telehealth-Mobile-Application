@@ -56,6 +56,8 @@ class _CompletedCardState extends State<CompletedCard> {
             if (state is CreateFeebackState) {
               if (state.blocState == BlocState.Successed) {
                 Navigator.pop(context, true);
+              }else if(state.blocState == BlocState.Failed){
+                EasyLoading.showToast(translate(context, 'feedback should not be empty'));
               }
             }
           },

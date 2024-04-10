@@ -77,13 +77,13 @@ class AppRoute {
     _consultationCubit.close();
     // _applicationUpdateBloc.close();
 
-    AppController.instance.close();
+    AppController().close();
   }
 
   Route? onGeneralRoute(RouteSettings settings) {
-    if (AppController.instance.authState == AuthState.DoctorAuthorized ||
-        AppController.instance.authState == AuthState.PatientAuthorized ||
-        AppController.instance.authState == AuthState.Unauthorized) {
+    if (AppController().authState == AuthState.DoctorAuthorized ||
+        AppController().authState == AuthState.PatientAuthorized ||
+        AppController().authState == AuthState.Unauthorized) {
       switch (settings.name) {
         case forumName:
           return MaterialPageRoute(
@@ -127,8 +127,8 @@ class AppRoute {
           );
       }
     }
-    if (AppController.instance.authState == AuthState.DoctorAuthorized ||
-        AppController.instance.authState == AuthState.PatientAuthorized) {
+    if (AppController().authState == AuthState.DoctorAuthorized ||
+        AppController().authState == AuthState.PatientAuthorized) {
       switch (settings.name) {
         case editPostName:
           final args = settings.arguments as String?;
@@ -187,7 +187,7 @@ class AppRoute {
           );
       }
     }
-    if (AppController.instance.authState == AuthState.Unauthorized) {
+    if (AppController().authState == AuthState.Unauthorized) {
       switch (settings.name) {
         case onboardingName:
           return MaterialPageRoute(
@@ -218,7 +218,7 @@ class AppRoute {
             ),
           );
       }
-    } else if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+    } else if (AppController().authState == AuthState.DoctorAuthorized) {
       switch (settings.name) {
         case mainScreenDoctorName:
           return MaterialPageRoute(
@@ -271,7 +271,7 @@ class AppRoute {
             ),
           );
       }
-    } else if (AppController.instance.authState ==
+    } else if (AppController().authState ==
         AuthState.PatientAuthorized) {
       switch (settings.name) {
         case mainScreenPatientName:

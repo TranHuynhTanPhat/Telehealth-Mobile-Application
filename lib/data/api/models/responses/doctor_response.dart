@@ -88,7 +88,7 @@ class DoctorResponse {
 
   factory DoctorResponse.fromMap(Map<String, dynamic> map) {
     return DoctorResponse(
-      id: map['id'],
+      id: map['id']??map['uid'],
       phone: map['phone'],
       email: map['email'],
       fullName: map['full_name'],

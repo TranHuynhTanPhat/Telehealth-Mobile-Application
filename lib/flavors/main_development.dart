@@ -16,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load();
-  await AppController.instance.init();
+  await AppController().init();
   AliceInspector().init();
 
 

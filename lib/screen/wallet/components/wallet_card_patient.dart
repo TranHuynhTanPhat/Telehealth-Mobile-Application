@@ -102,7 +102,8 @@ class WalletCardPatient extends StatelessWidget {
                                       ),
                                 ),
                                 Text(
-                                  convertToVND(state.profile.accountBalance ?? 0),
+                                  convertToVND(
+                                      state.profile.accountBalance ?? 0),
                                   softWrap: true,
                                   style: Theme.of(context)
                                       .textTheme
@@ -117,7 +118,9 @@ class WalletCardPatient extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const VerticalDivider(thickness: 2,),
+                    const VerticalDivider(
+                      thickness: 2,
+                    ),
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,16 +152,16 @@ class WalletCardPatient extends StatelessWidget {
                                         color: black26,
                                       ),
                                 ),
-                                // Text(
-                                //   "${state.profile.point ?? 0}",
-                                //   softWrap: true,
-                                //   style: Theme.of(context)
-                                //       .textTheme
-                                //       .labelSmall
-                                //       ?.copyWith(
-                                //           color: color1F1F1F,
-                                //           overflow: TextOverflow.ellipsis),
-                                // ),
+                                Text(
+                                  convertToVND(state.profile.point ?? 0),
+                                  softWrap: true,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(
+                                          color: color1F1F1F,
+                                          overflow: TextOverflow.ellipsis),
+                                ),
                               ],
                             ),
                           ),

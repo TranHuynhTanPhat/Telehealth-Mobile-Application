@@ -174,6 +174,24 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             ),
                           ],
                         ),
+                      if (widget.request.medicalHistory != null)
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${translate(context, 'medical_history')}: ',
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            Expanded(
+                              child: Text(
+                                widget.request.symptoms!.isEmpty
+                                    ? translate(context, 'empty')
+                                    : widget.request.medicalHistory!,
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),

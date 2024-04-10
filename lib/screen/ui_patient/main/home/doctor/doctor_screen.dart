@@ -44,10 +44,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
 
   @override
   void initState() {
+    if (!mounted) return;
     _searchController = TextEditingController();
     _pagingController.addPageRequestListener((pageKey) {
       context.read<DoctorCubit>().searchDoctor(
-            key: _searchController.text.trim(),
+            key: "",
             searchQuery: SearchQuery(
                 limit: 20,
                 attributesToSearchOn: ['full_name'],
@@ -60,7 +61,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 updateDate(doctors: doctors, pageKey: pageKey),
           );
     });
-    if (!mounted) return;
     _pagingController.addStatusListener((status) {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +116,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
             key: '',
             pageKey: 1,
             searchQuery: const SearchQuery(
-                sort: ['ratings:desc', 'full_name:asc'], limit: 6),
+                sort: ['ratings:desc',], limit: 10),
             callback: (doctors) {});
       },
       child: Scaffold(

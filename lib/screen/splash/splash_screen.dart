@@ -54,12 +54,12 @@ class _SplashScreenState extends State<SplashScreen> {
               notificationAppLaunchDetails.notificationResponse?.id);
         } else {
           if (firstTime != null && !firstTime) {
-            if (AppController.instance.authState == AuthState.Unauthorized) {
+            if (AppController().authState == AuthState.Unauthorized) {
               Navigator.pushReplacementNamed(context, logInName);
             } else if (
-                // AppController.instance.authState ==
+                // AppController().authState ==
                 //       AuthState.AllAuthorized ||
-                AppController.instance.authState ==
+                AppController().authState ==
                     AuthState.DoctorAuthorized) {
               Navigator.pushReplacementNamed(context, mainScreenDoctorName);
             } else {

@@ -8,28 +8,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class ReceivedNotification {
   ReceivedNotification({
+    this.id,
     this.title,
     this.body,
     this.payload,
   });
-
+  final int? id;
   final String? title;
   final String? body;
   final String? payload;
 
   @override
   String toString() {
-    return 'ReceivedNotification( title: $title, body: $body, payload: $payload)';
+    return 'ReceivedNotification(id: $id, title: $title, body: $body, payload: $payload)';
   }
 }
 
 class RemoteMessage {
+  String id;
   String channelId;
   String channelName;
   String channelDescription;
@@ -67,9 +70,10 @@ class RemoteMessage {
   bool usesChronometer;
   bool chronometerCountDown;
   RemoteMessage({
-    required this.channelId,
-    required this.channelName,
-    required this.channelDescription,
+    required this.id,
+    this.channelId = "com.example.healthline",
+    this.channelName = "healthline",
+    this.channelDescription = "",
     this.groupKey,
     this.icon,
     this.color,
@@ -126,25 +130,18 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 
 class PushNotificationManager {
 // singleton
-  static final PushNotificationManager instance =
+  static final PushNotificationManager _instance =
       PushNotificationManager._internal();
 
   factory PushNotificationManager() {
-    return instance;
+    return _instance;
   }
 
   PushNotificationManager._internal();
 
-  // Instance of Flutternotification plugin
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  // final FlutterLocalNotificationsPlugin notificationsPlugin =
-  //     _notificationsPlugin;
-  // final List<int> listId = [];
-  // int id = 0;
 
-  /// Streams are created so that app can respond to notification-related events
-  /// since the plugin is initialised in the `main` function
   final StreamController<ReceivedNotification>
       didReceiveLocalNotificationStream =
       StreamController<ReceivedNotification>.broadcast();
@@ -154,12 +151,8 @@ class PushNotificationManager {
 
   final MethodChannel platform = const MethodChannel('dexterx.dev/healthline');
 
-  // final String portName = 'notification_send_port';
-
-  // String? selectedNotificationPayload;
-
   /// A notification action which triggers a url launch event
-  // final String urlLaunchActionId = 'id_1';
+  final String urlLaunchActionId = 'id_1';
 
   /// A notification action which triggers a App navigation event
   final String navigationActionId = 'id_3';
@@ -172,7 +165,18 @@ class PushNotificationManager {
 
   init() async {
     await _configureLocalTimeZone();
-    // Initialization  setting
+
+    // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+    //     await _notificationsPlugin.getNotificationAppLaunchDetails();
+    // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    //   selectedNotificationPayload =
+    //       notificationAppLaunchDetails!.notificationResponse?.payload;
+    //   initialRoute = SecondPage.routeName;
+    // }
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+
     final List<DarwinNotificationCategory> darwinNotificationCategories =
         <DarwinNotificationCategory>[
       DarwinNotificationCategory(
@@ -217,8 +221,6 @@ class PushNotificationManager {
         },
       )
     ];
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings("@mipmap/launcher_icon");
 
     /// Note: permissions aren't requested here just to demonstrate that can be
     /// done later
@@ -236,20 +238,23 @@ class PushNotificationManager {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
-
-    /// Note: permissions aren't requested here just to demonstrate that can be
-    /// done later
-    try {
-      await _notificationsPlugin.initialize(
-        initializationSettings,
-        // to handle event when we receive notification
-        onDidReceiveNotificationResponse:
-            onDidReceiveBackgroundNotificationResponse,
-        onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-      );
-    } catch (e) {
-      logPrint(e.toString());
-    }
+    await _notificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) {
+        switch (notificationResponse.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
+            selectNotificationStream.add(notificationResponse.payload);
+            break;
+          case NotificationResponseType.selectedNotificationAction:
+            if (notificationResponse.actionId == navigationActionId) {
+              selectNotificationStream.add(notificationResponse.payload);
+            }
+            break;
+        }
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+    );
     await isAndroidPermissionGranted();
     await requestPermissions();
   }
@@ -289,7 +294,7 @@ class PushNotificationManager {
     tz.setLocalLocation(tz.getLocation(timeZoneName));
   }
 
-  Future<void> display(BuildContext context, RemoteMessage message) async {
+  Future<void> showNotification(RemoteMessage message) async {
     try {
       // var listNotification =
       //     await _notificationsPlugin.getActiveNotifications();
@@ -303,14 +308,14 @@ class PushNotificationManager {
           groupKey: message.groupKey,
           icon: message.icon,
           largeIcon: message.largeIcon,
-          color: Colors.green,
+          color: primary,
           importance: message.importance,
           priority: message.priority,
           ticker: message.ticker,
           actions: message.actions,
           playSound: message.playSound,
           channelAction: message.channelAction,
-          visibility: NotificationVisibility.private,
+          visibility: NotificationVisibility.public,
           timeoutAfter: message.timeoutAfter,
           additionalFlags: message.additionalFlags,
           styleInformation: message.styleInformation,
@@ -328,8 +333,7 @@ class PushNotificationManager {
           usesChronometer: message.usesChronometer,
           chronometerCountDown: message.chronometerCountDown,
         ),
-        iOS:
-            const DarwinNotificationDetails(presentBadge: true, badgeNumber: 0),
+        iOS: const DarwinNotificationDetails(presentBadge: false, badgeNumber: 0),
       );
       await _notificationsPlugin.show(id, message.notification.title,
           message.notification.body, notificationDetails,
@@ -341,80 +345,135 @@ class PushNotificationManager {
     }
   }
 
-  Future<void> areNotifcationsEnabledOnAndroid(BuildContext context) async {
-    final bool? areEnabled = await _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.areNotificationsEnabled();
-    // ignore: use_build_context_synchronously
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        content: Text(areEnabled == null
-            ? 'ERROR: received null'
-            : (areEnabled
-                ? 'Notifications are enabled'
-                : 'Notifications are NOT enabled')),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+  Future<void> showScheduleNotification(
+      RemoteMessage message, DateTime time) async {
+    try {
+      tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, time.year,
+          time.month, time.day, time.hour, time.minute);
+      final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      NotificationDetails notificationDetails = NotificationDetails(
+        android: AndroidNotificationDetails(
+          message.channelId,
+          message.channelName,
+          channelDescription: message.channelDescription,
+          groupKey: message.groupKey,
+          icon: message.icon,
+          largeIcon: message.largeIcon,
+          color: primary,
+          importance: message.importance,
+          priority: message.priority,
+          ticker: message.ticker,
+          actions: message.actions,
+          playSound: message.playSound,
+          channelAction: message.channelAction,
+          visibility: NotificationVisibility.public,
+          timeoutAfter: message.timeoutAfter,
+          additionalFlags: message.additionalFlags,
+          styleInformation: message.styleInformation,
+          ongoing: message.ongoing,
+          autoCancel: message.autoCancel,
+          onlyAlertOnce: message.onlyAlertOnce,
+          channelShowBadge: message.channelShowBadge,
+          showProgress: message.showProgress,
+          maxProgress: message.maxProgress,
+          progress: message.progress,
+          indeterminate: message.indeterminate,
+          showWhen: message.showWhen,
+          when: message.when,
+          subText: message.subText,
+          usesChronometer: message.usesChronometer,
+          chronometerCountDown: message.chronometerCountDown,
+        ),
+        iOS: const DarwinNotificationDetails(presentBadge: true),
+      );
+      await _notificationsPlugin.zonedSchedule(id, message.notification.title,
+          message.notification.body, scheduledDate, notificationDetails,
+          payload: message.notification.payload,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: DateTimeComponents.time);
+      // listId.add(id);
+    } catch (e) {
+      logPrint(e.toString());
+      debugPrint(e.toString());
+    }
   }
 
-  Future<void> showFullScreenNotification(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Turn off your screen'),
-        content: const Text(
-            'to see the full-screen intent in 5 seconds, press OK and TURN '
-            'OFF your screen'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              tz.TZDateTime.local(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                  DateTime.now().hour,
-                  DateTime.now().minute);
-              // await _notificationsPlugin.zonedSchedule(
-              //     0,
-              //     'scheduled title',
-              //     'scheduled body',
-              //     tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-              //     const NotificationDetails(
-              //         android: AndroidNotificationDetails(
-              //             'full screen channel id', 'full screen channel name',
-              //             channelDescription: 'full screen channel description',
-              //             priority: Priority.high,
-              //             importance: Importance.high,
-              //             fullScreenIntent: true)),
-              //     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-              //     uiLocalNotificationDateInterpretation:
-              //         UILocalNotificationDateInterpretation.absoluteTime);
+  // Future<void> areNotifcationsEnabledOnAndroid(BuildContext context) async {
+  //   final bool? areEnabled = await _notificationsPlugin
+  //       .resolvePlatformSpecificImplementation<
+  //           AndroidFlutterLocalNotificationsPlugin>()
+  //       ?.areNotificationsEnabled();
+  //   // ignore: use_build_context_synchronously
+  //   await showDialog<void>(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       content: Text(areEnabled == null
+  //           ? 'ERROR: received null'
+  //           : (areEnabled
+  //               ? 'Notifications are enabled'
+  //               : 'Notifications are NOT enabled')),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //           child: const Text('OK'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-              // // ignore: use_build_context_synchronously
-              // Navigator.pop(context);
-            },
-            child: const Text('OK'),
-          )
-        ],
-      ),
-    );
-  }
+  // Future<void> showFullScreenNotification(BuildContext context) async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (_) => AlertDialog(
+  //       title: const Text('Turn off your screen'),
+  //       content: const Text(
+  //           'to see the full-screen intent in 5 seconds, press OK and TURN '
+  //           'OFF your screen'),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.pop(context);
+  //           },
+  //           child: const Text('Cancel'),
+  //         ),
+  //         TextButton(
+  //           onPressed: () async {
+  //             tz.TZDateTime.local(
+  //                 DateTime.now().year,
+  //                 DateTime.now().month,
+  //                 DateTime.now().day,
+  //                 DateTime.now().hour,
+  //                 DateTime.now().minute);
+  //             await _notificationsPlugin.zonedSchedule(
+  //                 0,
+  //                 'scheduled title',
+  //                 'scheduled body',
+  //                 tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+  //                 const NotificationDetails(
+  //                     android: AndroidNotificationDetails(
+  //                         'full screen channel id', 'full screen channel name',
+  //                         channelDescription: 'full screen channel description',
+  //                         priority: Priority.high,
+  //                         importance: Importance.high,
+  //                         fullScreenIntent: true)),
+  //                 androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  //                 uiLocalNotificationDateInterpretation:
+  //                     UILocalNotificationDateInterpretation.absoluteTime);
+
+  //             // ignore: use_build_context_synchronously
+  //             Navigator.pop(context);
+  //           },
+  //           child: const Text('OK'),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Future<void> cancelNotification(id) async {
     await _notificationsPlugin.cancel(id);
@@ -459,60 +518,8 @@ class PushNotificationManager {
     return false;
   }
 
-  // void configureDidReceiveLocalNotificationSubject(BuildContext context) {
-  //   didReceiveLocalNotificationStream.stream
-  //       .listen((ReceivedNotification receivedNotification) async {
-  //     await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) => CupertinoAlertDialog(
-  //         title: receivedNotification.title != null
-  //             ? Text(receivedNotification.title!)
-  //             : null,
-  //         content: receivedNotification.body != null
-  //             ? Text(receivedNotification.body!)
-  //             : null,
-  //         actions: <Widget>[
-  //           CupertinoDialogAction(
-  //             isDefaultAction: true,
-  //             onPressed: () async {
-  //               Navigator.of(context, rootNavigator: true).pop();
-
-  //               // await Navigator.of(context).push(
-  //               //   MaterialPageRoute<void>(
-  //               //     builder: (BuildContext context) =>
-  //               //         MainScreenPatient(),
-  //               //   ),
-  //               // );
-  //             },
-  //             child: const Text('Ok'),
-  //           )
-  //         ],
-  //       ),
-  //     );
-  //   });
-  // }
-
-  // void configureSelectNotificationSubject(BuildContext context) {
-  //   selectNotificationStream.stream.listen((String? payload) async {
-  //     logPrint(payload);
-  //     logPrint("CHECKKKKK");
-  //     try {
-  //       await Navigator.of(context).push(
-  //         MaterialPageRoute<void>(
-  //           builder: (BuildContext context) => WalletScreen(),
-  //         ),
-  //       );
-  //     } catch (e) {
-  //       logPrint(e);
-  //       logPrint("CHECK");
-  //     }
-  //   });
-  // }
-
   void onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) {
-    // print(id);
-    // print("CHECKKK");
     didReceiveLocalNotificationStream.add(
       ReceivedNotification(
         title: title,

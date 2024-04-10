@@ -9,7 +9,7 @@ class ApplicationUpdateCubit extends Cubit<ApplicationUpdateState> {
   ApplicationUpdateCubit()
       : super(ApplicationUpdateInitial(
           isShorebirdAvailable:
-              AppController.instance.shorebirdCodePush.isShorebirdAvailable(),
+              AppController().shorebirdCodePush.isShorebirdAvailable(),
         ));
 
   @override
@@ -18,7 +18,7 @@ class ApplicationUpdateCubit extends Cubit<ApplicationUpdateState> {
     logPrint(change);
   }
 
-  final _shorebirdCodePush = AppController.instance.shorebirdCodePush;
+  final _shorebirdCodePush = AppController().shorebirdCodePush;
 
   void requestCurrentPatchNumber() {
     // Request the current patch number.

@@ -35,7 +35,7 @@ class InfoCard extends StatelessWidget {
       subtitle: Text(
         translate(
             context,
-            AppController.instance.authState == AuthState.PatientAuthorized
+            AppController().authState == AuthState.PatientAuthorized
                 ? 'patient'
                 : 'doctor'),
         style: Theme.of(context)

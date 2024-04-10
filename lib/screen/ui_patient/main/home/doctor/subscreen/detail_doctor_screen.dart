@@ -77,16 +77,20 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
     }
 
     return BlocConsumer<DoctorCubit, DoctorState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (state.wishDoctors
-            .where((element) => element.id == doctor.id)
-            .isNotEmpty) {
-          marked = true;
-        } else {
-          marked = false;
+      listener: (context, state) {
+        if (state.blocState == BlocState.Successed) {
+          setState(() {
+            if (state.wishDoctors
+                .where((element) => element.id == doctor.id)
+                .isNotEmpty) {
+              marked = true;
+            } else {
+              marked = false;
+            }
+          });
         }
-        
+      },
+      builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: white,
@@ -116,7 +120,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     createConsultationName,
                     arguments: doctor.toJson(),
                   ).then((value) {
-                    if(value==true){
+                    if (value == true) {
                       context.read<ConsultationCubit>().fetchConsultation();
                     }
                   });
@@ -270,7 +274,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                         Padding(
                           padding: EdgeInsets.only(right: dimensWidth() * 3),
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               if (doctor.id == null) {
                                 EasyLoading.showToast(
                                     translate(context, 'cant_be_done'));
@@ -278,6 +282,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                                 context
                                     .read<DoctorCubit>()
                                     .addWishList(doctorId: doctor.id!);
+                                context.read<DoctorCubit>().getWishList();
                                 // setState(() {
                                 //   marked = !marked;
                                 // });

@@ -36,7 +36,7 @@ class _LogInScreenState extends State<LogInScreen> {
             //   EasyLoading.showToast(
             //       translate(context, 'login_to_patient_account_failed'));
             // }
-            if (AppController.instance.authState ==
+            if (AppController().authState ==
                 AuthState.DoctorAuthorized) {
               Navigator.pushReplacementNamed(context, mainScreenDoctorName);
             } else {

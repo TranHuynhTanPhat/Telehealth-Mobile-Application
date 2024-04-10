@@ -1667,6 +1667,47 @@
         "vi": "năm trước",
         "en": "years ago"
     },
+    "hour_left": {
+        "vi": "giờ nữa",
+        "en": "hour left"
+    },
+    "hours_left": {
+        "vi": "giờ nữa",
+        "en": "hours left"
+    },
+    "minute_left": {
+        "vi": "phút nữa",
+        "en": "minute left"
+    },
+    "minutes_left": {
+        "vi": "phút nữa",
+        "en": "minutes left"
+    },
+    "day_left": {
+        "vi": "ngày nữa",
+        "en": "day left"
+    },
+    "days_left": {
+        "vi": "ngày nữa",
+        "en": "days left"
+    },
+    "month_left": {
+        "vi": "tháng nữa",
+        "en": "month left"
+    },
+    "months_left": {
+        "vi": "tháng nữa",
+        "en": "months left"
+    },
+    "year_left": {
+        "vi": "năm nữa",
+        "en": "years left"
+    },
+    "years_left": {
+        "vi": "năm nữa",
+        "en": "years left"
+    },
+    
     "phone_number_has_been_registered": {
         "vi": "Số điện thoại đã được đăng ký",
         "en": "Phone number has been registered"
@@ -1782,5 +1823,13 @@
     "cant_be_done": {
         "vi": "Không thể hoàn thành",
         "en": "Can't be done"
+    },
+    "you_have_an_upcoming_appointment": {
+        "vi": "Bạn có một cuộc hẹn sắp tới",
+        "en": "You have an upcoming appointment"
+    },
+    "feedback should not be empty": {
+        "vi": "Không thể để trống đánh giá",
+        "en": "Feedback should not be empty"
     }
 }

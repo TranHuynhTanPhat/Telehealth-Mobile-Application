@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load();
-  await AppController.instance.init();
+  await AppController().init();
 
 // HttpOverrides.global = MyHttpOverrides();
   // Sentry

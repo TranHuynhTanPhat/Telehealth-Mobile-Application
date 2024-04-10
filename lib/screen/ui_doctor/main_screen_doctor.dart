@@ -37,6 +37,13 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
 
   DrawerMenu _currentPage = DrawerMenu.Overview;
   // ignore: prefer_typing_uninitialized_variables
+
+  void _updatePage(DrawerMenu page) {
+    setState(() {
+      _currentPage = page;
+    });
+  }
+
   var _image;
 
   @override
@@ -201,6 +208,17 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                       end: 7);
                 },
               ),
+              actions: [
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: dimensWidth()*1.5),
+                  child: InkWell(
+                    highlightColor: transparent,
+                    splashColor: transparent,
+                    child: FaIcon(FontAwesomeIcons.solidBell, color: Colors.orange, size: dimensIcon()*0.8,),
+                    onTap: () {},
+                  ),
+                )
+              ],
             ),
             onDrawerChanged: (isOpen) {
               if (isOpen) {
@@ -287,7 +305,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                             scrollDirection: Axis.vertical,
                             padding: EdgeInsets.zero,
                             children: [
-                              // if (AppController.instance.authState ==
+                              // if (AppController().authState ==
                               //     AuthState.AllAuthorized)
                               //   ListTile(
                               //     onTap: () {
@@ -496,7 +514,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 ? const HelpsScreen()
                                 : _currentPage == DrawerMenu.ApplicationSetting
                                     ? const ApplicationSettingScreen()
-                                    : const OverviewScreen(),
+                                    : OverviewScreen(
+                                        callBack: _updatePage,
+                                      ),
           ),
         ),
       ),

@@ -34,7 +34,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     _showDownloadingBanner();
 
     await Future.wait([
-      AppController.instance.shorebirdCodePush.downloadUpdateIfAvailable(),
+      AppController().shorebirdCodePush.downloadUpdateIfAvailable(),
       // Add an artificial delay so the banner has enough time to animate in.
       Future<void>.delayed(const Duration(milliseconds: 250)),
     ]);

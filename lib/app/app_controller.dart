@@ -11,6 +11,7 @@ import 'package:healthline/app/push_notification_manager.dart';
 import 'package:healthline/data/api/meilisearch_manager.dart';
 // import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/data/storage/data_constants.dart';
+import 'package:healthline/data/storage/provider/consultation_notification_provider.dart';
 import 'package:healthline/firebase_options.dart';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -36,10 +37,10 @@ class AppController {
   late final shorebirdCodePush = ShorebirdCodePush();
 
   // singleton
-  static final AppController instance = AppController._internal();
+  static final AppController _instance = AppController._internal();
 
   factory AppController() {
-    return instance;
+    return _instance;
   }
 
   AppController._internal();
@@ -48,7 +49,9 @@ class AppController {
   init() async {
     await Future.wait([setupSystem(), setupFirebase()]);
     await initAuth();
-    await PushNotificationManager.instance.init();
+    await PushNotificationManager().init();
+    await ConsultationNotificationProvider().init();
+
     MeiliSearchManager().init();
     // authState != AuthState.Unauthorized ? SocketManager.instance.init() : null;
     setupCloudinary();

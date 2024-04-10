@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         pageKey: 1,
         searchQuery: const SearchQuery(sort: [
           'ratings:desc',
-        ], limit: 6),
+        ], limit: 10),
         callback: (doctors) {});
     context.read<ConsultationCubit>().fetchConsultation();
     super.initState();
@@ -309,8 +309,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else if (state.blocState == BlocState.Successed) {
                   int max = state.doctors.length;
-                  if (max > 15) {
-                    max = 15;
+                  if (max > 10) {
+                    max = 10;
                   }
                   return SizedBox(
                     height: dimensHeight() * 30,
@@ -414,8 +414,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             vertical: dimensWidth() * 2,
                             horizontal: dimensWidth() * 3),
                         child:
-                            BaseGridview(radio: 0.8, reserve: true, children: [
-                          ...state.recentDoctors.map(
+                            BaseGridview(radio: 0.8, reserve: false, children: [
+                          ...state.recentDoctors.reversed.map(
                             (e) => RecentDoctorCard(
                               doctor: e,
                             ),

@@ -23,10 +23,10 @@ class _WalletScreenState extends State<WalletScreen>
   void initState() {
     tabController = TabController(length: 2, vsync: this);
     // _controller = TextEditingController();
-    if (AppController.instance.authState == AuthState.PatientAuthorized) {
+    if (AppController().authState == AuthState.PatientAuthorized) {
       context.read<PatientProfileCubit>().fetProfile();
     }
-    if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+    if (AppController().authState == AuthState.DoctorAuthorized) {
       context.read<DoctorProfileCubit>().fetchProfile();
     }
     super.initState();

@@ -227,8 +227,8 @@ class RestClient {
   Future<void> logout() async {
     try {
       await AppStorage().clear();
-      AppController.instance.authState = AuthState.Unauthorized;
-      if (AppController.instance.authState == AuthState.DoctorAuthorized) {
+      AppController().authState = AuthState.Unauthorized;
+      if (AppController().authState == AuthState.DoctorAuthorized) {
         await getDio().delete(
             dotenv.get('BASE_URL', fallback: '') + ApiConstants.DOCTOR_LOG_OUT);
       } else {

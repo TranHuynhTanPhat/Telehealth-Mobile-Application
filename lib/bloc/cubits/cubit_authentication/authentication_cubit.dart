@@ -85,24 +85,24 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         AppStorage()
             .setString(key: DataConstants.PATIENT, value: response.toJson());
         // patient = true;
-        AppController.instance.authState = AuthState.PatientAuthorized;
+        AppController().authState = AuthState.PatientAuthorized;
       } else if (isDoctor) {
         LoginResponse response =
             await _commonRepository.loginDoctor(phone.trim(), password.trim());
         AppStorage()
             .setString(key: DataConstants.DOCTOR, value: response.toJson());
         // doctor = true;
-        AppController.instance.authState = AuthState.DoctorAuthorized;
+        AppController().authState = AuthState.DoctorAuthorized;
       }
       AppStorage().setBool(key: DataConstants.REMEMBER, value: remember);
       // SocketManager.instance.close();
       // SocketManager.instance.init();
       emit(LoginState(blocState: BlocState.Successed));
     } on DioException catch (e) {
-      AppController.instance.authState = AuthState.Unauthorized;
+      AppController().authState = AuthState.Unauthorized;
       error = e.response!.data['message'].toString();
     } catch (e) {
-      AppController.instance.authState = AuthState.Unauthorized;
+      AppController().authState = AuthState.Unauthorized;
       error = e.toString();
     }
     emit(LoginState(error: error.toString(), blocState: BlocState.Failed));

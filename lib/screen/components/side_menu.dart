@@ -49,7 +49,7 @@ class _SideMenuState extends State<SideMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const InfoCard(),
-                // if (AppController.instance.authState == AuthState.AllAuthorized)
+                // if (AppController().authState == AuthState.AllAuthorized)
                 //   ListTile(
                 //     onTap: () {
                 //       EasyLoading.show();

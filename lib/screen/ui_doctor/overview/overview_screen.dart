@@ -15,7 +15,9 @@ import 'package:healthline/screen/ui_doctor/overview/components/export.dart';
 import 'package:healthline/utils/translate.dart';
 
 class OverviewScreen extends StatefulWidget {
-  const OverviewScreen({super.key});
+  const OverviewScreen({super.key, required this.callBack});
+  final Function(DrawerMenu) callBack;
+
 
   @override
   State<OverviewScreen> createState() => _OverviewScreenState();
@@ -95,7 +97,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
               scrollDirection: Axis.vertical,
               padding: EdgeInsets.only(bottom: dimensHeight() * 10),
               children: [
-                const UpCommingAppointment(),
+                 UpCommingAppointment(callBack: widget.callBack,),
                 Overview(
                   dashboard: dashboard,
                 ),
