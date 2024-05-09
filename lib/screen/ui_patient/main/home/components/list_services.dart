@@ -48,7 +48,7 @@ class _ListServicesState extends State<ListServices> {
             index: 0,
             press: () {
               Navigator.pushNamed(context, wishListName);
-              // PushNotificationManager().showScheduleNotification(
+              // PushNotificationManager().showNotification(
               //     RemoteMessage(
               //       channelId: 'channelId',
               //       channelName: 'channelName',
@@ -56,8 +56,7 @@ class _ListServicesState extends State<ListServices> {
               //       notification: ReceivedNotification(
               //           title: 'title', body: 'a', payload: updateName),
               //       id: 'faskjflsakjdfklsajdfldka',
-              //     ),
-              //     DateTime.now().add(const Duration(minutes: 1)));
+              //     ),);
             },
           ),
           ServiceCard(

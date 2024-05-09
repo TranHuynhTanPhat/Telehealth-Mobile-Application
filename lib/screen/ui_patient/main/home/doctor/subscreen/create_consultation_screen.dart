@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_patient_profile/patient_profile_cubit.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_medical_declaration.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
@@ -27,7 +27,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
   CreateConsultation _index = CreateConsultation.TimeLine;
   // ignore: unused_field
   PaymentMethod _paymentMethod = PaymentMethod.None;
-  DoctorResponse? doctor;
+  DoctorDetailResponse? doctor;
   late ConsultationRequest request;
   String? patientName;
   int? patientAge;
@@ -75,7 +75,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
   Widget build(BuildContext context) {
     try {
       if (doctor == null) {
-        doctor = DoctorResponse.fromJson(widget.args!);
+        doctor = DoctorDetailResponse.fromJson(widget.args!);
         updateRequest(
           doctorId: doctor?.id,
           doctorName: doctor?.fullName,

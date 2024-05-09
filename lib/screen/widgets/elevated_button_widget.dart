@@ -33,7 +33,8 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
       style: ButtonStyle(
         padding: MaterialStatePropertyAll(
           EdgeInsets.symmetric(
-              vertical: dimensHeight() * 2, horizontal: dimensWidth() * 2.5),
+              vertical: dimensHeight() * 2,
+               horizontal: dimensWidth() * 2.5),
         ),
         backgroundColor: MaterialStatePropertyAll(color),
         foregroundColor: const MaterialStatePropertyAll(white),

@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/keyboard.dart';
@@ -30,7 +30,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
   static const _pageSize = 20;
   bool openSearch = false;
 
-  final PagingController<int, DoctorResponse> _pagingController =
+  final PagingController<int, DoctorDetailResponse> _pagingController =
       PagingController(firstPageKey: 0, invisibleItemsThreshold: 5);
 
   void changeFilterExp(String value) {
@@ -48,7 +48,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     _searchController = TextEditingController();
     _pagingController.addPageRequestListener((pageKey) {
       context.read<DoctorCubit>().searchDoctor(
-            key: "",
+            key: _searchController.text.trim(),
             searchQuery: SearchQuery(
                 limit: 20,
                 attributesToSearchOn: ['full_name'],
@@ -81,7 +81,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 
   void updateDate(
-      {required List<DoctorResponse> doctors, required int pageKey}) {
+      {required List<DoctorDetailResponse> doctors, required int pageKey}) {
     final isLastPage = doctors.length < _pageSize;
     if (isLastPage) {
       _pagingController.appendLastPage(doctors);
@@ -267,10 +267,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       ),
                     ),
                   ),
-                  PagedSliverList<int, DoctorResponse>(
+                  PagedSliverList<int, DoctorDetailResponse>(
                     // prototypeItem: buildShimmer(),
                     pagingController: _pagingController,
-                    builderDelegate: PagedChildBuilderDelegate<DoctorResponse>(
+                    builderDelegate: PagedChildBuilderDelegate<DoctorDetailResponse>(
                         itemBuilder: (context, item, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(

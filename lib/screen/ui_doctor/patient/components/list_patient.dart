@@ -4,12 +4,12 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:healthline/bloc/cubits/cubit_doctor_profile/doctor_profile_cubit.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ListPatient extends StatefulWidget {
   const ListPatient({super.key});
@@ -120,10 +120,8 @@ class _ListPatientState extends State<ListPatient> {
         //   ],
         // );
         if (state is FetchPatientState && state.patients.isNotEmpty) {
-          return ListView(
-            shrinkWrap: true,
-            children:
-            state.patients.map((e) {
+          return Column(
+            children: state.patients.map((e) {
               var image;
               try {
                 if (e.avatar != null &&
@@ -152,92 +150,177 @@ class _ListPatientState extends State<ListPatient> {
                 path: e.phone,
               );
 
-              return ExpansionTile(
-                title: Padding(
-                  padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
-                  child: Text(
-                    e.fullName ?? translate(context, 'undefine'),
-                    style: Theme.of(context).textTheme.titleSmall,
+              return Container(
+                margin: EdgeInsets.only(top: dimensHeight() * 1.5),
+                padding: EdgeInsets.symmetric(
+                    vertical: dimensHeight() * 1.5,
+                    horizontal: dimensWidth() * 2),
+                decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(
+                      dimensWidth() * 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.1),
+                        blurRadius: 15,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]),
+                child: Row(children: [
+                  CircleAvatar(
+                    backgroundImage: image,
+                    onBackgroundImageError: (exception, stackTrace) {
+                      logPrint(exception);
+                    },
                   ),
-                ),
-                leading: CircleAvatar(
-                  backgroundImage: image,
-                  onBackgroundImageError: (exception, stackTrace) {
-                    logPrint(exception);
-                  },
-                ),
-                children: [
-                  if (e.email != null)
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: dimensHeight() * 3,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              e.email!,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ),
-                          InkWell(
-                            splashColor: transparent,
-                            highlightColor: transparent,
-                            onTap: () {
-                              logPrint(emailLaunchUri);
-                              launchUrl(emailLaunchUri);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  right: dimensWidth() * 3,
-                                  left: dimensWidth() * 2),
-                              child: FaIcon(
-                                FontAwesomeIcons.envelope,
-                                size: dimensIcon() * .7,
+                  SizedBox(
+                    width: dimensWidth() * 2,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.fullName ?? translate(context, 'undefine'),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        if (e.email != null)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  e.email!,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  if (e.phone != null)
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: dimensHeight() * 3,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              e.phone!,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                              InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () {
+                                  logPrint(emailLaunchUri);
+                                  launchUrl(emailLaunchUri);
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(left: dimensWidth() * 2),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.envelope,
+                                    size: dimensIcon() * .5,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          InkWell(
-                            splashColor: transparent,
-                            highlightColor: transparent,
-                            onTap: () {
-                              logPrint(telLaunchUri);
-                              launchUrl(telLaunchUri);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  right: dimensWidth() * 3,
-                                  left: dimensWidth() * 2),
-                              child: FaIcon(
-                                FontAwesomeIcons.phone,
-                                size: dimensIcon() * .7,
+                        if (e.phone != null)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  e.phone!,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
+                              InkWell(
+                                splashColor: transparent,
+                                highlightColor: transparent,
+                                onTap: () {
+                                  logPrint(telLaunchUri);
+                                  launchUrl(telLaunchUri);
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(left: dimensWidth() * 2),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.phone,
+                                    size: dimensIcon() * .5,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                      ],
                     ),
-                ],
+                  )
+                ]),
+
+                // children: [
+                //   if (e.email != null)
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(
+                //         vertical: dimensHeight() * 3,
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Expanded(
+                //             child: Text(
+                //               e.email!,
+                //               style: Theme.of(context).textTheme.bodyLarge,
+                //               overflow: TextOverflow.ellipsis,
+                //               maxLines: 1,
+                //             ),
+                //           ),
+                //           InkWell(
+                //             splashColor: transparent,
+                //             highlightColor: transparent,
+                //             onTap: () {
+                //               logPrint(emailLaunchUri);
+                //               launchUrl(emailLaunchUri);
+                //             },
+                //             child: Padding(
+                //               padding: EdgeInsets.only(
+                //                   right: dimensWidth() * 3,
+                //                   left: dimensWidth() * 2),
+                //               child: FaIcon(
+                //                 FontAwesomeIcons.envelope,
+                //                 size: dimensIcon() * .7,
+                //               ),
+                //             ),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //   if (e.phone != null)
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(
+                //         vertical: dimensHeight() * 3,
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           Expanded(
+                //             child: Text(
+                //               e.phone!,
+                //               style: Theme.of(context).textTheme.bodyLarge,
+                //               overflow: TextOverflow.ellipsis,
+                //               maxLines: 1,
+                //             ),
+                //           ),
+                //           InkWell(
+                //             splashColor: transparent,
+                //             highlightColor: transparent,
+                //             onTap: () {
+                //               logPrint(telLaunchUri);
+                //               launchUrl(telLaunchUri);
+                //             },
+                //             child: Padding(
+                //               padding: EdgeInsets.only(
+                //                   right: dimensWidth() * 3,
+                //                   left: dimensWidth() * 2),
+                //               child: FaIcon(
+                //                 FontAwesomeIcons.phone,
+                //                 size: dimensIcon() * .7,
+                //               ),
+                //             ),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                // ],
               );
             }).toList(),
           );

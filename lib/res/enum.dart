@@ -25,9 +25,21 @@ enum ScheduleTabBar { UpComing, Completed, Canceled }
 
 enum PatientTabBar { Patient, Feedback }
 
-enum CreateConsultation {TimeLine, MedicalRecord, FormMedicalDelaration, PaymentMethod, Invoice}
+enum CreateConsultation {
+  TimeLine,
+  MedicalRecord,
+  FormMedicalDelaration,
+  PaymentMethod,
+  Invoice
+}
 
-enum Gender { Male, Female }
+enum Gender { Male, Female , Other}
+
+enum TypeOfEducationAndExperience { Education, Experience }
+
+enum DegreeOfEducation { Master_Degree, Doctor_Degree }
+
+enum LeverOfSpecialty { High, Medium, Low }
 
 enum Role { Patient, Doctor }
 
@@ -95,4 +107,18 @@ enum Specialty {
   traumatologist, // Bác sĩ chuyên khoa chấn thương
   obstetrician, // Bác sĩ sản khoa
   paeditrician // Bác sĩ nhi khoa
+}
+
+enum PortSocket { comments, notifications }
+
+enum TypeNotificationSocket{
+  postLike,
+  postCreate,
+  postCommentAdded,
+  postCommentLiked,
+  consultationRequest,
+  consultationConfirmed,
+  consultationDenied,
+  consultationCanceled,
+
 }

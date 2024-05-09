@@ -1,12 +1,15 @@
 // ignore: depend_on_referenced_packages
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:healthline/repositories/user_repository.dart';
+import 'package:healthline/repositories/file_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meilisearch/meilisearch.dart';
 
 import 'package:healthline/data/api/meilisearch_manager.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
+import 'package:healthline/repositories/user_repository.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/utils/log_data.dart';
 
@@ -23,6 +26,7 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
         );
   final MeiliSearchManager meiliSearchManager = MeiliSearchManager.instance;
   final UserRepository _userRepository = UserRepository();
+  final FileRepository _fileRepository = FileRepository();
 
   @override
   void onChange(Change<DoctorState> change) {
@@ -34,11 +38,22 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
   //   await HydratedBloc.storage.clear();
   // }
 
+  Future<List<String>> uploadImageSpecialty(
+      {required List<File?> images, required String phone}) async {
+    try {
+      return await _fileRepository.uploadImageSpecialty(
+          images: images, phone: phone);
+    } catch (e) {
+      logPrint(e);
+      return [];
+    }
+  }
+
   Future<void> searchDoctor(
       {required String key,
       SearchQuery? searchQuery,
       required int pageKey,
-      required Function(List<DoctorResponse>) callback}) async {
+      required Function(List<DoctorDetailResponse>) callback}) async {
     emit(
       DoctorState(
           doctors: state.doctors,
@@ -54,11 +69,10 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
       //     list.map<DoctorResponse>((e) => DoctorResponse.fromMap(e)).toList();
 
       meiliSearchManager.index(uid: 'doctors');
-      var result = await meiliSearchManager.search(
-          key, searchQuery);
-      List<DoctorResponse> doctors = List<DoctorResponse>.from(
+      var result = await meiliSearchManager.search(key, searchQuery);
+      List<DoctorDetailResponse> doctors = List<DoctorDetailResponse>.from(
         result.hits.map(
-          (e) => DoctorResponse.fromMap(e),
+          (e) => DoctorDetailResponse.fromMap(e),
         ),
       );
       callback(doctors);
@@ -70,7 +84,7 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             recentDoctors: state.recentDoctors),
       );
     } catch (error) {
-      logPrint(error);
+      logPrint("A +$error");
       emit(
         DoctorState(
             error: error.toString(),
@@ -82,8 +96,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
     }
   }
 
-  Future<void> addRecentDoctor(DoctorResponse doctor) async {
-    List<DoctorResponse> recentDrs = state.recentDoctors.toList();
+  Future<void> addRecentDoctor(DoctorDetailResponse doctor) async {
+    List<DoctorDetailResponse> recentDrs = state.recentDoctors.toList();
 
     if (recentDrs.where((element) => element.id == doctor.id).isEmpty) {
       recentDrs.add(doctor);
@@ -148,7 +162,7 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
         pageKey: state.pageKey,
         wishDoctors: state.wishDoctors));
     try {
-      List<DoctorResponse> wishDrs = await _userRepository.getWishList();
+      List<DoctorDetailResponse> wishDrs = await _userRepository.getWishList();
       emit(DoctorState(
           doctors: state.doctors,
           blocState: BlocState.Successed,

@@ -89,10 +89,6 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
                         }
                       }
                     }
-                    // print(begin);
-                    // print(end);
-                    // print(workingTimes);
-
                     context
                         .read<DoctorScheduleCubit>()
                         .updateScheduleByDay(workingTimes);
@@ -121,9 +117,6 @@ class _UpdateScheduleByDayScreenState extends State<UpdateScheduleByDayScreen> {
               ),
               Expanded(
                 child: IconButton(
-                  // style: ButtonStyle(
-                  //     iconColor: MaterialStatePropertyAll(
-                  //         countInputTimes > 1 ? color1F1F1F : black26)),
                   onPressed: countInputTimes > 1
                       ? () {
                           removeInputTimes();

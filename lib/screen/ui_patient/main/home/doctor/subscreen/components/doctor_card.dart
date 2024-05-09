@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -17,7 +17,7 @@ class DoctorCard extends StatefulWidget {
     super.key,
     required this.doctor,
   });
-  final DoctorResponse doctor;
+  final DoctorDetailResponse doctor;
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();
@@ -116,7 +116,11 @@ class _DoctorCardState extends State<DoctorCard> {
                       flex: 2,
                       child: Text(
                         translate(
-                            context, widget.doctor.specialty ?? 'undefine'),
+                            context,
+                            widget.doctor.specialties!.firstOrNull?.specialty ??
+                                widget.doctor.careers!.firstOrNull
+                                    ?.medicalInstitute ??
+                                'undefine'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall,

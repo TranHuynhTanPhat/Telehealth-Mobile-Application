@@ -170,3 +170,66 @@ final class GetNewCustomer extends ConsultationState {
       this.data});
   final List<UserResponse>? data;
 }
+
+final class FetchPrescriptionState extends ConsultationState {
+  FetchPrescriptionState(
+      {required super.blocState,
+      required super.timeline,
+      super.error,
+      required super.consultations,
+      required super.feedbacks,
+      this.data});
+  final PrescriptionResponse? data;
+}
+
+final class SearchDrugState extends ConsultationState {
+  SearchDrugState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+  });
+}
+final class GetInfoDrugState extends ConsultationState {
+  GetInfoDrugState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+    this.data
+  });
+  final DrugResponse? data;
+}
+
+final class CreatePrescriptionState extends ConsultationState {
+  CreatePrescriptionState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+  });
+}
+
+final class FetchDiscountState extends ConsultationState {
+  FetchDiscountState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+    this.data,
+  });
+  List<DiscountResponse>? data;
+}
+final class AnnounceBusyState extends ConsultationState {
+  AnnounceBusyState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+  });
+}

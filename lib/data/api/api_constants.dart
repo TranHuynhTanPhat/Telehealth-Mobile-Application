@@ -42,6 +42,7 @@ class ApiConstants {
   static const DOCTOR_SCHEDULE = '$_DOCTOR/schedule';
   static const DOCTOR_SCHEDULE_CRON = '$DOCTOR_SCHEDULE/cron';
 
+
 // patient-record
   static const _PATIENT = '/patient-record';
   static const PATIENT_HEALTH_STAT = '$_PATIENT/health-stat';
@@ -71,6 +72,8 @@ class ApiConstants {
   static const CONSULTATION_DOCTOR_CONSULTATION = '$CONSULTATION_DOCTOR/consultation';
   static const CONSULTATION_DOCTOR_DASHBOARD = '$CONSULTATION_DOCTOR/doctor/dashboard';
   static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR/information';
+  static const CONSULTATION_PRESCRIPTION = '$CONSULTATION/prescription';
+  static const CONSULTATION_CONFIRM = '$CONSULTATION/confirm';
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';
@@ -78,4 +81,5 @@ class ApiConstants {
   static const UPLOAD_AVATAR_USER = '$_FILE_UPLOAD/user/avatar';
   static const UPLOAD_RECORD = '$_FILE_UPLOAD/user/record';
   static const UPLOAD_POST = '$_FILE_UPLOAD/post';
+  static const IMAGE_SPECIALTY = "$_FILE_UPLOAD/doctor/specialty";
 }

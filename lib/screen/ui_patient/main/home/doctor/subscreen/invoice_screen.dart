@@ -8,7 +8,7 @@ import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dar
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/responses/discount_response.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -28,7 +28,7 @@ class InvoiceScreen extends StatefulWidget {
   });
   final VoidCallback previousPage;
   final ConsultationRequest request;
-  final DoctorResponse doctor;
+  final DoctorDetailResponse doctor;
   final String? patientName;
   final int? patientAge;
   @override
@@ -39,7 +39,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   bool _usePoints = false;
   DiscountResponse? dis;
   Timer? timer;
+  late ConsultationCubit consultationCubit;
   final TextEditingController _discount = TextEditingController();
+
+  @override
+  void initState() {
+    if (!mounted) return;
+    consultationCubit = context.read<ConsultationCubit>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<int> time = [];
@@ -98,6 +107,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           ),
           body: BlocBuilder<PatientProfileCubit, PatientProfileState>(
               builder: (context, state) {
+            int total = widget.request.price ?? 0 - (dis?.value ?? 0);
+            if (state.profile.point != null && _usePoints) {
+              total -= state.profile.point ?? 0;
+            }
             return ListView(
               // padding: EdgeInsets.symmetric(
               //     vertical: dimensHeight(), horizontal: dimensWidth() * 3),
@@ -358,25 +371,155 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         validate: (value) => null,
                         controller: _discount,
                         label: translate(context, 'discount_code'),
-                        onChanged: (p0) {
-                          if (timer != null) {
-                            setState(() {
-                              timer?.cancel();
-                            });
-                          }
-                          setState(() {
-                            timer = Timer(const Duration(milliseconds: 800),
-                                () async {
-                              if (_discount.text.isNotEmpty) {
-                                dis = await context
-                                    .read<ConsultationCubit>()
-                                    .checkDiscount(code: _discount.text);
-                              } else {
-                                dis = null;
-                              }
-                            });
-                          });
+                        hint: translate(context, 'discount_code'),
+                        readOnly: true,
+                        onTap: () async {
+                          consultationCubit.fetchDiscount();
+                          await showDialog(
+                              context: context,
+                              builder: (context) => BlocProvider.value(
+                                    value: consultationCubit,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(
+                                            dimensWidth() * 2),
+                                      ),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: dimensWidth() * 3,
+                                          vertical: dimensHeight() * 10),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: dimensHeight() * 2,
+                                      ),
+                                      child: CustomScrollView(
+                                        slivers: [
+                                          SliverAppBar(
+                                            pinned: true,
+                                            floating: true,
+                                            automaticallyImplyLeading: false,
+                                            backgroundColor: white,
+                                            elevation: 0,
+                                            scrolledUnderElevation: 0,
+                                            title: TextFieldWidget(
+                                                fillColor: white,
+                                                validate: (value) => null,
+                                                hint: translate(
+                                                    context, 'discount_code'),
+                                                controller: _discount,
+                                                onChanged: (value) =>
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 2),
+                                                        () async {
+                                                      if (value ==
+                                                              _discount.text
+                                                                  .trim() &&
+                                                          _discount.text
+                                                              .isNotEmpty) {
+                                                        dis = await consultationCubit
+                                                            .checkDiscount(
+                                                                code: _discount
+                                                                    .text);
+                                                      } else {
+                                                        dis = null;
+                                                      }
+                                                      if (_discount
+                                                          .text.isEmpty) {
+                                                        consultationCubit
+                                                            .fetchDiscount();
+                                                      }
+                                                    })),
+                                          ),
+                                          // SliverToBoxAdapter(
+                                          //   child:
+                                          // ),
+
+                                          BlocBuilder<ConsultationCubit,
+                                              ConsultationState>(
+                                            bloc: consultationCubit,
+                                            builder: (context, state) {
+                                              if (state is FetchDiscountState) {
+                                                if (state.data != null &&
+                                                    state.data!.isNotEmpty) {
+                                                  return SliverList(
+                                                      delegate:
+                                                          SliverChildBuilderDelegate(
+                                                              childCount: state
+                                                                  .data?.length,
+                                                              (context, index) {
+                                                    return Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: state.data!
+                                                          .map((e) => ListTile(
+                                                                onTap: () {
+                                                                  dis = e;
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                title: Text(
+                                                                  e.code ??
+                                                                      translate(
+                                                                          context,
+                                                                          'undefine'),
+                                                                ),
+                                                                subtitle:
+                                                                    Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        "${e.value ?? 0} ${e.type}"),
+                                                                    Text(e.expirationTime ??
+                                                                        "0"),
+                                                                  ],
+                                                                ),
+                                                              ))
+                                                          .toList(),
+                                                    );
+                                                  }));
+                                                }
+                                              } else if (state
+                                                  is FetchTimelineState) {
+                                                if (state.blocState ==
+                                                    BlocState.Successed) {
+                                                  Navigator.pop(context);
+                                                }
+                                              }
+                                              return const SliverToBoxAdapter(
+                                                child: SizedBox.shrink(),
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ));
                         },
+                        // onChanged: (p0) {
+                        //   if (timer != null) {
+                        //     setState(() {
+                        //       timer?.cancel();
+                        //     });
+                        //   }
+                        //   setState(() {
+                        //     timer = Timer(const Duration(milliseconds: 800),
+                        //         () async {
+                        //       if (_discount.text.isNotEmpty) {
+                        //         dis = await context
+                        //             .read<ConsultationCubit>()
+                        //             .checkDiscount(code: _discount.text);
+                        //       } else {
+                        //         dis = null;
+                        //       }
+                        //     });
+                        //   });
+                        // },
                       ),
                     ],
                   ),
@@ -456,8 +599,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              convertToVND(((widget.request.price ?? 0) -
-                                  (dis?.value ?? 0))),
+                              convertToVND(total),
                               style: Theme.of(context).textTheme.titleSmall,
                               textAlign: TextAlign.right,
                             ),
@@ -466,7 +608,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             );
           }),

@@ -11,8 +11,10 @@ import 'package:healthline/data/api/models/responses/all_consultation_response.d
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
+import 'package:healthline/data/api/models/responses/drug_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/money_chart_response.dart';
+import 'package:healthline/data/api/models/responses/prescription_response.dart';
 import 'package:healthline/data/api/models/responses/statistic_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/storage/models/consultation_notification_model.dart';
@@ -44,6 +46,187 @@ class ConsultationCubit extends Cubit<ConsultationState> {
   void onChange(Change<ConsultationState> change) {
     super.onChange(change);
     logPrint(change);
+  }
+
+
+  Future<void> fetchDiscount() async {
+    emit(
+      FetchDiscountState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      List<DiscountResponse> discounts =
+          await _consultationRepository.fetchDiscount();
+      emit(
+        FetchDiscountState(
+            blocState: BlocState.Successed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: discounts),
+      );
+    } catch (error) {
+      logPrint("A +$error");
+      emit(
+        FetchDiscountState(
+          error: error.toString(),
+          blocState: BlocState.Failed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    }
+  }
+  Future<void> announceBusy({required String consultationId}) async {
+    emit(
+      AnnounceBusyState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+          await _consultationRepository.announceBusy(consultationId:consultationId);
+      emit(
+        AnnounceBusyState(
+            blocState: BlocState.Successed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,),
+      );
+    } catch (error) {
+      logPrint("A +$error");
+      emit(
+        AnnounceBusyState(
+          error: error.toString(),
+          blocState: BlocState.Failed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    }
+  }
+  Future<void> searchDrug(
+      {required String key,
+      required int pageKey,
+      required Function(List<DrugResponse>) callback}) async {
+    emit(
+      SearchDrugState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      List<DrugResponse> drugs =
+          await _consultationRepository.searchDrug(key: key, pageKey: pageKey);
+      callback(drugs);
+      emit(
+        SearchDrugState(
+          blocState: BlocState.Successed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    } catch (error) {
+      logPrint("A +$error");
+      emit(
+        SearchDrugState(
+          error: error.toString(),
+          blocState: BlocState.Failed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    }
+  }
+  Future<void> getInfoDrug(
+      {required String id,}) async {
+    emit(
+      GetInfoDrugState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+     DrugResponse drug =
+          await _consultationRepository.getInfoDrug(id: id);
+      emit(
+        GetInfoDrugState(
+          blocState: BlocState.Successed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+          data: drug
+        ),
+      );
+    } catch (error) {
+      logPrint("A +$error");
+      emit(
+        GetInfoDrugState(
+          error: error.toString(),
+          blocState: BlocState.Failed,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks,
+        ),
+      );
+    }
+  }
+
+  Future<void> fetchPrescription({required String consultationId}) async {
+    emit(
+      FetchPrescriptionState(
+        blocState: BlocState.Pending,
+        timeline: [],
+        consultations: state.consultations,
+        feedbacks: state.feedbacks,
+      ),
+    );
+    try {
+      PrescriptionResponse pre =
+          await _consultationRepository.fetchPrescription(
+        consultationId: consultationId,
+        isDoctor: AppController().authState == AuthState.DoctorAuthorized,
+      );
+      emit(
+        FetchPrescriptionState(
+            blocState: BlocState.Successed,
+            timeline: state.timeline,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks,
+            data: pre),
+      );
+    } on DioException catch (e) {
+      emit(
+        FetchPrescriptionState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'].toString(),
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        FetchPrescriptionState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
   }
 
   Future<void> fetchStatisticTable() async {
@@ -380,7 +563,8 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     List<ConsultationNotificationModel> notis =
         await ConsultationNotificationProvider().selectAll();
     for (var e in allConsultationResponse.coming) {
-      if (notis.where((element) => element.id == e.id).isEmpty && e.status=="confirmed") {
+      if (notis.where((element) => element.id == e.id).isEmpty &&
+          e.status == "confirmed") {
         if (e.id != null) {
           DateTime? date = convertStringToDateTime(e.date);
           if (date != null) {
@@ -395,6 +579,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
                 .toList();
             DateTime expectedTime = DateTime(
                 date.year, date.month, date.day, time.first, time.last);
+
             ConsultationNotificationProvider().insert(
               ConsultationNotificationModel(
                 id: e.id!,
@@ -408,15 +593,15 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             PushNotificationManager().showScheduleNotification(
                 RemoteMessage(
                   id: e.id!,
-                  channelId: "channelId",
-                  channelName: "channelName",
-                  channelDescription: "channelDescription",
+                  channelId: "healthline",
+                  channelName: "healthline",
+                  channelDescription: "healthline",
                   notification: ReceivedNotification(
                     // ignore: use_build_context_synchronously
                     title: translate(navigatorKey!.currentState!.context,
                         'you_have_an_upcoming_appointment'),
                     body:
-                        "${e.doctor?.fullName ?? '\n'}${e.symptoms ?? '\n'}${e.medicalHistory??''}",
+                        "${e.doctor?.fullName ?? '\n'}${e.symptoms ?? '\n'}${e.medicalHistory ?? ''}",
                   ),
                 ),
                 expectedTime.subtract(const Duration(minutes: 15)));
@@ -495,8 +680,9 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             detailDoctorConsultation: consultation),
       );
     } on DioException catch (e) {
+      print(e);
       emit(
-        FetchConsultationState(
+        FetchDetatilDoctorConsultationState(
             blocState: BlocState.Failed,
             timeline: state.timeline,
             error: e.response!.data['message'].toString(),
@@ -504,8 +690,9 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             feedbacks: state.feedbacks),
       );
     } catch (e) {
+      print(e);
       emit(
-        FetchConsultationState(
+        FetchDetatilDoctorConsultationState(
             blocState: BlocState.Failed,
             timeline: state.timeline,
             consultations: state.consultations,
@@ -751,6 +938,48 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     } catch (e) {
       emit(
         ConfirmConsultationState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    }
+  }
+
+  Future<void> createPrescription(
+      {required PrescriptionResponse prescriptionResponse,
+      required String consultationId}) async {
+    emit(
+      CreatePrescriptionState(
+          blocState: BlocState.Pending,
+          timeline: [],
+          consultations: state.consultations,
+          feedbacks: state.feedbacks),
+    );
+    try {
+      print(prescriptionResponse.toJson());
+      await _consultationRepository.createPrescription(
+          prescriptionResponse: prescriptionResponse,
+          consultationId: consultationId);
+      emit(
+        CreatePrescriptionState(
+            blocState: BlocState.Successed,
+            timeline: [],
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } on DioException catch (e) {
+      emit(
+        CreatePrescriptionState(
+            blocState: BlocState.Failed,
+            timeline: [],
+            error: e.response!.data['message'] ?? e.response,
+            consultations: state.consultations,
+            feedbacks: state.feedbacks),
+      );
+    } catch (e) {
+      emit(
+        CreatePrescriptionState(
             blocState: BlocState.Failed,
             timeline: [],
             consultations: state.consultations,

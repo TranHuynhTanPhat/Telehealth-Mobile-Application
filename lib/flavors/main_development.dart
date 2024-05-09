@@ -12,13 +12,13 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/healthline_app.dart';
 // import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load();
   await AppController().init();
   AliceInspector().init();
-
 
   // HttpOverrides.global = MyHttpOverrides();
   // Sentry

@@ -1,21 +1,22 @@
 import 'dart:developer';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/storage/app_storage.dart';
 import 'package:healthline/data/storage/data_constants.dart';
 import 'package:healthline/res/enum.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketManager {
   late Socket socket;
 
   late bool isConnected;
+  SocketManager({PortSocket? port}) {
+    _init(port: port);
+  }
 
-  SocketManager._internal();
-
-  void init() {
+  void _init({PortSocket? port}) {
     String? jwtToken;
     if (AppController().authState == AuthState.PatientAuthorized) {
       LoginResponse response = LoginResponse.fromJson(
@@ -27,7 +28,7 @@ class SocketManager {
       jwtToken = response.jwtToken;
     }
     socket = io(
-      dotenv.get('SOCKET_URL', fallback: ''),
+      "https://health-forum-truongne.koyeb.app/${port!.name}",
       OptionBuilder()
           .setTransports(['websocket']) // for Flutter or Dart VM
           .disableAutoConnect()
@@ -36,7 +37,6 @@ class SocketManager {
           .build(),
     );
     socket.connect();
-    // Event listeners.
     socket.onConnect((_) {
       isConnected = true;
 
@@ -45,15 +45,8 @@ class SocketManager {
 
     socket.onDisconnect((_) {
       isConnected = false;
-
       log('Disconnected from the socket server');
     });
-  }
-
-  static final SocketManager instance = SocketManager._internal();
-
-  factory SocketManager() {
-    return instance;
   }
 
   void sendData({required String event, required dynamic data}) {

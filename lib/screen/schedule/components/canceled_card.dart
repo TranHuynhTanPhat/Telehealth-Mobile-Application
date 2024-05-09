@@ -95,7 +95,11 @@ class _CanceledCardState extends State<CanceledCard> {
                   SizedBox(
                     width: dimensWidth() * 32,
                     child: Text(
-                      translate(context, widget.cancel.doctor?.specialty),
+                      translate(
+                          context,
+                          widget.cancel.doctor!.specialties!.firstOrNull
+                                  ?.specialty ??
+                              ""),
                       overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: color6A6E83, fontWeight: FontWeight.w900),
@@ -144,7 +148,7 @@ class _CanceledCardState extends State<CanceledCard> {
                         color: color1F1F1F, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    width: dimensWidth()*2,
+                    width: dimensWidth() * 2,
                   ),
                   Text(
                     formatDayMonthYear(

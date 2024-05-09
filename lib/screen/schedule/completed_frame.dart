@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
@@ -42,6 +43,8 @@ class _CompletedFrameState extends State<CompletedFrame> {
     super.initState();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ConsultationCubit, ConsultationState>(
@@ -78,7 +81,17 @@ class _CompletedFrameState extends State<CompletedFrame> {
                       if (DateTime(date.year, date.month) ==
                           DateTime(
                               current.year, current.month - monthSelected)) {
-                        return CompletedCard(finish: e);
+                        return InkWell(
+                          splashColor: transparent,
+                          highlightColor: transparent,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            detailConsultationName,
+                            arguments: e.toJson(),
+                          ),
+                          child: CompletedCard(finish: e),
+                        );
+                      
                       } else {
                         return const SizedBox();
                       }

@@ -129,8 +129,13 @@ class _UpcomingCardState extends State<UpcomingCard> {
                         SizedBox(
                           width: dimensWidth() * 30,
                           child: Text(
-                            translate(context,
-                                widget.coming.doctor?.specialty ?? 'undefine'),
+                            translate(
+                                context,
+                                widget.coming.doctor!.specialties!.firstOrNull
+                                        ?.specialty ??
+                                    widget.coming.doctor!.careers!.firstOrNull
+                                        ?.medicalInstitute ??
+                                    'undefine'),
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme

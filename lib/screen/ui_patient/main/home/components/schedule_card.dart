@@ -36,7 +36,7 @@ class ScheduleCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(dimensWidth() * 2),
       decoration: BoxDecoration(
-          color: colorCDDEFF,
+          color: consultation.status == 'pending' ? colorDF9F1E.withOpacity(.2) : colorCDDEFF,
           borderRadius: BorderRadius.circular(dimensWidth() * 2.5)),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
@@ -89,19 +89,36 @@ class ScheduleCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      consultation.doctor?.fullName??translate(context, 'undefine'),
+                      consultation.doctor?.fullName ??
+                          translate(context, 'undefine'),
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: secondary, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      translate(context,consultation.doctor?.specialty??'undefine'),
+                      translate(context, consultation.status ?? ''),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyLarge
+                          .bodyMedium
+                          ?.copyWith(color: secondary),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      translate(
+                          context,
+                          consultation.doctor!.specialties!.firstOrNull
+                                  ?.specialty ??
+                              consultation.doctor!.careers!.firstOrNull
+                                  ?.medicalInstitute ??
+                              ''),
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
                           ?.copyWith(color: secondary),
                     ),
                   )

@@ -44,6 +44,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
     });
   }
 
+  // ignore: prefer_typing_uninitialized_variables
   var _image;
 
   @override
@@ -215,7 +216,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                     highlightColor: transparent,
                     splashColor: transparent,
                     child: FaIcon(FontAwesomeIcons.solidBell, color: Colors.orange, size: dimensIcon()*0.8,),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, notificationName);
+                    },
                   ),
                 )
               ],

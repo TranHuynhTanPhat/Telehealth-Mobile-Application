@@ -7,8 +7,10 @@ import 'package:healthline/data/api/models/responses/all_consultation_response.d
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
 import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
+import 'package:healthline/data/api/models/responses/drug_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/money_chart_response.dart';
+import 'package:healthline/data/api/models/responses/prescription_response.dart';
 import 'package:healthline/data/api/models/responses/statistic_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
@@ -29,10 +31,9 @@ class ConsultationService extends BaseService {
         objects.map((e) => UserResponse.fromMap(e)).toList();
     return users;
   }
-  Future<List<UserResponse>> getNewCustomer(
-      {required bool isDoctor}) async {
-    final response = await get(
-        ApiConstants.CONSULTATION_DOCTOR_NEW_CUSTOMER,
+
+  Future<List<UserResponse>> getNewCustomer({required bool isDoctor}) async {
+    final response = await get(ApiConstants.CONSULTATION_DOCTOR_NEW_CUSTOMER,
         isDoctor: isDoctor);
     final List<dynamic> objects = json.decode(json.encode(response.data));
     final List<UserResponse> users =
@@ -192,5 +193,60 @@ class ConsultationService extends BaseService {
 
     return AllConsultationResponse(
         coming: coming, finish: finish, cancel: cancel);
+  }
+
+  Future<PrescriptionResponse> fetchPrescription(
+      {required String consultationId, required bool isDoctor}) async {
+    final response = await get(
+        '${ApiConstants.CONSULTATION_PRESCRIPTION}/$consultationId',
+        isDoctor: true);
+    PrescriptionResponse pre = PrescriptionResponse.fromMap(response.data);
+    return pre;
+  }
+
+  Future<List<DrugResponse>> searchDrug(
+      {required String key, required int pageKey}) async {
+    final response = await get(
+        "https://drugbank.vn/services/drugbank/api/public/thuoc",
+        params: {"page": pageKey, "tenThuoc": key, "size": 20});
+
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    List<DrugResponse> drugs =
+        objects.map((e) => DrugResponse.fromMap(e)).toList();
+
+    return drugs;
+  }
+
+  Future<int?> createPrescription(
+      {required PrescriptionResponse prescriptionResponse,
+      required String consultationId}) async {
+    final response = await post(
+        "${ApiConstants.CONSULTATION_PRESCRIPTION}/$consultationId",
+        data: prescriptionResponse.toJson());
+    return response.code;
+  }
+
+  Future<List<DiscountResponse>> fetchDiscount() async {
+    final response = await get(
+      ApiConstants.CONSULTATION_DISCOUNT,
+    );
+    List<dynamic> objects = json.decode(json.encode(response.data));
+    List<DiscountResponse> discounts =
+        objects.map((e) => DiscountResponse.fromMap(e)).toList();
+    return discounts;
+  }
+
+  Future<int?> announceBusy({required String consultationId}) async {
+    final response =
+        await delete("${ApiConstants.CONSULTATION_CONFIRM}/$consultationId");
+    return response.code;
+  }
+
+  Future<DrugResponse> getInfoDrug({required String id}) async {
+    final response = await get(
+      "https://drugbank.vn/services/drugbank/api/public/thuoc?id=$id",
+    );
+
+    return DrugResponse.fromMap(response.data[0]);
   }
 }

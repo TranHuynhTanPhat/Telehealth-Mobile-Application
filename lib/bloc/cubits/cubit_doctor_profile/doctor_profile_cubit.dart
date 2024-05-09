@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 
-
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/repositories/consultation_repository.dart';
 import 'package:healthline/res/enum.dart';
@@ -15,7 +14,7 @@ import '../../../repositories/file_repository.dart';
 part 'doctor_profile_state.dart';
 
 class DoctorProfileCubit extends Cubit<DoctorProfileState> {
-  DoctorProfileCubit() : super(DoctorProfileInitial(profile: DoctorResponse()));
+  DoctorProfileCubit() : super(DoctorProfileInitial(profile: DoctorDetailResponse()));
   final DoctorRepository _doctorRepository = DoctorRepository();
   final FileRepository _fileRepository = FileRepository();
   final ConsultationRepository _consultationRepository = ConsultationRepository();
@@ -25,7 +24,7 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
       FetchProfileState(profile: state.profile, blocState: BlocState.Pending),
     );
     try {
-      DoctorResponse profile = await _doctorRepository.fetchProfile();
+      DoctorDetailResponse profile = await _doctorRepository.fetchProfile();
       emit(FetchProfileState(profile: profile, blocState: BlocState.Successed));
     } on DioException catch (e) {
       // DioException er = e as DioException;

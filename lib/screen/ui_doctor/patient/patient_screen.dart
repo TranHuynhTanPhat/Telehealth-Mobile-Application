@@ -22,7 +22,7 @@ class _PatientScreenState extends State<PatientScreen> {
         children: [
           ListView(
             scrollDirection: Axis.vertical,
-            shrinkWrap: true,
+            shrinkWrap: false,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: dimensWidth()),
             children: [

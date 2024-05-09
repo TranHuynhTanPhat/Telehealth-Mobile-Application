@@ -17,7 +17,6 @@ class UpCommingAppointment extends StatefulWidget {
   const UpCommingAppointment({super.key, required this.callBack});
   final Function(DrawerMenu) callBack;
 
-
   @override
   State<UpCommingAppointment> createState() => _UpCommingAppointmentState();
 }
@@ -29,7 +28,27 @@ class _UpCommingAppointmentState extends State<UpCommingAppointment> {
         builder: (context, state) {
       if (state.consultations != null &&
           state.consultations!.coming.isNotEmpty) {
-        List<ConsultationResponse> consultations = state.consultations!.coming;
+        List<ConsultationResponse> consultations =
+            state.consultations!.coming.where(
+          (element) {
+            List<int> time = [];
+            try {
+              time = element.expectedTime
+                      ?.split('-')
+                      .map((e) => int.parse(e))
+                      .toList() ??
+                  [int.parse(element.expectedTime!)];
+            } catch (e) {
+              logPrint(e);
+            }
+            DateTime to =
+                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(element.date!);
+            to = DateTime(to.year, to.month, to.day, (time.first) ~/ 2,
+                (time.first) % 2 == 1 ? 30 : 0);
+
+            return to.isAfter(DateTime.now());
+          },
+        ).toList();
         consultations.sort((a, b) {
           List<int> aTimes = [];
           try {
@@ -71,7 +90,7 @@ class _UpCommingAppointmentState extends State<UpCommingAppointment> {
                       vertical: dimensHeight() * 2),
                   child: Row(
                     // crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         child: Text(

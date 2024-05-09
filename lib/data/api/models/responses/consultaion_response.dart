@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 
 class ConsultationResponse {
   String? id;
-  DoctorResponse? doctor;
+  DoctorDetailResponse? doctor;
   UserResponse? medical;
   String? date;
   String? expectedTime;
@@ -84,7 +84,7 @@ class ConsultationResponse {
     return ConsultationResponse(
       id: map['id'],
       doctor:
-          map['doctor'] != null ? DoctorResponse.fromMap(map['doctor']) : null,
+          map['doctor'] != null ? DoctorDetailResponse.fromMap(map['doctor']) : null,
       medical:
           map['medical'] != null ? UserResponse.fromMap(map['medical']) : null,
       feedback:
@@ -106,4 +106,36 @@ class ConsultationResponse {
 
   factory ConsultationResponse.fromJson(String source) =>
       ConsultationResponse.fromMap(json.decode(source));
+
+  ConsultationResponse copyWith({
+    String? id,
+    DoctorDetailResponse? doctor,
+    UserResponse? medical,
+    String? date,
+    String? expectedTime,
+    int? price,
+    String? status,
+    String? updatedAt,
+    String? jistiToken,
+    String? symptoms,
+    String? medicalHistory,
+    FeedbackResponse? feedback,
+    List<PatientRecordResponse>? patientRecords,
+  }) {
+    return ConsultationResponse(
+      id:id ?? this.id,
+     doctor: doctor ?? this.doctor,
+   medical:   medical ?? this.medical,
+date:date ?? this.date,
+      expectedTime:expectedTime ?? this.expectedTime,
+      price:price ?? this.price,
+      status:status ?? this.status,
+      updatedAt:updatedAt ?? this.updatedAt,
+      jistiToken:jistiToken ?? this.jistiToken,
+      symptoms:symptoms ?? this.symptoms,
+      medicalHistory:medicalHistory ?? this.medicalHistory,
+      feedback:feedback ?? this.feedback,
+      patientRecords:patientRecords ?? this.patientRecords,
+    );
+  }
 }

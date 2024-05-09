@@ -7,7 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -18,7 +18,7 @@ class DoctorCard extends StatefulWidget {
     super.key,
     required this.doctor,
   });
-  final DoctorResponse doctor;
+  final DoctorDetailResponse doctor;
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();
@@ -56,9 +56,8 @@ class _DoctorCardState extends State<DoctorCard> {
       highlightColor: transparent,
       onTap: () {
         Navigator.pushNamed(context, detailDoctorName,
-          arguments: widget.doctor.toJson());
+            arguments: widget.doctor.toJson());
         context.read<DoctorCubit>().addRecentDoctor(widget.doctor);
-
       },
       child: Container(
         padding: EdgeInsets.all(dimensWidth() * 2),
@@ -115,8 +114,11 @@ class _DoctorCardState extends State<DoctorCard> {
                         // ignore: prefer_interpolation_to_compose_strings
                         translate(
                           context,
-                          widget.doctor.specialty ??
-                              translate(context, 'undefine'),
+                          widget.doctor.careers!.firstOrNull
+                                  ?.medicalInstitute ??
+                          widget.doctor.specialties!.firstOrNull?.specialty ??
+                              
+                              '',
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -131,7 +133,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             context.read<ConsultationCubit>().fetchTimeline(
                                 doctorId: widget.doctor.id!,
                                 date:
-                                    '${dateTime.day+1}/${dateTime.month}/${dateTime.year}');
+                                    '${dateTime.day + 1}/${dateTime.month}/${dateTime.year}');
                             Navigator.pushNamed(
                               context,
                               createConsultationName,

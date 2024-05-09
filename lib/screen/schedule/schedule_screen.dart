@@ -36,10 +36,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         } else if (state.blocState == BlocState.Failed) {
           EasyLoading.showToast(translate(context, state.error));
         } else {
-          EasyLoading.dismiss();
+          EasyLoading.dismiss(); 
           if (state is CancelConsultationState ||
               state is ConfirmConsultationState ||
-              state is DenyConsultationState) {
+              state is DenyConsultationState ) {
             EasyLoading.showToast(translate(context, 'successfully'));
             context.read<ConsultationCubit>().fetchConsultation();
             Navigator.pop(context);

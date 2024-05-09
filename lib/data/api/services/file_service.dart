@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:healthline/data/api/api_constants.dart';
@@ -34,7 +35,6 @@ class FileService extends BaseService {
 
   Future<FileResponse> uploadRecordPatient(
       String medicalId, FileRequest request) async {
-    
     FormData formData = FormData.fromMap({
       "medicalId": medicalId,
       "file": await MultipartFile.fromFile(
@@ -66,6 +66,23 @@ class FileService extends BaseService {
   Future<String> downloadFile(
       {required String filePath, required String url}) async {
     final response = await download(filePath: filePath, url: url);
+    return response;
+  }
+
+  Future<DataResponse> uploadImageSpecialty(
+      {required List<File?> images, required String phone}) async {
+    FormData formData = FormData.fromMap({
+      'phone': phone,
+    });
+
+    for (File? element in images) {
+      formData.files
+          .add(MapEntry("files", await MultipartFile.fromFile(element!.path)));
+    }
+
+
+    final response =
+        await postUpload(ApiConstants.IMAGE_SPECIALTY, formData: formData);
     return response;
   }
 }

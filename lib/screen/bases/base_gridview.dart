@@ -11,7 +11,7 @@ class BaseGridview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      reverse: reserve,
+      // reverse: reserve,
       crossAxisCount: 2,
       mainAxisSpacing: dimensWidth()*2,
       crossAxisSpacing: dimensHeight()*3,
@@ -19,6 +19,7 @@ class BaseGridview extends StatelessWidget {
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       childAspectRatio: radio,
+      padding: EdgeInsets.zero,
       // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
       //   maxCrossAxisExtent: 200,
       //   childAspectRatio: radio,

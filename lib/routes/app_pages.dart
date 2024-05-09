@@ -13,6 +13,10 @@ const forgetPasswordName = '/forget-password';
 const bugReportName = '/bug-report';
 const chatName = '/chat';
 const chatBoxName = '/chat-box';
+const notificationName = '/notification';
+const registerDoctorName = "/register-doctor";
+const prescriptionName = "/prescription";
+const addPrescriptionName = "/add-prescription";
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";
@@ -33,11 +37,11 @@ const helpsName = '/helps';
 // const invoiceName ='/invoice';
 // const formConsultationName ='/form-consultaion';
 // const medicalRecordName ='/medical-record';
-const detailConsultationName ='/detail-consultation';
-const createConsultationName ='/create-consultation';
+const detailConsultationName = '/detail-consultation';
+const createConsultationName = '/create-consultation';
 // const formMedicalDeclarationName ='/form-medical-declaration';
 const wishListName = '/wish_list';
-
+const feedbacksName = "/feedbacks";
 
 const doctorName = '/doctor';
 const detailDoctorName = '/detail-doctor';

@@ -24,7 +24,7 @@ class NotificationProvider {
     String path = join(databasesPath, "healthline.db");
 
     // // Delete the database
-    await deleteDatabase(path);
+    // await deleteDatabase(path);
     await open(path: path, sql: sql);
   }
 

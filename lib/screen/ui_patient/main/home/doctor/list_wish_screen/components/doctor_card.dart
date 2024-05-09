@@ -2,7 +2,7 @@ import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/log_data.dart';
@@ -10,7 +10,7 @@ import 'package:healthline/utils/translate.dart';
 
 class DoctorCard extends StatefulWidget {
   const DoctorCard({super.key, required this.doctor});
-  final DoctorResponse doctor;
+  final DoctorDetailResponse doctor;
   @override
   State<DoctorCard> createState() => _DoctorCardState();
 }
@@ -106,7 +106,7 @@ class _DoctorCardState extends State<DoctorCard> {
                       Text(
                         translate(
                           context,
-                          widget.doctor.specialty ??
+                          widget.doctor.specialties!.firstOrNull?.specialty ??
                               translate(context, 'undefine'),
                         ),
                         maxLines: 2,

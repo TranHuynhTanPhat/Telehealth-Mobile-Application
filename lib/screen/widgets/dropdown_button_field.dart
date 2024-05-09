@@ -47,7 +47,7 @@ class DropdownButtonFieldWidget extends StatelessWidget {
         alignLabelWithHint: true,
         fillColor: fillColor,
         filled: filled,
-        contentPadding: EdgeInsets.symmetric(horizontal: dimensHeight() * 2),
+        contentPadding: EdgeInsets.fromLTRB( dimensHeight() * 2, dimensHeight()*2, dimensHeight(), dimensHeight()*2),
         labelText: label,
         floatingLabelStyle: Theme.of(context)
             .textTheme
@@ -57,7 +57,7 @@ class DropdownButtonFieldWidget extends StatelessWidget {
         hintStyle: Theme.of(context)
             .textTheme
             .bodyLarge
-            ?.copyWith(color: colorA8B1CE, fontWeight: FontWeight.w600),
+            ?.copyWith(color: colorA8B1CE, fontWeight: FontWeight.w500),
         errorStyle: Theme.of(context)
             .textTheme
             .bodySmall
@@ -88,7 +88,7 @@ class DropdownButtonFieldWidget extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .bodyLarge
-          ?.copyWith(fontWeight: FontWeight.w600),
+          ?.copyWith(fontWeight: FontWeight.w500),
       autovalidateMode: autovalidateMode,
       items: items,
       onChanged: onChanged,

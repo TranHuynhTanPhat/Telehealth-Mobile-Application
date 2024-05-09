@@ -10,7 +10,7 @@ class TextFieldWidget extends StatelessWidget {
       this.obscureText = false,
       this.enableSuggestions = true,
       this.autocorrect = false,
-       this.controller,
+      this.controller,
       this.error,
       this.suffixIcon,
       this.prefixIcon,
@@ -27,7 +27,8 @@ class TextFieldWidget extends StatelessWidget {
       this.enable = true,
       this.onChanged,
       this.focusNode,
-      this.autovalidateMode});
+      this.autovalidateMode,
+      this.textCapitalization = TextCapitalization.none});
   final TextEditingController? controller;
   final String? label;
   final String? hint;
@@ -52,10 +53,12 @@ class TextFieldWidget extends StatelessWidget {
   final Function(String)? onChanged;
   final FocusNode? focusNode;
   final AutovalidateMode? autovalidateMode;
+  final TextCapitalization textCapitalization;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textCapitalization: textCapitalization,
       focusNode: focusNode,
       onChanged: onChanged,
       enabled: enable,
@@ -89,7 +92,7 @@ class TextFieldWidget extends StatelessWidget {
         hintStyle: Theme.of(context)
             .textTheme
             .bodyLarge
-            ?.copyWith(color: colorA8B1CE, fontWeight: FontWeight.w600),
+            ?.copyWith(color: colorA8B1CE, fontWeight: FontWeight.w500),
         errorStyle: Theme.of(context)
             .textTheme
             .bodySmall

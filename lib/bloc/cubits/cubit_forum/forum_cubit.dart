@@ -23,6 +23,7 @@ class ForumCubit extends Cubit<ForumState> {
             blocState: BlocState.Successed, comments: [], currentPost: null));
   final MeiliSearchManager meiliSearchManager = MeiliSearchManager.instance;
   final ForumRepository _forumRepository = ForumRepository();
+  final SocketManager _socketManager = SocketManager(port: PortSocket.comments);
 
   Future<void> searchPost(
       {required String key,
@@ -123,7 +124,7 @@ class ForumCubit extends Cubit<ForumState> {
             blocState: BlocState.Pending, comments: [], currentPost: idPost),
       );
       try {
-        SocketManager.instance.addListener(
+        _socketManager.addListener(
             event: 'comment',
             listener: (data) {
               if (idPost == state.currentPost) {
@@ -140,7 +141,7 @@ class ForumCubit extends Cubit<ForumState> {
                     currentPost: state.currentPost));
               }
             });
-        SocketManager.instance.sendDataWithAck(
+        _socketManager.sendDataWithAck(
             data: idPost,
             event: "findAll",
             listen: (data) {
@@ -198,7 +199,7 @@ class ForumCubit extends Cubit<ForumState> {
       // }
 
       // SocketManager.instance.addListener(event: 'comment', listener: listen);
-      SocketManager.instance.sendDataWithAck(
+      _socketManager.sendDataWithAck(
           data: jsonEncode({"postId": idPost, "text": content}),
           event: "create",
           listen: (data) {

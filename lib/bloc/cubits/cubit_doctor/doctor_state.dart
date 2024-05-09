@@ -4,14 +4,14 @@ class DoctorState {
   const DoctorState({
     required this.doctors,
     required this.blocState,
-    this.recentDoctors = const <DoctorResponse>[],
-    this.wishDoctors = const <DoctorResponse>[],
+    this.recentDoctors = const <DoctorDetailResponse>[],
+    this.wishDoctors = const <DoctorDetailResponse>[],
     this.error,
     required this.pageKey,
   });
-  final List<DoctorResponse> doctors;
-  final List<DoctorResponse> recentDoctors;
-  final List<DoctorResponse> wishDoctors;
+  final List<DoctorDetailResponse> doctors;
+  final List<DoctorDetailResponse> recentDoctors;
+  final List<DoctorDetailResponse> wishDoctors;
   final BlocState blocState;
   final String? error;
   final int pageKey;
@@ -36,9 +36,9 @@ class DoctorState {
   factory DoctorState.fromMap(Map<String, dynamic> map) {
     return DoctorState(
       doctors: [],
-      recentDoctors: List<DoctorResponse>.from(
+      recentDoctors: List<DoctorDetailResponse>.from(
         map['recentDoctors']?.map(
-          (x) => DoctorResponse.fromMap(x),
+          (x) => DoctorDetailResponse.fromMap(x),
         ),
       ),
       wishDoctors: [],

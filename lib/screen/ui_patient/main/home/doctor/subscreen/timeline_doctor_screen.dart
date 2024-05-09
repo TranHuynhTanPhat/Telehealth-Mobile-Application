@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/components/valid_shift.dart';
@@ -17,7 +17,7 @@ class TimelineDoctorScreen extends StatefulWidget {
     required this.callback,
     required this.nextPage,
   });
-  final DoctorResponse doctor;
+  final DoctorDetailResponse doctor;
   final VoidCallback nextPage;
   final Function({
     String? doctorId,

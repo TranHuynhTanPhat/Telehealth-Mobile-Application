@@ -11,6 +11,8 @@ class FeedbackResponse {
   FeedbackResponse(
       {this.id, this.user, this.feedback, this.rated, this.createdAt});
 
+  get ratings => null;
+
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -47,4 +49,20 @@ class FeedbackResponse {
 
   factory FeedbackResponse.fromJson(String source) =>
       FeedbackResponse.fromMap(json.decode(source));
+
+  FeedbackResponse copyWith({
+    String? id,
+    UserResponse? user,
+    String? feedback,
+    int? rated,
+    String? createdAt,
+  }) {
+    return FeedbackResponse(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      feedback: feedback ?? this.feedback,
+      rated: rated ?? this.rated,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

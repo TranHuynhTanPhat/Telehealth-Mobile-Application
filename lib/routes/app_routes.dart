@@ -5,10 +5,12 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/forget_password/forgot_password_screen.dart';
 import 'package:healthline/screen/auth/login/login_screen.dart';
+import 'package:healthline/screen/auth/register_doctor/register_doctor_screen.dart';
 import 'package:healthline/screen/auth/signup/signup_screen.dart';
 import 'package:healthline/screen/change_password/change_password_screen.dart';
 import 'package:healthline/screen/chat/components/chat_box_screen.dart';
@@ -22,6 +24,8 @@ import 'package:healthline/screen/license/privacy_policy_screen.dart';
 import 'package:healthline/screen/license/terms_and_conditions_screen.dart';
 import 'package:healthline/screen/news/detail_news_screen.dart';
 import 'package:healthline/screen/news/news_screen.dart';
+import 'package:healthline/screen/prescription/add_prescription_screen.dart';
+import 'package:healthline/screen/prescription/prescription_screen.dart';
 import 'package:healthline/screen/schedule/detail_consultation.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
@@ -41,9 +45,11 @@ import 'package:healthline/screen/ui_patient/main/health_info/vaccination/vaccin
 import 'package:healthline/screen/ui_patient/main/home/docs_vaccination/docs_vaccination_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/list_wish_screen/list_wish_screen.dart';
+import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/all_feedbacks.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/create_consultation_screen.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_doctor_screen.dart';
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
+import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
 import 'package:healthline/screen/update/update_screen.dart';
 import 'package:healthline/screen/wallet/wallet_screen.dart';
 
@@ -125,6 +131,37 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => const ChatBoxScreen(),
           );
+        case notificationName:
+          return MaterialPageRoute(
+            builder: (_) => const NotificationScreen(),
+          );
+        case registerDoctorName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _doctorCubit,
+                ),
+                BlocProvider.value(
+                  value: _authenticationCubit,
+                ),
+              ],
+              child: const RegisterDoctorScreen(),
+            ),
+          );
+        case prescriptionName:
+          final args = settings.arguments as String?;
+
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+              ],
+              child: PrescriptionScreen(consultationId: args),
+            ),
+          );
       }
     }
     if (AppController().authState == AuthState.DoctorAuthorized ||
@@ -184,6 +221,22 @@ class AppRoute {
         case updateName:
           return MaterialPageRoute(
             builder: (_) => const UpdateScreen(),
+          );
+        case addPrescriptionName:
+          final args = settings.arguments as Map<String, dynamic>?;
+
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+              ],
+              child: AddPrescriptionScreen(
+                prescriptionResponse: args?['prescriptionResponse'],
+                consultationId: args?['consultationId'],
+              ),
+            ),
           );
       }
     }
@@ -271,8 +324,7 @@ class AppRoute {
             ),
           );
       }
-    } else if (AppController().authState ==
-        AuthState.PatientAuthorized) {
+    } else if (AppController().authState == AuthState.PatientAuthorized) {
       switch (settings.name) {
         case mainScreenPatientName:
           return MaterialPageRoute(
@@ -343,6 +395,13 @@ class AppRoute {
               child: DetailDoctorScreen(
                 args: args,
               ),
+            ),
+          );
+        case feedbacksName:
+          final args = settings.arguments as List<FeedbackResponse>;
+          return MaterialPageRoute(
+            builder: (_) => AllFeedbacks(
+              feedbacks: args,
             ),
           );
         case accountSettingName:

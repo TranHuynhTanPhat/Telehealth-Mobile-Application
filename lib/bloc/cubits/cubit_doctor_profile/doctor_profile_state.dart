@@ -2,7 +2,7 @@ part of 'doctor_profile_cubit.dart';
 
 class DoctorProfileState {
   const DoctorProfileState({required this.profile});
-  final DoctorResponse profile;
+  final DoctorDetailResponse profile;
 }
 
 final class DoctorProfileInitial extends DoctorProfileState {

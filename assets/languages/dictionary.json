@@ -59,6 +59,10 @@
         "vi": "Giới tính",
         "en": "Gender"
     },
+    "diagnosis": {
+        "vi": "Chuẩn đoán",
+        "en": "Diagnosis"
+    },
     "male": {
         "vi": "Nam",
         "en": "Male"
@@ -190,6 +194,14 @@
     "least_8_characters_long": {
         "vi": "Ít nhất 8 kí tự",
         "en": "Least 8 characters long"
+    },
+    "least_3_characters_long": {
+        "vi": "Ít nhất 3 kí tự",
+        "en": "Least 3 characters long"
+    },
+    "maximum_length_of_10_characters": {
+        "vi": "Tối đa 250 kí tự",
+        "en": "Maximum length of 10 characters"
     },
     "least_1_uppercase": {
         "vi": "Ít nhất 1 chữ hoa",
@@ -419,6 +431,10 @@
         "vi": "Tìm kiếm thuốc, thể loại",
         "en": "Search drugs, categories"
     },
+    "drug_name": {
+        "vi": "Tên thuốc",
+        "en": "Drug's name"
+    },
     "general_medical": {
         "vi": "Y tế tổng hợp",
         "en": "General medical"
@@ -442,6 +458,10 @@
     "all": {
         "vi": "Tất cả",
         "en": "All"
+    },
+    "star": {
+        "vi": "Sao",
+        "en": "Star"
     },
     "general": {
         "vi": "Chung",
@@ -743,6 +763,10 @@
         "vi": "Huỷ lịch hẹn",
         "en": "Cancel appointment"
     },
+    "busy": {
+        "vi": "Bận",
+        "en": "Busy"
+    },
     "discount": {
         "vi": "Giảm giá",
         "en": "Discount"
@@ -826,6 +850,10 @@
     "types": {
         "vi": "Loại",
         "en": "Types"
+    },
+    "tablet": {
+        "vi": "Viên thuốc",
+        "en": "Tablet"
     },
     "prescription": {
         "vi": "Đơn thuốc",
@@ -1367,6 +1395,130 @@
         "vi": "Tiểu sử",
         "en": "Biography"
     },
+    "type_of_education": {
+        "vi": "Loại hình giáo dục",
+        "en": "Type of Education"
+    },
+    "please_choose_type_of_education": {
+        "vi": "Vui lòng chọn loại hình giáo dục",
+        "en": "Please choose type of Education"
+    },
+    "degree_of_education": {
+        "vi": "Cấp bậc giáo dục",
+        "en": "Degree of Education"
+    },
+    "please_choose_degree": {
+        "vi": "Vui lòng chọn cấp bậc",
+        "en": "Please choose degree"
+    },
+    "experience": {
+        "vi": "Kinh nghiệm",
+        "en": "Experience"
+    },
+    "period": {
+        "vi": "Giai đoạn",
+        "en": "Period"
+    },
+    "introduce": {
+        "vi": "Giới thiệu",
+        "en": "Introduce"
+    },
+    "options": {
+        "vi": "Lựa chọn",
+        "en": "Options"
+    },
+    "position": {
+        "vi": "Vị trí",
+        "en": "Position"
+    },
+    "medical_institution": {
+        "vi": "Cơ sở y tế",
+        "en": "Medical Institution"
+    },
+    "please_choose_period_start": {
+        "vi": "Vui lòng chọn thời gian bắt đầu",
+        "en": "Please choose period start"
+    },
+    "please_choose_period_end": {
+        "vi": "Vui lòng chọn thời gian kết thúc",
+        "en": "Please choose period end"
+    },
+    "medicine": {
+        "vi": "Thuốc",
+        "en": "Medicine"
+    },
+    "education": {
+        "vi": "Giáo dục",
+        "en": "Education"
+    },
+    "master_degree": {
+        "vi": "Thạc sĩ",
+        "en": "Master"
+    },
+    "doctor_degree": {
+        "vi": "Tiến sĩ",
+        "en": "Doctor"
+    },
+    "institution": {
+        "vi": "Tổ chức",
+        "en": "Institution"
+    },
+    "high": {
+        "vi": "Cao",
+        "en": "High"
+    },
+    "medium": {
+        "vi": "Trung bình",
+        "en": "Medium"
+    },
+    "low": {
+        "vi": "Thấp",
+        "en": "Low"
+    },
+    "level_of_specialty": {
+        "vi": "Trình độ chuyên môn",
+        "en": "Level of Specialty"
+    },
+    "please_enter_specialty": {
+        "vi": "Vui lòng nhập chuyên ngành",
+        "en": "Please enter specialty"
+    },
+    "please_choose_level_of_specialty": {
+        "vi": "Vui lòng chọn trình độ",
+        "en": "Please choose level of specialty"
+    },
+    "certificate": {
+        "vi": "Văn bằng",
+        "en": "Certificate"
+    },
+    "brief": {
+        "vi": "Hồ sơ",
+        "en": "Brief"
+    },
+    "done": {
+        "vi": "Hoàn thành",
+        "en": "Done"
+    },
+    "add_information": {
+        "vi": "Thêm thông tin",
+        "en": "Add information"
+    },
+    "diploma_number_and_series": {
+        "vi": "Số sê-ri",
+        "en": "Diploma number and series"
+    },
+    "date_of_receipt_of_diploma": {
+        "vi": "Ngày cấp bằng",
+        "en": "Date of receipt of diploma"
+    },
+    "please_choose_date_of_receipt_of_diploma": {
+        "vi": "Vui lòng chọn ngày cấp bằng",
+        "en": "Please choose date of receipt of diloma"
+    },
+    "specialty_by_diploma": {
+        "vi": "Chuyên ngành theo văn bằng",
+        "en": "Specialty by diploma"
+    },
     "avatar": {
         "vi": "Ảnh đại diện",
         "en": "Avatar"
@@ -1443,9 +1595,33 @@
         "vi": "Tải tệp lên",
         "en": "Upload file"
     },
+    "upload_image": {
+        "vi": "Tải ảnh lên",
+        "en": "Upload image"
+    },
     "open": {
         "vi": "Mở",
         "en": "Open"
+    },
+    "fill_in": {
+        "vi": "Điền vào",
+        "en": "Fill in"
+    },
+    "personal_data": {
+        "vi": "Dữ liệu cá nhân",
+        "en": "Personal data"
+    },
+    "specialty": {
+        "vi": "Chuyên ngành",
+        "en": "Specialty"
+    },
+    "career": {
+        "vi": "Nghề nghiệp",
+        "en": "Career"
+    },
+    "education_and_certifications": {
+        "vi": "Giáo dục và chứng chỉ",
+        "en": "Education and Certifications"
     },
     "new_update": {
         "vi": "Bản cập nhật mới",
@@ -1517,7 +1693,7 @@
     },
     "wish_list": {
         "vi": "Quan tâm",
-        "en": "wish_list"
+        "en": "Wish list"
     },
     "start": {
         "vi": "Bắt đầu",
@@ -1611,6 +1787,10 @@
         "vi": "Mã hoá đơn",
         "en": "Invoice code"
     },
+    "prescription_code": {
+        "vi": "Mã đơn thuốc",
+        "en": "Prescription code"
+    },
     "created_at": {
         "vi": "Ngày tạo",
         "en": "Created at"
@@ -1622,6 +1802,14 @@
     "register_an_account_according_to_the_steps": {
         "vi": "Đăng ký tài khoản theo các bước",
         "en": "Register an account according to the steps"
+    },
+    "year": {
+        "vi": "Năm",
+        "en": "Year"
+    },
+    "years": {
+        "vi": "Năm",
+        "en": "Years"
     },
     "step": {
         "vi": "Bước",
@@ -1707,7 +1895,6 @@
         "vi": "năm nữa",
         "en": "years left"
     },
-    
     "phone_number_has_been_registered": {
         "vi": "Số điện thoại đã được đăng ký",
         "en": "Phone number has been registered"
@@ -1827,9 +2014,5 @@
     "you_have_an_upcoming_appointment": {
         "vi": "Bạn có một cuộc hẹn sắp tới",
         "en": "You have an upcoming appointment"
-    },
-    "feedback should not be empty": {
-        "vi": "Không thể để trống đánh giá",
-        "en": "Feedback should not be empty"
     }
 }

@@ -55,6 +55,14 @@ abstract class BaseService {
     return await _handleResponse(response, isUpload: true);
   }
 
+  Future<DataResponse> postUpload(String path,
+      {formData, bool isDoctor = false}) async {
+    final response = await RestClient()
+        .getDio(isUpload: true, isDoctor: isDoctor)
+        .post(path, data: formData);
+    return await _handleResponse(response, isUpload: true);
+  }
+
   Future<String> download(
       {required String filePath, required String url}) async {
     await RestClient().getDio().download(
@@ -73,8 +81,11 @@ abstract class BaseService {
       case 200:
       case 201:
         if (isUpload) {
+          // print(response.data);
           return DataResponse(
-              data: response.data, message: response.statusMessage, code: response.statusCode);
+              data: response.data,
+              message: response.statusMessage,
+              code: response.statusCode);
         }
         try {
           return DataResponse(
@@ -82,7 +93,10 @@ abstract class BaseService {
               message: response.statusMessage,
               code: response.statusCode);
         } catch (e) {
-          throw 'error base service';
+          return DataResponse(
+              data: response.data,
+              message: response.statusMessage,
+              code: response.statusCode);
         }
       default:
         var apiResponse = ApiException.fromJson(response.data);

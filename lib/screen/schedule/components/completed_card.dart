@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -29,22 +30,26 @@ class CompletedCard extends StatefulWidget {
 class _CompletedCardState extends State<CompletedCard> {
   var image;
   List<int> time = [];
+  late ConsultationResponse finish;
   @override
   void initState() {
+    if (!mounted) return;
+    finish = widget.finish;
     image = null;
     super.initState();
   }
 
   Future<bool?> showBottomSheetFeedback(BuildContext context,
-      {required String feedbackId}) {
+      {required String feedbackId}) async {
     double rating = 1;
     TextEditingController feedbackController = TextEditingController();
 
-    return showModalBottomSheet<bool>(
+    return await showModalBottomSheet<bool>(
       context: context,
       barrierColor: black26,
       elevation: 0,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: transparent,
       builder: (BuildContext contextBottomSheet) {
         // print(context.read<ConsultationCubit>());
@@ -55,9 +60,14 @@ class _CompletedCardState extends State<CompletedCard> {
           listener: (context, state) {
             if (state is CreateFeebackState) {
               if (state.blocState == BlocState.Successed) {
+                finish = finish.copyWith(
+                    feedback: FeedbackResponse(
+                        rated: rating.toInt(),
+                        feedback: feedbackController.text));
                 Navigator.pop(context, true);
-              }else if(state.blocState == BlocState.Failed){
-                EasyLoading.showToast(translate(context, 'feedback should not be empty'));
+              } else if (state.blocState == BlocState.Failed) {
+                EasyLoading.showToast(
+                    translate(context, 'feedback should not be empty'));
               }
             }
           },
@@ -71,7 +81,8 @@ class _CompletedCardState extends State<CompletedCard> {
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      margin: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                      margin: EdgeInsets.fromLTRB(15, 0, 15,
+                          20 + MediaQuery.of(context).viewInsets.bottom),
                       padding: EdgeInsets.symmetric(
                           horizontal: dimensWidth() * 3,
                           vertical: dimensHeight() * 3),
@@ -79,65 +90,82 @@ class _CompletedCardState extends State<CompletedCard> {
                         color: white,
                         borderRadius: BorderRadius.circular(dimensWidth() * 3),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              translate(context, 'feedbacks'),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: dimensHeight()),
-                            width: double.infinity,
-                            child: TextFieldWidget(
-                                controller: feedbackController,
-                                textInputType:
-                                    const TextInputType.numberWithOptions(),
-                                label: translate(context, 'feedbacks'),
-                                validate: (value) => null),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: dimensHeight() * 2),
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            child: RatingBar.builder(
-                              ignoreGestures: false,
-                              initialRating: (rating).toDouble(),
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemCount: 5,
-                              itemSize: dimensWidth() * 3,
-                              itemPadding: EdgeInsets.all(dimensWidth()),
-                              itemBuilder: (context, _) => const FaIcon(
-                                FontAwesomeIcons.solidStar,
-                                color: Colors.amber,
+                      child: Form(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                translate(context, 'feedbacks'),
+                                style: Theme.of(context).textTheme.titleLarge,
                               ),
-                              onRatingUpdate: (double value) {
-                                rating = value;
-                              },
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: dimensHeight() * 2),
-                            width: double.infinity,
-                            child: ElevatedButtonWidget(
-                              text: translate(context, 'send'),
-                              onPressed: () {
-                                consultationCubit.createFeedback(
-                                  feedbackId: feedbackId,
-                                  rating: (rating).toInt(),
-                                  feedback: feedbackController.text.trim(),
-                                );
-                              },
+                            Container(
+                              padding: EdgeInsets.only(top: dimensHeight()),
+                              width: double.infinity,
+                              child: TextFieldWidget(
+                                controller: feedbackController,
+                                textInputType: TextInputType.multiline,
+                                label: translate(context, 'feedbacks'),
+                                validate: (value) {
+                                  if (feedbackController.text.trim().length <
+                                      3) {
+                                    return translate(
+                                        context, 'least_3_characters_long');
+                                  }
+                                  if (feedbackController.text.trim().length >
+                                      250) {
+                                    return translate(context,
+                                        'maximum_length_of_10_characters');
+                                  }
+                                  return null;
+                                },
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                maxLine: 5,
+                              ),
                             ),
-                          )
-                        ],
+                            Container(
+                              padding: EdgeInsets.only(top: dimensHeight() * 2),
+                              alignment: Alignment.center,
+                              width: double.infinity,
+                              child: RatingBar.builder(
+                                ignoreGestures: false,
+                                initialRating: (rating).toDouble(),
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                itemCount: 5,
+                                itemSize: dimensWidth() * 3,
+                                itemPadding: EdgeInsets.all(dimensWidth()),
+                                itemBuilder: (context, _) => const FaIcon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (double value) {
+                                  rating = value;
+                                },
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(top: dimensHeight() * 2),
+                              width: double.infinity,
+                              child: ElevatedButtonWidget(
+                                text: translate(context, 'send'),
+                                onPressed: () {
+                                  consultationCubit.createFeedback(
+                                    feedbackId: feedbackId,
+                                    rating: (rating).toInt(),
+                                    feedback: feedbackController.text.trim(),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -228,7 +256,11 @@ class _CompletedCardState extends State<CompletedCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            translate(context, widget.finish.doctor?.specialty),
+                            translate(
+                                context,
+                                widget.finish.doctor!.specialties!.firstOrNull
+                                        ?.specialty ??
+                                    ""),
                             overflow: TextOverflow.visible,
                             style: Theme.of(context)
                                 .textTheme
@@ -265,8 +297,8 @@ class _CompletedCardState extends State<CompletedCard> {
                 InkWell(
                   splashColor: transparent,
                   highlightColor: transparent,
-                  onTap: () {
-                    showBottomSheetFeedback(context,
+                  onTap: () async {
+                    await showBottomSheetFeedback(context,
                             feedbackId: widget.finish.feedback!.id!)
                         .then((value) {
                       if (value == true) {

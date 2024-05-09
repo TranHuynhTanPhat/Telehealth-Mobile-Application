@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -98,11 +98,13 @@ class UserService extends BaseService {
     return response.code;
   }
 
-  Future<List<DoctorResponse>> getWishList() async {
+  Future<List<DoctorDetailResponse>> getWishList() async {
     final response = await get(ApiConstants.USER_WISH_LIST);
-    List<DoctorResponse> doctorResponse = response.data
-        .map<DoctorResponse>((e) => DoctorResponse.fromMap(e))
+    List<DoctorDetailResponse> doctorResponse = response.data
+        .map<DoctorDetailResponse>((e) => DoctorDetailResponse.fromMap(e))
         .toList();
     return doctorResponse;
   }
+
+  
 }

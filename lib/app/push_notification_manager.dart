@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:healthline/res/style.dart';
@@ -116,17 +115,7 @@ class RemoteMessage {
 }
 
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
-  // ignore: avoid_print
-  print('notification(${notificationResponse.id}) action tapped: '
-      '${notificationResponse.actionId} with'
-      ' payload: ${notificationResponse.payload}');
-  if (notificationResponse.input?.isNotEmpty ?? false) {
-    // ignore: avoid_print
-    print(
-        'notification action tapped with input: ${notificationResponse.input}');
-  }
-}
+void notificationTapBackground(NotificationResponse notificationResponse) {}
 
 class PushNotificationManager {
 // singleton
@@ -149,7 +138,7 @@ class PushNotificationManager {
   final StreamController<String?> selectNotificationStream =
       StreamController<String?>.broadcast();
 
-  final MethodChannel platform = const MethodChannel('dexterx.dev/healthline');
+  // final MethodChannel platform = const MethodChannel('dexterx.dev/healthline');
 
   /// A notification action which triggers a url launch event
   final String urlLaunchActionId = 'id_1';
@@ -174,8 +163,14 @@ class PushNotificationManager {
     //   initialRoute = SecondPage.routeName;
     // }
 
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'healthline', // id
+      'Healthline', // title
+      importance: Importance.low, // importance must be at low or higher level
+    );
+
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     final List<DarwinNotificationCategory> darwinNotificationCategories =
         <DarwinNotificationCategory>[
@@ -238,25 +233,33 @@ class PushNotificationManager {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
     );
-    await _notificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) {
-        switch (notificationResponse.notificationResponseType) {
-          case NotificationResponseType.selectedNotification:
-            selectNotificationStream.add(notificationResponse.payload);
-            break;
-          case NotificationResponseType.selectedNotificationAction:
-            if (notificationResponse.actionId == navigationActionId) {
+    if (Platform.isIOS || Platform.isAndroid) {
+      await _notificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse:
+            (NotificationResponse notificationResponse) {
+          switch (notificationResponse.notificationResponseType) {
+            case NotificationResponseType.selectedNotification:
               selectNotificationStream.add(notificationResponse.payload);
-            }
-            break;
-        }
-      },
-      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-    );
+              break;
+            case NotificationResponseType.selectedNotificationAction:
+              if (notificationResponse.actionId == navigationActionId) {
+                selectNotificationStream.add(notificationResponse.payload);
+              }
+              break;
+          }
+        },
+        onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+      );
+    }
+    await _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
     await isAndroidPermissionGranted();
     await requestPermissions();
+    // await cancelAllNotifications();
   }
 
   Future<NotificationAppLaunchDetails?>
@@ -296,8 +299,6 @@ class PushNotificationManager {
 
   Future<void> showNotification(RemoteMessage message) async {
     try {
-      // var listNotification =
-      //     await _notificationsPlugin.getActiveNotifications();
       // int? badgeNumber = listNotification.length;
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       NotificationDetails notificationDetails = NotificationDetails(
@@ -333,7 +334,7 @@ class PushNotificationManager {
           usesChronometer: message.usesChronometer,
           chronometerCountDown: message.chronometerCountDown,
         ),
-        iOS: const DarwinNotificationDetails(presentBadge: false, badgeNumber: 0),
+        iOS: const DarwinNotificationDetails(badgeNumber: 0),
       );
       await _notificationsPlugin.show(id, message.notification.title,
           message.notification.body, notificationDetails,
@@ -348,8 +349,8 @@ class PushNotificationManager {
   Future<void> showScheduleNotification(
       RemoteMessage message, DateTime time) async {
     try {
-      tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, time.year,
-          time.month, time.day, time.hour, time.minute);
+      tz.TZDateTime scheduledDate = tz.TZDateTime(
+          tz.local, time.year, time.month, time.day, time.hour, time.minute);
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       NotificationDetails notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
@@ -507,12 +508,10 @@ class PushNotificationManager {
             sound: true,
           );
     } else if (Platform.isAndroid) {
-      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-          _notificationsPlugin.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
-
-      final bool? grantedNotificationPermission =
-          await androidImplementation?.areNotificationsEnabled();
+      final bool? grantedNotificationPermission = await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission();
       return grantedNotificationPermission ?? false;
     }
     return false;

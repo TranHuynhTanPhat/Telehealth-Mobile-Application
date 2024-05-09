@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:healthline/data/api/api_constants.dart';
+import 'package:healthline/data/api/models/requests/doctor_detail_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/data/api/models/responses/schedule_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
 class DoctorService extends BaseService {
-  Future<DoctorResponse> getProfile() async {
+  Future<DoctorDetailResponse> getProfile() async {
     final response = await get(ApiConstants.DOCTOR, isDoctor: true);
 
-    return DoctorResponse.fromMap(response.data);
+    return DoctorDetailResponse.fromMap(response.data);
   }
 
   Future<List<ScheduleResponse>> getSchedule() async {
@@ -104,5 +105,8 @@ class DoctorService extends BaseService {
         isDoctor: true);
 
     return response.code;
+  }
+  Future<void> registerDoctor({required DoctorDetailRequest doctorDetailRequest}) async{
+    await post(ApiConstants.DOCTOR, data: doctorDetailRequest.toJson());
   }
 }

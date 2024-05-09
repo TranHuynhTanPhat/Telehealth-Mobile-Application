@@ -39,11 +39,15 @@
     <!-- <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" /> -->
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <!-- Provide required visibility configuration for API level 30 and above -->
     <queries>
@@ -60,7 +64,7 @@
     </queries>
 
 
-    <application tools:replace="android:label" android:label="Healthline" android:name="${applicationName}" android:icon="@mipmap/launcher_icon" android:requestLegacyExternalStorage="true">
+    <application tools:replace="android:label" android:label="Healthline" android:name="${applicationName}" android:icon="@mipmap/launcher_icon" android:requestLegacyExternalStorage="true" android:enableOnBackInvokedCallback="true">
         <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true" tools:replace="android:authorities">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths" tools:replace="android:resource" />
         </provider>
@@ -97,5 +101,8 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
+        <!--Add this-->
+        <service android:name="id.flutter.flutter_background_service.BackgroundService" android:foregroundServiceType="dataSync"/>
+        <!--end-->
     </application>
 </manifest>

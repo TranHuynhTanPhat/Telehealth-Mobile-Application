@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -103,6 +104,8 @@ class _UpdateSubUserInputDialogState extends State<UpdateSubUserInputDialog> {
             if (state is UpdateSubUserSuccessfully ||
                 state is DeleteSubUserSuccessfully) {
               Navigator.pop(context, true);
+            }else if(state is UpdateSubUserFailure || state is DeleteSubUserFailure){
+              EasyLoading.showToast(translate(context, "failure"));
             }
           },
           child: BlocBuilder<MedicalRecordCubit, MedicalRecordState>(

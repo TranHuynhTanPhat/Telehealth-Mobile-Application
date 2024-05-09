@@ -8,7 +8,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
-import 'package:healthline/data/api/models/responses/doctor_response.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
+import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/bases/base_gridview.dart';
@@ -17,6 +18,7 @@ import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/componen
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/currency_util.dart';
+import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
@@ -33,8 +35,9 @@ class DetailDoctorScreen extends StatefulWidget {
 
 class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   var _image;
-  late DoctorResponse doctor;
+  late DoctorDetailResponse doctor;
   bool marked = false;
+  bool seeAll = false;
 
   @override
   void initState() {
@@ -49,7 +52,8 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   @override
   Widget build(BuildContext context) {
     try {
-      doctor = DoctorResponse.fromJson(widget.args!);
+      doctor = DoctorDetailResponse.fromJson(widget.args!);
+
       context
           .read<ConsultationCubit>()
           .fetchFeedbackDoctor(doctorId: doctor.id!);
@@ -228,45 +232,17 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.fromLTRB(dimensWidth() * 3,
-                                  dimensHeight(), 0, dimensHeight()),
+                              padding: EdgeInsets.only(
+                                left: dimensWidth() * 3,
+                              ),
                               child: Text(
                                 translate(
-                                    context, doctor.specialty ?? 'undefine'),
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: dimensWidth() * 3),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RatingBar.builder(
-                                    ignoreGestures: true,
-                                    initialRating: doctor.ratings ?? 0,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: dimensWidth() * 2,
-                                    itemBuilder: (context, _) => const FaIcon(
-                                      FontAwesomeIcons.solidStar,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (double value) {},
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: dimensWidth()),
-                                    child: Text(
-                                      // "3.5 (+800 ${translate(context, 'feedbacks')})",
-                                      "${doctor.ratings?.toStringAsFixed(1) ?? 0} (${doctor.numberOfConsultation} ${translate(context, 'appointments')})",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  )
-                                ],
+                                    context,
+                                    doctor.specialties!.firstOrNull
+                                            ?.specialty ??
+                                        doctor.careers!.firstOrNull?.position ??
+                                        'undefine'),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
                           ],
@@ -301,149 +277,587 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: dimensHeight() * 3,
-                          left: dimensWidth() * 3,
-                          right: dimensWidth() * 3),
-                      child: Text(
-                        translate(context, 'biography'),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
                           left: dimensWidth() * 3, right: dimensWidth() * 3),
                       child: Text(
-                        doctor.biography ?? translate(context, 'undefine'),
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        "${translate(context, 'medical_institution')}: ${doctor.careers!.firstOrNull?.medicalInstitute ?? translate(context, 'undefine')}",
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
+                    // if (doctor.email != null)
+                    //   Padding(
+                    //     padding: EdgeInsets.only(
+                    //         left: dimensWidth() * 3, right: dimensWidth() * 3),
+                    //     child: Text(
+                    //       "${translate(context, 'email')}: ${doctor.email}",
+                    //       style: Theme.of(context).textTheme.bodyMedium,
+                    //     ),
+                    //   ),
 
                     Padding(
                       padding: EdgeInsets.only(
-                          top: dimensHeight() * 3,
                           left: dimensWidth() * 3,
-                          right: dimensWidth() * 3),
+                          right: dimensWidth() * 3,
+                          top: dimensHeight() * 3),
                       child: Text(
-                        translate(context, 'feedbacks'),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        translate(context, 'biography'),
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: dimensWidth() * 3,
+                          right: dimensWidth() * 3,
+                          bottom: dimensHeight() * 2),
+                      child: ShowBiography(
+                        biography:
+                            doctor.biography ?? translate(context, 'empty'),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (doctor.educationAndCertifications != null &&
+                            doctor.educationAndCertifications!.isNotEmpty) {
+                          final consulationCubit =
+                              context.read<ConsultationCubit>();
+                          await showDialog(
+                              context: context,
+                              builder: (context) => BlocProvider.value(
+                                    value: consulationCubit,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          color: white,
+                                          borderRadius: BorderRadius.circular(
+                                              dimensWidth() * 2),
+                                        ),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: dimensWidth() * 3,
+                                            vertical: dimensHeight() * 10),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: dimensHeight() * 2,
+                                        ),
+                                        child: ListView(
+                                          shrinkWrap: false,
+                                          // padding: EdgeInsets.symmetric(
+                                          //     horizontal: dimensWidth() * 3,
+                                          //     vertical: dimensHeight() * 2),
+                                          children: [
+                                            ...doctor
+                                                .educationAndCertifications!
+                                                .map(
+                                              (e) => Container(
+                                                decoration: BoxDecoration(
+                                                    color: white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            dimensWidth() * 3)),
+                                                padding: EdgeInsets.only(
+                                                    top: dimensHeight() * 3,
+                                                    left: dimensWidth() * 3,
+                                                    right: dimensWidth() * 3,
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                                .viewInsets
+                                                                .bottom +
+                                                            dimensHeight() * 3),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "${translate(context, "type_of_education")}: ${e.typeOfEducationAndExperience}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "degree_of_education")}: ${e.degreeOfEducation}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "institution")}: ${e.institution}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "specialty_by_diploma")}: ${e.specialtyByDiploma}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "address")}: ${e.address}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "date_of_receipt_of_diploma")}: ${e.dateOfReceiptOfDiploma}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                  ));
+                        }
+                      },
+                      splashColor: secondary.withOpacity(.1),
+                      highlightColor: secondary.withOpacity(.1),
+                      overlayColor:
+                          MaterialStatePropertyAll(secondary.withOpacity(.1)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight() * 2,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.stamp,
+                              color: secondary,
+                              size: dimensIcon() / 2,
+                            ),
+                            SizedBox(
+                              width: dimensWidth(),
+                            ),
+                            Text(
+                              translate(
+                                  context, 'education_and_certifications'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(color: secondary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    InkWell(
+                      onTap: () async {
+                        if (doctor.educationAndCertifications != null &&
+                            doctor.educationAndCertifications!.isNotEmpty) {
+                          final consulationCubit =
+                              context.read<ConsultationCubit>();
+                          await showDialog(
+                              context: context,
+                              builder: (context) => BlocProvider.value(
+                                    value: consulationCubit,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          color: white,
+                                          borderRadius: BorderRadius.circular(
+                                              dimensWidth() * 2),
+                                        ),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: dimensWidth() * 3,
+                                            vertical: dimensHeight() * 10),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: dimensHeight() * 2,
+                                        ),
+                                        child: ListView(
+                                          shrinkWrap: false,
+                                          // padding: EdgeInsets.symmetric(
+                                          //     horizontal: dimensWidth() * 3,
+                                          //     vertical: dimensHeight() * 2),
+                                          children: [
+                                            ...doctor.careers!.map(
+                                              (e) => Container(
+                                                decoration: BoxDecoration(
+                                                    color: white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            dimensWidth() * 3)),
+                                                padding: EdgeInsets.only(
+                                                    top: dimensHeight() * 3,
+                                                    left: dimensWidth() * 3,
+                                                    right: dimensWidth() * 3,
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                                .viewInsets
+                                                                .bottom +
+                                                            dimensHeight() * 3),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "${translate(context, "medical_institution")}: ${e.medicalInstitute}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                    Text(
+                                                        "${translate(context, "position")}: ${e.position}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                  ));
+                        }
+                      },
+                      splashColor: secondary.withOpacity(.1),
+                      highlightColor: secondary.withOpacity(.1),
+                      overlayColor:
+                          MaterialStatePropertyAll(secondary.withOpacity(.1)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: dimensWidth() * 3,
+                          vertical: dimensHeight() * 2,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.userDoctor,
+                              color: secondary,
+                              size: dimensIcon() / 2,
+                            ),
+                            SizedBox(
+                              width: dimensWidth(),
+                            ),
+                            Text(
+                              translate(context, 'career'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(color: secondary),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     BlocBuilder<ConsultationCubit, ConsultationState>(
                       builder: (context, state) {
-                        if (state.feedbacks != null &&
-                            state.feedbacks!.isNotEmpty) {
-                          return Column(
-                            children: state.feedbacks!
-                                .where((element) =>
-                                    element.rated != null && element.rated! > 0)
-                                .map((e) {
-                              var image;
-                              try {
-                                if (e.user?.avatar != null &&
-                                    e.user?.avatar != 'default' &&
-                                    e.user?.avatar != '') {
-                                  image = image ??
-                                      NetworkImage(
-                                        CloudinaryContext.cloudinary
-                                            .image(e.user?.avatar ?? '')
-                                            .toString(),
-                                      );
-                                } else {
-                                  image = AssetImage(DImages.placeholder);
-                                }
-                              } catch (e) {
-                                logPrint(e);
-                                image = AssetImage(DImages.placeholder);
-                              }
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  backgroundImage: image,
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) {
-                                    logPrint(exception);
-                                  },
-                                ),
-                                title: Text(
-                                  e.user?.fullName ??
-                                      translate(context, 'undefine'),
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                subtitle: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      RatingBar.builder(
-                                        ignoreGestures: true,
-                                        initialRating:
-                                            (e.rated ?? 0).toDouble(),
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemCount: 5,
-                                        itemSize: dimensWidth() * 2,
-                                        itemBuilder: (context, _) =>
-                                            const FaIcon(
-                                          FontAwesomeIcons.solidStar,
-                                          color: Colors.amber,
+                        List<FeedbackResponse> feedbacks = state.feedbacks!;
+
+                        feedbacks = feedbacks
+                            .where((element) =>
+                                element.rated != null && element.rated! > 0)
+                            .toList();
+                        feedbacks.sort((a, b) {
+                          DateTime? aTime =
+                              convertStringToDateTime(a.createdAt);
+                          DateTime? bTime =
+                              convertStringToDateTime(b.createdAt);
+                          if (aTime != null && bTime != null) {
+                            return aTime.compareTo(bTime);
+                          } else {
+                            return aTime == null ? -1 : 1;
+                          }
+                        });
+
+                        feedbacks = feedbacks.reversed.toList();
+
+                        return Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: dimensWidth() * 3),
+                              shape: Border(
+                                bottom: BorderSide(
+                                    width: .5,
+                                    color: secondary.withOpacity(.2)),
+                                top: BorderSide(
+                                    width: 15,
+                                    color: secondary.withOpacity(.2)),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context, feedbacksName,
+                                    arguments: state.feedbacks);
+                              },
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      translate(context, 'feedbacks'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                  ),
+                                  Text(
+                                    translate(context, 'see_all'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: secondary,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        onRatingUpdate: (double value) {},
-                                      ),
-                                      if (e.feedback != null)
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Text(e.feedback!),
-                                        )
-                                    ]),
-                              );
-                            }).toList(),
-                          );
-                        } else {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 3),
-                            child: Text(
-                              translate(context, 'empty'),
-                              style: Theme.of(context).textTheme.bodyLarge,
-                              textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                              subtitle: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  RatingBar.builder(
+                                    ignoreGestures: true,
+                                    initialRating: doctor.ratings ?? 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemSize: dimensWidth() * 1.5,
+                                    itemBuilder: (context, _) => const FaIcon(
+                                      FontAwesomeIcons.solidStar,
+                                      color: Colors.orangeAccent,
+                                    ),
+                                    onRatingUpdate: (double value) {},
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: dimensWidth() / 2),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${doctor.ratings?.toStringAsFixed(1) ?? 0}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                        Text(
+                                          " (${doctor.numberOfConsultation})",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          );
-                        }
+                            if (feedbacks.isNotEmpty)
+                              ...feedbacks
+                                  .getRange(
+                                      0,
+                                      feedbacks.length > 5
+                                          ? 5
+                                          : feedbacks.length)
+                                  .toList()
+                                  .map(
+                                (e) {
+                                  // count++;
+                                  var image;
+                                  try {
+                                    if (e.user?.avatar != null &&
+                                        e.user?.avatar != 'default' &&
+                                        e.user?.avatar != '') {
+                                      image = image ??
+                                          NetworkImage(
+                                            CloudinaryContext.cloudinary
+                                                .image(e.user?.avatar ?? '')
+                                                .toString(),
+                                          );
+                                    } else {
+                                      image = AssetImage(DImages.placeholder);
+                                    }
+                                  } catch (e) {
+                                    logPrint(e);
+                                    image = AssetImage(DImages.placeholder);
+                                  }
+                                  DateTime? createdAt =
+                                      convertStringToDateTime(e.createdAt);
+                                  return ListTile(
+                                    shape: Border(
+                                      bottom: BorderSide(
+                                          color: secondary.withOpacity(.1),
+                                          width: .5),
+                                    ),
+                                    leading: CircleAvatar(
+                                      radius: dimensWidth() * 2,
+                                      backgroundImage: image,
+                                      onBackgroundImageError:
+                                          (exception, stackTrace) {
+                                        logPrint(exception);
+                                      },
+                                    ),
+                                    title: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            e.user?.fullName ??
+                                                translate(context, 'undefine'),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: transparent,
+                                          highlightColor: transparent,
+                                          onTap: () => showDialog(
+                                              context: context,
+                                              builder:
+                                                  (BuildContext context) =>
+                                                      AlertDialog(
+                                                        // insetPadding: EdgeInsets.zero,
+                                                        // iconPadding: EdgeInsets.zero,
+                                                        // titlePadding: EdgeInsets.zero,
+                                                        // buttonPadding: EdgeInsets.zero,
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        // actionsPadding: EdgeInsets.zero,
+                                                        content: InkWell(
+                                                          child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        dimensWidth() *
+                                                                            2,
+                                                                    vertical:
+                                                                        dimensHeight() *
+                                                                            2),
+                                                                child: Text(
+                                                                  translate(
+                                                                      context,
+                                                                      'report'),
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .labelLarge,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )),
+                                          child: FaIcon(
+                                            FontAwesomeIcons.ellipsis,
+                                            size: dimensIcon() / 2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          RatingBar.builder(
+                                            ignoreGestures: true,
+                                            initialRating:
+                                                (e.rated ?? 0).toDouble(),
+                                            minRating: 1,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemSize: dimensWidth() * 1.5,
+                                            itemBuilder: (context, _) =>
+                                                const FaIcon(
+                                              FontAwesomeIcons.solidStar,
+                                              color: Colors.orangeAccent,
+                                            ),
+                                            onRatingUpdate: (double value) {},
+                                          ),
+                                          if (e.feedback != null)
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                top: dimensHeight(),
+                                              ),
+                                              width: double.infinity,
+                                              child: Text(e.feedback!),
+                                            ),
+                                          if (createdAt != null)
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  top: dimensHeight()),
+                                              width: double.infinity,
+                                              child: Text(
+                                                formatFileDate(
+                                                    context, createdAt),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: black26
+                                                            .withOpacity(.5),
+                                                        fontSize: 8),
+                                              ),
+                                            )
+                                        ]),
+                                  );
+                                },
+                              )
+                            else
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: dimensWidth() * 3),
+                                child: Text(
+                                  translate(context, 'empty'),
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            if (feedbacks.isNotEmpty)
+                              ListTile(
+                                onTap: () {},
+                                shape: Border(
+                                  bottom: BorderSide(
+                                      color: secondary.withOpacity(.1),
+                                      width: 15),
+                                ),
+                                title: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dimensHeight() * 2),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "${translate(context, "see_all")} >",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(color: secondary),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: dimensHeight() * 4,
-                          left: dimensWidth() * 3,
-                          right: dimensWidth() * 3),
-                      child: Row(
-                        children: [
-                          Text(
-                            translate(context, 'suggestion_for_you'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(color: color1F1F1F),
-                          ),
-                          // InkWell(
-                          //   onTap: () => Navigator.pushNamed(context, doctorName),
-                          //   child: Text(
-                          //     translate(context, 'see_all'),
-                          //     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          //           color: primary,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
+
                     BlocBuilder<DoctorCubit, DoctorState>(
                       builder: (context, state) {
                         if (state.blocState == BlocState.Pending) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight() * 3,
+                                  horizontal: dimensWidth() * 3,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      translate(context, 'suggestion_for_you'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(color: color1F1F1F),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Container(
                                 alignment: Alignment.center,
                                 padding:
@@ -455,42 +869,41 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                                     vertical: dimensWidth() * 2,
                                     horizontal: dimensWidth() * 3),
                                 child: BaseGridview(
-                                  radio: 0.3,
+                                  radio: 0.8,
                                   children: [buildShimmer(), buildShimmer()],
                                 ),
                               )
                             ],
                           );
                         } else if (state.blocState == BlocState.Successed) {
-                          // return SizedBox(
-                          //   height: dimensHeight() * 30,
-                          //   child: ListView(
-                          //     shrinkWrap: true,
-                          //     scrollDirection: Axis.horizontal,
-                          //     // reverse: true,
-                          //     physics: const AlwaysScrollableScrollPhysics(),
-                          //     padding: EdgeInsets.symmetric(
-                          //         horizontal: dimensWidth() * 3,
-                          //         vertical: dimensWidth() * 2),
-                          //     children: [
-                          //       ...state.doctors.getRange(0, 10).map(
-                          //             (e) => DoctorCard(
-                          //               doctor: e,
-                          //             ),
-                          //           ),
-                          //     ],
-                          //   ),
-                          // );
-
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: dimensWidth() * 3),
-                            child: BaseGridview(radio: 0.8, children: [
-                              ...state.doctors.map(
-                                (e) => DoctorCard(
-                                  doctor: e,
+                            child: Column(children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: dimensHeight() * 3,
+                                  horizontal: dimensWidth() * 3,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      translate(context, 'suggestion_for_you'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(color: color1F1F1F),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              BaseGridview(radio: 0.8, children: [
+                                ...state.doctors.map(
+                                  (e) => DoctorCard(
+                                    doctor: e,
+                                  ),
+                                ),
+                              ]),
                             ]),
                           );
                         } else {
@@ -579,101 +992,33 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
           ],
         ),
       );
+}
 
-  // ListView shimmerBuilder() {
-  //   return ListView(
-  //     shrinkWrap: true,
-  //     scrollDirection: Axis.vertical,
-  //     padding: EdgeInsets.only(
-  //         bottom: dimensHeight() * 2,
-  //         left: dimensWidth() * 3,
-  //         right: dimensWidth() * 3),
-  //     children: [
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             bottom: dimensHeight(),
-  //             top: dimensHeight(),
-  //             right: dimensWidth() * 25),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(right: dimensWidth() * 20),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2.5,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             top: dimensHeight() * 2, right: dimensWidth() * 35),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 3.5,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(top: dimensHeight() * 2),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(top: dimensHeight()),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(top: dimensHeight()),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(top: dimensHeight()),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding:
-  //             EdgeInsets.only(top: dimensHeight(), right: dimensWidth() * 15),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             top: dimensHeight() * 3, right: dimensWidth() * 20),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 3.5,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             top: dimensHeight() * 2, right: dimensWidth() * 15),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             top: dimensHeight() * 3, right: dimensWidth() * 35),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 3.5,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: EdgeInsets.only(
-  //             top: dimensHeight() * 2, right: dimensWidth() * 20),
-  //         child: ShimmerWidget.rectangular(
-  //           height: dimensHeight() * 2,
-  //         ),
-  //       ),
-  //       SizedBox(
-  //         height: dimensHeight() * 10,
-  //       )
-  //     ],
-  //   );
-  // }
+class ShowBiography extends StatefulWidget {
+  const ShowBiography({super.key, required this.biography});
+  final String biography;
+  @override
+  State<ShowBiography> createState() => _ShowBiographyState();
+}
+
+class _ShowBiographyState extends State<ShowBiography> {
+  bool seeAll = false;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          seeAll = !seeAll;
+        });
+      },
+      splashColor: transparent,
+      highlightColor: transparent,
+      child: Text(
+        widget.biography,
+        style: Theme.of(context).textTheme.bodyLarge,
+        maxLines: seeAll ? null : 5,
+        overflow: seeAll ? null : TextOverflow.ellipsis,
+      ),
+    );
+  }
 }

@@ -3,6 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/data/api/models/requests/doctor_detail_request.dart';
 import 'package:healthline/data/api/models/responses/login_response.dart';
 import 'package:healthline/data/api/rest_client.dart';
 import 'package:healthline/data/storage/app_storage.dart';
@@ -43,6 +44,28 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       await _userRepository.registerAccount(fullName, phone, email, password,
           passwordConfirm, gender, birthday, address);
+      emit(RegisterAccountState(blocState: BlocState.Successed));
+    } on DioException catch (e) {
+      emit(
+        RegisterAccountState(
+          blocState: BlocState.Failed,
+          error: e.response!.data['message'].toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        RegisterAccountState(
+          blocState: BlocState.Failed,
+          error: e.toString(),
+        ),
+      );
+    }
+  }
+  Future<void> registerDoctor(
+     {required DoctorDetailRequest doctorDetailRequest}) async {
+    emit(RegisterAccountState(blocState: BlocState.Pending));
+    try {
+      await _doctorRepository.registerDoctor(doctorDetailRequest:doctorDetailRequest);
       emit(RegisterAccountState(blocState: BlocState.Successed));
     } on DioException catch (e) {
       emit(

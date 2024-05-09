@@ -20,7 +20,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   bool showTrash = false;
   late List<ConsultationNotificationModel> consultationNotis;
 
-
   Future<List<ConsultationNotificationModel>> fetchNotis() async {
     consultationNotis = await ConsultationNotificationProvider().selectAll();
 
@@ -36,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           return true;
         }
       }
-      return false;
+      return true;
     }).toList();
     return consultationNotis;
   }
@@ -185,8 +184,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ),
                                     if (expectedTime != null)
                                       Text(
-                                        timeComing(context, DateTime.now(),
-                                            expectedTime),
+                                        expectedTime.isAfter(DateTime.now())
+                                            ? timeComing(
+                                                context,
+                                                expectedTime,
+                                                DateTime.now(),
+                                              )
+                                            : daysBetween(
+                                                context,
+                                                expectedTime,
+                                                DateTime.now(),
+                                              ),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall

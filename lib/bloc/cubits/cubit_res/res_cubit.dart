@@ -3,6 +3,8 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:healthline/app/push_notification_manager.dart';
+import 'package:healthline/data/api/socket_manager.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:healthline/utils/log_data.dart';
@@ -35,6 +37,7 @@ class ResCubit extends HydratedCubit<ResState> {
           ResState(locale: const Locale('en'), switchTheme: state.switchTheme));
     });
   }
+
 
   void toLightTheme() =>
       emit(ResState(locale: state.locale, switchTheme: false));

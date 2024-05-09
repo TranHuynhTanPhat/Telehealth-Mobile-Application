@@ -48,6 +48,28 @@ class OptionSignUp extends StatelessWidget {
             ),
           ],
         ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              style: const ButtonStyle(
+                padding: MaterialStatePropertyAll(
+                  EdgeInsets.all(0),
+                ),
+              ),
+              onPressed: () =>
+                  Navigator.pushNamed(context, registerDoctorName),
+              child: Text(
+                "${translate(context, 'sign_up')} ${translate(context, 'doctor').toLowerCase()}",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: secondary, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
