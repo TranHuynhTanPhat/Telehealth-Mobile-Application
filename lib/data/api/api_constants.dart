@@ -74,6 +74,7 @@ class ApiConstants {
   static const CONSULTATION_DOCTOR_INFORMATION = '$CONSULTATION_DOCTOR/information';
   static const CONSULTATION_PRESCRIPTION = '$CONSULTATION/prescription';
   static const CONSULTATION_CONFIRM = '$CONSULTATION/confirm';
+  static const CONSULTATION_MEDICAL_CHART = '$CONSULTATION/admin/money/medical/chart';
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';

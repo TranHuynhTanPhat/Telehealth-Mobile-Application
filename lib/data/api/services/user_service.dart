@@ -4,6 +4,7 @@ import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
+import 'package:healthline/data/api/models/responses/spending_chart_patient.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
 
@@ -106,5 +107,11 @@ class UserService extends BaseService {
     return doctorResponse;
   }
 
-  
+  Future<SpendingChartPatient> fetchSpendingChart(
+      {required String id, required int month, required int year}) async {
+    final response = await get(
+        "${ApiConstants.CONSULTATION_MEDICAL_CHART}/$id/$month/$year");
+    SpendingChartPatient chart = SpendingChartPatient.fromMap(response.data);
+    return chart;
+  }
 }

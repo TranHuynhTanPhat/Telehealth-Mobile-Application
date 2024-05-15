@@ -53,7 +53,7 @@ class _DoctorCardState extends State<DoctorCard> {
       highlightColor: transparent,
       onTap: () {
         Navigator.pushNamed(context, detailDoctorName,
-            arguments: widget.doctor.toJson());
+            arguments: widget.doctor);
         context.read<DoctorCubit>().addRecentDoctor(widget.doctor);
       },
       child: Container(

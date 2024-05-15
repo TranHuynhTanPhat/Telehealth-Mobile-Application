@@ -27,7 +27,7 @@ class DetailDoctorScreen extends StatefulWidget {
     super.key,
     this.args,
   });
-  final String? args;
+  final DoctorDetailResponse? args;
 
   @override
   State<DetailDoctorScreen> createState() => _DetailDoctorScreenState();
@@ -38,12 +38,18 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
   late DoctorDetailResponse doctor;
   bool marked = false;
   bool seeAll = false;
+  List<FeedbackResponse> feedbacks = [];
 
   @override
   void initState() {
     _image = null;
 
     if (!mounted) return;
+    if (widget.args == null) return;
+    doctor = widget.args!;
+    context
+          .read<ConsultationCubit>()
+          .fetchFeedbackDoctor(doctorId: doctor.id!);
     context.read<DoctorCubit>().getWishList();
 
     super.initState();
@@ -51,17 +57,6 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      doctor = DoctorDetailResponse.fromJson(widget.args!);
-
-      context
-          .read<ConsultationCubit>()
-          .fetchFeedbackDoctor(doctorId: doctor.id!);
-    } catch (e) {
-      EasyLoading.showToast(translate(context, 'cant_load_data'));
-      Navigator.pop(context);
-      return const SizedBox();
-    }
     try {
       if (doctor.avatar != null &&
           doctor.avatar != 'default' &&
@@ -83,6 +78,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
     return BlocConsumer<DoctorCubit, DoctorState>(
       listener: (context, state) {
         if (state.blocState == BlocState.Successed) {
+          EasyLoading.dismiss();
           setState(() {
             if (state.wishDoctors
                 .where((element) => element.id == doctor.id)
@@ -92,6 +88,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
               marked = false;
             }
           });
+        } else if (state.blocState == BlocState.Pending) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else {
+          EasyLoading.dismiss();
         }
       },
       builder: (context, state) {
@@ -212,7 +212,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                           overflow: TextOverflow.fade,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
+                              .bodySmall
                               ?.copyWith(color: secondary),
                         ),
                       ],
@@ -250,15 +250,18 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                         Padding(
                           padding: EdgeInsets.only(right: dimensWidth() * 3),
                           child: InkWell(
+                            splashColor: transparent,
+                            hoverColor: transparent,
+                            highlightColor: transparent,
                             onTap: () async {
                               if (doctor.id == null) {
                                 EasyLoading.showToast(
                                     translate(context, 'cant_be_done'));
                               } else {
-                                context
+                                await context
                                     .read<DoctorCubit>()
                                     .addWishList(doctorId: doctor.id!);
-                                context.read<DoctorCubit>().getWishList();
+                                await context.read<DoctorCubit>().getWishList();
                                 // setState(() {
                                 //   marked = !marked;
                                 // });
@@ -268,7 +271,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                               marked
                                   ? FontAwesomeIcons.solidBookmark
                                   : FontAwesomeIcons.bookmark,
-                              size: dimensIcon() / 2,
+                              size: dimensIcon() * .8,
                               color: marked ? Colors.orangeAccent : null,
                             ),
                           ),
@@ -319,89 +322,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                             doctor.educationAndCertifications!.isNotEmpty) {
                           final consulationCubit =
                               context.read<ConsultationCubit>();
-                          await showDialog(
-                              context: context,
-                              builder: (context) => BlocProvider.value(
-                                    value: consulationCubit,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          color: white,
-                                          borderRadius: BorderRadius.circular(
-                                              dimensWidth() * 2),
-                                        ),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: dimensWidth() * 3,
-                                            vertical: dimensHeight() * 10),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: dimensHeight() * 2,
-                                        ),
-                                        child: ListView(
-                                          shrinkWrap: false,
-                                          // padding: EdgeInsets.symmetric(
-                                          //     horizontal: dimensWidth() * 3,
-                                          //     vertical: dimensHeight() * 2),
-                                          children: [
-                                            ...doctor
-                                                .educationAndCertifications!
-                                                .map(
-                                              (e) => Container(
-                                                decoration: BoxDecoration(
-                                                    color: white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            dimensWidth() * 3)),
-                                                padding: EdgeInsets.only(
-                                                    top: dimensHeight() * 3,
-                                                    left: dimensWidth() * 3,
-                                                    right: dimensWidth() * 3,
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                                .viewInsets
-                                                                .bottom +
-                                                            dimensHeight() * 3),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        "${translate(context, "type_of_education")}: ${e.typeOfEducationAndExperience}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "degree_of_education")}: ${e.degreeOfEducation}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "institution")}: ${e.institution}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "specialty_by_diploma")}: ${e.specialtyByDiploma}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "address")}: ${e.address}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "date_of_receipt_of_diploma")}: ${e.dateOfReceiptOfDiploma}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                                  ));
+                          await showDialogEduAndEpx(context, consulationCubit);
                         }
                       },
                       splashColor: secondary.withOpacity(.1),
@@ -443,67 +364,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                             doctor.educationAndCertifications!.isNotEmpty) {
                           final consulationCubit =
                               context.read<ConsultationCubit>();
-                          await showDialog(
-                              context: context,
-                              builder: (context) => BlocProvider.value(
-                                    value: consulationCubit,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          color: white,
-                                          borderRadius: BorderRadius.circular(
-                                              dimensWidth() * 2),
-                                        ),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: dimensWidth() * 3,
-                                            vertical: dimensHeight() * 10),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: dimensHeight() * 2,
-                                        ),
-                                        child: ListView(
-                                          shrinkWrap: false,
-                                          // padding: EdgeInsets.symmetric(
-                                          //     horizontal: dimensWidth() * 3,
-                                          //     vertical: dimensHeight() * 2),
-                                          children: [
-                                            ...doctor.careers!.map(
-                                              (e) => Container(
-                                                decoration: BoxDecoration(
-                                                    color: white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            dimensWidth() * 3)),
-                                                padding: EdgeInsets.only(
-                                                    top: dimensHeight() * 3,
-                                                    left: dimensWidth() * 3,
-                                                    right: dimensWidth() * 3,
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                                .viewInsets
-                                                                .bottom +
-                                                            dimensHeight() * 3),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        "${translate(context, "medical_institution")}: ${e.medicalInstitute}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                    Text(
-                                                        "${translate(context, "position")}: ${e.position}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                                  ));
+                          await showCareer(context, consulationCubit);
                         }
                       },
                       splashColor: secondary.withOpacity(.1),
@@ -539,7 +400,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                     ),
                     BlocBuilder<ConsultationCubit, ConsultationState>(
                       builder: (context, state) {
-                        List<FeedbackResponse> feedbacks = state.feedbacks!;
+                        feedbacks = state.feedbacks!;
 
                         feedbacks = feedbacks
                             .where((element) =>
@@ -692,7 +553,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                                                 translate(context, 'undefine'),
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodySmall,
+                                                .bodyLarge,
                                           ),
                                         ),
                                         InkWell(
@@ -784,7 +645,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                                                   top: dimensHeight()),
                                               width: double.infinity,
                                               child: Text(
-                                                formatFileDate(
+                                                formatyMMMMd(
                                                     context, createdAt),
                                                 style: Theme.of(context)
                                                     .textTheme
@@ -811,7 +672,10 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                               ),
                             if (feedbacks.isNotEmpty)
                               ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(context, feedbacksName,
+                                      arguments: state.feedbacks);
+                                },
                                 shape: Border(
                                   bottom: BorderSide(
                                       color: secondary.withOpacity(.1),
@@ -877,8 +741,12 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                           );
                         } else if (state.blocState == BlocState.Successed) {
                           return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: dimensWidth() * 3),
+                            padding: EdgeInsets.fromLTRB(
+                              dimensWidth() * 3,
+                              0,
+                              dimensWidth() * 3,
+                              dimensHeight() * 20,
+                            ),
                             child: Column(children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -923,6 +791,214 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
           ),
         );
       },
+    );
+  }
+
+  Future<dynamic> showDialogEduAndEpx(
+      BuildContext context, ConsultationCubit consulationCubit) async {
+    return await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FaIcon(
+              FontAwesomeIcons.stamp,
+              color: secondary,
+              size: dimensIcon() / 2,
+            ),
+            SizedBox(
+              width: dimensWidth(),
+            ),
+            Text(
+              translate(context, 'education_and_certifications'),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: secondary),
+            ),
+          ],
+        ),
+        backgroundColor: white,
+        elevation: 0,
+        iconPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.symmetric(
+            horizontal: dimensWidth() * 3, vertical: dimensHeight() * 3),
+        content: SingleChildScrollView(
+          child: BlocProvider.value(
+            value: consulationCubit,
+            child: ListBody(
+              children: [
+                ...doctor.educationAndCertifications!.map(
+                  (e) => Container(
+                    decoration: const BoxDecoration(
+                      color: white,
+                      border: BorderDirectional(
+                          bottom: BorderSide(width: 2, color: secondary)),
+                      // borderRadius:
+                      //     BorderRadius.circular(
+                      //         dimensWidth() * 2)
+                    ),
+                    margin: EdgeInsets.only(
+                      bottom: dimensHeight() * 2,
+                    ),
+                    padding: EdgeInsets.only(bottom: dimensHeight()),
+                    child: ListBody(
+                      children: [
+                        Row(
+                          children: [
+                            Text("${translate(context, "type_of_education")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.typeOfEducationAndExperience}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                "${translate(context, "degree_of_education")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.degreeOfEducation}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("${translate(context, "institution")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.institution}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                "${translate(context, "specialty_by_diploma")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.specialtyByDiploma}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("${translate(context, "address")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.address}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                                "${translate(context, "date_of_receipt_of_diploma")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.dateOfReceiptOfDiploma}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> showCareer(
+      BuildContext context, ConsultationCubit consulationCubit) async {
+    return await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FaIcon(
+              FontAwesomeIcons.userDoctor,
+              color: secondary,
+              size: dimensIcon() / 2,
+            ),
+            SizedBox(
+              width: dimensWidth(),
+            ),
+            Text(
+              translate(context, 'career'),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: secondary),
+            ),
+          ],
+        ),
+        backgroundColor: white,
+        elevation: 0,
+        iconPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.symmetric(
+            horizontal: dimensWidth() * 3, vertical: dimensHeight() * 3),
+        content: SingleChildScrollView(
+          child: BlocProvider.value(
+            value: consulationCubit,
+            child: ListBody(
+              children: [
+                ...doctor.careers!.map(
+                  (e) => Container(
+                    decoration: const BoxDecoration(
+                      color: white,
+                      border: BorderDirectional(
+                          bottom: BorderSide(width: 2, color: secondary)),
+                      // borderRadius:
+                      //     BorderRadius.circular(
+                      //         dimensWidth() * 2)
+                    ),
+                    margin: EdgeInsets.only(
+                      bottom: dimensHeight() * 2,
+                    ),
+                    padding: EdgeInsets.only(bottom: dimensHeight()),
+                    child: ListBody(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                                "${translate(context, "medical_institution")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.medicalInstitute}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("${translate(context, "position")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.position}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("${translate(context, "start")}: ",
+                                style: Theme.of(context).textTheme.labelLarge),
+                            Text("${e.periodStart}",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 

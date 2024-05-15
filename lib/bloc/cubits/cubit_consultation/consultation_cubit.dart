@@ -815,7 +815,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
             timeline: [],
             error: e.response!.data['message'].toString(),
             consultations: state.consultations,
-            feedbacks: []),
+            feedbacks: state.feedbacks),
       );
     } catch (e) {
       emit(

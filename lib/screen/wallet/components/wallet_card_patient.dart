@@ -6,28 +6,43 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/currency_util.dart';
 import 'package:healthline/utils/translate.dart';
 
-class WalletCardPatient extends StatelessWidget {
+class WalletCardPatient extends StatefulWidget {
   const WalletCardPatient({
     super.key,
   });
+
+  @override
+  State<WalletCardPatient> createState() => _WalletCardPatientState();
+}
+
+class _WalletCardPatientState extends State<WalletCardPatient> {
+  @override
+  void initState() {
+    if (!mounted) return;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientProfileCubit, PatientProfileState>(
       builder: (context, state) {
         return SliverAppBar(
-          expandedHeight: dimensHeight() * 12,
-          collapsedHeight: dimensHeight() * 10,
-          automaticallyImplyLeading: false,
+          expandedHeight: dimensHeight() * 35,
+          collapsedHeight: dimensHeight() * 20,
+          automaticallyImplyLeading: true,
           pinned: true,
           floating: false,
+          actions: null,
+          leading: null,
           flexibleSpace: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
             double top = constraints.biggest.height;
             return FlexibleSpaceBar(
+              titlePadding: EdgeInsets.zero,
               background: Column(
                 children: [
                   Expanded(
+                    flex: 6,
                     child: Container(
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -40,6 +55,7 @@ class WalletCardPatient extends StatelessWidget {
                     ),
                   ),
                   Expanded(
+                    flex: 2,
                     child: Container(
                       color: white,
                     ),
@@ -47,129 +63,94 @@ class WalletCardPatient extends StatelessWidget {
                 ],
               ),
               centerTitle: true,
-              title: Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: dimensWidth() * 2,
-                    vertical: dimensHeight() * 0.5),
-                padding: EdgeInsets.symmetric(
-                  horizontal: dimensWidth(),
-                  vertical: dimensHeight(),
-                ),
-                width: double.infinity,
-                height: dimensHeight() * 8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(dimensWidth() * 2),
-                  color: white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.1),
-                      blurRadius: 15,
-                      offset: const Offset(0, 1),
+              title: ListView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.only(bottom: dimensHeight() * 3),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: dimensWidth() * 3,
+                        vertical: dimensHeight() * 3),
+                    child: Text(
+                      translate(context, 'budget'),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Visibility(
-                            visible: top < 135,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: dimensWidth(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: dimensWidth() * 2.5,
+                      vertical: dimensHeight(),
+                    ),
+                    width: double.infinity,
+                    height: dimensHeight() * 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(dimensWidth() * 2),
+                      color: white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: dimensWidth(),
+                                ),
+                                child: const FaIcon(
+                                  FontAwesomeIcons.wallet,
+                                  color: color9D4B6C,
+                                ),
                               ),
-                              child: const FaIcon(
-                                FontAwesomeIcons.wallet,
-                                color: color9D4B6C,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  translate(context, 'your_balance'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: black26,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Visibility(
+                                      visible: top > 145,
+                                      child: Text(
+                                        translate(context, 'your_balance'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: black26,
+                                            ),
                                       ),
+                                    ),
+                                    Text(
+                                      convertToVND(
+                                          state.profile.accountBalance ?? 0),
+                                      softWrap: true,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              color: color1F1F1F,
+                                              overflow: TextOverflow.ellipsis),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  convertToVND(
-                                      state.profile.accountBalance ?? 0),
-                                  softWrap: true,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(
-                                          color: color1F1F1F,
-                                          overflow: TextOverflow.ellipsis),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const VerticalDivider(
-                      thickness: 2,
-                    ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Visibility(
-                            visible: top < 135,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: dimensWidth(),
                               ),
-                              child: const FaIcon(
-                                FontAwesomeIcons.award,
-                                color: color9D4B6C,
-                              ),
-                            ),
+                            ],
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  translate(context, 'reward_points'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: black26,
-                                      ),
-                                ),
-                                Text(
-                                  convertToVND(state.profile.point ?? 0),
-                                  softWrap: true,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(
-                                          color: color1F1F1F,
-                                          overflow: TextOverflow.ellipsis),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }),

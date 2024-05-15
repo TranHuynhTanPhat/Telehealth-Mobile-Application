@@ -54,7 +54,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 attributesToSearchOn: ['full_name'],
                 sort: ['full_name:asc'],
                 filter:
-                    filterExp != null ? 'specialty = $filterExp' : filterExp,
+                    filterExp != null ? 'specialty.specialty = $filterExp' : filterExp,
                 page: pageKey + 1),
             pageKey: pageKey,
             callback: (doctors) =>

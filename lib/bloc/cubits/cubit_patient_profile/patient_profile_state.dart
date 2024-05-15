@@ -25,3 +25,13 @@ final class UpdateContactState extends PatientProfileState {
 
   // final DataResponse? response;
 }
+
+final class FetchSpendingChart extends PatientProfileState {
+  FetchSpendingChart(
+      {required super.blocState,
+      super.error,
+      required super.profile,
+      required this.spendingChartPatient});
+  final SpendingChartPatient? spendingChartPatient;
+  // final DataResponse? response;
+}

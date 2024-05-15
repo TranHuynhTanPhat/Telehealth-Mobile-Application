@@ -2,6 +2,7 @@
 import 'package:healthline/data/api/models/requests/user_request.dart';
 import 'package:healthline/data/api/models/responses/base/data_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
+import 'package:healthline/data/api/models/responses/spending_chart_patient.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/user_service.dart';
 import 'package:healthline/repositories/base_repository.dart';
@@ -111,6 +112,10 @@ class UserRepository extends BaseRepository {
 
   Future<List<DoctorDetailResponse>>getWishList() async{
     return await _userService.getWishList();
+  }
+
+  Future<SpendingChartPatient>fetchSpendingChart({required String id, required int month, required int year}) async {
+    return await _userService.fetchSpendingChart(id: id, month:month, year:year);
   }
 
   

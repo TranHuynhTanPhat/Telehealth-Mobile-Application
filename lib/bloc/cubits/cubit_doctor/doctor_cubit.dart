@@ -124,14 +124,16 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
         doctors: state.doctors,
         blocState: BlocState.Pending,
         recentDoctors: state.recentDoctors,
-        pageKey: state.pageKey));
+        pageKey: state.pageKey,
+        wishDoctors: state.wishDoctors));
     try {
       await _userRepository.addWishList(doctorId: doctorId);
       emit(DoctorState(
           doctors: state.doctors,
           blocState: BlocState.Successed,
           recentDoctors: state.recentDoctors,
-          pageKey: state.pageKey));
+          pageKey: state.pageKey,
+          wishDoctors: state.wishDoctors));
     } on DioException catch (e) {
       // DioException er = e as DioException;
       emit(
@@ -140,7 +142,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             blocState: BlocState.Failed,
             error: e.response!.data['message'].toString(),
             recentDoctors: state.recentDoctors,
-            pageKey: state.pageKey),
+            pageKey: state.pageKey,
+            wishDoctors: state.wishDoctors),
       );
     } catch (e) {
       emit(
@@ -149,7 +152,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             blocState: BlocState.Failed,
             error: e.toString(),
             recentDoctors: state.recentDoctors,
-            pageKey: state.pageKey),
+            pageKey: state.pageKey,
+            wishDoctors: state.wishDoctors),
       );
     }
   }

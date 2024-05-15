@@ -24,7 +24,7 @@ class _WalletScreenState extends State<WalletScreen>
     tabController = TabController(length: 2, vsync: this);
     // _controller = TextEditingController();
     if (AppController().authState == AuthState.PatientAuthorized) {
-      context.read<PatientProfileCubit>().fetProfile();
+      context.read<PatientProfileCubit>().fetchProfile();
     }
     if (AppController().authState == AuthState.DoctorAuthorized) {
       context.read<DoctorProfileCubit>().fetchProfile();
@@ -35,26 +35,29 @@ class _WalletScreenState extends State<WalletScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+        extendBody: true,
+        backgroundColor: white,
       body: CustomScrollView(shrinkWrap: true, slivers: [
-        SliverAppBar(
-          automaticallyImplyLeading: true,
-          centerTitle: true,
-          title: Text(translate(context, 'budget')),
-          foregroundColor: white,
-          flexibleSpace: FlexibleSpaceBar(
-            stretchModes: const [StretchMode.zoomBackground],
-            background: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [primary, color9D4B6C],
-                  stops: [0, 1],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-            ),
-          ),
-        ),
+        // SliverAppBar(
+        //   automaticallyImplyLeading: true,
+        //   centerTitle: true,
+        //   title: Text(translate(context, 'budget')),
+        //   foregroundColor: white,
+        //   flexibleSpace: FlexibleSpaceBar(
+        //     stretchModes: const [StretchMode.zoomBackground],
+        //     background: Container(
+        //       decoration: const BoxDecoration(
+        //         gradient: LinearGradient(
+        //           colors: [primary, color9D4B6C],
+        //           stops: [0, 1],
+        //           begin: Alignment.centerLeft,
+        //           end: Alignment.centerRight,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         if (AppController().authState == AuthState.DoctorAuthorized)
           const WalletCardDoctor(),
         if (AppController().authState == AuthState.PatientAuthorized)
@@ -63,7 +66,7 @@ class _WalletScreenState extends State<WalletScreen>
           automaticallyImplyLeading: false,
           pinned: true,
           floating: false,
-          toolbarHeight: dimensHeight() * 3,
+          toolbarHeight: dimensHeight() * 10,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
               padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),

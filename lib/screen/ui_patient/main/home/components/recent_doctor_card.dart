@@ -51,7 +51,7 @@ class _DoctorCardState extends State<RecentDoctorCard> {
       splashColor: transparent,
       highlightColor: transparent,
       onTap: () => Navigator.pushNamed(context, detailDoctorName,
-          arguments: widget.doctor.toJson()),
+          arguments: widget.doctor),
       child: Container(
         // width: dimensWidth() * 20,
         // height: dimensHeight() * 40,

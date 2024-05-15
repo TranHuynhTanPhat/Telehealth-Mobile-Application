@@ -1,6 +1,9 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/res/style.dart';
@@ -48,7 +51,7 @@ class _DoctorCardState extends State<DoctorCard> {
       highlightColor: transparent,
       onTap: () {
         Navigator.pushNamed(context, detailDoctorName,
-            arguments: widget.doctor.toJson());
+            arguments: widget.doctor);
         context.read<DoctorCubit>().addRecentDoctor(widget.doctor);
       },
       child: Container(
@@ -113,62 +116,62 @@ class _DoctorCardState extends State<DoctorCard> {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      // InkWell(
-                      //   splashColor: transparent,
-                      //   highlightColor: transparent,
-                      //   onTap: () {
-                      //     if (widget.doctor.id != null) {
-                      //       DateTime dateTime = DateTime.now();
-                      //       context.read<ConsultationCubit>().fetchTimeline(
-                      //           doctorId: widget.doctor.id!,
-                      //           date:
-                      //               '${dateTime.day + 1}/${dateTime.month}/${dateTime.year}');
-                      //       Navigator.pushNamed(
-                      //         context,
-                      //         createConsultationName,
-                      //         arguments: widget.doctor.toJson(),
-                      //       );
-                      //     } else {
-                      //       EasyLoading.showToast(
-                      //           translate(context, 'cant_load_data'));
-                      //       Navigator.pop(context);
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     width: dimensWidth() * 17,
-                      //     padding: EdgeInsets.all(dimensWidth() * .8),
-                      //     decoration: const BoxDecoration(
-                      //       color: primary,
-                      //       borderRadius: BorderRadius.all(
-                      //         Radius.circular(100),
-                      //       ),
-                      //     ),
-                      //     child: Row(
-                      //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //       children: [
-                      //         FaIcon(
-                      //           FontAwesomeIcons.solidCalendarPlus,
-                      //           size: dimensIcon() * .4,
-                      //           color: white,
-                      //         ),
-                      //         SizedBox(
-                      //           width: dimensWidth() * .3,
-                      //         ),
-                      //         Expanded(
-                      //           child: Text(
-                      //             translate(context, 'book_appointment_now'),
-                      //             maxLines: 1,
-                      //             overflow: TextOverflow.ellipsis,
-                      //             style: Theme.of(context)
-                      //                 .textTheme
-                      //                 .bodySmall
-                      //                 ?.copyWith(color: white),
-                      //           ),
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
+                      InkWell(
+                        splashColor: transparent,
+                        highlightColor: transparent,
+                        onTap: () {
+                          if (widget.doctor.id != null) {
+                            DateTime dateTime = DateTime.now();
+                            context.read<ConsultationCubit>().fetchTimeline(
+                                doctorId: widget.doctor.id!,
+                                date:
+                                    '${dateTime.day + 1}/${dateTime.month}/${dateTime.year}');
+                            Navigator.pushNamed(
+                              context,
+                              createConsultationName,
+                              arguments: widget.doctor.toJson(),
+                            );
+                          } else {
+                            EasyLoading.showToast(
+                                translate(context, 'cant_load_data'));
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Container(
+                          width: dimensWidth() * 17,
+                          padding: EdgeInsets.all(dimensWidth() * .8),
+                          decoration: const BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.solidCalendarPlus,
+                                size: dimensIcon() * .4,
+                                color: white,
+                              ),
+                              SizedBox(
+                                width: dimensWidth() * .3,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  translate(context, 'book_appointment_now'),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(color: white),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

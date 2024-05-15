@@ -36,7 +36,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
   void initState() {
     request = ConsultationRequest();
     if(!mounted)return;
-    context.read<PatientProfileCubit>().fetProfile();
+    context.read<PatientProfileCubit>().fetchProfile();
 
     super.initState();
   }

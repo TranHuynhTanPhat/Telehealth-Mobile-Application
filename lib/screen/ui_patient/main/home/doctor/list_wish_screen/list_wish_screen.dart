@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthline/bloc/cubits/cubit_doctor/doctor_cubit.dart';
 import 'package:healthline/res/colors.dart';
 import 'package:healthline/res/dimens.dart';
+import 'package:healthline/res/enum.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/list_wish_screen/components/export.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
 import 'package:healthline/utils/translate.dart';
@@ -32,7 +33,13 @@ class _ListWishScreenState extends State<ListWishScreen> {
         ),
         body: BlocBuilder<DoctorCubit, DoctorState>(
           builder: (context, state) {
-            if (state.wishDoctors.isNotEmpty) {
+            if (state.blocState == BlocState.Pending) {
+              return Column(
+                children: [
+                  buildShimmer(),
+                ],
+              );
+            } else if (state.wishDoctors.isNotEmpty) {
               return ListView(
                 shrinkWrap: false,
                 padding: EdgeInsets.symmetric(
@@ -45,10 +52,8 @@ class _ListWishScreenState extends State<ListWishScreen> {
                 ],
               );
             } else {
-              return Column(
-                children: [
-                  buildShimmer(),
-                ],
+              return Center(
+                child: Text(translate(context, 'empty')),
               );
             }
           },
@@ -79,8 +84,8 @@ Widget buildShimmer() => Container(
           Row(
             children: [
               ShimmerWidget.circular(
-                width: dimensWidth() * 7,
-                height: dimensWidth() * 7,
+                width: dimensWidth() * 9,
+                height: dimensWidth() * 9,
               ),
               SizedBox(
                 width: dimensWidth() * 2.5,

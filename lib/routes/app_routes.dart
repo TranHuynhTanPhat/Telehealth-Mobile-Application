@@ -5,6 +5,7 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -381,7 +382,8 @@ class AppRoute {
             ),
           );
         case detailDoctorName:
-          final args = settings.arguments as String?;
+          final args = settings.arguments as DoctorDetailResponse?;
+
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
               providers: [

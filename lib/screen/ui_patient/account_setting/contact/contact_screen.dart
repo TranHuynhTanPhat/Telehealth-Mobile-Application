@@ -20,7 +20,7 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   @override
   void initState() {
-    context.read<PatientProfileCubit>().fetProfile();
+    context.read<PatientProfileCubit>().fetchProfile();
 
     super.initState();
   }
