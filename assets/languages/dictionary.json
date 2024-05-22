@@ -427,6 +427,10 @@
         "vi": "Thông báo",
         "en": "Notification"
     },
+    "message": {
+        "vi": "Tin nhắn",
+        "en": "Message"
+    },
     "search_drugs_categories": {
         "vi": "Tìm kiếm thuốc, thể loại",
         "en": "Search drugs, categories"

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
@@ -21,12 +22,25 @@ class _ChatScreenState extends State<ChatScreen> {
       resizeToAvoidBottomInset: true,
       extendBody: true,
       backgroundColor: white,
-      appBar: AppBar(
-        title: const Text("Trò chuyện"),
-        centerTitle: false,
-      ),
+      appBar: AppController().authState == AuthState.PatientAuthorized
+          ? AppBar(
+              surfaceTintColor: transparent,
+              scrolledUnderElevation: 0,
+              backgroundColor: white,
+              title: Padding(
+                padding: EdgeInsets.only(left: dimensWidth()),
+                child: Text(
+                  translate(context, 'message'),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: color1F1F1F, fontWeight: FontWeight.w900),
+                ),
+              ),
+              centerTitle: false,
+            )
+          : null,
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+        padding: EdgeInsets.symmetric(
+            horizontal: dimensWidth() * 3, vertical: dimensHeight()),
         shrinkWrap: true,
         children: [
           TextFieldWidget(
@@ -93,10 +107,11 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                   color: white,
                   borderRadius: BorderRadius.circular(dimensWidth() * 2),
+                  // border: Border.all(width: .5, color: black26.withOpacity(.1)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(.1),
-                      blurRadius: 15,
+                      color: Colors.black.withOpacity(.07),
+                      blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ]),
@@ -124,24 +139,39 @@ class _ChatScreenState extends State<ChatScreen> {
                               children: [
                                 Text(
                                   "Name",
-                                  style: Theme.of(context).textTheme.titleMedium,
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                Row(
-                                  children: [
-                                    Text("${translate(context,'you')}: "),
-                                    const Text(
-                                      "The last message",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                Text.rich(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(fontWeight: FontWeight.normal, color: black26),
+                                  TextSpan(
+                                    text: "${translate(context, 'you')}: ",
+                                    children: const [
+                                      TextSpan(
+                                        text: "the last message",
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            const Positioned(
-                                right: 0, top: 0, child: Text("20:00")),
+                            Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Text(
+                                  "20:00",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(color: black26),
+                                )),
                           ],
                         ),
                       )

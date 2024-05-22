@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/screen/chat/chat_screen.dart';
 import 'package:open_document/open_document.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -142,9 +143,9 @@ class _MainScreenPatientState extends State<MainScreenPatient>
         "badge": false
       },
       {
-        "page": const NotificationScreen(),
-        "title": "notification",
-        "icon": FontAwesomeIcons.solidBell,
+        "page": const ChatScreen(),
+        "title": "message",
+        "icon": FontAwesomeIcons.inbox,
         "badge": false
       },
       {
@@ -224,6 +225,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               EasyLoading.showToast(translate(context, 'cant_download'));
               if (!await launchUrl(Uri.parse(state.url))) {
                 if (!mounted) return;
+                // ignore: use_build_context_synchronously
                 EasyLoading.showToast(translate(context, 'cant_open'));
               }
             } else if (state is AddPatientRecordError) {
@@ -262,7 +264,7 @@ class _MainScreenPatientState extends State<MainScreenPatient>
                   BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
                 builder: (context, state) {
                   _pageDetail.firstWhere((element) =>
-                          element['title'] == 'notification')['badge'] =
+                          element['title'] == 'message')['badge'] =
                       state is UpdateAvailable;
                   return ListView.builder(
                     itemCount: _pageDetail.length,
