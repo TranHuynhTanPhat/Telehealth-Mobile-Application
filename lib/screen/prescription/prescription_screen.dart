@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_prescription/prescription_cubit.dart';
 import 'package:healthline/data/api/models/responses/prescription_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
@@ -24,7 +24,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     if (!mounted) return;
     if (widget.consultationId != null) {
       context
-          .read<ConsultationCubit>()
+          .read<PrescriptionCubit>()
           .fetchPrescription(consultationId: widget.consultationId!);
     } else {
       return;
@@ -43,7 +43,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             translate(context, 'prescription'),
           ),
         ),
-        body: BlocBuilder<ConsultationCubit, ConsultationState>(
+        body: BlocBuilder<PrescriptionCubit, PrescriptionState>(
           builder: (context, state) {
             if (state is FetchPrescriptionState) {
               if (state.blocState == BlocState.Failed) {
@@ -313,8 +313,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
 
   Future<dynamic> showDetailDrug(BuildContext context,
       {required DrugModal drug}) async {
-    context.read<ConsultationCubit>().getInfoDrug(id: drug.code!);
-    final consulationCubit = context.read<ConsultationCubit>();
+    context.read<PrescriptionCubit>().getInfoDrug(id: drug.code!);
+    final prescriptionCubit = context.read<PrescriptionCubit>();
     return await showDialog(
       barrierColor: black26,
       context: context,
@@ -340,7 +340,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         ],
         content: SingleChildScrollView(
           child: BlocProvider.value(
-            value: consulationCubit,
+            value: prescriptionCubit,
             child: Container(
               color: transparent,
               width: MediaQuery.of(context).size.width - dimensWidth() * 5,
@@ -353,8 +353,8 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                     ),
                   ),
                   DrugCardBottom(
-                    widget: BlocBuilder<ConsultationCubit, ConsultationState>(
-                      bloc: consulationCubit,
+                    widget: BlocBuilder<PrescriptionCubit, PrescriptionState>(
+                      bloc: prescriptionCubit,
                       builder: (context, state) {
                         if (state is GetInfoDrugState) {
                           if (state.blocState == BlocState.Successed &&
@@ -656,7 +656,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
           ),
         ),
       ),
-    ).then((value) => consulationCubit.fetchPrescription(
+    ).then((value) => prescriptionCubit.fetchPrescription(
         consultationId: widget.consultationId!));
   }
 }

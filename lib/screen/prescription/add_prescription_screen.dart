@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_prescription/prescription_cubit.dart';
 import 'package:healthline/data/api/models/responses/drug_response.dart';
 import 'package:healthline/data/api/models/responses/prescription_response.dart';
 import 'package:healthline/res/style.dart';
@@ -99,7 +100,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => KeyboardUtil.hideKeyboard(context),
-      child: BlocConsumer<ConsultationCubit, ConsultationState>(
+      child: BlocConsumer<PrescriptionCubit, PrescriptionState>(
         listener: (context, state) {
           if (state is CreatePrescriptionState) {
             if (state.blocState == BlocState.Successed) {
@@ -390,7 +391,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                             
                             if (_formKey.currentState!.validate()) {
                               context
-                                  .read<ConsultationCubit>()
+                                  .read<PrescriptionCubit>()
                                   .createPrescription(
                                       prescriptionResponse:
                                           prescriptionResponse.copyWith(

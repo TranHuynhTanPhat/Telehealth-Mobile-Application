@@ -170,16 +170,6 @@ final class GetNewCustomer extends ConsultationState {
   final List<UserResponse>? data;
 }
 
-final class FetchPrescriptionState extends ConsultationState {
-  FetchPrescriptionState(
-      {required super.blocState,
-      required super.timeline,
-      super.error,
-      required super.consultations,
-      required super.feedbacks,
-      this.data});
-  final PrescriptionResponse? data;
-}
 
 final class SearchDrugState extends ConsultationState {
   SearchDrugState({
@@ -190,27 +180,7 @@ final class SearchDrugState extends ConsultationState {
     required super.feedbacks,
   });
 }
-final class GetInfoDrugState extends ConsultationState {
-  GetInfoDrugState({
-    required super.blocState,
-    required super.timeline,
-    super.error,
-    required super.consultations,
-    required super.feedbacks,
-    this.data
-  });
-  final DrugResponse? data;
-}
 
-final class CreatePrescriptionState extends ConsultationState {
-  CreatePrescriptionState({
-    required super.blocState,
-    required super.timeline,
-    super.error,
-    required super.consultations,
-    required super.feedbacks,
-  });
-}
 final class FetchHistoryPatientConsultationState extends ConsultationState {
   FetchHistoryPatientConsultationState({
     required super.blocState,

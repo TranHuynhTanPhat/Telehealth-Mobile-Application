@@ -271,6 +271,11 @@
         "vi": "Không thể xác thực",
         "en": "Unauthorized"
     },
+    "medical_examination_history": {
+        "vi": "Lịch sử khám bệnh",
+        "en": "Medical examination history"
+    },
+    
     "patient": {
         "vi": "Bệnh nhân",
         "en": "Patient"

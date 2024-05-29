@@ -5,6 +5,7 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/bloc/cubits/cubit_chat/chat_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_prescription/prescription_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_wallet/wallet_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/consultation_response.dart';
@@ -79,6 +80,7 @@ class AppRoute {
   late ConsultationCubit _consultationCubit;
   late ChatCubit _chatCubit;
   late WalletCubit _walletCubit;
+  late PrescriptionCubit _prescriptionCubit;
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
 
   AppRoute() {
@@ -102,6 +104,7 @@ class AppRoute {
     _consultationCubit = ConsultationCubit();
     _chatCubit = ChatCubit(socketManager: _socketChat);
     _walletCubit = WalletCubit();
+    _prescriptionCubit = PrescriptionCubit();
   }
 
   void dispose() {
@@ -219,8 +222,9 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
               providers: [
+              
                 BlocProvider.value(
-                  value: _consultationCubit,
+                  value: _prescriptionCubit,
                 ),
               ],
               child: PrescriptionScreen(consultationId: args),
@@ -306,8 +310,9 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
               providers: [
+                
                 BlocProvider.value(
-                  value: _consultationCubit,
+                  value: _prescriptionCubit,
                 ),
               ],
               child: AddPrescriptionScreen(
@@ -421,6 +426,9 @@ class AppRoute {
               providers: [
                 BlocProvider.value(
                   value: _consultationCubit,
+                ),
+                 BlocProvider.value(
+                  value: _prescriptionCubit,
                 ),
                 BlocProvider.value(
                   value: _patientRecordCubit,

@@ -34,12 +34,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         if (state.blocState == BlocState.Pending) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state.blocState == BlocState.Failed) {
-          if (state is FetchPrescriptionState) {
-            EasyLoading.showToast(
-                translate(context, "prescription_has_not_been_created_yet"));
-          } else {
             EasyLoading.showToast(translate(context, state.error));
-          }
         } else {
           EasyLoading.dismiss();
           if (state is CancelConsultationState ||

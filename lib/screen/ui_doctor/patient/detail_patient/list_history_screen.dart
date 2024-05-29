@@ -5,6 +5,8 @@ import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dar
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/date_util.dart';
+import 'package:healthline/utils/log_data.dart';
+import 'package:healthline/utils/time_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class ListHistoryConsultationScreen extends StatefulWidget {
@@ -18,6 +20,7 @@ class ListHistoryConsultationScreen extends StatefulWidget {
 
 class _ListHistoryConsultationScreenState
     extends State<ListHistoryConsultationScreen> {
+  List<int> time = [];
   @override
   void initState() {
     if (!mounted) return;
@@ -65,8 +68,19 @@ class _ListHistoryConsultationScreenState
                       date = formatyMMMMd(
                           context, convertStringToDateTime(e.date)!);
                     } catch (e) {
-                      date = "undefine";
+                      date = "--";
                     }
+                    try {
+                      time = e.expectedTime
+                              ?.split('-')
+                              .map((e) => int.parse(e))
+                              .toList() ??
+                          [int.parse(e.expectedTime!)];
+                    } catch (e) {
+                      logPrint(e);
+                    }
+                    String expectedTime =
+                        '${convertIntToTime(time.first)} - ${convertIntToTime(time.last + 1)}';
                     return InkWell(
                       hoverColor: transparent,
                       splashColor: transparent,
@@ -98,7 +112,7 @@ class _ListHistoryConsultationScreenState
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              translate(context, date),
+                              "$date $expectedTime",
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             Text(
