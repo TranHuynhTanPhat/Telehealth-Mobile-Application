@@ -4,7 +4,7 @@ import 'package:healthline/data/api/api_constants.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/requests/feedback_request.dart';
 import 'package:healthline/data/api/models/responses/all_consultation_response.dart';
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
 import 'package:healthline/data/api/models/responses/drug_response.dart';
@@ -14,6 +14,7 @@ import 'package:healthline/data/api/models/responses/prescription_response.dart'
 import 'package:healthline/data/api/models/responses/statistic_response.dart';
 import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/data/api/services/base_service.dart';
+import 'package:healthline/utils/date_util.dart';
 
 class ConsultationService extends BaseService {
   Future<DiscountResponse> checkDiscount({required String code}) async {
@@ -150,29 +151,72 @@ class ConsultationService extends BaseService {
     final response =
         await get(ApiConstants.CONSULTATION_DOCTOR_INFORMATION, isDoctor: true);
     final List<dynamic> objects =
-        json.decode(json.encode(response.data['consultation']));
+        json.decode(json.encode(response.data['medicals']));
     final List<UserResponse> patients =
         objects.map((e) => UserResponse.fromMap(e)).toList();
     return patients;
   }
 
-  Future<AllConsultationResponse> fetchPatientConsultation() async {
-    final response = await get(ApiConstants.CONSULTATION_USER);
-    final List<dynamic> oComing =
-        json.decode(json.encode(response.data['coming']));
-    final List<dynamic> oFinish =
-        json.decode(json.encode(response.data['finish']));
-    final List<dynamic> oCancel =
-        json.decode(json.encode(response.data['cancel']));
-    final List<ConsultationResponse> coming =
-        oComing.map((e) => ConsultationResponse.fromMap(e)).toList();
-    final List<ConsultationResponse> finish =
-        oFinish.map((e) => ConsultationResponse.fromMap(e)).toList();
-    final List<ConsultationResponse> cancel =
-        oCancel.map((e) => ConsultationResponse.fromMap(e)).toList();
+  Future<List<ConsultationResponse>> fetchHistoryPatientConsultation(
+      {required String medicalId}) async {
+    final response = await get(
+        "${ApiConstants.CONSULTATION_HISTORY_PATIENT}/$medicalId",
+        isDoctor: true);
+    final List<dynamic> objects = json.decode(json.encode(response.data));
+    final List<ConsultationResponse> patients =
+        objects.map((e) => ConsultationResponse.fromMap(e)).toList();
+    return patients;
+  }
 
-    return AllConsultationResponse(
-        coming: coming, finish: finish, cancel: cancel);
+  Future<AllConsultationResponse> fetchPatientConsultation() async {
+    try {
+      final response = await get(ApiConstants.CONSULTATION_USER);
+      final List<dynamic> oComing =
+          json.decode(json.encode(response.data['coming']));
+      final List<dynamic> oFinish =
+          json.decode(json.encode(response.data['finish']));
+      final List<dynamic> oCancel =
+          json.decode(json.encode(response.data['cancel']));
+      final List<ConsultationResponse> coming =
+          oComing.map((e) => ConsultationResponse.fromMap(e)).toList();
+      final List<ConsultationResponse> finish =
+          oFinish.map((e) => ConsultationResponse.fromMap(e)).toList();
+      final List<ConsultationResponse> cancel =
+          oCancel.map((e) => ConsultationResponse.fromMap(e)).toList();
+
+      coming.sort((a, b) {
+        DateTime? aTime = convertStringToDateTime(a.updatedAt);
+        DateTime? bTime = convertStringToDateTime(b.updatedAt);
+        if (aTime != null && bTime != null) {
+          return bTime.compareTo(aTime);
+        } else {
+          return bTime == null ? -1 : 1;
+        }
+      });
+      finish.sort((a, b) {
+        DateTime? aTime = convertStringToDateTime(a.updatedAt);
+        DateTime? bTime = convertStringToDateTime(b.updatedAt);
+        if (aTime != null && bTime != null) {
+          return bTime.compareTo(aTime);
+        } else {
+          return bTime == null ? -1 : 1;
+        }
+      });
+      cancel.sort((a, b) {
+        DateTime? aTime = convertStringToDateTime(a.updatedAt);
+        DateTime? bTime = convertStringToDateTime(b.updatedAt);
+        if (aTime != null && bTime != null) {
+          return bTime.compareTo(aTime);
+        } else {
+          return bTime == null ? -1 : 1;
+        }
+      });
+
+      return AllConsultationResponse(
+          coming: coming, finish: finish, cancel: cancel);
+    } catch (e) {
+      return AllConsultationResponse(coming: [], finish: [], cancel: []);
+    }
   }
 
   Future<AllConsultationResponse> fetchDoctorConsultation() async {

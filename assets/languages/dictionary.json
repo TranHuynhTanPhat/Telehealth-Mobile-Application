@@ -431,6 +431,10 @@
         "vi": "Tin nhắn",
         "en": "Message"
     },
+    "texting": {
+        "vi": "Nhắn tin",
+        "en": "Texting"
+    },
     "search_drugs_categories": {
         "vi": "Tìm kiếm thuốc, thể loại",
         "en": "Search drugs, categories"
@@ -866,6 +870,10 @@
     "prescriptions": {
         "vi": "Đơn",
         "en": "Prescriptions"
+    },
+    "prescription_has_not_been_created_yet": {
+        "vi": "Đơn thuốc chưa được tạo",
+        "en": "Prescription has not been created yet"
     },
     "health_information": {
         "vi": "Thông tin sức khoẻ",
@@ -1802,6 +1810,10 @@
     "payment": {
         "vi": "Thanh toán",
         "en": "Payment"
+    },
+    "payment_by_momo": {
+        "vi": "Thanh toán qua Momo",
+        "en": "Payment by Momo"
     },
     "register_an_account_according_to_the_steps": {
         "vi": "Đăng ký tài khoản theo các bước",

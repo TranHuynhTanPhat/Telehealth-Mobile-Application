@@ -89,4 +89,6 @@
 			<string>be.tramckrijte.workmanagerExample.iOSBackgroundAppRefresh</string>
 		</array>
 	</dict>
+	<key>com.apple.security.network.client</key>
+	<true/>
 </plist>

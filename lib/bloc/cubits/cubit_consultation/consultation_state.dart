@@ -50,7 +50,6 @@ final class FetchConsultationState extends ConsultationState {
       required super.consultations,
       required super.feedbacks});
 }
-
 final class FetchDetatilDoctorConsultationState extends ConsultationState {
   FetchDetatilDoctorConsultationState(
       {required super.blocState,
@@ -211,6 +210,17 @@ final class CreatePrescriptionState extends ConsultationState {
     required super.consultations,
     required super.feedbacks,
   });
+}
+final class FetchHistoryPatientConsultationState extends ConsultationState {
+  FetchHistoryPatientConsultationState({
+    required super.blocState,
+    required super.timeline,
+    super.error,
+    required super.consultations,
+    required super.feedbacks,
+    required this.historyConsultation
+  });
+  final List<ConsultationResponse> historyConsultation;
 }
 
 final class FetchDiscountState extends ConsultationState {

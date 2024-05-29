@@ -130,6 +130,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         onPressed: () async {
                           await _downloadUpdate();
                           if (!mounted) return;
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context)
                               .hideCurrentMaterialBanner();
                         },

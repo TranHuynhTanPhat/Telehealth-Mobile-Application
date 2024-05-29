@@ -14,10 +14,18 @@ import '../../../repositories/file_repository.dart';
 part 'doctor_profile_state.dart';
 
 class DoctorProfileCubit extends Cubit<DoctorProfileState> {
-  DoctorProfileCubit() : super(DoctorProfileInitial(profile: DoctorDetailResponse()));
+  DoctorProfileCubit()
+      : super(DoctorProfileInitial(profile: DoctorDetailResponse(), blocState: BlocState.Successed));
   final DoctorRepository _doctorRepository = DoctorRepository();
   final FileRepository _fileRepository = FileRepository();
-  final ConsultationRepository _consultationRepository = ConsultationRepository();
+  final ConsultationRepository _consultationRepository =
+      ConsultationRepository();
+
+  @override
+  void onChange(Change<DoctorProfileState> change) {
+    super.onChange(change);
+    logPrint("$change ${change.currentState.blocState.name}");
+  }
 
   Future<void> fetchProfile() async {
     emit(
@@ -54,6 +62,7 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
     try {
       List<UserResponse> patients =
           await _consultationRepository.fetchPatient();
+          logPrint(patients);
       emit(FetchPatientState(
           profile: state.profile,
           blocState: BlocState.Successed,
@@ -173,7 +182,7 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
           await _doctorRepository.updateAvatar(publicId);
           emit(
             DoctorProfileState(
-              profile: state.profile.copyWith(avatar: publicId),
+              profile: state.profile.copyWith(avatar: publicId), blocState: BlocState.Successed,
             ),
           );
         } else {}
@@ -187,9 +196,4 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
     }
   }
 
-  @override
-  void onChange(Change<DoctorProfileState> change) {
-    super.onChange(change);
-    logPrint(change);
-  }
 }

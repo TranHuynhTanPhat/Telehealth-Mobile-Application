@@ -229,7 +229,6 @@ class MedicalRecordCubit extends HydratedCubit<MedicalRecordState> {
         currentId: state.currentId,
       ));
     } catch (e) {
-      logPrint(e);
       emit(AddSubUserFailure(
         stats: state.stats,
         message: e.toString(),

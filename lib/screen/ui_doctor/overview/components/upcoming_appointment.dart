@@ -3,7 +3,7 @@
 import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';

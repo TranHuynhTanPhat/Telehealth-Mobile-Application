@@ -11,7 +11,6 @@ class FeedbackResponse {
   FeedbackResponse(
       {this.id, this.user, this.feedback, this.rated, this.createdAt});
 
-  get ratings => null;
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/data/api/models/responses/prescription_response.dart';
-import 'package:healthline/res/dimens.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/prescription/components/export.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
+import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class PrescriptionScreen extends StatefulWidget {
@@ -48,7 +47,6 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
           builder: (context, state) {
             if (state is FetchPrescriptionState) {
               if (state.blocState == BlocState.Failed) {
-                EasyLoading.showToast(translate(context, state.error));
                 Future.delayed(const Duration(milliseconds: 100), () {
                   Navigator.pop(context, addPrescriptionName);
                 });
@@ -86,7 +84,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${translate(context, "Ngày tạo")}: ",
+                            "${translate(context, "created_at")}: ",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -94,8 +92,11 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              state.data?.createdAt ??
-                                  translate(context, 'undefine'),
+                              formatDayMonthYear(
+                                  context,
+                                  convertStringToDateTime(
+                                          state.data?.createdAt) ??
+                                      DateTime.now()),
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                           )
@@ -288,7 +289,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              "Không bỏ cử",
+                              state.data?.notice ?? translate(context, 'empty'),
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                           )

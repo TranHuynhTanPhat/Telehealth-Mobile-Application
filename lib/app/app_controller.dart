@@ -86,7 +86,7 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
   // Only available for flutter 3.0.0 and later
-  DartPluginRegistrant.ensureInitialized();
+  // DartPluginRegistrant.ensureInitialized();
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
@@ -106,7 +106,7 @@ void onStart(ServiceInstance service) async {
 
 connectNotification() {
   final _socketManager = SocketManager(port: PortSocket.notifications);
-
+  _socketManager.stopEvent(event: "notification");
   _socketManager.addListener(
       event: 'notification',
       listener: (data) async {
@@ -137,6 +137,18 @@ connectNotification() {
                 id: Random.secure().nextInt(100).toString(),
               ),
             );
+          }
+          else if (socketNotification.type ==
+              TypeNotificationSocket.consultationCanceled) {
+            
+          }
+          else if (socketNotification.type ==
+              TypeNotificationSocket.consultationDenied) {
+            
+          }
+          else if (socketNotification.type ==
+              TypeNotificationSocket.consultationRequest) {
+            
           }
         } catch (e) {
           await PushNotificationManager().showNotification(

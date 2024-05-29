@@ -22,7 +22,7 @@ import 'package:healthline/app/app_controller.dart';
 import 'package:healthline/app/jitsi_service.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_patient_record/patient_record_cubit.dart';
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/widgets/file_widget.dart';
 import 'package:healthline/utils/date_util.dart';
@@ -87,7 +87,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
       if (AppController().authState == AuthState.DoctorAuthorized) {
         context
             .read<ConsultationCubit>()
-            .fetchDetatilDoctorConsultation(consultationId: consultation!.id!);
+            .fetchDetailDoctorConsultation(consultationId: consultation!.id!);
       }
     } catch (e) {
       logPrint(e);
@@ -301,6 +301,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
               EasyLoading.showToast(translate(context, 'cant_download'));
               if (!await launchUrl(Uri.parse(state.url))) {
                 if (!mounted) return;
+                // ignore: use_build_context_synchronously
                 EasyLoading.showToast(translate(context, 'cant_open'));
               }
             } else if (state is AddPatientRecordError) {
@@ -310,20 +311,27 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
             }
           },
         ),
-        BlocListener<ConsultationCubit, ConsultationState>(
-          listener: (context, state) async {
-            if (state is AnnounceBusyState) {
-              if (state.blocState == BlocState.Pending) {
-                EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state.blocState == BlocState.Failed) {
-                EasyLoading.showToast(translate(context, state.error));
-              } else {
-                EasyLoading.dismiss();
-                Navigator.pop(context);
-              }
-            }
-          },
-        )
+        // BlocListener<ConsultationCubit, ConsultationState>(
+        //   listener: (context, state) async {
+        //     if (state is AnnounceBusyState) {
+        //       if (state.blocState == BlocState.Pending) {
+        //         EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        //       }
+        //       else if (state.blocState == BlocState.Failed) {
+        //         if(state is FetchPrescriptionState){
+        //           EasyLoading.showToast(translate(context, "prescription_has_not_been_created_yet"));
+
+        //         }else {
+        //           EasyLoading.showToast(translate(context, state.error));
+        //         }
+        //       }
+        //       else {
+        //         EasyLoading.dismiss();
+        //         Navigator.pop(context);
+        //       }
+        //     }
+        //   },
+        // )
       ],
       child: BlocBuilder<ConsultationCubit, ConsultationState>(
         builder: (context, state) {
@@ -678,23 +686,24 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                                       fontWeight: FontWeight.w900),
                             ),
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              translate(
-                                  context,
-                                  consultation?.doctor!.specialties!.firstOrNull
-                                          ?.specialty ??
-                                      consultation?.doctor!.careers!.firstOrNull
-                                          ?.medicalInstitute ??
-                                      'undefine'),
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(color: color1F1F1F),
-                            ),
-                          )
+                          if (consultation!.doctor!.specialties!.isNotEmpty)
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                translate(
+                                    context,
+                                    consultation?.doctor!.specialties!
+                                            .firstOrNull?.specialty ??
+                                        consultation?.doctor!.careers!
+                                            .firstOrNull?.medicalInstitute ??
+                                        'undefine'),
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(color: color1F1F1F),
+                              ),
+                            )
                         ],
                       ),
                     ),
@@ -772,6 +781,27 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                                       fontWeight: FontWeight.w900),
                             ),
                           ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              translate(context,
+                                  consultation?.medical?.gender ?? 'undefine'),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                          if (consultation?.medical?.dateOfBirth != null)
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                formatDayMonthYear(
+                                    context,
+                                    convertStringToDateTime(
+                                        consultation!.medical!.dateOfBirth!)!),
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -897,6 +927,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                                 AuthState.DoctorAuthorized) {
                           PrescriptionResponse prescriptionResponse =
                               PrescriptionResponse(
+                            createdAt: DateTime.now().toIso8601String(),
                             patientName: consultation?.medical?.fullName,
                             patientAddress: consultation?.medical?.address,
                             gender: consultation?.medical?.gender,
@@ -943,7 +974,8 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                       ),
                     ),
                   ),
-                if (consultation?.status == "confirmed" && AppController().authState==AuthState.PatientAuthorized)
+                if (consultation?.status == "confirmed" &&
+                    AppController().authState == AuthState.PatientAuthorized)
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: dimensWidth() * 15,
@@ -1031,7 +1063,8 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                     children: [
                       RatingBar.builder(
                         ignoreGestures: true,
-                        initialRating: consultation?.feedback?.ratings ?? 0,
+                        initialRating:
+                            (consultation?.feedback?.rated ?? 0).toDouble(),
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -1044,7 +1077,7 @@ class _DetailConsultationScreenState extends State<DetailConsultationScreen> {
                         onRatingUpdate: (double value) {},
                       ),
                       Text(
-                        " (${consultation?.feedback?.ratings?.toStringAsFixed(1) ?? 0})",
+                        " (${consultation?.feedback?.rated?.toStringAsFixed(1) ?? 0})",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],

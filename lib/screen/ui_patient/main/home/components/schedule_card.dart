@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/res/style.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';

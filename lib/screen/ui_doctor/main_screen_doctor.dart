@@ -156,12 +156,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           BlocListener<ConsultationCubit, ConsultationState>(
               listener: (context, state) {
             if (state is FetchFeedbackDoctorState) {
-              if (state.blocState == BlocState.Pending) {
-                EasyLoading.show(maskType: EasyLoadingMaskType.black);
-              } else if (state.blocState == BlocState.Successed ||
-                  state.blocState == BlocState.Failed) {
-                EasyLoading.dismiss();
-              } else if (state.blocState == BlocState.Failed) {
+               if (state.blocState == BlocState.Failed) {
                 EasyLoading.showToast(translate(context, 'cant_load_data'));
               }
             }
@@ -357,6 +352,31 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 ),
                                 leading: FaIcon(
                                   FontAwesomeIcons.solidComments,
+                                  size: dimensIcon() * .5,
+                                  color: color1F1F1F,
+                                ),
+                              ),
+                              ListTile(
+                                onTap: () {
+                                  // EasyLoading.show(
+                                  //     maskType: EasyLoadingMaskType.black);
+                                  // setState(() {
+                                  //   onChangeToPatient = true;
+                                  // Future.delayed(const Duration(seconds: 1),
+                                  //     () {
+                                  Navigator.pushNamed(context, chatName);
+                                  // });
+                                  // });
+                                },
+                                title: Text(
+                                  translate(context, 'message'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(color: color1F1F1F),
+                                ),
+                                leading: FaIcon(
+                                  FontAwesomeIcons.solidMessage,
                                   size: dimensIcon() * .5,
                                   color: color1F1F1F,
                                 ),

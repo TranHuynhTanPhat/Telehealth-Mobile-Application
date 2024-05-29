@@ -269,11 +269,11 @@ class PushNotificationManager {
 
   void onDidReceiveBackgroundNotificationResponse(
       NotificationResponse notificationResponse) {
-    logPrint(notificationResponse.actionId);
-    logPrint(notificationResponse.id);
-    logPrint(notificationResponse.input);
-    logPrint(notificationResponse.notificationResponseType);
-    logPrint(notificationResponse.runtimeType);
+    // logPrint(notificationResponse.actionId);
+    // logPrint(notificationResponse.id);
+    // logPrint(notificationResponse.input);
+    // logPrint(notificationResponse.notificationResponseType);
+    // logPrint(notificationResponse.runtimeType);
     switch (notificationResponse.notificationResponseType) {
       case NotificationResponseType.selectedNotification:
         selectNotificationStream.add(notificationResponse.payload);

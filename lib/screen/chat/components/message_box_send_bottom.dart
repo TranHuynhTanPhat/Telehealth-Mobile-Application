@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:healthline/res/dimens.dart';
 import 'package:healthline/res/style.dart';
 
 class MessageBoxSendBottom extends StatelessWidget {

@@ -17,6 +17,7 @@ const notificationName = '/notification';
 const registerDoctorName = "/register-doctor";
 const prescriptionName = "/prescription";
 const addPrescriptionName = "/add-prescription";
+const payName = "/pay";
 
 const mainScreenPatientName = "/main-screen-patient";
 const accountSettingName = "/account-setting";
@@ -50,3 +51,5 @@ const updateScheduleByDayDoctorName = '/update-schedule-by-day-doctor';
 const mainScreenDoctorName = '/main-screen-doctor';
 const shiftDoctorName = '/shift-doctor';
 const updateProfileDoctorName = '/update-profile-doctor';
+const listHistoryConsultation = '/list-history-consultation';
+const detailHistoryConsultation = '/detail-history-consultation';

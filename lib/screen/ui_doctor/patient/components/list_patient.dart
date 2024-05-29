@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:healthline/bloc/cubits/cubit_doctor_profile/doctor_profile_cubit.dart';
-import 'package:healthline/res/dimens.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,135 +55,143 @@ class _ListPatientState extends State<ListPatient> {
                 path: e.phone,
               );
 
-              return Container(
-                margin: EdgeInsets.only(top: dimensHeight() * 1.5),
-                padding: EdgeInsets.symmetric(
-                    vertical: dimensHeight() * 1.5,
-                    horizontal: dimensWidth() * 2),
-                decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(
-                      dimensWidth() * 2,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(.1),
-                        blurRadius: 15,
-                        offset: const Offset(0, 2),
+              return InkWell(
+                splashColor: transparent,
+                highlightColor: transparent,
+                hoverColor: transparent,
+                onTap: () {
+                  Navigator.pushNamed(context, listHistoryConsultation, arguments: e.id);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: dimensHeight() * 1.5),
+                  padding: EdgeInsets.symmetric(
+                      vertical: dimensHeight() * 1.5,
+                      horizontal: dimensWidth() * 2),
+                  decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(
+                        dimensWidth() * 2,
                       ),
-                    ]),
-                child: Row(children: [
-                  CircleAvatar(
-                    backgroundImage: image,
-                    onBackgroundImageError: (exception, stackTrace) {
-                      logPrint(exception);
-                    },
-                  ),
-                  SizedBox(
-                    width: dimensWidth() * 2,
-                  ),
-                  Expanded(
-                    child: ListBody(
-                      children: [
-                        Text(
-                          e.fullName ?? translate(context, 'undefine'),
-                          style: Theme.of(context).textTheme.labelLarge,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 2),
                         ),
-                        if (e.email != null)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  e.email!,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (e.phone != null)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  e.phone!,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: dimensHeight(),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            if (e.email != null)
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: dimensWidth() * 2),
-                                child: InkWell(
-                                  splashColor: transparent,
-                                  highlightColor: transparent,
-                                  onTap: () {
-                                    logPrint(emailLaunchUri);
-                                    launchUrl(emailLaunchUri);
-                                  },
-                                  child: Container(
-                                    width: dimensIcon(),
-                                    height: dimensIcon(),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: primary,
-                                      borderRadius: BorderRadius.circular(360),
-                                    ),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.envelope,
-                                      size: dimensIcon() * .6,
-                                      color: white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            if (e.phone != null)
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: dimensWidth() * 2),
-                                child: InkWell(
-                                  splashColor: transparent,
-                                  highlightColor: transparent,
-                                  onTap: () {
-                                    logPrint(telLaunchUri);
-                                    launchUrl(telLaunchUri);
-                                  },
-                                  child: Container(
-                                    width: dimensIcon(),
-                                    height: dimensIcon(),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: primary,
-                                      borderRadius: BorderRadius.circular(360),
-                                    ),
-                                    // padding:
-                                    //     EdgeInsets.only(left: dimensWidth() * 2),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.phone,
-                                      size: dimensIcon() * .5,
-                                      color: white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        )
-                      ],
+                      ]),
+                  child: Row(children: [
+                    CircleAvatar(
+                      backgroundImage: image,
+                      onBackgroundImageError: (exception, stackTrace) {
+                        logPrint(exception);
+                      },
                     ),
-                  )
-                ]),
+                    SizedBox(
+                      width: dimensWidth() * 2,
+                    ),
+                    Expanded(
+                      child: ListBody(
+                        children: [
+                          Text(
+                            e.fullName ?? translate(context, 'undefine'),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          if (e.email != null)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    e.email!,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (e.phone != null)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    e.phone!,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(
+                            height: dimensHeight(),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              if (e.email != null)
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(right: dimensWidth() * 2),
+                                  child: InkWell(
+                                    splashColor: transparent,
+                                    highlightColor: transparent,
+                                    onTap: () {
+                                      logPrint(emailLaunchUri);
+                                      launchUrl(emailLaunchUri);
+                                    },
+                                    child: Container(
+                                      width: dimensIcon(),
+                                      height: dimensIcon(),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: primary,
+                                        borderRadius: BorderRadius.circular(360),
+                                      ),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.envelope,
+                                        size: dimensIcon() * .6,
+                                        color: white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (e.phone != null)
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(right: dimensWidth() * 2),
+                                  child: InkWell(
+                                    splashColor: transparent,
+                                    highlightColor: transparent,
+                                    onTap: () {
+                                      logPrint(telLaunchUri);
+                                      launchUrl(telLaunchUri);
+                                    },
+                                    child: Container(
+                                      width: dimensIcon(),
+                                      height: dimensIcon(),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: primary,
+                                        borderRadius: BorderRadius.circular(360),
+                                      ),
+                                      // padding:
+                                      //     EdgeInsets.only(left: dimensWidth() * 2),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.phone,
+                                        size: dimensIcon() * .5,
+                                        color: white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ]),
+                ),
               );
             }).toList(),
           );

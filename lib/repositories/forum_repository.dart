@@ -48,4 +48,9 @@ class ForumRepository extends BaseRepository {
     return await _forumService.fetchPostPage(
         pageKey: pageKey, limit: limit, isDoctor: isDoctor);
   }
+  // Future<List<RoomChat>> fetchRoomChat(
+  //     {required String medicalId}) async {
+  //   return await _forumService.fetchRoomChat(
+  //       medicalId: medicalId);
+  // }
 }

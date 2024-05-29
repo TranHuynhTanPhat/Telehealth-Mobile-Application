@@ -97,4 +97,13 @@ class ForumService extends BaseService {
       ),
     );
   }
+  // Future<List<RoomChat>> fetchRoomChat(
+  //     {required String medicalId}) async {
+  //   final response = await patch("${ApiConstants.FORUM_CHAT}/$medicalId");
+  //   return List<RoomChat>.from(
+  //     response.data.map(
+  //       (e) => RoomChat.fromMap(e),
+  //     ),
+  //   );
+  // }
 }

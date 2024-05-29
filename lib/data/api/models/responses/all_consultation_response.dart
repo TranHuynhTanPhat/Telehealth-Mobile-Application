@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 
 class AllConsultationResponse {
   List<ConsultationResponse> coming;

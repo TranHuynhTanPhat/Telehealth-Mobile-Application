@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:healthline/data/api/models/responses/consultaion_response.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/res/colors.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/ui_patient/main/home/components/export.dart';

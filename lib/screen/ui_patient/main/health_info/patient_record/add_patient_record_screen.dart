@@ -59,6 +59,7 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
       _file = null;
       if (!mounted) return;
       EasyLoading.showToast(
+        // ignore: use_build_context_synchronously
         translate(context, '${translate(context, 'max_file_size')}: 10 MB'),
       );
     }

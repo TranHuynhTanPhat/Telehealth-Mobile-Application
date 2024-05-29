@@ -16,8 +16,7 @@ final GlobalKey<NavigatorState>? navigatorKey = AliceInspector().dev
     ? AliceInspector().alice.getNavigatorKey()
     : GlobalKey<NavigatorState>();
 // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-
+final router = AppRoute();
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -27,15 +26,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _router = AppRoute();
-
   @override
   void dispose() {
-    _router.dispose();
+    router.dispose();
     super.dispose();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                   child: const SplashScreen(),
                 ),
                 theme: AppThemes.appThemeData[AppTheme.LightTheme],
-                onGenerateRoute: _router.onGeneralRoute,
+                onGenerateRoute: router.onGeneralRoute,
                 supportedLocales: AppLocalizationsSetup.supportedLocales,
                 localizationsDelegates:
                     AppLocalizationsSetup.localizationsDelegates,

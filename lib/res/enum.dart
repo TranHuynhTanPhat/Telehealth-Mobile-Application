@@ -109,7 +109,7 @@ enum Specialty {
   paeditrician // Bác sĩ nhi khoa
 }
 
-enum PortSocket { comments, notifications }
+enum PortSocket { comments, notifications, chat }
 
 enum TypeNotificationSocket{
   postLike,

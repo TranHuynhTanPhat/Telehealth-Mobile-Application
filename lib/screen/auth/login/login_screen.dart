@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/app/healthline_app.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/res/style.dart';
@@ -42,6 +43,7 @@ class _LogInScreenState extends State<LogInScreen> {
             } else {
               Navigator.pushReplacementNamed(context, mainScreenPatientName);
             }
+            router.init();
           } else if (state.blocState == BlocState.Failed) {
             EasyLoading.dismiss();
             EasyLoading.showToast(translate(context, state.error));

@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:healthline/app/app_controller.dart';
+import 'package:healthline/bloc/cubits/cubit_chat/chat_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
 import 'package:healthline/bloc/cubits/cubit_forum/forum_cubit.dart';
+import 'package:healthline/bloc/cubits/cubit_wallet/wallet_cubit.dart';
 import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
+import 'package:healthline/data/api/models/responses/room_chat.dart';
+import 'package:healthline/data/api/socket_manager.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/auth/forget_password/forgot_password_screen.dart';
@@ -31,6 +36,8 @@ import 'package:healthline/screen/schedule/detail_consultation.dart';
 import 'package:healthline/screen/splash/onboarding.dart';
 import 'package:healthline/screen/ui_doctor/account_setting/update_profile_screen.dart';
 import 'package:healthline/screen/ui_doctor/main_screen_doctor.dart';
+import 'package:healthline/screen/ui_doctor/patient/detail_patient/detail_history_screen.dart';
+import 'package:healthline/screen/ui_doctor/patient/detail_patient/list_history_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/shift_screen.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_default_schedule.dart';
 import 'package:healthline/screen/ui_doctor/shift_schedule/update_schedule_by_day_screen.dart';
@@ -52,22 +59,50 @@ import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/detail_d
 import 'package:healthline/screen/ui_patient/main/main_sceen_patient.dart';
 import 'package:healthline/screen/ui_patient/main/notification/notification_screen.dart';
 import 'package:healthline/screen/update/update_screen.dart';
+import 'package:healthline/screen/wallet/pay_screen.dart';
 import 'package:healthline/screen/wallet/wallet_screen.dart';
 
 class AppRoute {
-  final _vaccineRecordCubit = VaccineRecordCubit();
-  final _authenticationCubit = AuthenticationCubit();
-  final _medicalRecordCubit = MedicalRecordCubit();
-  final _patientProfileCubit = PatientProfileCubit();
-  final _docsVaccination = DocsVaccinationCubit();
-  final _doctorScheduleCubit = DoctorScheduleCubit();
-  final _doctorProfileCubit = DoctorProfileCubit();
-  final _patientRecordCubit = PatientRecordCubit();
-  final _doctorCubit = DoctorCubit();
-  final _newsCubit = NewsCubit();
-  final _forumCubit = ForumCubit();
-  final _consultationCubit = ConsultationCubit();
+  late SocketManager _socketForum;
+  late SocketManager _socketChat;
+  late VaccineRecordCubit _vaccineRecordCubit;
+  late AuthenticationCubit _authenticationCubit;
+  late MedicalRecordCubit _medicalRecordCubit;
+  late PatientProfileCubit _patientProfileCubit;
+  late DocsVaccinationCubit _docsVaccination;
+  late DoctorScheduleCubit _doctorScheduleCubit;
+  late DoctorProfileCubit _doctorProfileCubit;
+  late PatientRecordCubit _patientRecordCubit;
+  late DoctorCubit _doctorCubit;
+  late NewsCubit _newsCubit;
+  late ForumCubit _forumCubit;
+  late ConsultationCubit _consultationCubit;
+  late ChatCubit _chatCubit;
+  late WalletCubit _walletCubit;
   // final _applicationUpdateBloc = ApplicationUpdateCubit();
+
+  AppRoute() {
+    init();
+  }
+
+  void init() {
+    _socketForum = SocketManager(port: PortSocket.comments);
+    _socketChat = SocketManager(port: PortSocket.chat);
+    _vaccineRecordCubit = VaccineRecordCubit();
+    _authenticationCubit = AuthenticationCubit();
+    _medicalRecordCubit = MedicalRecordCubit();
+    _patientProfileCubit = PatientProfileCubit();
+    _docsVaccination = DocsVaccinationCubit();
+    _doctorScheduleCubit = DoctorScheduleCubit();
+    _doctorProfileCubit = DoctorProfileCubit();
+    _patientRecordCubit = PatientRecordCubit();
+    _doctorCubit = DoctorCubit();
+    _newsCubit = NewsCubit();
+    _forumCubit = ForumCubit(socketManager: _socketForum);
+    _consultationCubit = ConsultationCubit();
+    _chatCubit = ChatCubit(socketManager: _socketChat);
+    _walletCubit = WalletCubit();
+  }
 
   void dispose() {
     _vaccineRecordCubit.close();
@@ -82,6 +117,8 @@ class AppRoute {
     _newsCubit.close();
     _forumCubit.close();
     _consultationCubit.close();
+    _chatCubit.close();
+    _walletCubit.close();
     // _applicationUpdateBloc.close();
 
     AppController().close();
@@ -126,11 +163,37 @@ class AppRoute {
           );
         case chatName:
           return MaterialPageRoute(
-            builder: (_) => const ChatScreen(),
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _medicalRecordCubit,
+                ),
+                BlocProvider.value(
+                  value: _chatCubit,
+                ),
+              ],
+              child: const ChatScreen(),
+            ),
           );
         case chatBoxName:
+          RoomChat args = settings.arguments as RoomChat;
           return MaterialPageRoute(
-            builder: (_) => const ChatBoxScreen(),
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _chatCubit,
+                ),
+              ],
+              child: ChatBoxScreen(
+                detail: args,
+              ),
+            ),
           );
         case notificationName:
           return MaterialPageRoute(
@@ -191,8 +254,22 @@ class AppRoute {
                 BlocProvider.value(
                   value: _doctorProfileCubit,
                 ),
+                BlocProvider.value(
+                  value: _walletCubit,
+                ),
               ],
               child: const WalletScreen(),
+            ),
+          );
+        case payName:
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _walletCubit,
+                ),
+              ],
+              child: const PayScreen(),
             ),
           );
         case changePasswordName:
@@ -290,6 +367,9 @@ class AppRoute {
                 BlocProvider.value(
                   value: _consultationCubit,
                 ),
+                BlocProvider.value(
+                  value: _chatCubit,
+                ),
               ],
               child: const MainScreenDoctor(),
             ),
@@ -324,6 +404,31 @@ class AppRoute {
               child: const UpdateScheduleByDayScreen(),
             ),
           );
+        case listHistoryConsultation:
+          final args = settings.arguments as String?;
+
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: _consultationCubit,
+              child: ListHistoryConsultationScreen(medicalId: args),
+            ),
+          );
+        case detailHistoryConsultation:
+          final args = settings.arguments as ConsultationResponse?;
+
+          return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _patientRecordCubit,
+                ),
+              ],
+              child: DetailHistoryConsultationScreen(consultation: args),
+            ),
+          );
       }
     } else if (AppController().authState == AuthState.PatientAuthorized) {
       switch (settings.name) {
@@ -348,6 +453,9 @@ class AppRoute {
                 ),
                 BlocProvider.value(
                   value: _consultationCubit,
+                ),
+                BlocProvider.value(
+                  value: _chatCubit,
                 ),
               ],
               child: const MainScreenPatient(),

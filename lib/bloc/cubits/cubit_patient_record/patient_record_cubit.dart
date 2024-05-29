@@ -105,13 +105,11 @@ class PatientRecordCubit extends Cubit<PatientRecordState> {
       emit(DeletePatientRecordLoaded(
           records: response, medicalId: state.medicalId));
     } on DioException catch (e) {
-      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,
           message: e.response!.data['message'].toString()));
     } catch (e) {
-      logPrint(e);
       emit(DeletePatientRecordError(
           records: state.records,
           medicalId: state.medicalId,

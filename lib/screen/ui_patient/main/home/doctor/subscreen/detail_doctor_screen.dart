@@ -261,6 +261,7 @@ class _DetailDoctorScreenState extends State<DetailDoctorScreen> {
                                 await context
                                     .read<DoctorCubit>()
                                     .addWishList(doctorId: doctor.id!);
+                                // ignore: use_build_context_synchronously
                                 await context.read<DoctorCubit>().getWishList();
                                 // setState(() {
                                 //   marked = !marked;

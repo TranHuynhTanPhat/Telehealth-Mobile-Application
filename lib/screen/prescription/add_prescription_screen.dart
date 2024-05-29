@@ -9,6 +9,7 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/screen/prescription/components/export.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
+import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -38,7 +39,11 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
     }
     prescriptionResponse = widget.prescriptionResponse!;
     prescriptionResponse = prescriptionResponse.copyWith(
-        patientAddress: prescriptionResponse.patientAddress ?? "empty",
+        patientAddress: prescriptionResponse.patientAddress == null
+            ? "empty"
+            : prescriptionResponse.patientAddress == ""
+                ? "empty"
+                : prescriptionResponse.patientAddress,
         gender: prescriptionResponse.gender ?? "Male",
         diagnosis: prescriptionResponse.diagnosis ?? "",
         notice: prescriptionResponse.notice ?? "");
@@ -99,6 +104,9 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
           if (state is CreatePrescriptionState) {
             if (state.blocState == BlocState.Successed) {
               Navigator.pop(context);
+            }else if(state.blocState == BlocState.Failed){
+              EasyLoading.showToast(translate(context, 'failure'));
+              Navigator.pop(context);
             }
           }
         },
@@ -123,11 +131,30 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                         horizontal: dimensWidth() * 3,
                         vertical: dimensHeight() * 2),
                     children: [
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     Text(
+                      //       "${translate(context, "prescription_code")}: ",
+                      //       style: Theme.of(context)
+                      //           .textTheme
+                      //           .bodyMedium
+                      //           ?.copyWith(fontStyle: FontStyle.italic),
+                      //     ),
+                      //     Expanded(
+                      //       child: Text(
+                      //         prescriptionResponse.id ??
+                      //             translate(context, 'undifine'),
+                      //         style: Theme.of(context).textTheme.labelMedium,
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${translate(context, "prescription_code")}: ",
+                            "${translate(context, "created_at")}: ",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -135,27 +162,11 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              prescriptionResponse.id ??
-                                  translate(context, 'undifine'),
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${translate(context, "Ngày tạo")}: ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontStyle: FontStyle.italic),
-                          ),
-                          Expanded(
-                            child: Text(
-                              prescriptionResponse.createdAt ??
-                                  translate(context, 'undefine'),
+                              formatDayMonthYear(
+                                  context,
+                                  convertStringToDateTime(
+                                          prescriptionResponse.createdAt) ??
+                                      DateTime.now()),
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                           )
@@ -355,6 +366,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                         splashColor: transparent,
                         highlightColor: transparent,
                         onTap: () {
+                          
                           modelBottomSheet();
                         },
                         child: DrugCardNone(
@@ -375,6 +387,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                             EdgeInsets.symmetric(vertical: dimensHeight() * 3),
                         child: ElevatedButtonWidget(
                           onPressed: () {
+                            
                             if (_formKey.currentState!.validate()) {
                               context
                                   .read<ConsultationCubit>()
@@ -641,6 +654,7 @@ class _FormAddDrugState extends State<FormAddDrug> {
                         text: translate(
                             context, widget.drug != null ? 'update' : 'add'),
                         onPressed: () {
+                          
                           if (_formKey.currentState!.validate()) {
                             drugModal = drugModal.copyWith(
                                 note: _controllerNote.text,

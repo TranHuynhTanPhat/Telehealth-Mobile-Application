@@ -18,12 +18,12 @@ import 'package:healthline/utils/log_data.dart';
 part 'forum_state.dart';
 
 class ForumCubit extends Cubit<ForumState> {
-  ForumCubit()
+  ForumCubit({required this.socketManager})
       : super(ForumInitial(
             blocState: BlocState.Successed, comments: [], currentPost: null));
   final MeiliSearchManager meiliSearchManager = MeiliSearchManager.instance;
   final ForumRepository _forumRepository = ForumRepository();
-  final SocketManager _socketManager = SocketManager(port: PortSocket.comments);
+  final SocketManager socketManager;
 
   Future<void> searchPost(
       {required String key,
@@ -65,7 +65,6 @@ class ForumCubit extends Cubit<ForumState> {
             currentPost: state.currentPost),
       );
     } catch (error) {
-      logPrint(error);
       emit(
         SearchPostState(
             error: error.toString(),
@@ -102,7 +101,6 @@ class ForumCubit extends Cubit<ForumState> {
             currentPost: state.currentPost),
       );
     } catch (error) {
-      logPrint(error);
       emit(
         FetchPostState(
             error: error.toString(),
@@ -124,7 +122,7 @@ class ForumCubit extends Cubit<ForumState> {
             blocState: BlocState.Pending, comments: [], currentPost: idPost),
       );
       try {
-        _socketManager.addListener(
+        socketManager.addListener(
             event: 'comment',
             listener: (data) {
               if (idPost == state.currentPost) {
@@ -141,7 +139,7 @@ class ForumCubit extends Cubit<ForumState> {
                     currentPost: state.currentPost));
               }
             });
-        _socketManager.sendDataWithAck(
+        socketManager.sendEventDataWithAck(
             data: idPost,
             event: "findAll",
             listen: (data) {
@@ -161,7 +159,6 @@ class ForumCubit extends Cubit<ForumState> {
               // }
             });
       } catch (error) {
-        logPrint(error);
         emit(
           FetchCommentState(
             error: error.toString(),
@@ -199,7 +196,7 @@ class ForumCubit extends Cubit<ForumState> {
       // }
 
       // SocketManager.instance.addListener(event: 'comment', listener: listen);
-      _socketManager.sendDataWithAck(
+      socketManager.sendEventDataWithAck(
           data: jsonEncode({"postId": idPost, "text": content}),
           event: "create",
           listen: (data) {
@@ -222,7 +219,6 @@ class ForumCubit extends Cubit<ForumState> {
           comments: state.comments,
           currentPost: state.currentPost));
     } catch (error) {
-      logPrint(error);
       emit(
         CreateCommentState(
           error: error.toString(),

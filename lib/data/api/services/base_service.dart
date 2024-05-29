@@ -89,7 +89,7 @@ abstract class BaseService {
         }
         try {
           return DataResponse(
-              data: response.data['data'],
+              data: response.data['data']?? response.data,
               message: response.statusMessage,
               code: response.statusCode);
         } catch (e) {

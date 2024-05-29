@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:healthline/utils/log_data.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:healthline/app/app_controller.dart';
@@ -47,13 +48,22 @@ class SocketManager {
       isConnected = false;
       log('Disconnected from the socket server');
     });
+    logPrint("https://health-forum-truongne.koyeb.app/${port.name}");
   }
 
-  void sendData({required String event, required dynamic data}) {
+  void sendEventData({required String event, required dynamic data}) {
     socket.emit(event, data);
   }
 
-  void sendDataWithAck(
+  void sendEvent({required String event}) {
+    socket.emit(event);
+  }
+
+  void sendData({required dynamic data}) {
+    socket.send(data);
+  }
+
+  void sendEventDataWithAck(
       {required String event,
       required dynamic data,
       required Function(dynamic) listen}) {
@@ -62,13 +72,28 @@ class SocketManager {
     });
   }
 
+  void stopEvent({required String event}) {
+    socket.off(event);
+  }
+
   void addListener(
       {required String event, required Function(dynamic) listener}) {
     socket.on(event, listener);
   }
 
-  void close() {
-    socket.disconnect();
-    socket.dispose();
+  void dispose() {
+    try {
+      socket.dispose();
+    } catch (e) {
+      logPrint(e);
+    }
+  }
+
+  void destroy() {
+    try {
+      socket.destroy();
+    } catch (e) {
+      logPrint(e);
+    }
   }
 }

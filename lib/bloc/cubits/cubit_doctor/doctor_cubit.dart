@@ -84,7 +84,6 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             recentDoctors: state.recentDoctors),
       );
     } catch (error) {
-      logPrint("A +$error");
       emit(
         DoctorState(
             error: error.toString(),

@@ -60,7 +60,7 @@ class PrescriptionResponse {
   factory PrescriptionResponse.fromMap(Map<String, dynamic> map) {
     return PrescriptionResponse(
       id: map['id'],
-      createdAt: map['createdAt'],
+      createdAt: map['created_at'],
       patientName: map['patientName'],
       patientAddress: map['patientAddress'],
       gender: map['gender'],

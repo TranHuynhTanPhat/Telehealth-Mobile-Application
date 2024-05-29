@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:healthline/res/enum.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'license_state.dart';
@@ -32,7 +31,6 @@ class LicenseCubit extends Cubit<LicenseState> {
       // listMap.forEach(logPrint);
       emit(FAQState(blocState: BlocState.Successed, faqs: faqs));
     } catch (e) {
-      logPrint(e);
       emit(FAQState(blocState: BlocState.Failed, faqs: []));
     }
   }
@@ -60,7 +58,6 @@ class LicenseCubit extends Cubit<LicenseState> {
       emit(PrivacyPolicyState(
           blocState: BlocState.Successed, policies: policies));
     } catch (e) {
-      logPrint(e);
       emit(PrivacyPolicyState(blocState: BlocState.Failed, policies: {}));
     }
   }
@@ -85,7 +82,6 @@ class LicenseCubit extends Cubit<LicenseState> {
       emit(TermAndConditionState(
           blocState: BlocState.Successed, content: content));
     } catch (e) {
-      logPrint(e);
       emit(TermAndConditionState(blocState: BlocState.Failed, content: []));
     }
   }
@@ -108,7 +104,6 @@ class LicenseCubit extends Cubit<LicenseState> {
       Sentry.captureUserFeedback(userFeedback);
       emit(BugReportState(blocState: BlocState.Successed));
     } catch (e) {
-      logPrint(e);
       emit(BugReportState(blocState: BlocState.Failed));
     }
   }

@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:healthline/data/api/meilisearch_manager.dart';
 import 'package:healthline/data/api/models/responses/news_response.dart';
 import 'package:healthline/res/enum.dart';
-import 'package:healthline/utils/log_data.dart';
 import 'package:meilisearch/meilisearch.dart';
 
 part 'news_state.dart';
@@ -42,7 +41,6 @@ class NewsCubit extends Cubit<NewsState> {
             news: news, blocState: BlocState.Successed, pageKey: pageKey),
       );
     } catch (error) {
-      logPrint(error);
       emit(
         SearchNewsState(
             error: error.toString(),

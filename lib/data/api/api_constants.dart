@@ -27,6 +27,7 @@ class ApiConstants {
   static const USER_FORGOT_PASSWORD_RESET = '$USER/reset-password-forgot';
   static const USER_MEDICAL_RECORD = '$_USER/medical-record';
   static const USER_WISH_LIST = '$USER/wish-list';
+  static const USER_TRANSACTION = '$_USER/transaction';
 
 // doctor-management
   static const _DOCTOR = '/doctor-management';
@@ -56,6 +57,7 @@ class ApiConstants {
   // forum
   static const _FORUM = '/health-forum';
   static const FORUM_POST = '$_FORUM/posts';
+  static const FORUM_CHAT = '$_FORUM/chat';
 
 
 
@@ -75,6 +77,8 @@ class ApiConstants {
   static const CONSULTATION_PRESCRIPTION = '$CONSULTATION/prescription';
   static const CONSULTATION_CONFIRM = '$CONSULTATION/confirm';
   static const CONSULTATION_MEDICAL_CHART = '$CONSULTATION/admin/money/medical/chart';
+  static const CONSULTATION_HISTORY_PATIENT = '$CONSULTATION_DOCTOR/detail/medical';
+
 
   // file-upload
   static const _FILE_UPLOAD = '/file-upload';
