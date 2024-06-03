@@ -48,45 +48,45 @@ class _MainScreenPatientState extends State<MainScreenPatient>
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       EasyLoading.dismiss();
-      await showDialog<String>(
-        context: context,
-        barrierColor: black26,
-        builder: (BuildContext context) => AlertDialog(
-          backgroundColor: Colors.transparent,
-          contentPadding: EdgeInsets.zero,
-          elevation: 0,
-          content: Stack(
-            children: [
-              Positioned(
-                right: 0,
-                top: 0,
-                child: IconButton(
-                    style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.zero)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Container(
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: white),
-                      // padding: EdgeInsets.all(dimensWidth()/2),
-                      height: dimensIcon(),
-                      width: dimensIcon(),
-                      alignment: Alignment.center,
-                      child: FaIcon(
-                        FontAwesomeIcons.xmark,
-                        size: dimensIcon() / 2,
-                      ),
-                    )),
-              ),
-              SizedBox(
-                height: dimensHeight() * 40,
-                child: Center(child: Image.asset(DImages.placeholder)),
-              ),
-            ],
-          ),
-        ),
-      );
+      // await showDialog<String>(
+      //   context: context,
+      //   barrierColor: black26,
+      //   builder: (BuildContext context) => AlertDialog(
+      //     backgroundColor: Colors.transparent,
+      //     contentPadding: EdgeInsets.zero,
+      //     elevation: 0,
+      //     content: Stack(
+      //       children: [
+      //         Positioned(
+      //           right: 0,
+      //           top: 0,
+      //           child: IconButton(
+      //               style: const ButtonStyle(
+      //                   padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+      //               onPressed: () {
+      //                 Navigator.pop(context);
+      //               },
+      //               icon: Container(
+      //                 decoration: const BoxDecoration(
+      //                     shape: BoxShape.circle, color: white),
+      //                 // padding: EdgeInsets.all(dimensWidth()/2),
+      //                 height: dimensIcon(),
+      //                 width: dimensIcon(),
+      //                 alignment: Alignment.center,
+      //                 child: FaIcon(
+      //                   FontAwesomeIcons.xmark,
+      //                   size: dimensIcon() / 2,
+      //                 ),
+      //               )),
+      //         ),
+      //         SizedBox(
+      //           height: dimensHeight() * 40,
+      //           child: Center(child: Image.asset(DImages.placeholder)),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // );
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))

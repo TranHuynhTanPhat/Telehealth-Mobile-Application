@@ -62,12 +62,6 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
           recentDoctors: state.recentDoctors),
     );
     try {
-      // String jsonString =
-      //     await rootBundle.loadString('assets/virtual_data/doctor.json');
-      // dynamic list = json.decode(jsonString);
-      // List<DoctorResponse> doctors =
-      //     list.map<DoctorResponse>((e) => DoctorResponse.fromMap(e)).toList();
-
       meiliSearchManager.index(uid: 'doctors');
       var result = await meiliSearchManager.search(key, searchQuery);
       List<DoctorDetailResponse> doctors = List<DoctorDetailResponse>.from(
@@ -84,6 +78,7 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
             recentDoctors: state.recentDoctors),
       );
     } catch (error) {
+      logPrint(error);
       emit(
         DoctorState(
             error: error.toString(),
@@ -171,7 +166,8 @@ class DoctorCubit extends HydratedCubit<DoctorState> {
           blocState: BlocState.Successed,
           recentDoctors: state.recentDoctors,
           pageKey: state.pageKey,
-          wishDoctors: wishDrs));
+          wishDoctors:
+              wishDrs.where((element) => element.isActive == true).toList()));
     } on DioException catch (e) {
       // DioException er = e as DioException;
       emit(

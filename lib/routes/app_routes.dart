@@ -222,7 +222,6 @@ class AppRoute {
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
               providers: [
-              
                 BlocProvider.value(
                   value: _prescriptionCubit,
                 ),
@@ -306,11 +305,9 @@ class AppRoute {
           );
         case addPrescriptionName:
           final args = settings.arguments as Map<String, dynamic>?;
-
           return MaterialPageRoute(
             builder: (_) => MultiBlocProvider(
               providers: [
-                
                 BlocProvider.value(
                   value: _prescriptionCubit,
                 ),

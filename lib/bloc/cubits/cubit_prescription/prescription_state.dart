@@ -26,3 +26,11 @@ final class CreatePrescriptionState extends PrescriptionState {
     super.error,
   });
 }
+
+
+final class SearchDrugState extends PrescriptionState {
+  SearchDrugState({
+    required super.blocState,
+    super.error,
+  });
+}

@@ -53,8 +53,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 limit: 20,
                 attributesToSearchOn: ['full_name'],
                 sort: ['full_name:asc'],
-                filter:
-                    filterExp != null ? 'specialty.specialty = $filterExp' : filterExp,
+                filter: [
+                  filterExp != null ? 'specialty.specialty = $filterExp' : '',
+                  'is_active = true'
+                ],
                 page: pageKey + 1),
             pageKey: pageKey,
             callback: (doctors) =>
@@ -115,8 +117,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
         context.read<DoctorCubit>().searchDoctor(
             key: '',
             pageKey: 1,
-            searchQuery: const SearchQuery(
-                sort: ['ratings:desc',], limit: 10),
+            searchQuery: const SearchQuery(sort: [
+              'ratings:desc',
+            ], filter: [
+              'is_active=true'
+            ], limit: 10),
             callback: (doctors) {});
       },
       child: Scaffold(
@@ -270,8 +275,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   PagedSliverList<int, DoctorDetailResponse>(
                     // prototypeItem: buildShimmer(),
                     pagingController: _pagingController,
-                    builderDelegate: PagedChildBuilderDelegate<DoctorDetailResponse>(
-                        itemBuilder: (context, item, index) {
+                    builderDelegate:
+                        PagedChildBuilderDelegate<DoctorDetailResponse>(
+                            itemBuilder: (context, item, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: dimensWidth() * 2,

@@ -107,7 +107,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           ),
           body: BlocBuilder<PatientProfileCubit, PatientProfileState>(
               builder: (context, state) {
-            int total = widget.request.price ?? 0 - (dis?.value ?? 0);
+            int total = (widget.request.price ?? 0) - (dis?.value ?? 0);
             if (state.profile.point != null && _usePoints) {
               total -= state.profile.point ?? 0;
             }
@@ -458,6 +458,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                           .map((e) => ListTile(
                                                                 onTap: () {
                                                                   dis = e;
+                                                                  _discount
+                                                                          .text =
+                                                                      e.code ??
+                                                                          "";
                                                                   Navigator.pop(
                                                                       context);
                                                                 },
@@ -499,7 +503,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         ],
                                       ),
                                     ),
-                                  ));
+                                  )).then((value) => setState(() {}));
                         },
                         // onChanged: (p0) {
                         //   if (timer != null) {

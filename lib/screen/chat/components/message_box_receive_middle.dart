@@ -14,24 +14,26 @@ class MessageBoxReceiveMiddle extends StatelessWidget {
 
     return Row(
       children: [
-        Container(
-          margin: EdgeInsets.only(top: dimensHeight() / 4),
-          padding: EdgeInsets.symmetric(
-              horizontal: dimensWidth() * 2, vertical: dimensHeight() * 2),
-          decoration:  BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: const Radius.circular(180),
-                bottomRight: const Radius.circular(180),
-                topLeft: Radius.circular(dimensWidth()*5),
-                bottomLeft: Radius.circular(dimensWidth()*5)
-              ),
-              color: primary),
-          child: Text(
-            message.text??"",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: white, fontWeight: FontWeight.w500),
+        Flexible(
+          child: Container(
+            margin: EdgeInsets.only(top: dimensHeight() / 4),
+            padding: EdgeInsets.symmetric(
+                horizontal: dimensWidth(), vertical: dimensHeight() * 2),
+            decoration:  BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: const Radius.circular(180),
+                  bottomRight: const Radius.circular(180),
+                  topLeft: Radius.circular(dimensWidth()*5),
+                  bottomLeft: Radius.circular(dimensWidth()*5)
+                ),
+                color: primary),
+            child: Text(
+              message.text??"",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: white, fontWeight: FontWeight.w500),textAlign: TextAlign.left,
+            ),
           ),
         ),
         SizedBox(

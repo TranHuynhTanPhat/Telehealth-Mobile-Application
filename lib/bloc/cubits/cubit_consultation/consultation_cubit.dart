@@ -11,7 +11,6 @@ import 'package:healthline/data/api/models/responses/all_consultation_response.d
 import 'package:healthline/data/api/models/responses/consultation_response.dart';
 import 'package:healthline/data/api/models/responses/discount_response.dart';
 import 'package:healthline/data/api/models/responses/doctor_dasboard_response.dart';
-import 'package:healthline/data/api/models/responses/drug_response.dart';
 import 'package:healthline/data/api/models/responses/feedback_response.dart';
 import 'package:healthline/data/api/models/responses/money_chart_response.dart';
 import 'package:healthline/data/api/models/responses/statistic_response.dart';
@@ -114,42 +113,7 @@ class ConsultationCubit extends Cubit<ConsultationState> {
     }
   }
 
-  Future<void> searchDrug(
-      {required String key,
-      required int pageKey,
-      required Function(List<DrugResponse>) callback}) async {
-    emit(
-      SearchDrugState(
-        blocState: BlocState.Pending,
-        timeline: [],
-        consultations: state.consultations,
-        feedbacks: state.feedbacks,
-      ),
-    );
-    try {
-      List<DrugResponse> drugs =
-          await _consultationRepository.searchDrug(key: key, pageKey: pageKey);
-      callback(drugs);
-      emit(
-        SearchDrugState(
-          blocState: BlocState.Successed,
-          timeline: [],
-          consultations: state.consultations,
-          feedbacks: state.feedbacks,
-        ),
-      );
-    } catch (error) {
-      emit(
-        SearchDrugState(
-          error: error.toString(),
-          blocState: BlocState.Failed,
-          timeline: [],
-          consultations: state.consultations,
-          feedbacks: state.feedbacks,
-        ),
-      );
-    }
-  }
+  
 
   Future<void> fetchStatisticTable() async {
     emit(

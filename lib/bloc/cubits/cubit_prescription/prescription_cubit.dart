@@ -96,4 +96,32 @@ class PrescriptionCubit extends Cubit<PrescriptionState> {
       );
     }
   }
+
+  Future<void> searchDrug(
+      {required String key,
+      required int pageKey,
+      required Function(List<DrugResponse>) callback}) async {
+    emit(
+      SearchDrugState(
+        blocState: BlocState.Pending,
+      ),
+    );
+    try {
+      List<DrugResponse> drugs =
+          await _consultationRepository.searchDrug(key: key, pageKey: pageKey);
+      callback(drugs);
+      emit(
+        SearchDrugState(
+          blocState: BlocState.Successed,
+        ),
+      );
+    } catch (error) {
+      emit(
+        SearchDrugState(
+          error: error.toString(),
+          blocState: BlocState.Failed,
+        ),
+      );
+    }
+  }
 }

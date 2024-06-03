@@ -28,6 +28,7 @@ class ApiConstants {
   static const USER_MEDICAL_RECORD = '$_USER/medical-record';
   static const USER_WISH_LIST = '$USER/wish-list';
   static const USER_TRANSACTION = '$_USER/transaction';
+  static const USER_TRANSACTION_CASH_OUT = '$USER_TRANSACTION/cash-out';
 
 // doctor-management
   static const _DOCTOR = '/doctor-management';

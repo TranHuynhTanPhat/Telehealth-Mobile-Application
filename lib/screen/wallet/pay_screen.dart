@@ -216,23 +216,68 @@ class _PayScreenState extends State<PayScreen>
                                       ],
                                     ),
                                     ListView(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       padding: EdgeInsets.only(
                                           left: dimensWidth() * 3,
                                           right: dimensWidth() * 3,
                                           top: dimensHeight() * 3),
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
                                       children: [
                                         TextFieldWidget(
                                           suffix: const Text("VNĐ"),
-                                          controller: rechargeController,
+                                          controller: withdrawController,
                                           textInputType: const TextInputType
                                               .numberWithOptions(
                                             signed: false,
                                           ),
                                           label: translate(context, 'withdraw'),
+                                          onChanged: (p0) {
+                                            String temp =
+                                                withdrawController.text;
+                                            temp = temp.replaceAll('.', '');
+                                            temp = temp.replaceAll('₫', '');
+                                            int? num = int.tryParse(temp);
+                                            if (num != null) {
+                                              withdrawController.text =
+                                                  convertToVND(num);
+                                              int l = withdrawController
+                                                  .text.length;
+                                              if (l > 2) l -= 2;
+                                              withdrawController.selection =
+                                                  TextSelection.fromPosition(
+                                                TextPosition(offset: l),
+                                              );
+                                            } else {
+                                              withdrawController.text = "";
+                                            }
+                                          },
                                           validate: (value) => null,
                                         ),
+                                        SizedBox(
+                                          height: dimensHeight() * 3,
+                                        ),
+                                        ElevatedButtonWidget(
+                                            text:
+                                                translate(context, 'withdraw'),
+                                            onPressed: withdrawController
+                                                        .text.isEmpty
+                                                ? null
+                                                : () {
+                                                    String temp =
+                                                        withdrawController.text;
+                                                    temp = temp.replaceAll(
+                                                        '.', '');
+                                                    temp = temp.replaceAll(
+                                                        '₫', '');
+                                                    int? amount =
+                                                        int.tryParse(temp);
+                                                    if (amount != null) {
+                                                      context
+                                                          .read<WalletCubit>()
+                                                          .withdraw(
+                                                              amount: amount);
+                                                    }
+                                                  })
                                       ],
                                     ),
                                   ],

@@ -175,7 +175,7 @@ class DoctorDetailResponse {
       result.addAll({'career': careers!.map((x) => x.toMap()).toList()});
     }
     if (isActive != null) {
-      result.addAll({'isActive': isActive});
+      result.addAll({'is_active': isActive});
     }
 
     return result;
@@ -198,7 +198,7 @@ class DoctorDetailResponse {
       accountBalance: map['account_balance']?.toInt(),
       numberOfConsultation: map['number_of_consultation']?.toInt(),
       updatedAt: map['updatedAt'],
-      isActive: map['isActive'],
+      isActive: map['is_active'],
       educationAndCertifications: map['educationAndCertification'] != null
           ? List<EducationAndCertificationModelResponse>.from(
               map['educationAndCertification']?.map(

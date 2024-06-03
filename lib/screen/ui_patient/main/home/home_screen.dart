@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         pageKey: 1,
         searchQuery: const SearchQuery(sort: [
           'ratings:desc',
-        ], limit: 10),
+        ], filter: ['is_active=true'], limit: 10),
         callback: (doctors) {});
     context.read<ConsultationCubit>().fetchConsultation();
     super.initState();

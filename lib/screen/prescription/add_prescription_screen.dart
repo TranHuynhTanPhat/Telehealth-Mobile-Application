@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import 'package:healthline/bloc/cubits/cubit_prescription/prescription_cubit.dart';
 import 'package:healthline/data/api/models/responses/drug_response.dart';
 import 'package:healthline/data/api/models/responses/prescription_response.dart';
@@ -13,21 +14,22 @@ import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/date_util.dart';
 import 'package:healthline/utils/keyboard.dart';
 import 'package:healthline/utils/translate.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class AddPrescriptionScreen extends StatefulWidget {
   const AddPrescriptionScreen(
       {super.key, required this.prescriptionResponse, this.consultationId});
-  final PrescriptionResponse? prescriptionResponse;
+
   final String? consultationId;
+  final PrescriptionResponse? prescriptionResponse;
 
   @override
   State<AddPrescriptionScreen> createState() => _AddPrescriptionScreenState();
 }
 
 class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
-  late PrescriptionResponse prescriptionResponse;
   late List<DrugModal> drugModal;
+  late PrescriptionResponse prescriptionResponse;
+
   late TextEditingController _controllerDiagnose;
   late TextEditingController _controllerNotice;
   final _formKey = GlobalKey<FormState>();
@@ -58,7 +60,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
     await showModalBottomSheet(
       context: context,
       builder: (BuildContext ctx) {
-        ConsultationCubit consultationCubit = context.read<ConsultationCubit>();
+        PrescriptionCubit prescriptionCubit = context.read<PrescriptionCubit>();
         return DraggableScrollableSheet(
           expand: false,
           minChildSize: .2,
@@ -67,7 +69,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
           shouldCloseOnMinExtent: true,
           builder: (BuildContext context, ScrollController scrollController) {
             return BlocProvider.value(
-              value: consultationCubit,
+              value: prescriptionCubit,
               child: GestureDetector(
                 onTap: () => KeyboardUtil.hideKeyboard(context),
                 child: FormAddDrug(
@@ -417,6 +419,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
 
 class FormAddDrug extends StatefulWidget {
   const FormAddDrug({super.key, this.drug});
+
   final DrugModal? drug;
 
   @override
@@ -424,15 +427,22 @@ class FormAddDrug extends StatefulWidget {
 }
 
 class _FormAddDrugState extends State<FormAddDrug> {
-  final PagingController<int, DrugResponse> _pagingController =
-      PagingController(firstPageKey: -2, invisibleItemsThreshold: 5);
+  DrugModal drugModal = DrugModal();
+
+  static const _pageSize = 20;
+
   final TextEditingController _controllerDrugName = TextEditingController();
   final TextEditingController _controllerNote = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final PagingController<int, DrugResponse> _pagingController =
+      PagingController(firstPageKey: -2, invisibleItemsThreshold: 5);
 
-  static const _pageSize = 20;
-  DrugModal drugModal = DrugModal();
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -444,7 +454,7 @@ class _FormAddDrugState extends State<FormAddDrug> {
       _controllerQuantity.text = "${drugModal.quantity ?? 0}";
     }
     _pagingController.addPageRequestListener((pageKey) {
-      context.read<ConsultationCubit>().searchDrug(
+      context.read<PrescriptionCubit>().searchDrug(
             key: _controllerDrugName.text.trim(),
             pageKey: pageKey + 1,
             callback: (drugs) => updateDate(drugs: drugs, pageKey: pageKey),
@@ -479,14 +489,8 @@ class _FormAddDrugState extends State<FormAddDrug> {
   }
 
   @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocListener<ConsultationCubit, ConsultationState>(
+    return BlocListener<PrescriptionCubit, PrescriptionState>(
       listener: (context, state) {
         EasyLoading.dismiss();
       },

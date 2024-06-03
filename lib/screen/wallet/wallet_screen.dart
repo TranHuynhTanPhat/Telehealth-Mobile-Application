@@ -9,8 +9,6 @@ import 'package:healthline/res/style.dart';
 import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/wallet/components/exports.dart';
 import 'package:healthline/screen/wallet/pay_screen.dart';
-import 'package:healthline/screen/widgets/bar_chart.dart';
-import 'package:healthline/utils/currency_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -26,6 +24,7 @@ class _WalletScreenState extends State<WalletScreen>
   // late TextEditingController _controller;
   @override
   void initState() {
+    if (!mounted) return;
     tabController = TabController(length: 2, vsync: this);
 
     // _controller = TextEditingController();
@@ -35,6 +34,7 @@ class _WalletScreenState extends State<WalletScreen>
     if (AppController().authState == AuthState.DoctorAuthorized) {
       context.read<DoctorProfileCubit>().fetchProfile();
     }
+    context.read<WalletCubit>().transaction();
     super.initState();
   }
 
@@ -45,9 +45,9 @@ class _WalletScreenState extends State<WalletScreen>
         if (state.blocState == BlocState.Pending) {
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         } else if (state.blocState == BlocState.Successed) {
-          EasyLoading.dismiss();
+          EasyLoading.showToast(translate(context, 'successfully'));
         } else if (state.blocState == BlocState.Failed) {
-          EasyLoading.dismiss();
+          EasyLoading.showToast(translate(context, 'failure'));
         }
       },
       child: BlocBuilder<WalletCubit, WalletState>(
@@ -83,6 +83,8 @@ class _WalletScreenState extends State<WalletScreen>
                                   horizontal: dimensWidth(),
                                   vertical: dimensHeight(),
                                 ),
+                                margin:
+                                    EdgeInsets.only(bottom: dimensHeight() * 2),
                                 child: InkWell(
                                   onTap: () async {
                                     Navigator.pushNamed(context, payName)
@@ -125,120 +127,132 @@ class _WalletScreenState extends State<WalletScreen>
                               ),
                             ],
                           ),
-                          Text(
-                            translate(context, 'transaction_history'),
-                            style: Theme.of(context).textTheme.titleLarge,
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: dimensHeight() * 2),
+                            child: Text(
+                              translate(context, 'transaction_history'),
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
-                          TabBar(
-                            controller: tabController,
-                            tabs: [
-                              Tab(
-                                text: translate(context, "booking_history"),
-                              ),
-                              Tab(
-                                text: translate(context, 'cash_flow'),
-                              ),
-                            ],
-                          ),
+                          // TabBar(
+                          //   controller: tabController,
+                          //   tabs: [
+                          //     Tab(
+                          //       text: translate(context, "booking_history"),
+                          //     ),
+                          //     Tab(
+                          //       text: translate(context, 'cash_flow'),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: TabBarView(
-                            controller: tabController,
-                            children: [
-                              const Column(
-                                children: [TransactionHistoryCard()],
-                              ),
-                              Column(
-                                children: [
-                                  const BarChartWidget(
-                                    groupData: [
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      300000.0,
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      0.0,
-                                      0.0
-                                    ],
-                                    bottomTitles: [
-                                      "Jan",
-                                      "Feb",
-                                      "Mar",
-                                      "Apr",
-                                      "May",
-                                      "Jun",
-                                      "Jul",
-                                      "Aug",
-                                      "Sep",
-                                      "Oct",
-                                      "Nov",
-                                      "Dec"
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: dimensWidth() * 3),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            const Text("Tổng chi tiêu"),
-                                            Text(
-                                              convertToVND(10),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            const Text("So với tháng trước"),
-                                            Text(
-                                              "10%",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium
-                                                  ?.copyWith(color: Colors.red),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      const TransactionHistoryCard(),
+                      SizedBox(
+                        height: dimensHeight() * 30,
+                      ),
+                    ],
                   ),
                 ),
+                // SliverToBoxAdapter(
+                //   child: Container(
+                //     padding: EdgeInsets.symmetric(vertical: dimensHeight() * 2),
+                //     height: MediaQuery.of(context).size.height,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Expanded(
+                //           child: TabBarView(
+                //             controller: tabController,
+                //             children: [
+                //               const TransactionHistoryCard(),
+                //               Column(
+                //                 children: [
+                //                   const BarChartWidget(
+                //                     groupData: [
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       300000.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0,
+                //                       0.0
+                //                     ],
+                //                     bottomTitles: [
+                //                       "Jan",
+                //                       "Feb",
+                //                       "Mar",
+                //                       "Apr",
+                //                       "May",
+                //                       "Jun",
+                //                       "Jul",
+                //                       "Aug",
+                //                       "Sep",
+                //                       "Oct",
+                //                       "Nov",
+                //                       "Dec"
+                //                     ],
+                //                   ),
+                //                   Padding(
+                //                     padding: EdgeInsets.symmetric(
+                //                         horizontal: dimensWidth() * 3),
+                //                     child: Column(
+                //                       children: [
+                //                         Row(
+                //                           mainAxisAlignment:
+                //                               MainAxisAlignment.spaceBetween,
+                //                           crossAxisAlignment:
+                //                               CrossAxisAlignment.end,
+                //                           children: [
+                //                             const Text("Tổng chi tiêu"),
+                //                             Text(
+                //                               convertToVND(10),
+                //                               style: Theme.of(context)
+                //                                   .textTheme
+                //                                   .labelMedium,
+                //                             ),
+                //                           ],
+                //                         ),
+                //                         Row(
+                //                           mainAxisAlignment:
+                //                               MainAxisAlignment.spaceBetween,
+                //                           crossAxisAlignment:
+                //                               CrossAxisAlignment.end,
+                //                           children: [
+                //                             const Text("So với tháng trước"),
+                //                             Text(
+                //                               "10%",
+                //                               style: Theme.of(context)
+                //                                   .textTheme
+                //                                   .labelMedium
+                //                                   ?.copyWith(color: Colors.red),
+                //                             ),
+                //                           ],
+                //                         )
+                //                       ],
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ]),
             ),
           );

@@ -34,12 +34,12 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.healthline"
-    compileSdkVersion 34
+    compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
+        // // Flag to enable support for the new language APIs
+        // coreLibraryDesugaringEnabled true
         // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -76,6 +76,10 @@ android {
                 universalApk true
             }
         }
+        // minSdkVersion flutter.minSdkVersion
+        // targetSdkVersion flutter.targetSdkVersion
+        // versionCode flutterVersionCode.toInteger()
+        // versionName flutterVersionName
     }
 
     flavorDimensions "track"
@@ -113,7 +117,14 @@ android {
     //         keyPassword "android"
     //     }
     // }
+    lintOptions {
+        abortOnError false
+    }
 }
+
+// tasks.withType(JavaCompile) {
+//     options.compilerArgs << "-Xlint:deprecation"
+// }
 
 flutter {
     source '../..'

@@ -580,45 +580,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                        "${translate(context, "Quốc gia sản xuất")}: ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge!
-                                            .copyWith(color: white)),
-                                    Expanded(
-                                      child: Text(
-                                          state.data?.nuocSx ??
-                                              translate(context, 'empty'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(color: white)),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                        "${translate(context, "Nhóm thuốct")}: ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelLarge!
-                                            .copyWith(color: white)),
-                                    Expanded(
-                                      child: Text(
-                                          state.data?.diaChiSx ??
-                                              translate(context, 'empty'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(color: white)),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                        "${translate(context, "Quốc gia sản xuất")}: ",
+                                        "${translate(context, "Nhóm thuốc")}: ",
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge!
@@ -626,6 +588,44 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                                     Expanded(
                                       child: Text(
                                           state.data?.nhomThuoc ??
+                                              translate(context, 'empty'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(color: white)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                        "${translate(context, "Địa chỉ đăng ký:")}: ",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge!
+                                            .copyWith(color: white)),
+                                    Expanded(
+                                      child: Text(
+                                          state.data?.diaChiDk ??
+                                              translate(context, 'empty'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(color: white)),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                        "${translate(context, "Địa chỉ sản xuất")}: ",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge!
+                                            .copyWith(color: white)),
+                                    Expanded(
+                                      child: Text(
+                                          state.data?.diaChiSx ??
                                               translate(context, 'empty'),
                                           style: Theme.of(context)
                                               .textTheme

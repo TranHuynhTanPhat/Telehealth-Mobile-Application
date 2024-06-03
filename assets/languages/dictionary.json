@@ -7,9 +7,17 @@
         "vi": "Đổi sang tiếng Anh",
         "en": "Change to English"
     },
-    "skip": {
-        "vi": "Bỏ qua",
-        "en": "Skip"
+    "receive": {
+        "vi": "Nhận",
+        "en": "Receive"
+    },
+    "from": {
+        "vi": "Từ",
+        "en": "From"
+    },
+    "to": {
+        "vi": "Đến",
+        "en": "To"
     },
     "next": {
         "vi": "Kế tiếp",
@@ -275,7 +283,10 @@
         "vi": "Lịch sử khám bệnh",
         "en": "Medical examination history"
     },
-    
+    "waiting_for_admin_approval": {
+        "vi": "Đang chờ quản trị viên phê duyệt",
+        "en": "Waiting for admin approval"
+    },
     "patient": {
         "vi": "Bệnh nhân",
         "en": "Patient"
@@ -1059,6 +1070,10 @@
     "add_member": {
         "vi": "Thêm thành viên",
         "en": "Add member"
+    },
+    "add": {
+        "vi": "Thêm",
+        "en": "Add"
     },
     "log_out": {
         "vi": "Đăng xuất",
