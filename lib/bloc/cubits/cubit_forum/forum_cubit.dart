@@ -123,7 +123,7 @@ class ForumCubit extends Cubit<ForumState> {
       );
       try {
         socketManager.addListener(
-            event: 'comment',
+            event: 'comment.$idPost',
             listener: (data) {
               if (idPost == state.currentPost) {
                 CommentResponse response = CommentResponse.fromMap(data);
@@ -139,25 +139,25 @@ class ForumCubit extends Cubit<ForumState> {
                     currentPost: state.currentPost));
               }
             });
-        socketManager.sendEventDataWithAck(
-            data: idPost,
-            event: "findAll",
-            listen: (data) {
-              // if (data != 'medical_record_not_found') {
-              List<CommentResponse> comments = data
-                  .map<CommentResponse>((e) => CommentResponse.fromMap(e))
-                  .toList();
-              emit(FetchCommentState(
-                  blocState: BlocState.Successed,
-                  comments: comments,
-                  currentPost: idPost));
-              // } else {
-              //   emit(FetchCommentState(
-              //       blocState: BlocState.Successed,
-              //       comments: [],
-              //       currentPost: idPost));
-              // }
+        socketManager.addListener(
+            event: "findAll.$idPost",
+            listener: (data) {
+              try {
+                List<CommentResponse> comments = data
+                    .map<CommentResponse>((e) => CommentResponse.fromMap(e))
+                    .toList();
+                emit(FetchCommentState(
+                    blocState: BlocState.Successed,
+                    comments: comments,
+                    currentPost: idPost));
+              } catch (e) {
+                logPrint(e);
+              }
             });
+        socketManager.sendEventData(
+          data: idPost,
+          event: "findAll",
+        );
       } catch (error) {
         emit(
           FetchCommentState(
@@ -196,24 +196,25 @@ class ForumCubit extends Cubit<ForumState> {
       // }
 
       // SocketManager.instance.addListener(event: 'comment', listener: listen);
-      socketManager.sendEventDataWithAck(
-          data: jsonEncode({"postId": idPost, "text": content}),
-          event: "create",
-          listen: (data) {
-            if (idPost == state.currentPost) {
-              CommentResponse response = CommentResponse.fromMap(data);
-              List<CommentResponse> comments = List.from(state.comments);
-              if (comments
-                  .where((element) => element.id == response.id)
-                  .isEmpty) {
-                comments.add(response);
-              }
-              emit(CreateCommentState(
-                  blocState: BlocState.Successed,
-                  comments: comments,
-                  currentPost: state.currentPost));
-            }
-          });
+      socketManager.sendEventData(
+        data: jsonEncode({"postId": idPost, "text": content}),
+        event: "create",
+        // listen: (data) {
+        //   if (idPost == state.currentPost) {
+        //     CommentResponse response = CommentResponse.fromMap(data);
+        //     List<CommentResponse> comments = List.from(state.comments);
+        //     if (comments
+        //         .where((element) => element.id == response.id)
+        //         .isEmpty) {
+        //       comments.add(response);
+        //     }
+        //     emit(CreateCommentState(
+        //         blocState: BlocState.Successed,
+        //         comments: comments,
+        //         currentPost: state.currentPost));
+        //   }
+        // }
+      );
       emit(CreateCommentState(
           blocState: BlocState.Successed,
           comments: state.comments,
@@ -248,7 +249,6 @@ class ForumCubit extends Cubit<ForumState> {
           files: files,
           isDoctor: AppController().authState == AuthState.DoctorAuthorized);
       if (code == 200 || code == 201) {
-        
         emit(
           EditPostState(
               blocState: BlocState.Successed,

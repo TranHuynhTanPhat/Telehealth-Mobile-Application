@@ -309,7 +309,7 @@ class _HealthStatUpdateScreenState extends State<HealthStatUpdateScreen> {
                                 },
                                 controller: _controllerTemperature,
                                 label: translate(context, 'temperature'),
-                                suffix: const Text('cm'),
+                                suffix: const Text('℃'),
                                 textInputType: TextInputType.number,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,

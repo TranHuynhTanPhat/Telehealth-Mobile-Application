@@ -43,6 +43,7 @@ class _PostCardState extends State<PostCard> {
 
   late int _currentIndex;
   bool like = false;
+  int countLike = 0;
   String? timeBetween;
 
   bool showAll = false;
@@ -56,8 +57,7 @@ class _PostCardState extends State<PostCard> {
         LoginResponse response = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.PATIENT)!);
         uid = response.id;
-      } else if (AppController().authState ==
-          AuthState.DoctorAuthorized) {
+      } else if (AppController().authState == AuthState.DoctorAuthorized) {
         LoginResponse response = LoginResponse.fromJson(
             AppStorage().getString(key: DataConstants.DOCTOR)!);
         uid = response.id;
@@ -68,6 +68,7 @@ class _PostCardState extends State<PostCard> {
     if (widget.post.likes!.contains(uid)) {
       like = true;
     }
+    countLike = widget.post.likes?.length ?? 0;
     _preloadPageController = PreloadPageController(initialPage: 0);
     _currentIndex = 0;
     super.initState();
@@ -83,7 +84,7 @@ class _PostCardState extends State<PostCard> {
     } catch (e) {
       logPrint(e);
     }
-    
+
     try {
       if (widget.post.user?.avatar != null &&
           widget.post.user?.avatar != 'default' &&
@@ -115,7 +116,6 @@ class _PostCardState extends State<PostCard> {
       logPrint(e);
     }
 
-    
     return BlocBuilder<ForumCubit, ForumState>(
       builder: (context, state) {
         return Column(
@@ -162,7 +162,7 @@ class _PostCardState extends State<PostCard> {
                     ],
                   ),
                 ),
-                if (widget.post.user?.uid == uid)
+                if (widget.post.user?.id == uid)
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: dimensWidth() * 2),
@@ -322,10 +322,12 @@ class _PostCardState extends State<PostCard> {
                           context
                               .read<ForumCubit>()
                               .unlikePost(idPost: widget.post.id!);
+                          countLike--;
                         } else {
                           context
                               .read<ForumCubit>()
                               .likePost(idPost: widget.post.id!);
+                          countLike++;
                         }
                         setState(() {
                           like = !like;
@@ -383,7 +385,7 @@ class _PostCardState extends State<PostCard> {
                   bottom: dimensHeight(),
                   top: dimensHeight()),
               child: Text(
-                '${(like && !widget.post.likes!.contains(uid) ? 1 : 0) + (widget.post.likes?.length ?? 0)} ${translate(context, 'liked')}',
+                '$countLike ${translate(context, 'liked')}',
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context)
                     .textTheme

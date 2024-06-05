@@ -22,7 +22,7 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
-		<key>CFBundleURLTypes</key>
+		<!-- <key>CFBundleURLTypes</key>
 		<array>
 			<dict>
 				<key>CFBundleTypeRole</key>
@@ -32,13 +32,13 @@
 					<string>com.googleusercontent.apps.809067603048-j3i1eg5rkh6nknpubaivesksdmkh2g4m</string>
 				</array>
 			</dict>
-		</array>
+		</array> -->
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>FLTEnableImpeller</key>
 		<false/>
-		<key>GIDClientID</key>
-		<string>809067603048-j3i1eg5rkh6nknpubaivesksdmkh2g4m.apps.googleusercontent.com</string>
+		<!-- <key>GIDClientID</key>
+		<string>809067603048-j3i1eg5rkh6nknpubaivesksdmkh2g4m.apps.googleusercontent.com</string> -->
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>sms</string>
@@ -56,12 +56,12 @@
 		<string>Explain why your app uses photo library</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
-		<key>UIBackgroundModes</key>
+		<!-- <key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
 			<string>processing</string>
 			<string>remote-notification</string>
-		</array>
+		</array> -->
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
@@ -81,13 +81,12 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
-		<key>BGTaskSchedulerPermittedIdentifiers</key>
+		<!-- <key>BGTaskSchedulerPermittedIdentifiers</key>
 		<array>
 			<string>task-identifier</string>
 			<string>dev.flutter.background.refresh</string>
-			<!-- Register a periodic task in iOS 13+ -->
 			<string>be.tramckrijte.workmanagerExample.iOSBackgroundAppRefresh</string>
-		</array>
+		</array> -->
 	</dict>
 	<key>com.apple.security.network.client</key>
 	<true/>

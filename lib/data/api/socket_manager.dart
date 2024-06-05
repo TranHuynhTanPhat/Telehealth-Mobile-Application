@@ -28,8 +28,9 @@ class SocketManager {
           AppStorage().getString(key: DataConstants.DOCTOR)!);
       jwtToken = response.jwtToken;
     }
+
     socket = io(
-      "https://health-forum-truongne.koyeb.app/${port!.name}",
+      "https://health-forum-truongne.koyeb.app/${port?.name}",
       OptionBuilder()
           .setTransports(['websocket']) // for Flutter or Dart VM
           .disableAutoConnect()
@@ -48,7 +49,6 @@ class SocketManager {
       isConnected = false;
       log('Disconnected from the socket server');
     });
-    logPrint("https://health-forum-truongne.koyeb.app/${port.name}");
   }
 
   void sendEventData({required String event, required dynamic data}) {

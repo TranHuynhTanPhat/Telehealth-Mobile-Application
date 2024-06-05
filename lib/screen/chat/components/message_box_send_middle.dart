@@ -24,7 +24,7 @@ class MessageBoxSendMiddle extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(top: dimensHeight() / 4),
             padding: EdgeInsets.symmetric(
-                horizontal: dimensWidth(), vertical: dimensHeight() * 2),
+                horizontal: dimensWidth() * 2, vertical: dimensHeight() * 2),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(180),
@@ -37,7 +37,8 @@ class MessageBoxSendMiddle extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: white, fontWeight: FontWeight.w500),textAlign: TextAlign.right,
+                  ?.copyWith(color: white, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.right,
             ),
           ),
         )

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:healthline/data/api/models/responses/user_response.dart';
+
 class PostResponse {
   String? id;
   String? description;
@@ -60,39 +62,39 @@ class PostResponse {
       PostResponse.fromMap(json.decode(source));
 }
 
-class UserResponse {
-  String? uid;
-  String? fullName;
-  String? avatar;
+// class UserResponse {
+//   String? uid;
+//   String? fullName;
+//   String? avatar;
 
-  UserResponse({this.uid, this.fullName, this.avatar});
+//   UserResponse({this.uid, this.fullName, this.avatar});
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
+//   Map<String, dynamic> toMap() {
+//     final result = <String, dynamic>{};
 
-    if (uid != null) {
-      result.addAll({'uid': uid});
-    }
-    if (fullName != null) {
-      result.addAll({'full_name': fullName});
-    }
-    if (avatar != null) {
-      result.addAll({'avatar': avatar});
-    }
+//     if (uid != null) {
+//       result.addAll({'uid': uid});
+//     }
+//     if (fullName != null) {
+//       result.addAll({'full_name': fullName});
+//     }
+//     if (avatar != null) {
+//       result.addAll({'avatar': avatar});
+//     }
 
-    return result;
-  }
+//     return result;
+//   }
 
-  factory UserResponse.fromMap(Map<String, dynamic> map) {
-    return UserResponse(
-      uid: map['uid'],
-      fullName: map['full_name'],
-      avatar: map['avatar'],
-    );
-  }
+//   factory UserResponse.fromMap(Map<String, dynamic> map) {
+//     return UserResponse(
+//       uid: map['uid'],
+//       fullName: map['full_name'],
+//       avatar: map['avatar'],
+//     );
+//   }
 
-  String toJson() => json.encode(toMap());
+//   String toJson() => json.encode(toMap());
 
-  factory UserResponse.fromJson(String source) =>
-      UserResponse.fromMap(json.decode(source));
-}
+//   factory UserResponse.fromJson(String source) =>
+//       UserResponse.fromMap(json.decode(source));
+// }

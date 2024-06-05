@@ -80,7 +80,7 @@ class UserResponse {
 
   factory UserResponse.fromMap(Map<String, dynamic> map) {
     return UserResponse(
-      id: map['id'],
+      id: map['id']??map['uid'],
       fullName: map['full_name'],
       dateOfBirth: map['date_of_birth'],
       gender: map['gender'],
