@@ -156,7 +156,7 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
           BlocListener<ConsultationCubit, ConsultationState>(
               listener: (context, state) {
             if (state is FetchFeedbackDoctorState) {
-               if (state.blocState == BlocState.Failed) {
+              if (state.blocState == BlocState.Failed) {
                 EasyLoading.showToast(translate(context, 'cant_load_data'));
               }
             }
@@ -206,11 +206,16 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
               ),
               actions: [
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: dimensWidth()*1.5),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: dimensWidth() * 1.5),
                   child: InkWell(
                     highlightColor: transparent,
                     splashColor: transparent,
-                    child: FaIcon(FontAwesomeIcons.solidBell, color: Colors.orange, size: dimensIcon()*0.8,),
+                    child: FaIcon(
+                      FontAwesomeIcons.solidBell,
+                      color: Colors.orange,
+                      size: dimensIcon() * 0.8,
+                    ),
                     onTap: () {
                       Navigator.pushNamed(context, notificationName);
                     },
@@ -435,11 +440,9 @@ class _MainScreenDoctorState extends State<MainScreenDoctor> {
                                 press: () {
                                   setState(() {
                                     _currentPage = DrawerMenu.Patient;
-                                    if (state.profile.id != null) {
-                                      context
-                                          .read<DoctorProfileCubit>()
-                                          .fetchPatient();
-                                    }
+                                    context
+                                        .read<DoctorProfileCubit>()
+                                        .fetchPatient();
                                     clickDrawer();
                                   });
                                 },

@@ -404,7 +404,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                                       consultationId: widget.consultationId!);
                             }
                           },
-                          text: translate(context, 'create'),
+                          text: translate(context, 'add'),
                         ),
                       )
                     ],

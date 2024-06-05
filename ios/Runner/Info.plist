@@ -87,7 +87,7 @@
 			<string>dev.flutter.background.refresh</string>
 			<string>be.tramckrijte.workmanagerExample.iOSBackgroundAppRefresh</string>
 		</array> -->
+		<key>com.apple.security.network.client</key>
+		<true/>
 	</dict>
-	<key>com.apple.security.network.client</key>
-	<true/>
 </plist>

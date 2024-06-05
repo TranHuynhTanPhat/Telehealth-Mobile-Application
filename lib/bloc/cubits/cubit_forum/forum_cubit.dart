@@ -142,10 +142,12 @@ class ForumCubit extends Cubit<ForumState> {
         socketManager.addListener(
             event: "findAll.$idPost",
             listener: (data) {
+              logPrint("CHECKK $data");
               try {
                 List<CommentResponse> comments = data
                     .map<CommentResponse>((e) => CommentResponse.fromMap(e))
                     .toList();
+                    logPrint(comments);
                 emit(FetchCommentState(
                     blocState: BlocState.Successed,
                     comments: comments,
