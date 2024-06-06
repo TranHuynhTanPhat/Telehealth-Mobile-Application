@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:intl/intl.dart';
 
 import 'package:healthline/bloc/cubits/cubits_export.dart';
 import 'package:healthline/data/api/models/responses/patient_record_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/screen/ui_patient/main/health_info/components/subuser_input_dialog.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
 import 'package:healthline/screen/widgets/file_widget.dart';
 import 'package:healthline/screen/widgets/shimmer_widget.dart';
@@ -45,6 +47,9 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
   String? patientName;
   int? age;
   List<String> patientRecordIds = [];
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     if (!mounted) return;
@@ -81,6 +86,24 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
         logPrint(e);
       }
     }
+  }
+
+  Future<void> showDialogInput(BuildContext context) async {
+    final medicalRecordCubit = context.read<MedicalRecordCubit>();
+    await showModalBottomSheet(
+        barrierColor: black26,
+        backgroundColor: transparent,
+        elevation: 0,
+        isScrollControlled: true,
+        useSafeArea: true,
+        context: context,
+        builder: (context) => BlocProvider.value(
+              value: medicalRecordCubit,
+              child: SubUserInputDialog(formKey: _formKey),
+            ));
+    // if (result == true) {
+    //   medicalRecordCubit.fetchMedicalRecord();
+    // }
   }
 
   @override
@@ -132,6 +155,24 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
               title: Text(
                 translate(context, 'medical_record'),
               ),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                  child: InkWell(
+                    highlightColor: transparent,
+                    splashColor: transparent,
+                    child: FaIcon(
+                      FontAwesomeIcons.plus,
+                      size: dimensIcon() * 0.8,
+                    ),
+                    onTap: () async {
+                      await showDialogInput(context).then((value) => context
+                          .read<MedicalRecordCubit>()
+                          .fetchMedicalRecord());
+                    },
+                  ),
+                )
+              ],
             ),
             body: AbsorbPointer(
               // absorbing: state is FetchScheduleLoading && state.schedules.isEmpty,
@@ -168,7 +209,6 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                           patientName = e.fullName;
                           patientRecordIds.clear();
                           try {
-
                             age = calculateAge(
                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                                     .parse(e.dateOfBirth!));
@@ -412,6 +452,52 @@ class _MedicalRecordScreenState extends State<MedicalRecordScreen> {
                                       size: e.size,
                                     );
                                   },
+                                ),
+                                SizedBox(
+                                  height: dimensHeight() * 3,
+                                ),
+                                InkWell(
+                                  splashColor: transparent,
+                                  highlightColor: transparent,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                            context, addPatientRecordName)
+                                        .then((value) => context
+                                            .read<PatientRecordCubit>()
+                                            .fetchPatientRecord(medicalId!));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: dimensWidth(),
+                                        vertical: dimensHeight()),
+                                    width: dimensWidth() * 25,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: colorA8B1CE.withOpacity(.1),
+                                      border: Border.all(
+                                          width: 1, color: colorA8B1CE),
+                                      borderRadius: BorderRadius.circular(
+                                          dimensWidth() * 2),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        FaIcon(
+                                          FontAwesomeIcons.plus,
+                                          size: dimensWidth() * 2,
+                                        ),
+                                        Text(
+                                          translate(context, 'add_information'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: dimensHeight() * 10,

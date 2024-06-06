@@ -262,8 +262,8 @@ class _MainScreenPatientState extends State<MainScreenPatient>
               child:
                   BlocBuilder<ApplicationUpdateCubit, ApplicationUpdateState>(
                 builder: (context, state) {
-                  _pageDetail.firstWhere((element) =>
-                          element['title'] == 'message')['badge'] =
+                  _pageDetail.firstWhere(
+                          (element) => element['title'] == 'message')['badge'] =
                       state is UpdateAvailable;
                   return ListView.builder(
                     itemCount: _pageDetail.length,

@@ -11,6 +11,7 @@ import 'package:healthline/screen/widgets/file_widget.dart';
 import 'package:healthline/screen/widgets/text_field_widget.dart';
 import 'package:healthline/utils/file_picker.dart';
 import 'package:healthline/utils/keyboard.dart';
+import 'package:healthline/utils/log_data.dart';
 import 'package:healthline/utils/translate.dart';
 
 class AddPatientRecordScreen extends StatefulWidget {
@@ -53,17 +54,21 @@ class _AddPatientRecordScreenState extends State<AddPatientRecordScreen> {
   }
 
   Future<void> chooseFile(BuildContext context) async {
-    _file = await FilePickerCustom().chooseFile();
-    double sizeInMb = _file!.size / (1024 * 1024);
-    if (sizeInMb > 10) {
-      _file = null;
-      if (!mounted) return;
-      EasyLoading.showToast(
-        // ignore: use_build_context_synchronously
-        translate(context, '${translate(context, 'max_file_size')}: 10 MB'),
-      );
+    try {
+      _file = await FilePickerCustom().chooseFile();
+      double sizeInMb = _file!.size / (1024 * 1024);
+      if (sizeInMb > 10) {
+        _file = null;
+        if (!mounted) return;
+        EasyLoading.showToast(
+          // ignore: use_build_context_synchronously
+          translate(context, '${translate(context, 'max_file_size')}: 10 MB'),
+        );
+      }
+      setState(() {});
+    } catch (e) {
+      logPrint(e);
     }
-    setState(() {});
   }
 
   @override

@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthline/bloc/cubits/cubits_export.dart';
+import 'package:healthline/data/api/models/requests/consultation_request.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/style.dart';
+import 'package:healthline/routes/app_pages.dart';
 import 'package:healthline/screen/widgets/elevated_button_widget.dart';
+import 'package:healthline/utils/currency_util.dart';
 import 'package:healthline/utils/translate.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
-  const PaymentMethodScreen({super.key, required this.callback, required this.nextPage, required this.previousPage});
+  const PaymentMethodScreen(
+      {super.key,
+      required this.callback,
+      required this.nextPage,
+      required this.previousPage,
+      required this.profile,
+      required this.request});
+  final UserResponse profile;
+  final ConsultationRequest request;
   final Function(PaymentMethod) callback;
   final VoidCallback nextPage;
   final VoidCallback previousPage;
@@ -15,6 +29,45 @@ class PaymentMethodScreen extends StatefulWidget {
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   PaymentMethod _payment = PaymentMethod.None;
+
+  @override
+  void initState() {
+    if (!mounted) return;
+    super.initState();
+  }
+
+  Future<void> showAlert() async {
+    await showDialog(
+      context: context,
+      builder: ((context) => AlertDialog(
+            title: Text(
+                'Bạn không đủ tiền trong tài khoản. Tài khoản của bạn hiện có ${convertToVND(widget.profile.accountBalance ?? 0)}'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Nạp tiền ngay'),
+                onPressed: () {
+                  Navigator.pushNamed(context, payName)
+                      .then((value) => Navigator.pop(context));
+                  // Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Thoát'),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+            ],
+          )),
+    ).then((value) {
+      if (value == false) {
+        Navigator.pop(context);
+      } else {
+        context.read<PatientProfileCubit>().fetchProfile();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -24,7 +77,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         resizeToAvoidBottomInset: true,
         backgroundColor: white,
         extendBody: true,
-        bottomNavigationBar: _payment != PaymentMethod.None
+        bottomNavigationBar: _payment != PaymentMethod.None &&
+                (widget.profile.accountBalance ?? 0) >
+                    (widget.request.price ?? 0)
             ? Container(
                 padding: EdgeInsets.fromLTRB(dimensWidth() * 10, 0,
                     dimensWidth() * 10, dimensHeight() * 3),
@@ -39,8 +94,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     text: translate(context, 'payment'),
                     onPressed: () {
                       widget.callback(_payment);
-                          widget.nextPage();
-      
+                      widget.nextPage();
+
                       // Navigator.pushNamed(context, formConsultationName)
                       //     .then((value) {
                       //   if (value == true) {
@@ -75,9 +130,14 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     dimensWidth(),
                   ),
                 ),
-                onTap: () => setState(() {
-                  _payment = PaymentMethod.Healthline;
-                }),
+                onTap: () async {
+                  setState(() {
+                    _payment = PaymentMethod.Healthline;
+                  });
+                  if (widget.request.price! > widget.profile.accountBalance!) {
+                    await showAlert();
+                  }
+                },
                 dense: true,
                 visualDensity: const VisualDensity(vertical: 0),
                 contentPadding: EdgeInsets.symmetric(
@@ -92,10 +152,14 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 trailing: Radio<PaymentMethod>(
                   value: PaymentMethod.Healthline,
                   groupValue: _payment,
-                  onChanged: (PaymentMethod? value) {
+                  onChanged: (PaymentMethod? value) async {
                     setState(() {
                       _payment = value ?? PaymentMethod.None;
                     });
+                    if (widget.request.price! >
+                        widget.profile.accountBalance!) {
+                      await showAlert();
+                    }
                   },
                 ),
               ),

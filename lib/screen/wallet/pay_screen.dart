@@ -48,7 +48,7 @@ class _PayScreenState extends State<PayScreen>
             absorbing: state.blocState == BlocState.Pending,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              backgroundColor: transparent,
+              backgroundColor: white,
               extendBody: true,
               appBar: AppBar(
                 title: Text(
@@ -59,15 +59,6 @@ class _PayScreenState extends State<PayScreen>
                 onTap: () => KeyboardUtil.hideKeyboard(context),
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: dimensHeight()),
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(
-                        dimensWidth() * 4,
-                      ),
-                      topRight: Radius.circular(dimensWidth() * 4),
-                    ),
-                  ),
                   child: CustomScrollView(
                     shrinkWrap: true,
                     slivers: [

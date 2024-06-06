@@ -5,6 +5,7 @@ import 'package:healthline/bloc/cubits/cubit_consultation/consultation_cubit.dar
 import 'package:healthline/bloc/cubits/cubit_patient_profile/patient_profile_cubit.dart';
 import 'package:healthline/data/api/models/requests/consultation_request.dart';
 import 'package:healthline/data/api/models/responses/doctor_detail_response.dart';
+import 'package:healthline/data/api/models/responses/user_response.dart';
 import 'package:healthline/res/enum.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/form_medical_declaration.dart';
 import 'package:healthline/screen/ui_patient/main/home/doctor/subscreen/invoice_screen.dart';
@@ -35,7 +36,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
   @override
   void initState() {
     request = ConsultationRequest();
-    if(!mounted)return;
+    if (!mounted) return;
     context.read<PatientProfileCubit>().fetchProfile();
 
     super.initState();
@@ -109,6 +110,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
       },
       child: BlocBuilder<PatientProfileCubit, PatientProfileState>(
         builder: (context, state) {
+          UserResponse profile = state.profile;
           return BlocBuilder<ConsultationCubit, ConsultationState>(
             builder: (context, state) {
               if (_index == CreateConsultation.TimeLine) {
@@ -230,6 +232,7 @@ class _CreateConsultationScreenState extends State<CreateConsultationScreen> {
                       _index = CreateConsultation.FormMedicalDelaration;
                     });
                   },
+                  profile: profile, request: request,
                 );
               } else {
                 return InvoiceScreen(

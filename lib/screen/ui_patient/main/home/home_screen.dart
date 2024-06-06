@@ -38,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
         pageKey: 1,
         searchQuery: const SearchQuery(sort: [
           'ratings:desc',
-        ], filter: ['is_active=true'], limit: 10),
+        ], filter: [
+          'is_active=true'
+        ], limit: 10),
         callback: (doctors) {});
     context.read<ConsultationCubit>().fetchConsultation();
     super.initState();
@@ -115,6 +117,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 centerTitle: false,
+                actions: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: dimensWidth() * 3),
+                    child: InkWell(
+                      highlightColor: transparent,
+                      splashColor: transparent,
+                      child: FaIcon(
+                        FontAwesomeIcons.solidBell,
+                        color: Colors.orange,
+                        size: dimensIcon() * 0.8,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, notificationName);
+                      },
+                    ),
+                  )
+                ],
                 leading: Padding(
                   padding: EdgeInsets.only(
                     left: dimensWidth() * 3,

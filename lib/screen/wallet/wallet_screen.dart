@@ -89,19 +89,17 @@ class _WalletScreenState extends State<WalletScreen>
                                   onTap: () async {
                                     Navigator.pushNamed(context, payName)
                                         .then((value) {
-                                      if (value == "success") {
-                                        if (AppController().authState ==
-                                            AuthState.PatientAuthorized) {
-                                          context
-                                              .read<PatientProfileCubit>()
-                                              .fetchProfile();
-                                        }
-                                        if (AppController().authState ==
-                                            AuthState.DoctorAuthorized) {
-                                          context
-                                              .read<DoctorProfileCubit>()
-                                              .fetchProfile();
-                                        }
+                                      if (AppController().authState ==
+                                          AuthState.PatientAuthorized) {
+                                        context
+                                            .read<PatientProfileCubit>()
+                                            .fetchProfile();
+                                      }
+                                      if (AppController().authState ==
+                                          AuthState.DoctorAuthorized) {
+                                        context
+                                            .read<DoctorProfileCubit>()
+                                            .fetchProfile();
                                       }
                                     });
                                   },
