@@ -184,8 +184,8 @@ class _PayScreenState extends State<PayScreen>
                                             text:
                                                 translate(context, 'recharge'),
                                             onPressed: rechargeController
-                                                        .text.isEmpty &&
-                                                    checkMomo ==
+                                                        .text.isEmpty ||
+                                                    checkMomo !=
                                                         PaymentMethod.Momo
                                                 ? null
                                                 : () {
