@@ -967,6 +967,18 @@
         "vi": "Nạp/rút tiền",
         "en": "Recharge/withdraw"
     },
+    "recharge_now": {
+        "vi": "Nạp tiền ngay",
+        "en": "Recharge now"
+    },
+    "alert_no_money": {
+        "vi": "Bạn không đủ tiền trong tài khoản. Tài khoản của bạn hiện có",
+        "en": "You do not have enough money in your account. Your account currently has"
+    },
+    "withdraw_now": {
+        "vi": "Rút tiền ngay",
+        "en": "Withdraw now"
+    },
     "transfer": {
         "vi": "Chuyển khoản",
         "en": "Transfer"

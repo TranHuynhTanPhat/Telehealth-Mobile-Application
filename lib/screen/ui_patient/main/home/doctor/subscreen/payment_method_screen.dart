@@ -41,10 +41,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       context: context,
       builder: ((context) => AlertDialog(
             title: Text(
-                'Bạn không đủ tiền trong tài khoản. Tài khoản của bạn hiện có ${convertToVND(widget.profile.accountBalance ?? 0)}'),
+                '${translate(context, 'alert_no_money')} ${convertToVND(widget.profile.accountBalance ?? 0)}'),
             actions: <Widget>[
               TextButton(
-                child: const Text('Nạp tiền ngay'),
+                child:  Text(translate(context, 'recharge_now')),
                 onPressed: () {
                   Navigator.pushNamed(context, payName)
                       .then((value) => Navigator.pop(context));
@@ -52,7 +52,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 },
               ),
               TextButton(
-                child: const Text('Thoát'),
+                child:  Text(translate(context, 'cancel')),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
